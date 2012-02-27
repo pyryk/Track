@@ -58,13 +58,26 @@
       
     </footer>
   </div> <!--! end of #container -->
+  
+  <script id="template-TargetList" type="text/x-handlebars-template">
+    <ul>
+        {{#each items}}
+        <li>{{this.name}}</li>
+        {{/each}}
+    </ul>
+  </script>
 
 
   <!-- JavaScript at the bottom for fast page loading -->
+  <!-- libraries -->
+  <script src="js/libs/jquery-1.7.1.min.js"></script>
+  <script src="js/libs/spine.js"></script>
+  <script src="js/libs/handlebars.js"></script>
 
-  <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if necessary -->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>
+  <!-- our code -->
+  <script src="js/models.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/app.js"></script>
 
   <!-- scripts concatenated and minified via ant build script-->
   <script src="js/helper.js"></script>
@@ -75,12 +88,13 @@
 
   <!-- Asynchronous Google Analytics snippet. Change UA-XXXXX-X to be your site's ID.
        mathiasbynens.be/notes/async-analytics-snippet -->
+       <!--
   <script>
     var _gaq=[["_setAccount","UA-XXXXX-X"],["_trackPageview"]];
     (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
     g.src=("https:"==location.protocol?"//ssl":"//www")+".google-analytics.com/ga.js";
     s.parentNode.insertBefore(g,s)}(document,"script"));
-  </script>
+  </script> -->
 
 </body>
 </html>
