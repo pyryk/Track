@@ -17,7 +17,6 @@ var ListTargets = BaseController.sub({
   elements: {
     ".targets": "targets"  
   },
-  collection: Target.all, // TODO move to constructor call
   getData: function() {
     return {items: Target.all()};
   },
