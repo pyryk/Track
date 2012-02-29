@@ -1,4 +1,4 @@
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 var Promise = require('node-promise').Promise;
 
 var Mongo = {

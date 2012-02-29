@@ -9,7 +9,7 @@ var API = {
 
     getTargets: function(req, res, next) {
         Mongo.findAllTargets().then(function(data) {
-            res.send(data);
+            res.send(200, data);
         });
     },
 
