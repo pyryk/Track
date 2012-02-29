@@ -1,0 +1,17 @@
+{
+  "name": "track-api",
+  "description": "RESTful API for Track application",
+  "author": "Mikko Koski",
+  "version": "0.0.1",
+  "dependencies": {
+    "mongoose": "2.5.9",
+    "restify": "1.0.1",
+    "node-promise": "0.5.1"
+  },
+  "devDependencies": {
+    "jasmine-node": "1.0.21"
+  },
+  "scripts": {
+    "test": "jasmine-node spec/"
+  }
+}
