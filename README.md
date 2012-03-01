@@ -4,4 +4,4 @@
 
 Server status
 
-[![Build Status](https://secure.travis-ci.org/rap1ds/Track.png?branch=master)](http://travis-ci.org/rap1ds/Track)
+[![Build Status](https://secure.travis-ci.org/pyryk/Track.png?branch=master)](http://travis-ci.org/pyryk/Track)
