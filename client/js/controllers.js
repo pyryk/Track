@@ -3,9 +3,8 @@ var BaseController = Spine.Controller.sub({
   },
   render: function() {
     var data = this.getData();
-    //this.replace(this.compiledTemplate(collection));
-    var template = Handlebars.compile(this.template.html());
-    this.replace(template(data));
+    //var template = Handlebars.compile(this.template.html());
+    this.replace(this.template(data));
   }
 });
 
@@ -22,8 +21,8 @@ var ListTargets = BaseController.sub({
   },
   init: function() {
     Target.bind("create", this.proxy(this.addOne));
-    this.template = this.template || $("#template-TargetList");
-    //this.compiledTemplate = Handlebars.compile(this.template.html());
+    this.rawTemplate = this.template || $("#template-TargetList");
+    this.template = Handlebars.compile(this.rawTemplate.html());
   },
   addOne: function(task){
     this.render();

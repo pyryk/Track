@@ -298,12 +298,3 @@ textarea[contenteditable] {-webkit-appearance: none;}
   h2, h3 { page-break-after: avoid; }
 }
 
-
-/* ==================== app specific styles ==================== */
-body {
-  background-color: #efe;
-}
-#container {
-  padding: 5px;
-}
-

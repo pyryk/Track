@@ -1,0 +1,51 @@
+/* ==================== app specific styles ==================== */
+/* line 2, ../scss/app.scss */
+body {
+  background-color: #efe;
+}
+
+/* line 6, ../scss/app.scss */
+#container {
+  padding: 0;
+}
+
+/* line 10, ../scss/app.scss */
+header {
+  position: fixed;
+  height: 40px;
+  width: 100%;
+  margin-top: 0;
+  padding-top: 0;
+  background-color: #defede;
+  border-bottom: 1px solid #666;
+}
+
+/* line 20, ../scss/app.scss */
+header h1 {
+  padding: 0;
+  margin: 0;
+}
+
+/* line 25, ../scss/app.scss */
+#main {
+  padding-top: 40px;
+}
+
+/* line 29, ../scss/app.scss */
+.primary-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* line 34, ../scss/app.scss */
+.primary-list li {
+  padding: 1em 0.5em;
+  border: 0;
+  border-bottom: 1px solid #666;
+  background-color: #fefffe;
+}
+
+/* line 41, ../scss/app.scss */
+.primary-list li:first-child {
+  border-top: 1px solid #666;
+}

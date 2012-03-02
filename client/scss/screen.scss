@@ -1,0 +1,76 @@
+@import "compass/css3/font-face";
+@import "compass";
+/* ==================== app specific styles ==================== */
+
+$header_color: rgba(100,100,100,0.7);
+$footer_color: rgba(100,100,100,1);
+$header_height: 40px;
+$border_color: #666;
+$background_color: #333;
+$text_color: rgba(255,255,255,0.8);
+$list_item_color: rgba(255,255,255,0.1);
+
+@include font-face("Roboto", font-files("Roboto-Regular.ttf", truetype));
+@include font-face("Roboto Bold", font-files("Roboto-Bold.ttf", truetype));
+@include font-face("Roboto Italic", font-files("Roboto-Italic.ttf", truetype));
+
+body {
+  background-color: $background_color;
+  color: $text_color;
+  font-family: Roboto;
+}
+
+#container {
+  padding: 0;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: $header_height;
+  width: 100%;
+  margin-top: 0;
+  padding-top: 0;
+  background-color: $header_color;
+  border-bottom: 1px solid $border_color;
+  
+  h1 {
+    padding: 0.25em;
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: Roboto;
+  }
+}
+
+#main {
+  padding-top: $header_height;
+  padding-bottom: $header_height;
+}
+
+.primary-list {
+  list-style-type: none;
+  padding: 0;
+  
+  li {
+    padding: 1em 0.5em;
+    border: 0;
+    border-bottom: 1px solid $border_color;
+    background-color: $list_item_color;
+  }
+  
+  li:first-child {
+    border-top: 1px solid $border_color;
+  }
+}
+
+footer {
+  @include background-image(linear-gradient(top, #2F2F2F, #151515 50%, #000000 51%, #000000));
+  border: 1px solid #222;
+  height: 40px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
