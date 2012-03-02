@@ -25,19 +25,19 @@ var Mongo = {
 
     loadFixtures: function() {
 
-        this.Target.remove({}, function() {
-            console.log('All removed!');
-        });
+        this.Target.remove({}, function() {});
 
         Fixtures.targets.forEach(function(targetHash) {
             var target = new this.Target();
-            target.name = targetHash.name;
+
+            for(key in targetHash) {
+                target[key] = targetHash[key];
+            }
+
 
             target.save(function(error) {
                 if(error) {
                     console.error(error);
-                } else {
-                    console.log('Saved fixture target: [name: ' + target.name + ', id: ' + target.id + ']');
                 }
             });
         }, this);
@@ -53,7 +53,41 @@ var Mongo = {
         return promise;
     },
 
-    resolvePromise: function(error, data, promise) {
+    findTargetById: function(id) {
+        var promise = Promise();
+
+        this.Target.findById(id, function(error, data) {
+            this.resolvePromise(error, data, promise)
+        }.bind(this));
+
+        return promise;
+    },
+
+    createTarget: function(name) {
+        var promise = Promise();
+
+        var target = new this.Target();
+        target.name = name;
+
+        target.save(function(error) {
+            this.resolvePromise(error, promise)
+        }.bind(this));
+
+        return promise;
+    },
+
+    resolvePromise: function(error) {
+        var data, promise;
+
+        if(arguments.length === 3) {
+            data = arguments[1];
+            promise = arguments[2];
+        }
+
+        if(arguments.length === 2) {
+            promise = arguments[1];
+        }
+
         if(error) {
             promise.reject(error);
         } else {

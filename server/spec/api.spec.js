@@ -5,8 +5,10 @@ describe('API', function() {
     var req = {}, res = {}, next = {};
 
     var spyOnPromise = function(Klass, method) {
-        return {andReturn: function(returnValue) {
-            spyOn(Klass, method).andReturn({
+        var spy = spyOn(Klass, method);
+
+        return {andCallThenWith: function(returnValue) {
+            spy.andReturn({
                 then: function(callback) {
                     callback(returnValue);
                 }
@@ -54,7 +56,7 @@ describe('API', function() {
     describe('getTargets', function() {
 
         beforeEach(function() {
-            spyOnPromise(Mongo, 'findAllTargets').andReturn([
+            spyOnPromise(Mongo, 'findAllTargets').andCallThenWith([
                 {name: "T-Talon ruokajono", _id: "accab1234"},
                 {name: "Putous", _id: "accab12345"}
             ]);
@@ -63,31 +65,54 @@ describe('API', function() {
         it('should return list of targets', function() {
             API.getTargets(req, res, next);
 
-            expectBody(res).toEqual([
-                {name: "T-Talon ruokajono", _id: "accab1234"},
-                {name: "Putous", _id: "accab12345"}
-            ]);
+            expectBody(res).toEqual({
+                targets: [
+                    {name: "T-Talon ruokajono", _id: "accab1234"},
+                    {name: "Putous", _id: "accab12345"}
+                ]
+            });
 
             expectStatus(res).toEqual(200);
         });
     });
 
-    xdescribe('getTarget', function() {
+    describe('getTarget', function() {
 
         beforeEach(function() {
-            spyOnPromise(Mongo, 'findTargetById').andReturn([
-                {name: "T-Talon ruokajono", _id: "accab1234"},
-            ]);
+            spyOnPromise(Mongo, 'findTargetById').andCallThenWith(
+                {name: "T-Talon ruokajono", _id: "accab1234"}
+            );
         });
 
         it('should return details of a target', function() {
-            req.params.id = 1;
+            req.params.id = 'accab1234';
 
             API.getTarget(req, res, next);
 
-            expectBody(res).toEqual({name: "T-Talon ruokajono", _id: "accab1234"});
-            expectStatus(res).toEqual(200);
-        })
+            expectBody(res).toEqual({
+                target: {name: "T-Talon ruokajono", _id: "accab1234"}
+            });
 
-    })
+            expectStatus(res).toEqual(200);
+        });
+    });
+
+    describe('postTarget', function() {
+
+        beforeEach(function() {
+            spyOnPromise(Mongo, 'createTarget').andCallThenWith();
+        });
+
+        it('should return details of a target', function() {
+            req.params.name = 'New tracking target';
+
+            API.postTarget(req, res, next);
+
+            expect(Mongo.createTarget).toHaveBeenCalledWith('New tracking target');
+
+            expectStatus(res).toEqual(201);
+        });
+    });
+
+
 });
