@@ -1,10 +1,18 @@
 var mongoose = require('mongoose');
 var Promise = require('node-promise').Promise;
+var Fixtures = require('./fixtures');
 
 var Mongo = {
 
-    init: function() {
-        mongoose.connect('mongodb://localhost/track');
+    profiles: {
+        dev: {db: "mongodb://localhost/track"},
+        test: {db: "mongodb://localhost/track_test"}
+    },
+
+    init: function(profile) {
+        profile = profile || this.profiles.dev;
+
+        mongoose.connect(profile.db);
 
         var TargetModel = {
             name    : String
@@ -15,23 +23,13 @@ var Mongo = {
         this.Target = mongoose.model('Target');
     },
 
-    deleteAll: function() {
-        // CAREFUL WITH THIS ONE!
+    loadFixtures: function() {
+
         this.Target.remove({}, function() {
             console.log('All removed!');
         });
-    },
 
-    createSampleData: function() {
-        var targets = [{
-            name: 'T-Talon ruokajono'
-        }, {
-            name: 'Mikä fiilis?'
-        }, {
-            name: 'Putouksen munamiehen läpän taso'
-        }]
-
-        targets.forEach(function(targetHash) {
+        Fixtures.targets.forEach(function(targetHash) {
             var target = new this.Target();
             target.name = targetHash.name;
 
@@ -39,7 +37,7 @@ var Mongo = {
                 if(error) {
                     console.error(error);
                 } else {
-                    console.log('Saved sample target: [name: ' + target.name + ', id: ' + target.id + ']');
+                    console.log('Saved fixture target: [name: ' + target.name + ', id: ' + target.id + ']');
                 }
             });
         }, this);

@@ -9,9 +9,9 @@
     "node-promise": "0.5.1"
   },
   "devDependencies": {
-    "jasmine-node": "1.0.21"
+    "public": "git://github.com/mikelehen/jasmine-node.git"
   },
   "scripts": {
-    "test": "jasmine-node spec/"
+    "test": "node_modules/jasmine-node/bin/jasmine-node --forceexit spec/"
   }
 }
