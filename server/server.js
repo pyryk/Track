@@ -11,10 +11,10 @@ var server = restify.createServer({
   name: ApplicationConstraints.name
 });
 
+server.use(restify.bodyParser());
+
 API.start(server);
 Mongo.init();
-Mongo.deleteAll();
-Mongo.createSampleData();
 
 server.listen(ApplicationConstraints.port, function() {
   console.log('%s listening at %s', server.name, server.url);

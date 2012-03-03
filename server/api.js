@@ -4,21 +4,25 @@ var API = {
     start: function(server) {
         server.get("/targets", this.getTargets);
         server.get("/target/:id", this.getTarget);
-        server.post("/target/:id", this.postTarget);
+        server.post("/target", this.postTarget);
     },
 
     getTargets: function(req, res, next) {
         Mongo.findAllTargets().then(function(data) {
-            res.send(200, data);
+            res.send(200, {targets: data});
         });
     },
 
     getTarget: function(req, res, next) {
-        res.send('not implemented');
+        Mongo.findTargetById(req.params.id).then(function(data) {
+            res.send(200, {target: data});
+        });
     },
 
     postTarget: function(req, res, next) {
-        res.send('not implemented');
+        Mongo.createTarget(req.params.name).then(function() {
+            res.send(201, "");
+        });
     }
 }
 
