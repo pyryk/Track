@@ -46,31 +46,36 @@ header h1 {
   font-weight: bold;
   font-family: Roboto;
 }
+/* line 45, ../scss/screen.scss */
+header h1 a:link, header h1 a:visited, header h1 a:active {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+}
 
-/* line 47, ../scss/screen.scss */
+/* line 52, ../scss/screen.scss */
 #main {
   padding-top: 40px;
   padding-bottom: 40px;
 }
 
-/* line 52, ../scss/screen.scss */
+/* line 57, ../scss/screen.scss */
 .primary-list {
   list-style-type: none;
   padding: 0;
 }
-/* line 56, ../scss/screen.scss */
+/* line 61, ../scss/screen.scss */
 .primary-list li {
   padding: 1em 0.5em;
   border: 0;
   border-bottom: 1px solid #666666;
   background-color: rgba(255, 255, 255, 0.1);
 }
-/* line 63, ../scss/screen.scss */
+/* line 68, ../scss/screen.scss */
 .primary-list li:first-child {
   border-top: 1px solid #666666;
 }
 
-/* line 68, ../scss/screen.scss */
+/* line 73, ../scss/screen.scss */
 footer {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2f2f2f), color-stop(50%, #151515), color-stop(51%, #000000), color-stop(100%, #000000));
   background-image: -webkit-linear-gradient(top, #2f2f2f, #151515 50%, #000000 51%, #000000);
@@ -84,4 +89,14 @@ footer {
   position: fixed;
   bottom: 0;
   left: 0;
+}
+
+/* line 83, ../scss/screen.scss */
+.loading-indicator {
+  margin: 10px;
+}
+
+/* line 87, ../scss/screen.scss */
+.hide {
+  display: none;
 }

@@ -51,7 +51,7 @@
 
   <div id="container">
     <header>
-      <h1>Track</h1>
+      <h1><a href="#">Track</a></h1>
     </header>
     <div id="main" role="main">
     </div>
@@ -62,13 +62,39 @@
   </div> <!--! end of #container -->
   
   <script id="template-TargetList" type="text/x-handlebars-template">
+    {{#if error}}
+      {{error}}
+    {{/if}}
     <ul class="primary-list" id="target-list">
-        {{#each items}}
-        <li>{{this.name}}</li>
-        {{/each}}
+      {{#each items}}
+        <li data-id="{{this.id}}">{{this.name}}</li>
+      {{/each}}
     </ul>
   </script>
-
+  
+  <script id="template-TargetDetails" type="text/x-handlebars-template">
+    {{#if error}}
+      {{error}}
+    {{/if}}
+    <div id="target-details">
+    {{#if target}}
+      {{#with target}}
+        <h2 class="target-name">{{name}}</h2>
+        {{#if metrics}}
+          {{#with metrics}}
+            <p class="target-question">{{question}}</p>
+            <p class="target-answer">
+              <input type="number" name="answer" /> <span class="unit">{{unit}}</span>
+            </p>
+            <button class="save-answer" type="button">Save</button>
+          {{/with}}
+        {{else}}
+          <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
+        {{/if}}
+      {{/with}}
+    {{/if}}
+    </div>
+  </script>
 
   <!-- JavaScript at the bottom for fast page loading -->
   <!-- libraries -->
