@@ -3,8 +3,7 @@ var BaseController = Spine.Controller.sub({
   },
   render: function() {
     var data = this.getData();
-    //var template = Handlebars.compile(this.template.html());
-    this.replace(this.template(data));
+    this.html(this.template(data));
   }
 });
 
@@ -12,7 +11,7 @@ var BaseController = Spine.Controller.sub({
  * A controller for the target item list
  *
  */
-var ListTargets = BaseController.sub({
+var TargetsList = BaseController.sub({
   elements: {
     ".targets": "targets"  
   },

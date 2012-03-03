@@ -6,8 +6,13 @@ var Target = Spine.Model.sub();
 
 Target.configure("Target", "name", "metrics");
 
-Target.extend({
-    
+Target.include({
+    getType: function() {
+      return "target"
+    },
+    getResourceName: function() {
+      return "targets"
+    },
 });
 
  

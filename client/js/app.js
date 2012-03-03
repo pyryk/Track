@@ -3,17 +3,10 @@ var App = Spine.Controller.sub({
   init: function() {
     this.routes({
       "!/targets/": function(params) {
-        if (!this.pages.targetList) {
-          log("creating view targetlist");
-          this.pages.targetList = new ListTargets({
-            el: $("#placeholder")
-          });
-        } else {
-          this.pages.targetList.render();
-        }
+        this.renderView('targetList', TargetsList);
       },
       "!/targets/:id": function(params) {
-        log("targets", params.id);
+        this.renderView('targetDetails', TargetDetails, params.id);
       },
       // default route
       "*others": function(params) {
@@ -23,10 +16,31 @@ var App = Spine.Controller.sub({
     });
     
     Spine.Route.setup();
+  },
+  renderView: function(name, className, id) {
+    // create controller if it doesnt already exist
+    if (!this.pages[name]) {
+      log("creating view " + name);
+      this.pages[name] = new className({
+        el: $("#main"),
+      });
+    }
+    
+    log("rendering view " + name);
+    this.pages[name].id = id; // set id if needed
+    this.pages[name].render();
   }
 });
 
-//TODO url resolver/generator
+/**
+ * Return a route fragment to a specific domain object (target etc.)
+ *
+ */
+App.getRoute = function(obj) {
+  return "!/" + obj.getResourceName() + "/"+obj.id;
+}
+
+//TODO url resolver?
 
 jQuery(function($) {
   var app = new App();
