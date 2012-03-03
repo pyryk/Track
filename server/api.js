@@ -20,7 +20,6 @@ var API = {
     },
 
     postTarget: function(req, res, next) {
-        console.log(req.params);
         Mongo.createTarget(req.params.name).then(function() {
             res.send(201, "");
         });
