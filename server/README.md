@@ -25,7 +25,7 @@ Reponse body:
 		target: {
 			_id: “12faggf”,
 			name: “T-Talon ruokajono”,
-			metrics: {
+			metric: {
 				unit: “min”,
 				question: “Kauanko jonotit ruokajonossa?”
 			}
@@ -40,6 +40,10 @@ Request body:
 
 	{
 		name: “Track target name”
+		metric: {
+			unit: "min",
+			question: "Kauanko sitä ja tätä?"
+		}
 	}
 	
 Status: 201 Created
