@@ -19,7 +19,7 @@ describe('API', function() {
 
             expect(next).toHaveBeenCalledWith(error);
         });
-    }
+    };
 
     beforeEach(function() {
         req.params = {};
@@ -53,14 +53,20 @@ describe('API', function() {
 
         it('should return details of a target', function() {
             spyOnPromise(Mongo, 'findTargetById').andCallSuccess(
-                {name: "T-Talon ruokajono", _id: "accab1234"}
-            );
+                {name: "T-Talon ruokajono", _id: "accab1234", metric: {
+                    unit: 'min',
+                    question: 'Kauanko jonotit?'
+                }
+                });
             req.params.id = 'accab1234';
 
             API.getTarget(req, res, next);
 
             expectBody(res).toEqual({
-                target: {name: "T-Talon ruokajono", _id: "accab1234"}
+                target: {name: "T-Talon ruokajono", _id: "accab1234", metric: {
+                    unit: 'min',
+                    question: 'Kauanko jonotit?'
+                }}
             });
             expectStatus(res).toEqual(200);
         });
@@ -71,13 +77,23 @@ describe('API', function() {
     describe('postTarget', function() {
 
         it('should return details of a target', function() {
-            spyOnPromise(Mongo, 'createTarget').andCallSuccess();
+            spyOnPromise(Mongo, 'createTarget').andCallSuccess('12345678901234567890abce');
             req.params.name = 'New tracking target';
+            req.params.metric = {
+                unit: 'min',
+                question: 'How much time?'
+            }
 
             API.postTarget(req, res, next);
 
-            expect(Mongo.createTarget).toHaveBeenCalledWith('New tracking target');
+            expect(Mongo.createTarget).toHaveBeenCalledWith({
+                name: 'New tracking target',
+                metric: {
+                    unit: 'min',
+                    question: 'How much time?'
+                }});
             expectStatus(res).toEqual(201);
+            expectBody(res).toEqual({_id: '12345678901234567890abce'});
         });
 
         itShouldCallNextWithError('postTarget', 'createTarget');

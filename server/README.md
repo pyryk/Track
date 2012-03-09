@@ -50,4 +50,4 @@ Status: 201 Created
 
 Response body: 
 
-	{}
+	{_id: "12345678901234567890abcd"}

@@ -27,13 +27,25 @@ describe('Integration test', function() {
                 expect(result.body).toEqual({
                     targets: [{
                         name: 'T-Talon ruokajono',
-                        _id: '12345678901234567890abce'
+                        _id: '12345678901234567890abce',
+                        metric: {
+                            unit: 'min',
+                            question: 'Kauanko jonotit?'
+                        }
                     }, {
                         name: 'Mikä fiilis?',
-                        _id: '12345678901234567890abcd'
+                        _id: '12345678901234567890abcd',
+                        metric: {
+                            unit: '1-5',
+                            question: 'Millainen fiilis sinulla on tällä hetkellä?'
+                        }
                     }, {
                         name: 'Putouksen munamiehen läpän taso',
-                        _id: '12345678901234567890abcf'
+                        _id: '12345678901234567890abcf',
+                        metric: {
+                            unit: '4-10',
+                            question: 'No millasta läpyskää puskee?'
+                        }
                     }]
                 });
             });
@@ -45,35 +57,47 @@ describe('Integration test', function() {
                 expect(result.body).toEqual({
                     target: {
                         name: 'T-Talon ruokajono',
-                        _id: '12345678901234567890abce'
+                        _id: '12345678901234567890abce',
+                        metric: {
+                            unit: 'min',
+                            question: 'Kauanko jonotit?'
+                        }
                     }
                 });
             });
         });
 
         it('POST /target', function() {
-            var requestComplete = false;
+            var id;
 
             runs(function() {
-                testRequest({method: 'POST', path: '/target', body: {name: "New track target"}}, function(result) {
-                    expect(result.statusCode).toEqual(201);
-                    expect(result.body).toEqual({});
+                var body = {
+                    name: "New track target",
+                    metric: {
+                        unit: "1-5",
+                        question: "Mitä mitä?"
+                    }
+                }
 
-                    requestComplete = true;
+                testRequest({method: 'POST', path: '/target', body: body}, function(result) {
+                    expect(result.statusCode).toEqual(201);
+                    expect(result.body._id.length).toEqual(24); // Valid 24 length string
+                    id = result.body._id;
                 });
             });
 
             waitsFor(function() {
-                return requestComplete;
+                return id;
             });
 
             runs(function() {
-                testRequest({method: 'GET', path: '/targets'}, function(result) {
+                testRequest({method: 'GET', path: '/target/' + id}, function(result) {
                     expect(result.statusCode).toEqual(200);
-                    expect(result.body.targets.length).toEqual(4);
-                    expect(result.body.targets.some(function(target) {
-                        return target.name === "New track target";
-                    })).toBeTruthy();
+                    expect(result.body.target.name).toEqual("New track target");
+                    expect(result.body.target.metric).toEqual({
+                        unit: "1-5",
+                        question: "Mitä mitä?"
+                    });
                 });
             });
         });

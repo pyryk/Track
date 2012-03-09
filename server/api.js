@@ -26,8 +26,8 @@ var API = {
     },
 
     postTarget: function(req, res, next) {
-        Mongo.createTarget(req.params.name).then(function() {
-            res.send(201, "");
+        Mongo.createTarget(req.params).then(function(id) {
+            res.send(201, {_id: id});
             return next();
         }, function(error) {
             return next(error);
