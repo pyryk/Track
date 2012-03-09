@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "dependencies": {
     "mongoose": "2.5.9",
-    "restify": "1.0.1",
+    "restify": "1.2.0",
     "node-promise": "0.5.1"
   },
   "devDependencies": {
