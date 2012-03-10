@@ -1,57 +1,14 @@
 var Mongo = require('../mongo');
 var API = require('../api');
+var APIHelpers = require('./helpers').API;
+
+// Helper methods for API testing
+var spyOnPromise = APIHelpers.spyOnPromise;
+var expectStatus = APIHelpers.expectStatus;
+var expectBody = APIHelpers.expectBody;
 
 describe('API', function() {
     var req = {}, res = {}, next;
-
-    var spyOnPromise = function(Klass, method) {
-        var spy = spyOn(Klass, method);
-
-        return {
-            andCallSuccess: function(returnValue) {
-                spy.andReturn({
-                    then: function(callback) {
-                        callback(returnValue);
-                    }
-                })
-            },
-            andCallError: function(errorValue) {
-                spy.andReturn({
-                    then: function(callback, error) {
-                        error(errorValue);
-                    }
-                })
-            }
-        };
-    };
-
-    var expectStatus = function(res, status) {
-        var args = res.send.mostRecentCall.args;
-
-        if(args.length === 1) {
-            // Ok
-            return expect(200);
-        }
-        if(args.length === 2) {
-            return expect(args[0]);
-        }
-
-        return expect(NaN);
-    };
-
-    var expectBody = function(body) {
-        var args = res.send.mostRecentCall.args;
-
-        if(args.length === 1) {
-            // Ok
-            return expect(args[0]);
-        }
-        if(args.length === 2) {
-            return expect(args[1]);
-        }
-
-        return expect(null);
-    };
 
     var itShouldCallNextWithError = function(apiMethod, mongoMethod) {
         it('should call next with error', function() {
@@ -62,17 +19,11 @@ describe('API', function() {
 
             expect(next).toHaveBeenCalledWith(error);
         });
-    };
+    }
 
     beforeEach(function() {
-
-        // Request
         req.params = {};
-
-        // Response
         res.send = jasmine.createSpy('res.send');
-
-        // Next
         next = jasmine.createSpy('next');
     });
 

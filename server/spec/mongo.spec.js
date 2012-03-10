@@ -1,24 +1,13 @@
 var Mongo = require('../mongo');
+var MongoHelpers = require('./helpers').Mongo;
 
+// Helper methods for Mongo testing
+var testDB = MongoHelpers.testDB;
+
+// Initialize database for tests
 Mongo.init(Mongo.profiles.test);
 
 describe('Mongo', function() {
-
-    var testDB = function(dbPromise, callback) {
-        var promiseReturns;
-
-        dbPromise.then(function() {
-            promiseReturns = arguments;
-        });
-
-        waitsFor(function() {
-            return promiseReturns;
-        });
-
-        runs(function() {
-            callback.apply(this, promiseReturns);
-        });
-    }
 
     beforeEach(function() {
         Mongo.loadFixtures();
