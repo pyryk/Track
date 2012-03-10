@@ -1,67 +1,25 @@
-var http = require('http');
-var Promise = require('node-promise').Promise;
 var Mongo = require('../mongo');
+var IntegrationHelpers = require('./helpers').Integration;
+
+// Initialize server for integration tests
+var confs = {port: 9999, name: "Track API integration test server"};
+require('../server').createServer(confs).start();
+
+// Helper methods for Mongo testing
+var testRequest = function(opts, callback) {
+    return IntegrationHelpers.testRequest(opts, confs, callback);
+}
+
+// Initialize Mongo for integration tests
+Mongo.init(Mongo.profiles.test);
 
 describe('Integration test', function() {
-
-    var confs = {port: 9999, name: "Track API integration test server"};
-
-    Mongo.init(Mongo.profiles.test);
-    require('../server').createServer(confs).start();
 
     beforeEach(function() {
         Mongo.loadFixtures();
     });
 
     describe('GET /targets', function() {
-
-        var testRequest = function(opts, callback) {
-            var promiseResult;
-
-            var promise = Promise();
-            opts = opts || {};
-            opts.port = confs.port;
-            opts.headers = {
-                "Content-Type": "application/json"
-            };
-
-            var req = http.request(opts, function(res) {
-                var statusCode = res.statusCode;
-                var headers = res.headers;
-                var body = '';
-                res.setEncoding('utf8');
-                res.on('data', function (chunk) {
-                    body += chunk;
-                });
-                res.on('end', function () {
-                    body = body !== '' ? JSON.parse(body) : {};
-
-                    promise.resolve({statusCode: statusCode, headers: headers, body: body});
-                });
-            });
-
-            req.on('error', function(e) {
-                console.log('problem with request: ' + e.message);
-            });
-
-            if(opts.body) {
-                req.write(JSON.stringify(opts.body));
-            }
-
-            req.end();
-
-            promise.then(function() {
-                promiseResult = arguments;
-            });
-
-            waitsFor(function() {
-                return promiseResult;
-            });
-
-            runs(function() {
-                callback.apply(this, promiseResult);
-            });
-        };
 
         it('GET /targets', function() {
             testRequest({method: 'GET', path: '/targets'}, function(result) {

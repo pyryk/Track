@@ -68,8 +68,6 @@ var Mongo = {
         var target = new this.Target();
         target.name = name;
 
-        console.log('Createing target with name', name);
-
         target.save(function(error) {
             this.resolvePromise(error, promise)
         }.bind(this));
