@@ -14,11 +14,18 @@ var Mongo = {
 
         mongoose.connect(profile.db);
 
-        var TargetModel = {
-            name    : String
-        };
+        var Target = new mongoose.Schema({
+            name: String,
+            metric: {
+                unit: String,
+                question: String
+            },
+            results: [{
+                timestamp: Date,
+                value: Number
+            }]
+        });
 
-        var Target = new mongoose.Schema(TargetModel);
         mongoose.model('Target', Target);
         this.Target = mongoose.model('Target');
     },
@@ -62,15 +69,38 @@ var Mongo = {
         return promise;
     },
 
-    createTarget: function(name) {
+    createTarget: function(params) {
         var promise = Promise();
 
         var target = new this.Target();
-        target.name = name;
+        target.name = params.name;
+        target.metric = params.metric;
 
         target.save(function(error) {
-            this.resolvePromise(error, promise)
+            var id = target._id;
+            this.resolvePromise(error, id, promise)
         }.bind(this));
+
+        return promise;
+    },
+
+    addResult: function(params) {
+        var promise = Promise();
+
+        this.findTargetById(params._id).then(function(target) {
+            if(!target.results) {
+                target.results = [];
+            }
+
+            target.results.push({timestamp: new Date(), value: params.value});
+
+            target.save(function(error) {
+                Mongo.resolvePromise(error, promise);
+            }.bind(this));
+
+        }, function(error) {
+            this.resolvePromise(error, promise);
+        })
 
         return promise;
     },

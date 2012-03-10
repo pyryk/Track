@@ -118,6 +118,11 @@ var Integration = {
         runs(function() {
             callback.apply(this, promiseResult);
         });
+    },
+
+    isTimestamp: function(string) {
+        // Valid timestamp 2012-03-10T15:36:38.587Z
+        return string.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/) !== null
     }
 };
 
