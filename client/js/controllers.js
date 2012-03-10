@@ -25,6 +25,9 @@ var TargetsList = BaseController.sub({
     Target.bind("create", this.proxy(this.addOne));
     this.rawTemplate = this.template || $("#template-TargetList");
     this.template = Handlebars.compile(this.rawTemplate.html());
+    
+    // load initial set of targets
+    Target.loadList();
   },
   addOne: function(task){
     this.render();
@@ -32,7 +35,9 @@ var TargetsList = BaseController.sub({
   clicked: function(e) {
     var id = $(e.target).attr('data-id');
     if (id) {
-      Spine.Route.navigate(App.getRoute(Target.find(id)));
+      var target = Target.find(id);
+      target.loadDetails();
+      Spine.Route.navigate(App.getRoute(target));
     }
   }
 });
@@ -44,18 +49,29 @@ var TargetDetails = BaseController.sub({
   init: function() {
     this.rawTemplate = this.template || $("#template-TargetDetails");
     this.template = Handlebars.compile(this.rawTemplate.html());
+    Target.bind("create update", this.proxy(this.targetUpdated));
   },
   getData: function() {
     var target, error;
     try {
       target = Target.find(this.id);
       log("Rendering ", target);
-    } catch (e) {
+    } catch (e) { // unknown record
+      // try to load record
+      Target.loadDetails(this.id, this);
       error = e;
       log(e);
     }
     
     return {target: target, error: error};
+  },
+  error: function(reason) {
+    if (reason == "notfound") {
+      alert('not found');
+    }
+  },
+  targetUpdated: function() { // TODO update only if this target has updated
+    this.render();
   },
   saveAnswer: function(e) {
     var fields = $(e.target).siblings('.target-answer').children('input');

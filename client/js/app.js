@@ -32,6 +32,8 @@ var App = Spine.Controller.sub({
   }
 });
 
+App.serverURL = "http://mkos.futupeople.com/track/";
+
 /**
  * Return a route fragment to a specific domain object (target etc.)
  *
@@ -41,8 +43,3 @@ App.getRoute = function(obj) {
 }
 
 //TODO url resolver?
-
-jQuery(function($) {
-  var app = new App();
-  //Spine.Route.navigate("/targets/11");
-});
