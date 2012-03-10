@@ -1,17 +1,17 @@
 /* ==================== app specific styles ==================== */
 @font-face {
   font-family: "Roboto";
-  src: url('/Users/pyry/Documents/studiox/track/client/css/fonts/Roboto-Regular.ttf') format('truetype');
+  src: url('/css/fonts/Roboto-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: "Roboto Bold";
-  src: url('/Users/pyry/Documents/studiox/track/client/css/fonts/Roboto-Bold.ttf') format('truetype');
+  src: url('/css/fonts/Roboto-Bold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: "Roboto Italic";
-  src: url('/Users/pyry/Documents/studiox/track/client/css/fonts/Roboto-Italic.ttf') format('truetype');
+  src: url('/css/fonts/Roboto-Italic.ttf') format('truetype');
 }
 
 /* line 17, ../scss/app.scss */
