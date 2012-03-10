@@ -80,16 +80,17 @@
     {{#if target}}
       {{#with target}}
         <h2 class="target-name">{{name}}</h2>
+        {{#unless detailsLoaded}}
+          <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
+        {{/unless}}
         {{#if metrics}}
           {{#with metrics}}
             <p class="target-question">{{question}}</p>
             <p class="target-answer">
               <input type="number" name="answer" /> <span class="unit">{{unit}}</span>
             </p>
-            <button class="save-answer" type="button">Save</button>
+            <button class="save-answer" type="button">Send</button>
           {{/with}}
-        {{else}}
-          <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
         {{/if}}
       {{/with}}
     {{/if}}
