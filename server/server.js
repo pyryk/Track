@@ -2,20 +2,31 @@ var restify = require('restify');
 var API = require('./api');
 var Mongo = require('./mongo');
 
-var ApplicationConstraints = {
-    port: 9999,
-    name: "TrackAPI"
+// Private server
+var server;
+var confs;
+
+var Server = {
+
+    createServer: function(serverConfigurations) {
+        confs = serverConfigurations;
+
+        server = restify.createServer({
+            name: confs.name
+        });
+
+        server.use(restify.bodyParser());
+
+        return this;
+    },
+
+    start: function() {
+        API.start(server);
+
+        server.listen(confs.port, function() {
+            console.log('%s listening at %s', server.name, server.url);
+        });
+    }
 }
 
-var server = restify.createServer({
-  name: ApplicationConstraints.name
-});
-
-server.use(restify.bodyParser());
-
-API.start(server);
-Mongo.init();
-
-server.listen(ApplicationConstraints.port, function() {
-  console.log('%s listening at %s', server.name, server.url);
-});
+module.exports = Server;
