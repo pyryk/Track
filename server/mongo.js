@@ -19,7 +19,11 @@ var Mongo = {
             metric: {
                 unit: String,
                 question: String
-            }
+            },
+            results: [{
+                timestamp: Date,
+                value: Number
+            }]
         });
 
         mongoose.model('Target', Target);
@@ -76,6 +80,27 @@ var Mongo = {
             var id = target._id;
             this.resolvePromise(error, id, promise)
         }.bind(this));
+
+        return promise;
+    },
+
+    addResult: function(params) {
+        var promise = Promise();
+
+        this.findTargetById(params._id).then(function(target) {
+            if(!target.results) {
+                target.results = [];
+            }
+
+            target.results.push({timestamp: new Date(), value: params.value});
+
+            target.save(function(error) {
+                Mongo.resolvePromise(error, promise);
+            }.bind(this));
+
+        }, function(error) {
+            this.resolvePromise(error, promise);
+        })
 
         return promise;
     },

@@ -50,4 +50,18 @@ describe('Mongo', function() {
         });
     });
 
+    describe('addResult', function() {
+        it('should add a new result entry to the tracking target', function() {
+            testDB(Mongo.addResult({
+                _id: '12345678901234567890abce',
+                value: 15
+            }), function() {
+                testDB(Mongo.findTargetById('12345678901234567890abce'), function(dbResult) {
+                    expect(dbResult.results.length).toEqual(6);
+                    expect(dbResult.results[5].value).toEqual(15);
+                });
+            });
+        })
+    })
+
 });

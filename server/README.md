@@ -1,5 +1,7 @@
 # Track RESTful API
 
+All the requests with body (POST requests) should have a application/json Content-Type header set.
+
 ### GET /targets - Lists all targets
 
 Status: 200 Ok
@@ -15,7 +17,7 @@ Response body:
 	}
   
 
-### GET /target/:id - Returns specific target with detailed info
+### GET /target/:_id - Returns specific target with detailed info
 
 Status: 200 Ok
 
@@ -28,13 +30,16 @@ Reponse body:
 			metric: {
 				unit: “min”,
 				question: “Kauanko jonotit ruokajonossa?”
-			}
+			},
+			results: [
+			    {"value": 15, "timestamp": "2012-03-10T15:53:29.015Z"},
+			    {"value": 16, "timestamp": "2012-03-10T15:53:33.002Z"},
+			    {"value": 17, "timestamp": "2012-03-10T15:53:36.151Z"}
+			]
 		}
 	}
 
 ### POST /target - Create a new target
-
-Header: Content-Type (application/json)
 
 Request body:
 
@@ -51,3 +56,17 @@ Status: 201 Created
 Response body: 
 
 	{_id: "12345678901234567890abcd"}
+
+### POST /target/:_id/result - Send tracking result
+
+Request body:
+
+    {
+        value: "12"
+    }
+
+Status: 204 No content
+
+Response body:
+
+    { }

@@ -5,7 +5,8 @@ module.exports = {
         metric: {
             unit: 'min',
             question: 'Kauanko jonotit?'
-        }
+        },
+        results: [10, 5, 6, 7, 20]
     }, {
         name: 'Mikä fiilis?',
         _id: '12345678901234567890abcd',
