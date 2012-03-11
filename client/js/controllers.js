@@ -19,7 +19,7 @@ var TargetsList = BaseController.sub({
     "click #target-list li": "clicked"
   },
   getData: function() {
-    return {items: Target.all()};
+    return {items: Target.findAllByAttribute("saved", true)};
   },
   init: function() {
     Target.bind("create", this.proxy(this.addOne));
@@ -33,11 +33,14 @@ var TargetsList = BaseController.sub({
     this.render();
   },
   clicked: function(e) {
-    var id = $(e.target).attr('data-id');
+    var el = $(e.target);
+    var id = el.attr('data-id');
     if (id) {
       var target = Target.find(id);
       target.loadDetails();
       Spine.Route.navigate(App.getRoute(target));
+    } else if (el.hasClass("create-new")) {
+      Spine.Route.navigate(App.getRoute("create_target"));
     }
   }
 });
@@ -76,5 +79,36 @@ var TargetDetails = BaseController.sub({
   saveAnswer: function(e) {
     var fields = $(e.target).siblings('.target-answer').children('input');
     log("Saving answer", fields);
+  }
+});
+
+var TargetCreate = BaseController.sub({
+  events: {
+    "submit #create-target-form": "saveTarget"
+  },
+  init: function() {
+    this.rawTemplate = this.template || $("#template-TargetCreate");
+    this.template = Handlebars.compile(this.rawTemplate.html());
+  },
+  targetSavedToServer: function(target, success) {
+    console.log(target.name + (success ? '' : ' _NOT_') + ' saved to server');
+    if (success) {
+      console.log(App.getRoute(target));
+      Spine.Route.navigate(App.getRoute(target)); 
+    } else {
+      // signal failure to the user
+    }
+  },
+  getData: function() {
+    return {};
+  },
+  saveTarget: function(e) {
+    e.preventDefault();
+    console.log(e);
+    var target = Target.fromForm($(e.target));
+    target.bind("saveToServer", this.targetSavedToServer);
+    target.saveToServer();
+    
+    console.log(target.toJSON());
   }
 });

@@ -52,6 +52,8 @@ header {
 #main {
   padding-top: $header_height;
   padding-bottom: $header_height;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .primary-list {
@@ -86,4 +88,14 @@ footer {
 
 .hide {
   display: none;
+}
+
+input[type=text] {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* no point to have red bg on untouched text boxes */
+input[type=text]:invalid {
+  background-color: white;
 }

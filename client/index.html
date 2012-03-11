@@ -69,6 +69,7 @@
       {{#each items}}
         <li data-id="{{this.id}}">{{this.name}}</li>
       {{/each}}
+      <li class="create-new">Create a new Track target</li>
     </ul>
   </script>
   
@@ -83,8 +84,8 @@
         {{#unless detailsLoaded}}
           <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
         {{/unless}}
-        {{#if metrics}}
-          {{#with metrics}}
+        {{#if metric}}
+          {{#with metric}}
             <p class="target-question">{{question}}</p>
             <p class="target-answer">
               <input type="number" name="answer" /> <span class="unit">{{unit}}</span>
@@ -96,6 +97,17 @@
     {{/if}}
     </div>
   </script>
+  
+  <script id="template-TargetCreate" type="text/x-handlebars-template">
+    <div id="target-details">
+      <form id="create-target-form">
+        <h2 class="target-name"><input type="text" name="name" placeholder="Name" required /></h2>
+        <p class="target-question"><input type="text" name="metric__question" placeholder="Question" required /></p>
+        <p class="target-unit"><input type="text" name="metric__unit" placeholder="Unit" /></p>
+        <button class="save-target" type="submit">Create</button>
+      </form>
+    </div>
+  </script>
 
   <!-- JavaScript at the bottom for fast page loading -->
   <!-- libraries -->
@@ -103,7 +115,7 @@
   <script src="js/libs/spine.js"></script>
   <script src="js/libs/spine.route.js"></script>
   <script src="js/libs/handlebars.js"></script>
-  
+  <script src="js/libs/cordova-1.5.0.js"></script>
 
   <!-- our code -->
   <script src="js/models.js"></script>

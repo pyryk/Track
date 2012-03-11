@@ -2,7 +2,7 @@ describe("Local targets", function() {
   it("Targets can be created", function() {
     var target = Target.create({
       name: "Test target", 
-      metrics: {
+      metric: {
         unit:"min",
         question: "Enter random number of minutes"
       }
@@ -13,7 +13,7 @@ describe("Local targets", function() {
   it("Targets are shown in the app", function() {
     var target = Target.create({
       name: "Test target", 
-      metrics: {
+      metric: {
         unit:"min",
         question: "Enter random number of minutes"
       }

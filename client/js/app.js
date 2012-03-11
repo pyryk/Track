@@ -5,6 +5,9 @@ var App = Spine.Controller.sub({
       "!/targets/": function(params) {
         this.renderView('targetList', TargetsList);
       },
+      "!/targets/create": function(params) {
+        this.renderView('targetCreate', TargetCreate);
+      },
       "!/targets/:id": function(params) {
         this.renderView('targetDetails', TargetDetails, params.id);
       },
@@ -33,13 +36,19 @@ var App = Spine.Controller.sub({
 });
 
 App.serverURL = "http://mkos.futupeople.com/track/";
+//App.serverURL = "http://localhost:9999/";
 
 /**
  * Return a route fragment to a specific domain object (target etc.)
  *
  */
 App.getRoute = function(obj) {
-  return "!/" + obj.getResourceName() + "/"+obj.id;
+  // special cases first
+  if (obj === "create_target") {
+    return "!/targets/create";
+  }
+  
+  return "!/" + obj.getResourceName() + "/" + obj.id
 }
 
 //TODO url resolver?
