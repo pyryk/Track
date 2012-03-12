@@ -30,7 +30,9 @@ var TargetsList = BaseController.sub({
     Target.loadList();
   },
   addOne: function(task){
-    this.render();
+    if (window.track.visiblePage == this) {
+      this.render();
+    }
   },
   clicked: function(e) {
     var el = $(e.target);
@@ -45,13 +47,31 @@ var TargetsList = BaseController.sub({
   }
 });
 
+var ownResult = BaseController.sub({
+  init: function() {
+    this.rawTemplate = this.template || $("#template-ownAnswer");
+    this.template = Handlebars.compile(this.rawTemplate.html());
+  },
+  getData: function() {
+    try {
+      var result = Result.find(this.id)
+      return {result: result};
+    } catch(e) {
+      return {error: e};
+    }
+  },
+});
+
 var TargetDetails = BaseController.sub({
   events: {
-    "click .save-answer": "saveAnswer"
+    "submit #answer-form": "saveAnswer"
   },
   init: function() {
     this.rawTemplate = this.template || $("#template-TargetDetails");
     this.template = Handlebars.compile(this.rawTemplate.html());
+    
+    // this is binded to all events to avoid the unbind-old/bind-new
+    // hassle when viewing another target
     Target.bind("create update", this.proxy(this.targetUpdated));
   },
   getData: function() {
@@ -73,12 +93,26 @@ var TargetDetails = BaseController.sub({
       alert('not found');
     }
   },
-  targetUpdated: function() { // TODO update only if this target has updated
-    this.render();
+  targetUpdated: function(target) { // TODO update only if this target has updated
+    if (target.id === this.id && window.track.visiblePage == this) {
+      this.render();
+    }
+  },
+  answerSaved: function(answer, success) {
+    if (success) {
+      Spine.Route.navigate(App.getRoute(answer));
+    } else {
+      log("Answer not saved!");
+    }
   },
   saveAnswer: function(e) {
-    var fields = $(e.target).siblings('.target-answer').children('input');
-    log("Saving answer", fields);
+    e.preventDefault();
+    var field = $(e.target).find('input[name="answer"]');
+    log("Saving answer", field);
+    var target = Target.find(this.id);
+    var result = Result.create({target: target, value: field.val()});
+    result.bind('resultSent', this.answerSaved);
+    result.post();
   }
 });
 

@@ -1,5 +1,6 @@
 var App = Spine.Controller.sub({
   pages: {},
+  visiblePage: undefined,
   init: function() {
     this.routes({
       "!/targets/": function(params) {
@@ -10,6 +11,9 @@ var App = Spine.Controller.sub({
       },
       "!/targets/:id": function(params) {
         this.renderView('targetDetails', TargetDetails, params.id);
+      },
+      "!/results/:id": function(params) {
+        this.renderView('ownResult', ownResult, params.id);
       },
       // default route
       "*others": function(params) {
@@ -32,11 +36,12 @@ var App = Spine.Controller.sub({
     log("rendering view " + name);
     this.pages[name].id = id; // set id if needed
     this.pages[name].render();
+    this.visiblePage = this.pages[name];
   }
 });
 
-App.serverURL = "http://mkos.futupeople.com/track/";
-//App.serverURL = "http://localhost:9999/";
+//App.serverURL = "http://mkos.futupeople.com/track/";
+App.serverURL = "http://localhost:9999/";
 
 /**
  * Return a route fragment to a specific domain object (target etc.)

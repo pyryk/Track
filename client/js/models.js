@@ -4,7 +4,7 @@
  */
 var Target = Spine.Model.sub();
 
-Target.configure("Target", "name", "metric", "detailsLoaded", "saved");
+Target.configure("Target", "name", "metric", "results", "detailsLoaded", "saved");
 
 Target.include({
     getType: function() {
@@ -16,7 +16,7 @@ Target.include({
     loadDetails: function(listener) {
       Target.loadDetails(this.id, listener);
     },
-    saveToServer: function(listener) {
+    saveToServer: function() {
       var url = App.serverURL;
       
       if (url.substring(url.length-1) !== "/") {
@@ -38,7 +38,6 @@ Target.include({
         dataType: "json",
         data: data,
         success: function(data) {
-          console.log(data);
           that.id = data._id;
           that.saved = true;
           that.detailsLoaded = true;
@@ -52,7 +51,8 @@ Target.include({
       });
     },
     saved: false,
-    detailsLoaded: false
+    detailsLoaded: false,
+    results: []
 });
 
 /**
@@ -160,3 +160,56 @@ Target.fromForm = function(form) {
   });
   return Target.create(data);
 } 
+
+/* -------------------------------------- */
+/* result (answer of the target question) */
+var Result = Spine.Model.sub();
+
+Result.configure("Result", "value", "timestamp", "target", "saved");
+
+Result.include({
+  getType: function() {
+    return "result"
+  },
+  getResourceName: function() {
+    return "results"
+  },
+  post: function() {
+    if (!this.target) {
+      log("a result without target!", this);
+      return;
+    }
+    
+    var url = App.serverURL;
+  
+    if (url.substring(url.length-1) !== "/") {
+      url += "/";
+    }
+    url += "target/" + this.target.id + "/" + "result";
+  
+    var toSend = {
+      value: this.value
+    }
+    var data = JSON.stringify(toSend);
+  
+    var that = this;
+    $.ajax({
+      url: url,
+      type: "POST",
+      contentType: "application/json",
+      dataType: "json",
+      data: data,
+      success: function(data) {
+        that.saved = true;
+        that.save();
+        
+        that.target.loadDetails();
+        that.trigger("resultSent", true);
+      }, 
+      error: function(jqxhr, status, err) {
+        that.trigger("resultSent", false);
+        alert(status + ': ' + err);
+      }
+    });
+  }
+});

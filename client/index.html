@@ -86,11 +86,13 @@
         {{/unless}}
         {{#if metric}}
           {{#with metric}}
-            <p class="target-question">{{question}}</p>
-            <p class="target-answer">
-              <input type="number" name="answer" /> <span class="unit">{{unit}}</span>
-            </p>
-            <button class="save-answer" type="button">Send</button>
+            <form id="answer-form">
+              <p class="target-question">{{question}}</p>
+              <p class="target-answer">
+                <input type="number" name="answer" /> <span class="unit">{{unit}}</span>
+              </p>
+              <button class="save-answer" type="submit">Send</button>
+            </form>
           {{/with}}
         {{/if}}
       {{/with}}
@@ -107,6 +109,21 @@
         <button class="save-target" type="submit">Create</button>
       </form>
     </div>
+  </script>
+  
+  <script id="template-ownAnswer" type="text/x-handlebars-template">
+    {{#if error}}
+      {{error}}
+    {{else}}
+      {{#with result}}
+        <h1>Thanks! Your answer was saved!</h1>
+        <div class="target">
+          <h2 class="name">{{target.name}}</h2>
+          <p class="question">{{target.metric.question}}</p>
+          <p class="answer">{{value}} <span class="unit">({{target.metric.unit}})</span></p>
+        </div>
+      {{/with}}
+    {{/if}}
   </script>
 
   <!-- JavaScript at the bottom for fast page loading -->
@@ -141,7 +158,7 @@
   </script> -->
   <script type="text/javascript">
     jQuery(function($) {
-      var app = new App();
+      window.track = new App();
     });
   </script>
 </body>
