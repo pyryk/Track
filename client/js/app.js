@@ -40,8 +40,8 @@ var App = Spine.Controller.sub({
   }
 });
 
-//App.serverURL = "http://mkos.futupeople.com/track/";
-App.serverURL = "http://localhost:9999/";
+App.serverURL = window.trackConfig.serverURL || "http://mkos.futupeople.com/track/";
+//App.serverURL = "http://localhost:9999/";
 
 /**
  * Return a route fragment to a specific domain object (target etc.)

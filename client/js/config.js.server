@@ -1,0 +1,4 @@
+/* local config file */
+window.trackConfig = {
+  serverURL: "http://mkos.futupeople.com/track/",
+};
