@@ -35,7 +35,7 @@ header {
   width: 100%;
   margin-top: 0;
   padding-top: 0;
-  background-color: rgba(100, 100, 100, 0.7);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.3)), color-stop(0.5, rgba(255, 255, 255, 0.1)), color-stop(0.5, rgba(255, 255, 255, 0))), -webkit-gradient(linear, left top, left bottom, from(#7189a6), to(#6a83a1));
   border-bottom: 1px solid #666666;
 }
 /* line 38, ../scss/app.scss */

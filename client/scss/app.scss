@@ -2,7 +2,7 @@
 @import "compass";
 /* ==================== app specific styles ==================== */
 
-$header_color: rgba(100,100,100,0.7);
+$header_color: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.30)), color-stop(0.5, rgba(255, 255, 255, 0.10)), color-stop(0.5, rgba(255, 255, 255, 0.00))), -webkit-gradient(linear, left top, left bottom, from(#7189A6), to(#6A83A1));
 $footer_color: rgba(100,100,100,1);
 $header_height: 40px;
 $border_color: #666;
@@ -32,7 +32,7 @@ header {
   width: 100%;
   margin-top: 0;
   padding-top: 0;
-  background-color: $header_color;
+  background-image: $header_color;
   border-bottom: 1px solid $border_color;
   
   h1 {
