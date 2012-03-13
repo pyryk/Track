@@ -14,19 +14,20 @@
   src: url('/css/fonts/Roboto-Italic.ttf') format('truetype');
 }
 
-/* line 17, ../scss/app.scss */
+/* line 18, ../scss/app.scss */
 body {
-  background-color: #333333;
-  color: rgba(255, 255, 255, 0.8);
+  -webkit-background-size: 0.438em 100%;
+  background-image: -webkit-gradient(linear, left top, right top, from(#c5ccd4), color-stop(71%, #c5ccd4), color-stop(72%, #cbd2d8), to(#cbd2d8));
+  color: black;
   font-family: Roboto;
 }
 
-/* line 23, ../scss/app.scss */
+/* line 25, ../scss/app.scss */
 #container {
   padding: 0;
 }
 
-/* line 27, ../scss/app.scss */
+/* line 29, ../scss/app.scss */
 header {
   position: fixed;
   top: 0;
@@ -38,7 +39,7 @@ header {
   background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.3)), color-stop(0.5, rgba(255, 255, 255, 0.1)), color-stop(0.5, rgba(255, 255, 255, 0))), -webkit-gradient(linear, left top, left bottom, from(#7189a6), to(#6a83a1));
   border-bottom: 1px solid #666666;
 }
-/* line 38, ../scss/app.scss */
+/* line 40, ../scss/app.scss */
 header h1 {
   padding: 0.25em;
   margin: 0;
@@ -46,13 +47,13 @@ header h1 {
   font-weight: bold;
   font-family: Roboto;
 }
-/* line 45, ../scss/app.scss */
+/* line 47, ../scss/app.scss */
 header h1 a:link, header h1 a:visited, header h1 a:active {
-  color: rgba(255, 255, 255, 0.8);
+  color: black;
   text-decoration: none;
 }
 
-/* line 52, ../scss/app.scss */
+/* line 54, ../scss/app.scss */
 #main {
   padding-top: 40px;
   padding-bottom: 40px;
@@ -60,24 +61,41 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   padding-right: 5px;
 }
 
-/* line 59, ../scss/app.scss */
+/* line 61, ../scss/app.scss */
 .primary-list {
   list-style-type: none;
   padding: 0;
 }
-/* line 63, ../scss/app.scss */
+/* line 65, ../scss/app.scss */
 .primary-list li {
   padding: 1em 0.5em;
   border: 0;
   border-bottom: 1px solid #666666;
-  background-color: rgba(255, 255, 255, 0.1);
+  border-left: 1px solid #666666;
+  border-right: 1px solid #666666;
+  background-color: white;
 }
-/* line 70, ../scss/app.scss */
+/* line 74, ../scss/app.scss */
 .primary-list li:first-child {
   border-top: 1px solid #666666;
+  -moz-border-radius: 5px 5px 0px 0px;
+  -webkit-border-radius: 5px 5px 0px 0px;
+  -o-border-radius: 5px 5px 0px 0px;
+  -ms-border-radius: 5px 5px 0px 0px;
+  -khtml-border-radius: 5px 5px 0px 0px;
+  border-radius: 5px 5px 0px 0px;
+}
+/* line 79, ../scss/app.scss */
+.primary-list li:last-child {
+  -moz-border-radius: 0px 0px 5px 5px;
+  -webkit-border-radius: 0px 0px 5px 5px;
+  -o-border-radius: 0px 0px 5px 5px;
+  -ms-border-radius: 0px 0px 5px 5px;
+  -khtml-border-radius: 0px 0px 5px 5px;
+  border-radius: 0px 0px 5px 5px;
 }
 
-/* line 75, ../scss/app.scss */
+/* line 84, ../scss/app.scss */
 footer {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2f2f2f), color-stop(50%, #151515), color-stop(51%, #000000), color-stop(100%, #000000));
   background-image: -webkit-linear-gradient(top, #2f2f2f, #151515 50%, #000000 51%, #000000);
@@ -93,24 +111,24 @@ footer {
   left: 0;
 }
 
-/* line 85, ../scss/app.scss */
+/* line 94, ../scss/app.scss */
 .loading-indicator {
   margin: 10px;
 }
 
-/* line 89, ../scss/app.scss */
+/* line 98, ../scss/app.scss */
 .hide {
   display: none;
 }
 
-/* line 93, ../scss/app.scss */
+/* line 102, ../scss/app.scss */
 input[type=text] {
   width: 100%;
   box-sizing: border-box;
 }
 
 /* no point to have red bg on untouched text boxes */
-/* line 99, ../scss/app.scss */
+/* line 108, ../scss/app.scss */
 input[type=text]:invalid {
   background-color: white;
 }

@@ -1,3 +1,4 @@
+@import "compass/css3/border-radius";
 @import "compass/css3/font-face";
 @import "compass";
 /* ==================== app specific styles ==================== */
@@ -6,16 +7,17 @@ $header_color: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 25
 $footer_color: rgba(100,100,100,1);
 $header_height: 40px;
 $border_color: #666;
-$background_color: #333;
-$text_color: rgba(255,255,255,0.8);
-$list_item_color: rgba(255,255,255,0.1);
+$background_color: -webkit-gradient(linear,left top,right top,from(#C5CCD4),color-stop(71%, #C5CCD4),color-stop(72%, #CBD2D8),to(#CBD2D8));
+$text_color: rgba(0,0,0,1);
+$list_item_color: rgba(255,255,255,1);
 
 @include font-face("Roboto", font-files("Roboto-Regular.ttf", truetype));
 @include font-face("Roboto Bold", font-files("Roboto-Bold.ttf", truetype));
 @include font-face("Roboto Italic", font-files("Roboto-Italic.ttf", truetype));
 
 body {
-  background-color: $background_color;
+  -webkit-background-size: 0.438em 100%;
+  background-image: $background_color;
   color: $text_color;
   font-family: Roboto;
 }
@@ -64,11 +66,18 @@ header {
     padding: 1em 0.5em;
     border: 0;
     border-bottom: 1px solid $border_color;
+    border-left: 1px solid $border_color;
+    border-right: 1px solid $border_color;
     background-color: $list_item_color;
   }
   
   li:first-child {
     border-top: 1px solid $border_color;
+    @include border-radius(5px 5px 0px 0px);
+  }
+
+  li:last-child {
+    @include border-radius(0px 0px 5px 5px);
   }
 }
 
