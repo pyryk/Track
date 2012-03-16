@@ -32,8 +32,8 @@ describe('API', function() {
 
         it('should return list of targets', function() {
             spyOnPromise(Mongo, 'findAllTargets').andCallSuccess([
-                {name: "T-Talon ruokajono", _id: "accab1234", metric: {}, results: []},
-                {name: "Putous", _id: "accab12345", metric: {}, results: []}
+                {name: "T-Talon ruokajono", _id: "accab1234", question: 'Oliko paljon jonoa?'},
+                {name: "Putous", _id: "accab12345", question: 'Millainen fiilis sinulla on tällä hetkellä?'}
             ]);
 
             spyOn(API.rel, 'calculate').andCallFake(function(targets) {
@@ -47,8 +47,8 @@ describe('API', function() {
 
             expectBody(res).toEqual({
                 targets: [
-                    {name: "Putous", _id: "accab12345", relevance: 1},
-                    {name: "T-Talon ruokajono", _id: "accab1234", relevance: 0}
+                    {name: "Putous", _id: "accab12345", question: 'Millainen fiilis sinulla on tällä hetkellä?', relevance: 1},
+                    {name: "T-Talon ruokajono", _id: "accab1234", question: 'Oliko paljon jonoa?', relevance: 0}
                 ]
             });
             expectStatus(res).toEqual(200);
@@ -87,19 +87,14 @@ describe('API', function() {
         it('should return details of a target', function() {
             spyOnPromise(Mongo, 'createTarget').andCallSuccess('12345678901234567890abce');
             req.params.name = 'New tracking target';
-            req.params.metric = {
-                unit: 'min',
-                question: 'How much time?'
-            }
+            req.params.question = 'How much time?';
 
             API.postTarget(req, res, next);
 
             expect(Mongo.createTarget).toHaveBeenCalledWith({
                 name: 'New tracking target',
-                metric: {
-                    unit: 'min',
-                    question: 'How much time?'
-                }});
+                question: 'How much time?'
+            });
             expectStatus(res).toEqual(201);
             expectBody(res).toEqual({_id: '12345678901234567890abce'});
         });
@@ -111,13 +106,13 @@ describe('API', function() {
         it('should post result of a tracking', function() {
             spyOnPromise(Mongo, 'addResult').andCallSuccess();
             req.params.id = '12345678901234567890abce';
-            req.params.value = 15;
+            req.params.value = 1;
 
             API.postResult(req, res, next);
 
             expect(Mongo.addResult).toHaveBeenCalledWith({
                 id: '12345678901234567890abce',
-                value: 15
+                value: 1
             });
             expectStatus(res).toEqual(204);
             expectBody(res).toEqual();

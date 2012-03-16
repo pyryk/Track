@@ -21,7 +21,7 @@ var API = {
 
             // Filter
             targets = data.map(function(target) {
-                return API.selectFields(target, ['name', '_id', 'relevance']);
+                return API.selectFields(target, ['name', '_id', 'question', 'relevance']);
             });
 
             // Sort

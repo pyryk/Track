@@ -28,14 +28,17 @@ describe('Integration test', function() {
             var expectedTargets = [{
                 name: 'T-Talon ruokajono',
                 _id: '12345678901234567890abce',
+                question: 'Oliko paljon jonoa?',
                 relevance: 10
             }, {
                 name: 'Putouksen munamiehen läpän taso',
                 _id: '12345678901234567890abcf',
+                question: 'No millasta läpyskää puskee?',
                 relevance: 5
             }, {
                 name: 'Mikä fiilis?',
                 _id: '12345678901234567890abcd',
+                question: 'Millainen fiilis sinulla on tällä hetkellä?',
                 relevance: 0
             }];
 
@@ -48,12 +51,9 @@ describe('Integration test', function() {
             expect(result.statusCode).toEqual(200);
             expect(result.body).toEqual({
                 target: {
-                    name: 'T-Talon ruokajono',
                     _id: '12345678901234567890abce',
-                    metric: {
-                        unit: 'min',
-                        question: 'Kauanko jonotit?'
-                    },
+                    name: 'T-Talon ruokajono',
+                    question: 'Oliko paljon jonoa?',
                     results: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
                 }
             });
@@ -66,11 +66,8 @@ describe('Integration test', function() {
         runs(function() {
             var body = {
                 name: "New track target",
-                metric: {
-                    unit: "1-5",
-                    question: "Mitä mitä?"
-                }
-            }
+                question: "Mitä mitä?"
+            };
 
             testRequest({method: 'POST', path: '/target', body: body}, function(result) {
                 expect(result.statusCode).toEqual(201);
@@ -87,10 +84,7 @@ describe('Integration test', function() {
             testRequest({method: 'GET', path: '/target/' + id}, function(result) {
                 expect(result.statusCode).toEqual(200);
                 expect(result.body.target.name).toEqual("New track target");
-                expect(result.body.target.metric).toEqual({
-                    unit: "1-5",
-                    question: "Mitä mitä?"
-                });
+                expect(result.body.target.question).toEqual("Mitä mitä?");
             });
         });
     });
