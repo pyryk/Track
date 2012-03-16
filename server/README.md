@@ -27,14 +27,11 @@ Reponse body:
 		target: {
 			_id: “12faggf”,
 			name: “T-Talon ruokajono”,
-			metric: {
-				unit: “min”,
-				question: “Kauanko jonotit ruokajonossa?”
-			},
+			question: “T-Talon ruokajonon jonotusaika”
 			results: [
-			    {"value": 15, "timestamp": "2012-03-10T15:53:29.015Z"},
-			    {"value": 16, "timestamp": "2012-03-10T15:53:33.002Z"},
-			    {"value": 17, "timestamp": "2012-03-10T15:53:36.151Z"}
+			    {"value": 0, "timestamp": "2012-03-10T15:53:29.015Z"},
+			    {"value": 1, "timestamp": "2012-03-10T15:53:33.002Z"},
+			    {"value": 1, "timestamp": "2012-03-10T15:53:36.151Z"}
 			]
 		}
 	}
@@ -45,10 +42,7 @@ Request body:
 
 	{
 		name: “Track target name”
-		metric: {
-			unit: "min",
-			question: "Kauanko sitä ja tätä?"
-		}
+		question: "Kauanko/paljonko/jne plaa plaa plaa otsikkoa tarkentava kysymys"
 	}
 	
 Status: 201 Created
@@ -62,7 +56,7 @@ Response body:
 Request body:
 
     {
-        value: "12"
+        value: 0 / 1
     }
 
 Status: 204 No content
