@@ -32,7 +32,6 @@ var App = Spine.Controller.sub({
         el: $("#main"),
       });
     }
-    
     log("rendering view " + name);
     this.pages[name].id = id; // set id if needed
     this.pages[name].render();

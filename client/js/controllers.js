@@ -16,7 +16,7 @@ var TargetsList = BaseController.sub({
     ".targets": "targets"  
   },
   events: {
-    "click #target-list li": "clicked"
+    "click #target-list a": "clicked"
   },
   getData: function() {
     return {items: Target.findAllByAttribute("saved", true)};
@@ -35,6 +35,7 @@ var TargetsList = BaseController.sub({
     }
   },
   clicked: function(e) {
+    debugger;
     var el = $(e.target);
     var id = el.attr('data-id');
     if (id) {

@@ -38,18 +38,28 @@
   <!-- more tags for your 'head' to consider h5bp.com/d/head-Tips -->
 
   <!-- MBP Stylesheet -->
+  <!-- 
   <link rel="stylesheet" href="css/style.css">
+  -->
+  <link rel="stylesheet" href="css/bootstrap.css" />
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+  <link rel="stylesheet" href="css/bootstrap-responsive.css" />
   <!-- App Stylesheet -->
-  <link href="css/app.css" rel="stylesheet" type="text/css" />
-  
+  <!-- <link href="css/app.css" rel="stylesheet" type="text/css" /> -->
 
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
   <script src="js/libs/modernizr-2.0.6.min.js"></script>
   <script src="js/config.js"></script>
 </head>
 
-<body>
+<body style="font-family: Helvetica">
 
+  <!--
   <div id="container">
     <header>
       <h1><a href="#">Track</a></h1>
@@ -61,16 +71,26 @@
       footer will be here
     </footer>
   </div> <!--! end of #container -->
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="brand" href="#">Track</a>
+     </div>
+    </div>
+  </div>
+  <div class="container">
+    <div id="main"></div>
+  </div>
   
   <script id="template-TargetList" type="text/x-handlebars-template">
     {{#if error}}
       {{error}}
     {{/if}}
-    <ul class="primary-list" id="target-list">
+    <ul class="nav nav-tabs nav-stacked" id="target-list">
       {{#each items}}
-        <li data-id="{{this.id}}">{{this.name}}</li>
+        <li><a href="#" data-id="{{this.id}}">{{this.name}}</a></li>
       {{/each}}
-      <li class="create-new">Create a new Track target</li>
+      <li class="create-new"><a href=="#">Create a new Track target</a></li>
     </ul>
   </script>
   
