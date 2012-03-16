@@ -11,13 +11,24 @@ describe('API', function() {
     var req = {}, res = {}, next;
 
     var itShouldCallNextWithError = function(apiMethod, mongoMethod) {
-        it('should call next with error', function() {
+        it(apiMethod + ' should call next with error', function() {
             var error = {message: "An error occured"};
             spyOnPromise(Mongo, mongoMethod).andCallError(error);
 
             API[apiMethod](req, res, next);
 
             expect(next).toHaveBeenCalledWith(error);
+        });
+    };
+
+    var itShouldCallMongo = function(apiMethod, mongoMethod) {
+        it(apiMethod + ' should call Mongo.' + mongoMethod + ' and call send()', function() {
+            spyOnPromise(Mongo, mongoMethod).andCallSuccess();
+            API[apiMethod](req, res, next);
+            expect(Mongo[mongoMethod]).toHaveBeenCalled();
+
+
+            expectStatus(res).toBeGreaterThan(199);
         });
     };
 
@@ -50,65 +61,18 @@ describe('API', function() {
     });
 
     describe('getTarget', function() {
-
-        it('should return details of a target', function() {
-            spyOnPromise(Mongo, 'findTargetById').andCallSuccess(
-                {name: "T-Talon ruokajono", _id: "accab1234", metric: {
-                    unit: 'min',
-                    question: 'Kauanko jonotit?'
-                }
-                });
-            req.params.id = 'accab1234';
-
-            API.getTarget(req, res, next);
-
-            expectBody(res).toEqual({
-                target: {name: "T-Talon ruokajono", _id: "accab1234", metric: {
-                    unit: 'min',
-                    question: 'Kauanko jonotit?'
-                }}
-            });
-            expectStatus(res).toEqual(200);
-        });
-
+        itShouldCallMongo('getTarget', 'findTargetById');
         itShouldCallNextWithError('getTarget', 'findTargetById');
     });
 
     describe('postTarget', function() {
-
-        it('should return details of a target', function() {
-            spyOnPromise(Mongo, 'createTarget').andCallSuccess('12345678901234567890abce');
-            req.params.name = 'New tracking target';
-            req.params.question = 'How much time?';
-
-            API.postTarget(req, res, next);
-
-            expect(Mongo.createTarget).toHaveBeenCalledWith({
-                name: 'New tracking target',
-                question: 'How much time?'
-            });
-            expectStatus(res).toEqual(201);
-            expectBody(res).toEqual({_id: '12345678901234567890abce'});
-        });
-
+        itShouldCallMongo('postTarget', 'createTarget');
         itShouldCallNextWithError('postTarget', 'createTarget');
     });
 
     describe('postResult', function() {
-        it('should post result of a tracking', function() {
-            spyOnPromise(Mongo, 'addResult').andCallSuccess();
-            req.params.id = '12345678901234567890abce';
-            req.params.value = 1;
-
-            API.postResult(req, res, next);
-
-            expect(Mongo.addResult).toHaveBeenCalledWith({
-                id: '12345678901234567890abce',
-                value: 1
-            });
-            expectStatus(res).toEqual(204);
-            expectBody(res).toEqual();
-        })
+        itShouldCallMongo('postResult', 'addResult');
+        itShouldCallNextWithError('postResult', 'addResult');
     });
 
     afterEach(function() {
