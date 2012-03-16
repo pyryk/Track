@@ -16,10 +16,7 @@ var Mongo = {
 
         var Target = new mongoose.Schema({
             name: String,
-            metric: {
-                unit: String,
-                question: String
-            },
+            question: String,
             results: [{
                 timestamp: Date,
                 value: Number
@@ -74,7 +71,7 @@ var Mongo = {
 
         var target = new this.Target();
         target.name = params.name;
-        target.metric = params.metric;
+        target.question = params.question;
 
         target.save(function(error) {
             var id = target._id;

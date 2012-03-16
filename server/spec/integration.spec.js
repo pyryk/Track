@@ -55,13 +55,10 @@ describe('Integration test', function() {
             expect(result.statusCode).toEqual(200);
             expect(result.body).toEqual({
                 target: {
-                    name: 'T-Talon ruokajono',
                     _id: '12345678901234567890abce',
-                    metric: {
-                        unit: 'min',
-                        question: 'Kauanko jonotit?'
-                    },
-                    results: [10, 5, 6, 7, 20]
+                    name: 'T-Talon ruokajono',
+                    question: 'Oliko paljon jonoa?',
+                    results: [0, 0, 0, 1]
                 }
             });
         });
@@ -73,11 +70,8 @@ describe('Integration test', function() {
         runs(function() {
             var body = {
                 name: "New track target",
-                metric: {
-                    unit: "1-5",
-                    question: "Mitä mitä?"
-                }
-            }
+                question: "Mitä mitä?"
+            };
 
             testRequest({method: 'POST', path: '/target', body: body}, function(result) {
                 expect(result.statusCode).toEqual(201);
@@ -94,10 +88,7 @@ describe('Integration test', function() {
             testRequest({method: 'GET', path: '/target/' + id}, function(result) {
                 expect(result.statusCode).toEqual(200);
                 expect(result.body.target.name).toEqual("New track target");
-                expect(result.body.target.metric).toEqual({
-                    unit: "1-5",
-                    question: "Mitä mitä?"
-                });
+                expect(result.body.target.question).toEqual("Mitä mitä?");
             });
         });
     });
@@ -107,7 +98,7 @@ describe('Integration test', function() {
         var requestComplete;
 
         runs(function() {
-            testRequest({method: 'POST', path: '/target/' + id + '/result', body: {value: 15}}, function(result) {
+            testRequest({method: 'POST', path: '/target/' + id + '/result', body: {value: 1}}, function(result) {
                 expect(result.statusCode).toEqual(204);
                 expect(result.body).toEqual({});
 
@@ -122,9 +113,9 @@ describe('Integration test', function() {
         runs(function() {
             testRequest({method: 'GET', path: '/target/' + id}, function(result) {
                 expect(result.statusCode).toEqual(200);
-                expect(result.body.target.results.length).toEqual(6);
-                expect(result.body.target.results[5].value).toEqual(15);
-                expect(isTimestamp(result.body.target.results[5].timestamp)).toBeTruthy();
+                expect(result.body.target.results.length).toEqual(5);
+                expect(result.body.target.results[4].value).toEqual(1);
+                expect(isTimestamp(result.body.target.results[4].timestamp)).toBeTruthy();
             });
         });
     })

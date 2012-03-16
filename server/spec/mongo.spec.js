@@ -26,8 +26,7 @@ describe('Mongo', function() {
         it('should return details of specific target by id', function() {
             testDB(Mongo.findTargetById('12345678901234567890ABCD'), function(dbResult) {
                 expect(dbResult.name).toEqual('Mikä fiilis?');
-                expect(dbResult.metric.unit).toEqual('1-5');
-                expect(dbResult.metric.question).toEqual('Millainen fiilis sinulla on tällä hetkellä?');
+                expect(dbResult.question).toEqual('Millainen fiilis sinulla on tällä hetkellä?');
             });
         });
     });
@@ -36,15 +35,11 @@ describe('Mongo', function() {
         it('should create a new target with metrics', function() {
             testDB(Mongo.createTarget({
                 name: 'Virgin oil mikä meno?',
-                metric: {
-                    unit: '4-10',
-                    question: 'Millanen fiilis Virgin Oilissa on?'
-                }
+                question: 'Millanen fiilis Virgin Oilissa on?'
             }), function(id) {
                 testDB(Mongo.findTargetById(id), function(dbResult) {
                     expect(dbResult.name).toEqual('Virgin oil mikä meno?');
-                    expect(dbResult.metric.unit).toEqual('4-10');
-                    expect(dbResult.metric.question).toEqual('Millanen fiilis Virgin Oilissa on?');
+                    expect(dbResult.question).toEqual('Millanen fiilis Virgin Oilissa on?');
                 });
             });
         });
@@ -54,11 +49,11 @@ describe('Mongo', function() {
         it('should add a new result entry to the tracking target', function() {
             testDB(Mongo.addResult({
                 _id: '12345678901234567890abce',
-                value: 15
+                value: 1
             }), function() {
                 testDB(Mongo.findTargetById('12345678901234567890abce'), function(dbResult) {
-                    expect(dbResult.results.length).toEqual(6);
-                    expect(dbResult.results[5].value).toEqual(15);
+                    expect(dbResult.results.length).toEqual(5);
+                    expect(dbResult.results[4].value).toEqual(1);
                 });
             });
         })
