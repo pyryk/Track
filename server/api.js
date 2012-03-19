@@ -1,4 +1,5 @@
 var Mongo = require('./mongo');
+var Relevancy = require('./relevancy');
 
 var API = {
     start: function(server) {
@@ -13,6 +14,8 @@ var API = {
             var targets = data.map(function(target) {
                 return API.selectFields(target, ['name', '_id']);
             });
+
+            Relevancy.calculate(targets);
 
             res.send(200, {targets: targets});
             return next();

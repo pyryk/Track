@@ -25,7 +25,7 @@ describe('Integration test', function() {
             expect(result.statusCode).toEqual(200);
 
             // The order is not guarenteed, thus, sort before assertion
-            result.body.targets.sort(function(a, b) {
+            var sortFunction = function(a, b) {
                 if(a._id < b._id) {
                     return -1;
                 } else if(a._id === b._id) {
@@ -33,19 +33,34 @@ describe('Integration test', function() {
                 } else {
                     return 1;
                 }
-            });
+            }
 
-            expect(result.body).toEqual({
-                targets: [{
-                    name: 'Mikä fiilis?',
-                    _id: '12345678901234567890abcd'
-                }, {
-                    name: 'T-Talon ruokajono',
-                    _id: '12345678901234567890abce'
-                }, {
-                    name: 'Putouksen munamiehen läpän taso',
-                    _id: '12345678901234567890abcf'
-                }]
+            // The order is not guarenteed, thus, sort before assertion
+            result.body.targets.sort(sortFunction);
+
+            // Expect
+            var expectedTargets = [{
+                name: 'Mikä fiilis?',
+                _id: '12345678901234567890abcd'
+            }, {
+                name: 'T-Talon ruokajono',
+                _id: '12345678901234567890abce'
+            }, {
+                name: 'Putouksen munamiehen läpän taso',
+                _id: '12345678901234567890abcf'
+            }].sort(sortFunction);
+
+            // Assertion
+            var i = 0;
+            result.body.targets.forEach(function(target) {
+                var expected = expectedTargets[i]
+
+                expect(target.name).toEqual(expected.name);
+                expect(target._id).toEqual(expected._id);
+                expect(target.relevancy).toBeGreaterThan(-0.1);
+                expect(target.relevancy).toBeLessThan(10.1);
+
+                i += 1;
             });
         });
     });
@@ -127,5 +142,5 @@ describe('Integration test', function() {
                 expect(isTimestamp(result.body.target.results[5].timestamp)).toBeTruthy();
             });
         });
-    })
+    });
 });
