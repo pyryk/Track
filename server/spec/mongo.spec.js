@@ -1,4 +1,4 @@
-var Mongo = require('../mongo');
+var Mongo = require('../modules/mongo');
 var MongoHelpers = require('./helpers').Mongo;
 
 // Helper methods for Mongo testing

@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Promise = require('node-promise').Promise;
-var Fixtures = require('./fixtures');
+var Fixtures = require('../fixtures/fixtures.js');
 
 var Mongo = {
 

@@ -1,9 +1,9 @@
-var Mongo = require('../mongo');
+var Mongo = require('../modules/mongo');
 var IntegrationHelpers = require('./helpers').Integration;
 
 // Initialize server for integration tests
 var confs = {port: 9999, name: "Track API integration test server"};
-require('../server').createServer(confs).start();
+require('../modules/server').createServer(confs).start();
 
 // Helper methods for Mongo testing
 var testRequest = function(opts, callback) {

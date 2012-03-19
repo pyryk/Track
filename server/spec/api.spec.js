@@ -1,6 +1,6 @@
-var Mongo = require('../mongo');
-var API = require('../api');
-var Relevancy = require('../relevancy');
+var Mongo = require('../modules/mongo');
+var API = require('../modules/api');
+var Relevancy = require('../modules/relevancy');
 var APIHelpers = require('./helpers').API;
 
 // Helper methods for API testing

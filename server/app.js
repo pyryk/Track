@@ -1,4 +1,4 @@
-var Mongo = require('./mongo');
+var Mongo = require('./modules/mongo');
 
 var confs = {
     port: 9999,
@@ -7,4 +7,4 @@ var confs = {
 
 Mongo.init();
 
-require('./server').createServer(confs).start();
+require('./modules/server').createServer(confs).start();
