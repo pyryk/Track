@@ -57,8 +57,8 @@ describe('Integration test', function() {
 
                 expect(target.name).toEqual(expected.name);
                 expect(target._id).toEqual(expected._id);
-                expect(target.relevancy).toBeGreaterThan(-0.1);
-                expect(target.relevancy).toBeLessThan(10.1);
+                expect(target.relevance).toBeGreaterThan(-0.1);
+                expect(target.relevance).toBeLessThan(10.1);
 
                 i += 1;
             });

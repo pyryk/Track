@@ -1,6 +1,6 @@
 var Mongo = require('../modules/mongo');
 var API = require('../modules/api');
-var Relevancy = require('../modules/relevancy');
+var Relevancy = require('../modules/relevance');
 var APIHelpers = require('./helpers').API;
 
 // Helper methods for API testing
@@ -39,7 +39,7 @@ describe('API', function() {
             spyOn(Relevancy, 'calculate').andCallFake(function(targets) {
                 var i = 0;
                 targets.forEach(function(target) {
-                    target.relevancy = i++;
+                    target.relevance = i++;
                 });
             });
 
@@ -48,8 +48,8 @@ describe('API', function() {
 
             expectBody(res).toEqual({
                 targets: [
-                    {name: "T-Talon ruokajono", _id: "accab1234", relevancy: 0},
-                    {name: "Putous", _id: "accab12345", relevancy: 1}
+                    {name: "T-Talon ruokajono", _id: "accab1234", relevance: 0},
+                    {name: "Putous", _id: "accab12345", relevance: 1}
                 ]
             });
             expectStatus(res).toEqual(200);

@@ -1,5 +1,5 @@
 var Mongo = require('./mongo.js');
-var Relevancy = require('./relevancy.js');
+var Relevancy = require('./relevance.js');
 
 var API = {
     start: function(server) {
