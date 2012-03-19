@@ -10,9 +10,9 @@ Response body:
 
 	{
 		targets: [
-			{_id: “12faggf”, name: “T-Talon ruokajono”, relevancy: 9.1251 (planned, not implemented},
-			{_id: “12fa41gf”, name: “Baarin meininki”, relevancy: 5.23521 (planned, not implemented},
-			{_id: “12fa113f”, name: “Mikä fiilis?”, relevancy: 1.2427254 (planned, not implemented}
+			{_id: “12faggf”, name: “T-Talon ruokajono”, relevancy: 9.1251},
+			{_id: “12fa41gf”, name: “Baarin meininki”, relevancy: 5.23521},
+			{_id: “12fa113f”, name: “Mikä fiilis?”, relevancy: 1.2427254}
 		]
 	}
   

@@ -1,6 +1,5 @@
 var restify = require('restify');
 var API = require('./api');
-var Mongo = require('./mongo');
 
 // Private server
 var server;
