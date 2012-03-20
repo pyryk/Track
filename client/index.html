@@ -85,16 +85,14 @@
         {{#unless detailsLoaded}}
           <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
         {{/unless}}
-        {{#if metric}}
-          {{#with metric}}
-            <form id="answer-form">
-              <p class="target-question">{{question}}</p>
-              <p class="target-answer">
-                <input type="number" name="answer" /> <span class="unit">{{unit}}</span>
-              </p>
-              <button class="save-answer" type="submit">Send</button>
-            </form>
-          {{/with}}
+        {{#if question}}
+          <form id="answer-form">
+            <p class="target-question">{{question}}</p>
+            <p class="target-answer">
+              <span class="answer positive">:)</span>
+              <span class="answer negative">:(</span>
+            </p>
+          </form>
         {{/if}}
       {{/with}}
     {{/if}}
@@ -105,8 +103,7 @@
     <div id="target-details">
       <form id="create-target-form">
         <h2 class="target-name"><input type="text" name="name" placeholder="Name" required /></h2>
-        <p class="target-question"><input type="text" name="metric__question" placeholder="Question" required /></p>
-        <p class="target-unit"><input type="text" name="metric__unit" placeholder="Unit" /></p>
+        <p class="target-question"><input type="text" name="question" placeholder="Question" required /></p>
         <button class="save-target" type="submit">Create</button>
       </form>
     </div>
@@ -121,8 +118,8 @@
         <p>Your answer was saved!</p>
         <div class="target">
           <h2 class="name">{{target.name}}</h2>
-          <p class="question">{{target.metric.question}}</p>
-          <p class="answer">{{value}} <span class="unit">({{target.metric.unit}})</span></p>
+          <p class="question">{{target.question}}</p>
+          <p class="answer">{{value}}</p>
         </div>
       {{/with}}
     {{/if}}

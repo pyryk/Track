@@ -4,7 +4,7 @@
  */
 var Target = Spine.Model.sub();
 
-Target.configure("Target", "name", "metric", "results", "detailsLoaded", "saved");
+Target.configure("Target", "name", "question", "results", "detailsLoaded", "saved");
 
 Target.include({
     getType: function() {
@@ -26,7 +26,7 @@ Target.include({
       
       var toSend = {
         name: this.name,
-        metric: this.metric
+        question: this.question
       }
       var data = JSON.stringify(toSend);
       
@@ -191,25 +191,24 @@ Result.include({
       value: this.value
     }
     var data = JSON.stringify(toSend);
-  
-    var that = this;
+    
     $.ajax({
       url: url,
       type: "POST",
       contentType: "application/json",
       dataType: "json",
       data: data,
-      success: function(data) {
-        that.saved = true;
-        that.save();
+      success: this.proxy(function(data) {
+        this.saved = true;
+        this.save();
         
-        that.target.loadDetails();
-        that.trigger("resultSent", true);
-      }, 
-      error: function(jqxhr, status, err) {
-        that.trigger("resultSent", false);
+        this.target.loadDetails();
+        this.trigger("resultSent", true);
+      }), 
+      error: this.proxy(function(jqxhr, status, err) {
+        this.trigger("resultSent", false);
         alert(status + ': ' + err);
-      }
+      })
     });
   }
 });

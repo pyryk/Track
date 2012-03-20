@@ -64,7 +64,8 @@ var ownResult = BaseController.sub({
 
 var TargetDetails = BaseController.sub({
   events: {
-    "submit #answer-form": "saveAnswer"
+    "click .answer.positive": "savePositiveAnswer",
+    "click .answer.negative": "saveNegativeAnswer",
   },
   init: function() {
     this.rawTemplate = this.template || $("#template-TargetDetails");
@@ -105,14 +106,18 @@ var TargetDetails = BaseController.sub({
       log("Answer not saved!");
     }
   },
-  saveAnswer: function(e) {
-    e.preventDefault();
-    var field = $(e.target).find('input[name="answer"]');
-    log("Saving answer", field);
+  saveAnswer: function(value) {
+    log("Saving answer", value);
     var target = Target.find(this.id);
-    var result = Result.create({target: target, value: field.val()});
+    var result = Result.create({target: target, value: value});
     result.bind('resultSent', this.answerSaved);
     result.post();
+  },
+  savePositiveAnswer: function() {
+    this.saveAnswer(1);
+  },
+  saveNegativeAnswer: function() {
+    this.saveAnswer(0);
   }
 });
 
