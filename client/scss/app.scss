@@ -1,25 +1,58 @@
 @import "compass/css3/border-radius";
 @import "compass/css3/font-face";
+@import "compass/css3/box-shadow";
+@import "compass/css3/box";
 @import "compass";
 /* ==================== app specific styles ==================== */
 
-$header_color: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.30)), color-stop(0.5, rgba(255, 255, 255, 0.10)), color-stop(0.5, rgba(255, 255, 255, 0.00))), -webkit-gradient(linear, left top, left bottom, from(#7189A6), to(#6A83A1));
+$header_gradient_1: #2DBCF8;
+$header_gradient_2: #2499CB;
+$header_text_color: #fff;
 $footer_color: rgba(100,100,100,1);
-$header_height: 40px;
-$border_color: #666;
-$background_color: -webkit-gradient(linear,left top,right top,from(#C5CCD4),color-stop(71%, #C5CCD4),color-stop(72%, #CBD2D8),to(#CBD2D8));
+$header_height: 46px;
+$border_color: #ccc;
+$background_gradient_1: #FFFFFF;
+$background_gradient_2: #D9D9D9;
 $text_color: rgba(0,0,0,1);
-$list_item_color: rgba(255,255,255,1);
+$list_item_gradient_1: #fdfdfd;
+$list_item_gradient_2: #eee;
 
-@include font-face("Roboto", font-files("Roboto-Regular.ttf", truetype));
-@include font-face("Roboto Bold", font-files("Roboto-Bold.ttf", truetype));
-@include font-face("Roboto Italic", font-files("Roboto-Italic.ttf", truetype));
+@mixin header {
+  @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
+  padding: 0.7em 1em;
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: $header_text_color;
+  text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
+  @include border-radius(5px 5px 0px 0px);
+}
+
+@mixin body-box {
+  margin: 0;
+  border: 1px solid $border_color;
+  border-bottom: none;
+  @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+}
+
+@mixin body-box-last {
+  border-bottom: 1px solid $border_color;
+  @include border-radius(0px 0px 5px 5px);
+}
+
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+}
+
+html {
+  background-color: $background_gradient_2;
+}
 
 body {
-  -webkit-background-size: 0.438em 100%;
-  background-image: $background_color;
   color: $text_color;
-  font-family: Roboto;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 14px;
+  @include background-image(linear-gradient($background_gradient_1, $background_gradient_2 100%));
 }
 
 #container {
@@ -34,19 +67,22 @@ header {
   width: 100%;
   margin-top: 0;
   padding-top: 0;
-  background-image: $header_color;
+  @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
+  color: $header_text_color;
   border-bottom: 1px solid $border_color;
+  text-align: center;
   
   h1 {
     padding: 0.25em;
     margin: 0;
     font-size: 24px;
     font-weight: bold;
-    font-family: Roboto;
     
     a:link, a:visited, a:active {
       color: $text_color;
       text-decoration: none;
+      color: $header_text_color;
+      text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
     }
   }
 }
@@ -63,12 +99,37 @@ header {
   padding: 0;
   
   li {
-    padding: 1em 0.5em;
+    padding: 1em 1em;
     border: 0;
     border-bottom: 1px solid $border_color;
     border-left: 1px solid $border_color;
     border-right: 1px solid $border_color;
-    background-color: $list_item_color;
+    @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+  }
+  
+  li.header {
+    @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
+    padding: 0.7em 1em;
+    font-size: 18px;
+    font-weight: bold;
+    color: $header_text_color;
+    text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
+    
+  }
+  
+  li.create-new {
+    
+    padding-top: 1em;
+    
+    
+    .text {
+      display: inline-block;
+      background-image: url("../img/add-new-small.png");
+      background-repeat: no-repeat;
+      background-position: 0;
+      padding-left: 25px;
+      height: 18px;
+    }
   }
   
   li:first-child {
@@ -78,6 +139,83 @@ header {
 
   li:last-child {
     @include border-radius(0px 0px 5px 5px);
+  }
+}
+
+#target-details {
+  .target-question {
+    @include header;
+  }
+  .target-answer {
+    @include display-box;
+    @include box-orient(horizontal);
+    @include box-align(stretch);
+    margin: 0;
+    
+    .answer {
+      border: 1px solid $border_color;
+      border-right: none;
+      padding: 1em;
+      display: block;
+      @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+      @include box-flex(1);
+      text-align: center;
+      @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
+    }
+    .answer:first-child {
+      @include border-radius(0px 0px 0px 5px);
+    }
+    .answer:last-child {
+      border-right: 1px solid $border_color;
+      @include border-radius(0px 0px 5px 0px);
+    }
+  }
+  .link-button {
+    margin-top: 2em;
+  }
+}
+
+#target-results {
+  .target-question {
+    @include header;
+  }
+  table {
+    width: 100%;
+  }
+  .target-answers {
+    @include body-box;
+    color: lighten($text_color, 50%);
+    font-size: 3em;
+  }
+  .result-number, .answer {
+    padding: 20px 1em;
+  }
+  .result-number {
+    text-align: right;
+  }
+  .target-answers:last-child {
+    @include body-box-last;
+  }
+}
+
+#target-ownResult {
+  h3 {
+    @include header;
+  }
+  .result-info-body {
+    @include body-box;
+    padding-left: 1em;
+    color: lighten($text_color, 40%);
+    
+    .question, .answer {
+      display: none;
+    }
+  }
+  .result-info-body:last-child {
+    @include body-box-last;
+  }
+  .link-button {
+    margin-top: 2em;
   }
 }
 
@@ -97,6 +235,24 @@ footer {
 
 .hide {
   display: none;
+}
+
+.link-button {
+  display: block;
+  @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
+  @include border-radius(25px);
+  border: 1px solid $border_color;
+  padding: 0.5em;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: lighten($text_color, 40%);
+  @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
+  
+  &:link, &:active, &:visited {
+    text-decoration: none;
+    color: lighten($text_color, 40%);
+  }
 }
 
 input[type=text] {

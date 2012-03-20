@@ -30,9 +30,11 @@ var App = Spine.Controller.sub({
   renderView: function(name, className, id) {
     // create controller if it doesnt already exist
     if (!this.pages[name]) {
-      log("creating view " + name);
+      var tmpl = $('#template-' + name);
+      log("creating view " + name, "with template", tmpl);
       this.pages[name] = new className({
         el: $("#main"),
+        template: tmpl
       });
     }
     

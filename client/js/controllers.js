@@ -1,10 +1,14 @@
 var BaseController = Spine.Controller.sub({
   init: function() {
-    
+    this.rawTemplate = this.template;
+    this.template = Handlebars.compile(this.rawTemplate.html());
   },
   render: function() {
     var data = this.getData();
     this.html(this.template(data));
+  },
+  getData: function() {
+    return {};
   }
 });
 
@@ -23,9 +27,8 @@ var TargetsList = BaseController.sub({
     return {items: Target.findAllByAttribute("saved", true)};
   },
   init: function() {
+    BaseController.prototype.init.call(this);
     Target.bind("create", this.proxy(this.addOne));
-    this.rawTemplate = this.template || $("#template-TargetList");
-    this.template = Handlebars.compile(this.rawTemplate.html());
     
     // load initial set of targets
     Target.loadList();
@@ -53,13 +56,14 @@ var ownResult = BaseController.sub({
     "click #view-results": "viewResults",
   },
   init: function() {
-    this.rawTemplate = this.template || $("#template-ownAnswer");
-    this.template = Handlebars.compile(this.rawTemplate.html());
+    BaseController.prototype.init.call(this);
   },
   getData: function() {
     try {
       var result = Result.find(this.id)
-      return {result: result};
+      var data = {result: result.toJSON()};
+      data.result.value = data.result.value === 1 ? ":)" : ":(";
+      return data;
     } catch(e) {
       return {error: e};
     }
@@ -77,8 +81,7 @@ var TargetDetails = BaseController.sub({
     "click #view-results": "viewResults",
   },
   init: function() {
-    this.rawTemplate = this.template || $("#template-TargetDetails");
-    this.template = Handlebars.compile(this.rawTemplate.html());
+    BaseController.prototype.init.call(this);
     
     // this is binded to all events to avoid the unbind-old/bind-new
     // hassle when viewing another target
@@ -103,7 +106,7 @@ var TargetDetails = BaseController.sub({
       alert('not found');
     }
   },
-  targetUpdated: function(target) { // TODO update only if this target has updated
+  targetUpdated: function(target) {
     if (target.id === this.id && window.track.visiblePage == this) {
       this.render();
     }
@@ -139,8 +142,7 @@ var TargetCreate = BaseController.sub({
     "submit #create-target-form": "saveTarget"
   },
   init: function() {
-    this.rawTemplate = this.template || $("#template-TargetCreate");
-    this.template = Handlebars.compile(this.rawTemplate.html());
+    BaseController.prototype.init.call(this);
   },
   targetSavedToServer: function(target, success) {
     log(target.name + (success ? '' : ' _NOT_') + ' saved to server');
@@ -149,9 +151,6 @@ var TargetCreate = BaseController.sub({
     } else {
       // signal failure to the user
     }
-  },
-  getData: function() {
-    return {};
   },
   saveTarget: function(e) {
     e.preventDefault();
@@ -163,14 +162,13 @@ var TargetCreate = BaseController.sub({
 
 var TargetResults = BaseController.sub({
   init: function() {
-    this.rawTemplate = this.template || $("#template-TargetResults");
-    this.template = Handlebars.compile(this.rawTemplate.html());
+    BaseController.prototype.init.call(this);
     
     // this is binded to all events to avoid the unbind-old/bind-new
     // hassle when viewing another target
     Target.bind("create update", this.proxy(this.targetUpdated));
   },
-  targetUpdated: function(target) { // TODO update only if this target has updated
+  targetUpdated: function(target) {
     if (target.id === this.id && window.track.visiblePage == this) {
       this.render();
     }

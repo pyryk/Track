@@ -12,7 +12,7 @@
   <!-- Mobile viewport optimization h5bp.com/ad -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 
   <!-- Home screen icon  Mathias Bynens mathiasbynens.be/notes/touch-icons -->
   <!-- For iPhone 4 with high-resolution Retina display: -->
@@ -52,29 +52,31 @@
 
   <div id="container">
     <header>
+      <a style="float: left;" href="#"></a>
       <h1><a href="#">Track</a></h1>
     </header>
     <div id="main" role="main">
     </div>
 
-    <footer>
+    <!--<footer>
       footer will be here
-    </footer>
+    </footer>-->
   </div> <!--! end of #container -->
   
-  <script id="template-TargetList" type="text/x-handlebars-template">
+  <script id="template-targetList" type="text/x-handlebars-template">
     {{#if error}}
       {{error}}
     {{/if}}
     <ul class="primary-list" id="target-list">
+      <li class="header">Targets</li>
       {{#each items}}
         <li data-id="{{this.id}}">{{this.name}}</li>
       {{/each}}
-      <li class="create-new">Create a new Track target</li>
+      <li class="create-new"><span class="create-new text">Create a new target</span></li>
     </ul>
   </script>
   
-  <script id="template-TargetDetails" type="text/x-handlebars-template">
+  <script id="template-targetDetails" type="text/x-handlebars-template">
     {{#if error}}
       {{error}}
     {{/if}}
@@ -100,11 +102,11 @@
     </div>
   </script>
   
-  <script id="template-TargetResults" type="text/x-handlebars-template">
+  <script id="template-targetResults" type="text/x-handlebars-template">
     {{#if error}}
       {{error}}
     {{/if}}
-    <div id="target-details">
+    <div id="target-results">
     {{#if target}}
       {{#with target}}
         <h2 class="target-name">{{name}}</h2>
@@ -112,22 +114,22 @@
           <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
         {{/unless}}
         {{#if question}}
-          <form id="answer-form">
             <p class="target-question">{{question}}</p>
-            <p class="target-answer">
-              {{#with ../../aggregate}}
-              <p><span class="result-number positive">{{positives}}</span> x <span class="answer positive">:)</span></p>
-              <p><span class="result-number positive">{{negatives}}</span> x <span class="answer negative">:(</span></p>
-              {{/with}}
-            </p>
-          </form>
+            <div class="results">
+            {{#with ../../aggregate}}
+              <table>
+              <tr class="target-answers"><td class="result-number positive">{{positives}}</td><td class="answer positive">:)</td></tr>
+              <tr class="target-answers"><td class="result-number positive">{{negatives}}</td><td class="answer negative">:(</td></tr>
+              </table>
+            {{/with}}
+            </div>
         {{/if}}
       {{/with}}
     {{/if}}
     </div>
   </script>
   
-  <script id="template-TargetCreate" type="text/x-handlebars-template">
+  <script id="template-targetCreate" type="text/x-handlebars-template">
     <div id="target-details">
       <form id="create-target-form">
         <h2 class="target-name"><input type="text" name="name" placeholder="Name" required /></h2>
@@ -137,21 +139,27 @@
     </div>
   </script>
   
-  <script id="template-ownAnswer" type="text/x-handlebars-template">
+  <script id="template-ownResult" type="text/x-handlebars-template">
+    <div id="target-ownResult">
     {{#if error}}
       {{error}}
     {{else}}
       {{#with result}}
-        <h1>Thanks!</h1>
-        <p>Your answer was saved!</p>
-        <div class="target">
-          <h2 class="name">{{target.name}}</h2>
-          <p class="question">{{target.question}}</p>
-          <p class="answer">{{value}}</p>
+        <h2>Thanks!</h2>
+        <div class="result-info">
+          <div class="target">
+            <h3 class="name">{{target.name}}</h3>
+            <div class="result-info-body">
+              <p>Your answer was saved!</p>
+              <p class="question">{{target.question}}</p>
+              <p class="answer">{{value}}</p>
+            </div>
+          </div>
         </div>
         <p><a class="link-button" id="view-results" href="#">View Results</a></p>
       {{/with}}
     {{/if}}
+    </div>
   </script>
 
   <!-- JavaScript at the bottom for fast page loading -->
