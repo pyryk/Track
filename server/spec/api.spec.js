@@ -36,7 +36,7 @@ describe('API', function() {
                 {name: "Putous", _id: "accab12345", metric: {}, results: []}
             ]);
 
-            spyOn(Relevance, 'calculate').andCallFake(function(targets) {
+            spyOn(API.rel, 'calculate').andCallFake(function(targets) {
                 var i = 0;
                 targets.forEach(function(target) {
                     target.relevance = i++;

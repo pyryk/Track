@@ -1,10 +1,11 @@
 var Relevance = require('../modules/relevance.js');
 
 describe('Relevance', function() {
+    var rel = new Relevance();
 
     beforeEach(function() {
-        Relevance.maxScore = 10;
-        Relevance.overallPopularityWeight = 0.5;
+        rel.maxScore = 10;
+        rel.overallPopularityWeight = 0.5;
     });
 
     it('should calculate relevancy by overall popularity', function() {
@@ -17,7 +18,7 @@ describe('Relevance', function() {
             {}
         ];
 
-        Relevance.calculate(targets);
+        rel.calculate(targets);
 
         expect(targets[0].relevance).toEqual(5);
         expect(targets[1].relevance).toEqual(3.75);

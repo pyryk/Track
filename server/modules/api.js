@@ -1,7 +1,10 @@
 var Mongo = require('./mongo.js');
-var Relevance = require('./relevance.js');
+var Relevance = require('./relevance');
 
 var API = {
+
+    rel: new Relevance(),
+
     start: function(server) {
         server.get("/targets", this.getTargets);
         server.get("/target/:id", this.getTarget);
@@ -10,10 +13,11 @@ var API = {
     },
 
     getTargets: function(req, res, next) {
+        var rel = API.rel;
+
         Mongo.findAllTargets().then(function(data) {
             var targets = data;
-
-            Relevance.calculate(targets);
+            rel.calculate(targets);
 
             // Filter
             targets = data.map(function(target) {
