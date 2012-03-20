@@ -1,9 +1,9 @@
-var Mongo = require('../mongo');
+var Mongo = require('../modules/mongo');
 var IntegrationHelpers = require('./helpers').Integration;
 
 // Initialize server for integration tests
 var confs = {port: 9999, name: "Track API integration test server"};
-require('../server').createServer(confs).start();
+require('../modules/server').createServer(confs).start();
 
 // Helper methods for Mongo testing
 var testRequest = function(opts, callback) {
@@ -57,9 +57,8 @@ describe('Integration test', function() {
 
                 expect(target.name).toEqual(expected.name);
                 expect(target._id).toEqual(expected._id);
-                expect(target.relevancy).toBeGreaterThan(-0.1);
-                expect(target.relevancy).toBeLessThan(10.1);
-
+                expect(target.relevance).toBeGreaterThan(-0.1);
+                expect(target.relevance).toBeLessThan(10.1);
                 i += 1;
             });
         });
