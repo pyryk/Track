@@ -15,6 +15,9 @@ var App = Spine.Controller.sub({
       "!/results/:id": function(params) {
         this.renderView('ownResult', ownResult, params.id);
       },
+      "!/targets/:id/results": function(params) {
+        this.renderView('targetResults', TargetResults, params.id);
+      },
       // default route
       "*others": function(params) {
         log("Invalid route ", params.match.input, " - redirecting to default");

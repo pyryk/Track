@@ -1,5 +1,6 @@
 var BaseController = Spine.Controller.sub({
   init: function() {
+    
   },
   render: function() {
     var data = this.getData();
@@ -48,6 +49,9 @@ var TargetsList = BaseController.sub({
 });
 
 var ownResult = BaseController.sub({
+  events: {
+    "click #view-results": "viewResults",
+  },
   init: function() {
     this.rawTemplate = this.template || $("#template-ownAnswer");
     this.template = Handlebars.compile(this.rawTemplate.html());
@@ -60,12 +64,17 @@ var ownResult = BaseController.sub({
       return {error: e};
     }
   },
+  viewResults: function(e) {
+    e.preventDefault();
+    Spine.Route.navigate(App.getRoute(Target.find(this.id)) + "/results");
+  }
 });
 
 var TargetDetails = BaseController.sub({
   events: {
     "click .answer.positive": "savePositiveAnswer",
     "click .answer.negative": "saveNegativeAnswer",
+    "click #view-results": "viewResults",
   },
   init: function() {
     this.rawTemplate = this.template || $("#template-TargetDetails");
@@ -118,6 +127,10 @@ var TargetDetails = BaseController.sub({
   },
   saveNegativeAnswer: function() {
     this.saveAnswer(0);
+  },
+  viewResults: function(e) {
+    e.preventDefault();
+    Spine.Route.navigate(App.getRoute(Target.find(this.id)) + "/results");
   }
 });
 
@@ -130,9 +143,8 @@ var TargetCreate = BaseController.sub({
     this.template = Handlebars.compile(this.rawTemplate.html());
   },
   targetSavedToServer: function(target, success) {
-    console.log(target.name + (success ? '' : ' _NOT_') + ' saved to server');
+    log(target.name + (success ? '' : ' _NOT_') + ' saved to server');
     if (success) {
-      console.log(App.getRoute(target));
       Spine.Route.navigate(App.getRoute(target)); 
     } else {
       // signal failure to the user
@@ -143,11 +155,35 @@ var TargetCreate = BaseController.sub({
   },
   saveTarget: function(e) {
     e.preventDefault();
-    console.log(e);
     var target = Target.fromForm($(e.target));
     target.bind("saveToServer", this.targetSavedToServer);
     target.saveToServer();
+  }
+});
+
+var TargetResults = BaseController.sub({
+  init: function() {
+    this.rawTemplate = this.template || $("#template-TargetResults");
+    this.template = Handlebars.compile(this.rawTemplate.html());
     
-    console.log(target.toJSON());
+    // this is binded to all events to avoid the unbind-old/bind-new
+    // hassle when viewing another target
+    Target.bind("create update", this.proxy(this.targetUpdated));
+  },
+  targetUpdated: function(target) { // TODO update only if this target has updated
+    if (target.id === this.id && window.track.visiblePage == this) {
+      this.render();
+    }
+  },
+  getData: function() {
+    var data = {};
+    try {
+      data.target = Target.find(this.id);
+      data.aggregate = data.target.getResultAggregate();
+    } catch (e) {
+      Target.loadDetails(this.id, this);
+      data.error = e;
+    }
+    return data;
   }
 });

@@ -50,9 +50,17 @@ Target.include({
         }
       });
     },
+    getResultAggregate: function() {
+      var aggregate = {
+        positives: _.filter(this.results, function(it) { return it.value === 1 }).length,
+        negatives: _.filter(this.results, function(it) { return it.value === 0 }).length,
+      };
+      
+      return aggregate;
+    },
     saved: false,
     detailsLoaded: false,
-    results: []
+    results: [],
 });
 
 /**

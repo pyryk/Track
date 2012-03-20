@@ -93,6 +93,34 @@
               <span class="answer negative">:(</span>
             </p>
           </form>
+          <p><a class="link-button" id="view-results" href="#">View Results</a></p>
+        {{/if}}
+      {{/with}}
+    {{/if}}
+    </div>
+  </script>
+  
+  <script id="template-TargetResults" type="text/x-handlebars-template">
+    {{#if error}}
+      {{error}}
+    {{/if}}
+    <div id="target-details">
+    {{#if target}}
+      {{#with target}}
+        <h2 class="target-name">{{name}}</h2>
+        {{#unless detailsLoaded}}
+          <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
+        {{/unless}}
+        {{#if question}}
+          <form id="answer-form">
+            <p class="target-question">{{question}}</p>
+            <p class="target-answer">
+              {{#with ../../aggregate}}
+              <p><span class="result-number positive">{{positives}}</span> x <span class="answer positive">:)</span></p>
+              <p><span class="result-number positive">{{negatives}}</span> x <span class="answer negative">:(</span></p>
+              {{/with}}
+            </p>
+          </form>
         {{/if}}
       {{/with}}
     {{/if}}
@@ -121,6 +149,7 @@
           <p class="question">{{target.question}}</p>
           <p class="answer">{{value}}</p>
         </div>
+        <p><a class="link-button" id="view-results" href="#">View Results</a></p>
       {{/with}}
     {{/if}}
   </script>
@@ -131,6 +160,7 @@
   <script src="js/libs/spine.js"></script>
   <script src="js/libs/spine.route.js"></script>
   <script src="js/libs/handlebars.js"></script>
+  <script src="js/libs/underscore-min.js"></script>
   <script src="js/libs/cordova-1.5.0.js"></script>
 
   <!-- our code -->
