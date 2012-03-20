@@ -1,5 +1,5 @@
 var Mongo = require('./mongo.js');
-var Relevancy = require('./relevance.js');
+var Relevance = require('./relevance.js');
 
 var API = {
     start: function(server) {
@@ -11,11 +11,26 @@ var API = {
 
     getTargets: function(req, res, next) {
         Mongo.findAllTargets().then(function(data) {
-            var targets = data.map(function(target) {
-                return API.selectFields(target, ['name', '_id']);
+            var targets = data;
+
+            Relevance.calculate(targets);
+
+            // Filter
+            targets = data.map(function(target) {
+                return API.selectFields(target, ['name', '_id', 'relevance']);
             });
 
-            Relevancy.calculate(targets);
+            // Sort
+            targets.sort(function(a, b) {
+                var aRel = a.relevance, bRel = b.relevance;
+                if(aRel > bRel) {
+                    return -1;
+                } else if(aRel === bRel) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            });
 
             res.send(200, {targets: targets});
             return next();

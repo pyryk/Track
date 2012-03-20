@@ -20,6 +20,11 @@ var Relevance = {
         var maxScore = this.maxScore;
         var weight = this.overallPopularityWeight;
         targets.forEach(function(target) {
+            if(maxResultsSqrt === 0) {
+                target.relevance = 0;
+                return;
+            }
+
             target.relevance = Math.sqrt(target.results ? target.results.length : 0) / maxResultsSqrt * maxScore * weight;
         });
     }

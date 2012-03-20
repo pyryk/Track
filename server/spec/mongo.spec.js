@@ -54,11 +54,11 @@ describe('Mongo', function() {
         it('should add a new result entry to the tracking target', function() {
             testDB(Mongo.addResult({
                 _id: '12345678901234567890abce',
-                value: 15
+                value: 17
             }), function() {
                 testDB(Mongo.findTargetById('12345678901234567890abce'), function(dbResult) {
-                    expect(dbResult.results.length).toEqual(6);
-                    expect(dbResult.results[5].value).toEqual(15);
+                    expect(dbResult.results.length).toEqual(17);
+                    expect(dbResult.results[16].value).toEqual(17);
                 });
             });
         })

@@ -24,43 +24,22 @@ describe('Integration test', function() {
         testRequest({method: 'GET', path: '/targets'}, function(result) {
             expect(result.statusCode).toEqual(200);
 
-            // The order is not guarenteed, thus, sort before assertion
-            var sortFunction = function(a, b) {
-                if(a._id < b._id) {
-                    return -1;
-                } else if(a._id === b._id) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            }
-
-            // The order is not guarenteed, thus, sort before assertion
-            result.body.targets.sort(sortFunction);
-
             // Expect
             var expectedTargets = [{
-                name: 'Mikä fiilis?',
-                _id: '12345678901234567890abcd'
-            }, {
                 name: 'T-Talon ruokajono',
-                _id: '12345678901234567890abce'
+                _id: '12345678901234567890abce',
+                relevance: 10
             }, {
                 name: 'Putouksen munamiehen läpän taso',
-                _id: '12345678901234567890abcf'
-            }].sort(sortFunction);
+                _id: '12345678901234567890abcf',
+                relevance: 5
+            }, {
+                name: 'Mikä fiilis?',
+                _id: '12345678901234567890abcd',
+                relevance: 0
+            }];
 
-            // Assertion
-            var i = 0;
-            result.body.targets.forEach(function(target) {
-                var expected = expectedTargets[i]
-
-                expect(target.name).toEqual(expected.name);
-                expect(target._id).toEqual(expected._id);
-                expect(target.relevance).toBeGreaterThan(-0.1);
-                expect(target.relevance).toBeLessThan(10.1);
-                i += 1;
-            });
+            expect(result.body.targets).toEqual(expectedTargets);
         });
     });
 
@@ -75,7 +54,7 @@ describe('Integration test', function() {
                         unit: 'min',
                         question: 'Kauanko jonotit?'
                     },
-                    results: [10, 5, 6, 7, 20]
+                    results: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
                 }
             });
         });
@@ -121,7 +100,7 @@ describe('Integration test', function() {
         var requestComplete;
 
         runs(function() {
-            testRequest({method: 'POST', path: '/target/' + id + '/result', body: {value: 15}}, function(result) {
+            testRequest({method: 'POST', path: '/target/' + id + '/result', body: {value: 17}}, function(result) {
                 expect(result.statusCode).toEqual(204);
                 expect(result.body).toEqual({});
 
@@ -136,9 +115,9 @@ describe('Integration test', function() {
         runs(function() {
             testRequest({method: 'GET', path: '/target/' + id}, function(result) {
                 expect(result.statusCode).toEqual(200);
-                expect(result.body.target.results.length).toEqual(6);
-                expect(result.body.target.results[5].value).toEqual(15);
-                expect(isTimestamp(result.body.target.results[5].timestamp)).toBeTruthy();
+                expect(result.body.target.results.length).toEqual(17);
+                expect(result.body.target.results[16].value).toEqual(17);
+                expect(isTimestamp(result.body.target.results[16].timestamp)).toBeTruthy();
             });
         });
     });

@@ -6,7 +6,7 @@ module.exports = {
             unit: 'min',
             question: 'Kauanko jonotit?'
         },
-        results: [10, 5, 6, 7, 20]
+        results: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     }, {
         name: 'Mikä fiilis?',
         _id: '12345678901234567890abcd',
@@ -20,6 +20,7 @@ module.exports = {
         metric: {
             unit: '4-10',
             question: 'No millasta läpyskää puskee?'
-        }
+        },
+        results: [1, 2, 3, 4]
     }]
 };

@@ -13,7 +13,8 @@ describe('Relevance', function() {
             {results: [1, 2, 3, 4, 5, 6, 7, 8, 9]},
             {results: [1, 2, 3, 4]},
             {results: [1]},
-            {results: []}
+            {results: []},
+            {}
         ];
 
         Relevance.calculate(targets);
@@ -23,5 +24,6 @@ describe('Relevance', function() {
         expect(targets[2].relevance).toEqual(2.5);
         expect(targets[3].relevance).toEqual(1.25);
         expect(targets[4].relevance).toEqual(0);
+        expect(targets[5].relevance).toEqual(0);
     });
 });
