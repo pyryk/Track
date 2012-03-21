@@ -331,6 +331,38 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
 }
 
 /* line 222, ../scss/app.scss */
+#back-button {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  height: 40px;
+  display: block;
+}
+/* line 228, ../scss/app.scss */
+#back-button .back-button {
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 10px 5px;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(0, 0, 0, 0.05)), color-stop(100%, rgba(0, 0, 0, 0.1)));
+  background-image: -webkit-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+  background-image: -moz-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+  background-image: -o-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+  background-image: -ms-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+  background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+}
+
+/* line 237, ../scss/app.scss */
+#back-button:empty {
+  display: none;
+}
+
+/* line 241, ../scss/app.scss */
 footer {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2f2f2f), color-stop(50%, #151515), color-stop(51%, #000000), color-stop(100%, #000000));
   background-image: -webkit-linear-gradient(top, #2f2f2f, #151515 50%, #000000 51%, #000000);
@@ -346,17 +378,17 @@ footer {
   left: 0;
 }
 
-/* line 232, ../scss/app.scss */
+/* line 251, ../scss/app.scss */
 .loading-indicator {
   margin: 10px;
 }
 
-/* line 236, ../scss/app.scss */
+/* line 255, ../scss/app.scss */
 .hide {
   display: none;
 }
 
-/* line 240, ../scss/app.scss */
+/* line 259, ../scss/app.scss */
 .link-button {
   display: block;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eeeeee), color-stop(100%, #fdfdfd));
@@ -382,20 +414,20 @@ footer {
   -o-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 }
-/* line 252, ../scss/app.scss */
+/* line 271, ../scss/app.scss */
 .link-button:link, .link-button:active, .link-button:visited {
   text-decoration: none;
   color: #666666;
 }
 
-/* line 258, ../scss/app.scss */
+/* line 277, ../scss/app.scss */
 input[type=text] {
   width: 100%;
   box-sizing: border-box;
 }
 
 /* no point to have red bg on untouched text boxes */
-/* line 264, ../scss/app.scss */
+/* line 283, ../scss/app.scss */
 input[type=text]:invalid {
   background-color: white;
 }

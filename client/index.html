@@ -12,7 +12,7 @@
   <!-- Mobile viewport optimization h5bp.com/ad -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 
   <!-- Home screen icon  Mathias Bynens mathiasbynens.be/notes/touch-icons -->
   <!-- For iPhone 4 with high-resolution Retina display: -->
@@ -46,13 +46,14 @@
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
   <script src="js/libs/modernizr-2.0.6.min.js"></script>
   <script src="js/config.js"></script>
+  <!--<script src="http://192.168.0.199:8000/target/target-script-min.js#anonymous"></script>-->
 </head>
 
 <body>
 
   <div id="container">
     <header>
-      <a style="float: left;" href="#"></a>
+      <div id="back-button"></div>
       <h1><a href="#">Track</a></h1>
     </header>
     <div id="main" role="main">
@@ -95,7 +96,7 @@
               <span class="answer negative">:(</span>
             </p>
           </form>
-          <p><a class="link-button" id="view-results" href="#">View Results</a></p>
+          <p><span class="link-button view-results">View Results</span></p>
         {{/if}}
       {{/with}}
     {{/if}}
@@ -156,10 +157,16 @@
             </div>
           </div>
         </div>
-        <p><a class="link-button" id="view-results" href="#">View Results</a></p>
+        <p><span class="link-button view-results">View Results</span></p>
       {{/with}}
     {{/if}}
     </div>
+  </script>
+  
+  <script id="template-backButton" type="text/x-handlebars-template">
+    {{#if title}}
+      <span class="back-button">&lt; {{title}}</span>
+    {{/if}}
   </script>
 
   <!-- JavaScript at the bottom for fast page loading -->
@@ -172,9 +179,9 @@
   <script src="js/libs/cordova-1.5.0.js"></script>
 
   <!-- our code -->
-  <script src="js/models.js"></script>
-  <script src="js/controllers.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/models.js?2135123513251"></script>
+  <script src="js/controllers.js?2135123513251"></script>
+  <script src="js/app.js?2135123513251"></script>
 
   <!-- scripts concatenated and minified via ant build script-->
   <script src="js/helper.js"></script>

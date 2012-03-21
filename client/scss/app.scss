@@ -219,6 +219,25 @@ header {
   }
 }
 
+#back-button {
+  position: absolute; 
+  top: 3px; 
+  left: 3px;
+  height: 40px;
+  display: block;
+  .back-button {
+    display: inline-block;
+    border: 1px solid rgba(0,0,0,0.3);
+    padding: 10px 5px;
+    @include background-image(linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.1)));
+    @include border-radius(5px);
+  }
+}
+
+#back-button:empty {
+  display: none;
+}
+
 footer {
   @include background-image(linear-gradient(top, #2F2F2F, #151515 50%, #000000 51%, #000000));
   border: 1px solid #222;

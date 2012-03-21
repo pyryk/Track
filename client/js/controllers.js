@@ -23,6 +23,9 @@ var TargetsList = BaseController.sub({
   events: {
     "click #target-list li": "clicked"
   },
+  getTitle: function() {
+    return "Target List";
+  },
   getData: function() {
     return {items: Target.findAllByAttribute("saved", true)};
   },
@@ -58,6 +61,9 @@ var ownResult = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
   },
+  getTitle: function() {
+    return "My Answer";
+  },
   getData: function() {
     try {
       var result = Result.find(this.id)
@@ -78,7 +84,7 @@ var TargetDetails = BaseController.sub({
   events: {
     "click .answer.positive": "savePositiveAnswer",
     "click .answer.negative": "saveNegativeAnswer",
-    "click #view-results": "viewResults",
+    "click .view-results": "viewResults"
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -87,19 +93,29 @@ var TargetDetails = BaseController.sub({
     // hassle when viewing another target
     Target.bind("create update", this.proxy(this.targetUpdated));
   },
+  getTitle: function() {
+    return "Target Details";
+  },
   getData: function() {
     var target, error;
     try {
       target = Target.find(this.id);
-      log("Rendering ", target);
     } catch (e) { // unknown record
       // try to load record
       Target.loadDetails(this.id, this);
       error = e;
       log(e);
     }
-    
     return {target: target, error: error};
+  },
+  render: function() {
+    BaseController.prototype.render.call(this);
+
+    //console.log($(this.el).find('.view-results').length);
+    /*this.el.find('.view-results').bind("click", this.proxy(function(e) {
+      console.log('view results clicked');
+      this.viewResults(e);
+    }));*/
   },
   error: function(reason) {
     if (reason == "notfound") {
@@ -132,8 +148,8 @@ var TargetDetails = BaseController.sub({
     this.saveAnswer(0);
   },
   viewResults: function(e) {
-    e.preventDefault();
-    Spine.Route.navigate(App.getRoute(Target.find(this.id)) + "/results");
+    var route = App.getRoute(Target.find(this.id)) + "/results";
+    Spine.Route.navigate(route);
   }
 });
 
@@ -143,6 +159,9 @@ var TargetCreate = BaseController.sub({
   },
   init: function() {
     BaseController.prototype.init.call(this);
+  },
+  getTitle: function() {
+    return "Create Target";
   },
   targetSavedToServer: function(target, success) {
     log(target.name + (success ? '' : ' _NOT_') + ' saved to server');
@@ -173,6 +192,9 @@ var TargetResults = BaseController.sub({
       this.render();
     }
   },
+  getTitle: function() {
+    return "Target Results";
+  },
   getData: function() {
     var data = {};
     try {
@@ -183,5 +205,23 @@ var TargetResults = BaseController.sub({
       data.error = e;
     }
     return data;
+  }
+});
+
+var BackButton = BaseController.sub({
+  events: {
+    "click .back-button": "clicked"
+  },
+  init: function() {
+    BaseController.prototype.init.call(this);
+    Spine.bind('page:change', this.proxy(this.render));
+  },
+  getData: function() {
+    var title = this.app.getPreviousPage() ? this.app.getPreviousPage().getTitle() : undefined;
+    console.log(title);
+    return {title: title};
+  },
+  clicked: function() {
+    this.app.goToPreviousPage();
   }
 });
