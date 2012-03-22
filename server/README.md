@@ -2,7 +2,23 @@
 
 All the requests with body (POST requests) should have a application/json Content-Type header set.
 
+## Authentication
+
+**This is a DRAFT of the authentication functions, waiting for comments. NOT YET IMPLEMENTED**
+
+User has to be logged in to Facebook before accessing Track API. Client software is responsible of Facebook login.
+
+The following parameters have to be sent with each request that requires authentication:
+
+**fbUserId** Facebook user ID
+
+**fbAccessToken** Access token received from Facebook after user login
+
+## API endpoints
+
 ### GET /targets - Lists all targets
+
+Requires authentication: Yes
 
 Status: 200 Ok
 
@@ -18,6 +34,8 @@ Response body:
   
 
 ### GET /target/:_id - Returns specific target with detailed info
+
+Requires authentication: Yes
 
 Status: 200 Ok
 
@@ -38,6 +56,8 @@ Reponse body:
 
 ### POST /target - Create a new target
 
+Requires authentication: Yes
+
 Request body:
 
 	{
@@ -52,6 +72,8 @@ Response body:
 	{_id: "12345678901234567890abcd"}
 
 ### POST /target/:_id/result - Send tracking result
+
+Requires authentication: Yes
 
 Request body:
 
