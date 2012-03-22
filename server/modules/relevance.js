@@ -1,7 +1,7 @@
 
 var Relevance = function() {
     this.maxScore = 10;
-    this.strategies = [OverallPopularity];
+    this.strategies = [new OverallPopularity()];
 };
 
 Relevance.prototype.calculate = function(targets) {
@@ -77,30 +77,32 @@ Relevance.prototype.calculate = function(targets) {
     });
 };
 
-var OverallPopularity = {
-    weight: 1,
+var OverallPopularity = function (){
+    this.weight = 1;
+};
 
-    analyzeTargetsStarted: function() {
-        this.maxResult = 0;
-        this.maxResultSqrt = 0;
-    },
-    analyzeTargetsFinished: function() {
-        this.maxResultSqrt = Math.sqrt(this.maxResult);
-    },
-    analyzeTarget: function(target) {
-        this.maxResult = Math.max(target.results ? target.results.length : 0, this.maxResult);
-    },
+OverallPopularity.prototype.analyzeTargetsStarted = function() {
+    this.maxResult = 0;
+    this.maxResultSqrt = 0;
+};
 
-    calculateRelevance: function(target, maxScore) {
+OverallPopularity.prototype.analyzeTargetsFinished = function() {
+    this.maxResultSqrt = Math.sqrt(this.maxResult);
+};
 
-        if(this.maxResultSqrt === 0) {
-            target.relevance = 0;
-            return;
-        }
+OverallPopularity.prototype.analyzeTarget = function(target) {
+    this.maxResult = Math.max(target.results ? target.results.length : 0, this.maxResult);
+};
 
-        return Math.sqrt(target.results ? target.results.length : 0) / this.maxResultSqrt * this.weight;
+OverallPopularity.prototype.calculateRelevance = function(target, maxScore) {
+
+    if(this.maxResultSqrt === 0) {
+        target.relevance = 0;
+        return;
     }
-}
+
+    return Math.sqrt(target.results ? target.results.length : 0) / this.maxResultSqrt * this.weight;
+};
 
 Relevance.Strategy = {
     OverallPopularity: OverallPopularity

@@ -8,8 +8,9 @@ describe('Relevance', function() {
     });
 
     it('should calculate relevancy by overall popularity', function() {
-        Relevance.Strategy.OverallPopularity.weight = 0.5;
-        rel.strategies = [Relevance.Strategy.OverallPopularity];
+        var overallPopularity = new Relevance.Strategy.OverallPopularity();
+        overallPopularity.weight = 0.5;
+        rel.strategies = [overallPopularity];
 
         var targets = [
             {results: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]},
