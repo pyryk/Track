@@ -82,6 +82,7 @@ describe('Relevance', function() {
         var target1 = createTarget({resultsHourAgo: 10, resultsTwoHoursAgo: 50, resultsTotal: 500});
         var target2 = createTarget({resultsHourAgo: 1, resultsTwoHoursAgo: 50, resultsTotal: 500});
         var target3 = createTarget({resultsHourAgo: 100, resultsTwoHoursAgo: 50, resultsTotal: 500});
+        var emptyTarget = createTarget({resultsHourAgo: 0, resultsTwoHoursAgo: 0, resultsTotal: 0});
 
         var targets = [target1, target2, target3];
 
@@ -131,6 +132,7 @@ describe('Relevance', function() {
 
             expect(target3.lastHourPopularity).toEqual(100);
             expect(target3.lastTwoHoursPopularity).toEqual(50);
+
         });
 
         it('should calculate the relevance based on the hourly trend', function() {
@@ -148,6 +150,12 @@ describe('Relevance', function() {
 
             expect(target3.relevance).toBeGreaterThan(target1.relevance);
             expect(target1.relevance).toBeGreaterThan(target2.relevance);
+        });
+
+        it('should not break if no results', function() {
+            rel.calculate([emptyTarget]);
+            expect(emptyTarget.relevance).toBeGreaterThan(-0.1);
+            expect(emptyTarget.relevance).toBeLessThan(10.1);
         })
 
     });

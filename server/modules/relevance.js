@@ -153,8 +153,11 @@ HourlyPopularity.prototype.analyzeResultsFinished = function(results, target) {
 HourlyPopularity.prototype.calculateRelevance = function(target, targets) {
     var delta = this.maxValue - this.minValue;
 
-    var relevance = (target.unscaledHourlyRelevance - this.minValue) / delta;
-    return relevance;
+    if(!delta) {
+        return 0;
+    }
+
+    return (target.unscaledHourlyRelevance - this.minValue) / delta;
 }
 
 Relevance.Strategy = {
