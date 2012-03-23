@@ -1,7 +1,7 @@
 
 var Relevance = function() {
     this.maxScore = 10;
-    this.strategies = [new OverallPopularity()];
+    this.strategies = [new HourlyPopularity()];
 };
 
 Relevance.prototype.calculate = function(targets) {
@@ -63,7 +63,7 @@ Relevance.prototype.calculate = function(targets) {
         var totalRelevance = 0;
         strategies.forEach(function(strategy) {
             if(strategy.calculateRelevance) {
-                totalRelevance += strategy.calculateRelevance(target, targets) * maxScore;
+                totalRelevance += strategy.calculateRelevance(target, targets) * maxScore * strategy.weight;
             }
         });
 
@@ -101,11 +101,65 @@ OverallPopularity.prototype.calculateRelevance = function(target, maxScore) {
         return;
     }
 
-    return Math.sqrt(target.results ? target.results.length : 0) / this.maxResultSqrt * this.weight;
+    return Math.sqrt(target.results ? target.results.length : 0) / this.maxResultSqrt;
 };
 
+var HourlyPopularity = function() {
+    this.weight = 1;
+}
+
+HourlyPopularity.prototype.analyzeTargetsStarted = function() {
+    this.now = (new Date()).getTime();
+    this.oneHourAgo = this.now - (1000 * 60 * 60);
+    this.twoHoursAgo = this.now - (1000 * 60 * 60 * 2);
+    delete this.minValue;
+    delete this.maxValue;
+}
+
+HourlyPopularity.prototype.analyzeResultsStarted = function() {
+    this.lastHourPopularity = 0;
+    this.lastTwoHoursPopularity = 0;
+}
+
+HourlyPopularity.prototype.analyzeResult = function(result) {
+    var resultTime = result.timestamp.getTime();
+
+    if(resultTime > this.twoHoursAgo) {
+        if(resultTime > this.oneHourAgo) {
+            this.lastHourPopularity += 1;
+        } else {
+            this.lastTwoHoursPopularity += 1;
+        }
+    }
+}
+
+HourlyPopularity.prototype.analyzeResultsFinished = function(results, target) {
+    target.lastHourPopularity = this.lastHourPopularity;
+    target.lastTwoHoursPopularity = this.lastTwoHoursPopularity;
+
+    // Calculate unscaled relevance
+    var y1 = target.lastHourPopularity;
+    var y2 = target.lastTwoHoursPopularity;
+
+    var slope = y1 - y2;
+    var trend = slope * Math.log(1 + (target.results ? target.results.length : 0));
+
+    this.minValue = this.minValue == null ? trend : Math.min(this.minValue, trend);
+    this.maxValue = this.maxValue == null ? trend : Math.max(this.maxValue, trend);
+
+    target.unscaledHourlyRelevance = trend;
+}
+
+HourlyPopularity.prototype.calculateRelevance = function(target, targets) {
+    var delta = this.maxValue - this.minValue;
+
+    var relevance = (target.unscaledHourlyRelevance - this.minValue) / delta;
+    return relevance;
+}
+
 Relevance.Strategy = {
-    OverallPopularity: OverallPopularity
+    OverallPopularity: OverallPopularity,
+    HourlyPopularity: HourlyPopularity
 }
 
 module.exports = Relevance;

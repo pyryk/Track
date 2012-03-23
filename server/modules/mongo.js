@@ -38,6 +38,19 @@ var Mongo = {
                 target[key] = targetHash[key];
             }
 
+            if(target.results) {
+                var results = target.results;
+                for(var i = 0, len = results.length; i < len; i++) {
+                    if(results[i].timestamp) {
+                        continue;
+                    }
+
+                    var value = results[i];
+                    var timestamp = new Date();
+                    results[i] = {value: value, timestamp: timestamp};
+                }
+            };
+
             target.save(function(error) {
                 if(error) {
                     console.error(error);

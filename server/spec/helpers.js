@@ -1,5 +1,11 @@
 var http = require('http');
 var Promise = require('node-promise').Promise;
+var DateUtils = require('../modules/now.js');
+
+beforeEach(function() {
+    var now = new Date();
+    spyOn(DateUtils, 'now').andReturn(now);
+})
 
 var API = {
     spyOnPromise: function(Klass, method) {
