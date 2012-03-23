@@ -24,7 +24,7 @@ var TargetsList = BaseController.sub({
     "click #target-list li": "clicked"
   },
   getTitle: function() {
-    return "Target List";
+    return "List";
   },
   getData: function() {
     return {items: Target.findAllByAttribute("saved", true)};
@@ -94,7 +94,7 @@ var TargetDetails = BaseController.sub({
     Target.bind("create update", this.proxy(this.targetUpdated));
   },
   getTitle: function() {
-    return "Target Details";
+    return "Target";
   },
   getData: function() {
     var target, error;
