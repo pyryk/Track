@@ -1,6 +1,7 @@
 var Mongo = require('../modules/mongo');
 var IntegrationHelpers = require('./helpers').Integration;
 var _ = require('underscore');
+var DateUtils = require('../modules/now.js');
 
 // Initialize server for integration tests
 var confs = {port: 9999, name: "Track API integration test server"};
@@ -107,27 +108,21 @@ describe('Integration test', function() {
 
     it('GET /target/:id', function() {
         testRequest({method: 'GET', path: '/target/12345678901234567890abce'}, function(result) {
+            var target = result.body.target;
+
             expect(result.statusCode).toEqual(200);
-            expect(result.body.target._id).toEqual('12345678901234567890abce');
-            expect(result.body.target.name).toEqual('T-Talon ruokajono');
-            expect(result.body.target.question).toEqual('Oliko paljon jonoa?');
-            expect(result.body.target.results).toEqual([
-             { value : 1, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 2, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 3, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 4, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 5, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 6, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 7, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 8, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 9, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 10, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 11, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 12, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 13, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 14, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 15, timestamp : '2012-03-23T08:03:48.223Z' },
-             { value : 16, timestamp : '2012-03-23T08:03:48.223Z' } ]);
+            expect(target._id).toEqual('12345678901234567890abce');
+            expect(target.name).toEqual('T-Talon ruokajono');
+            expect(target.question).toEqual('Oliko paljon jonoa?');
+
+            expect(target.results.history).toEqual([
+                {start: '2012-03-23T08:00:00.000Z', end: '2012-03-23T08:15:00.000Z', pos: 3, neg: 1},
+                {start: '2012-03-23T08:45:00.000Z', end: '2012-03-23T09:00:00.000Z', pos: 0, neg: 2},
+                {start: '2012-03-23T10:00:00.000Z', end: '2012-03-23T10:15:00.000Z', pos: 3, neg: 0},
+                {start: '2012-03-23T12:00:00.000Z', end: '2012-03-23T12:15:00.000Z', pos: 0, neg: 3},
+                {start: '2012-03-23T13:30:00.000Z', end: '2012-03-23T13:45:00.000Z', pos: 2, neg: 0},
+                {start: '2012-03-23T13:45:00.000Z', end: '2012-03-23T14:00:00.000Z', pos: 1, neg: 1}
+            ]);
         });
     });
 
@@ -163,9 +158,10 @@ describe('Integration test', function() {
     it('POST /target/:id/result', function() {
         var id = '12345678901234567890abce';
         var requestComplete;
+        spyOn(DateUtils, 'now').andReturn(new Date('2012-03-23T13:59:00.000Z'));
 
         runs(function() {
-            testRequest({method: 'POST', path: '/target/' + id + '/result', body: {value: 17}}, function(result) {
+            testRequest({method: 'POST', path: '/target/' + id + '/result', body: {value: 0}}, function(result) {
                 expect(result.statusCode).toEqual(204);
                 expect(result.body).toEqual({});
 
@@ -180,9 +176,7 @@ describe('Integration test', function() {
         runs(function() {
             testRequest({method: 'GET', path: '/target/' + id}, function(result) {
                 expect(result.statusCode).toEqual(200);
-                expect(result.body.target.results.length).toEqual(17);
-                expect(result.body.target.results[16].value).toEqual(17);
-                expect(isTimestamp(result.body.target.results[16].timestamp)).toBeTruthy();
+                expect(result.body.target.results.history[5].neg).toEqual(2);
             });
         });
     });

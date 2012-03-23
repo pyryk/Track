@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Promise = require('node-promise').Promise;
 var Fixtures = require('../fixtures/fixtures');
+var DateUtils = require('../modules/now.js');
 
 var Mongo = {
 
@@ -102,7 +103,7 @@ var Mongo = {
                 target.results = [];
             }
 
-            target.results.push({timestamp: new Date(), value: params.value});
+            target.results.push({timestamp: DateUtils.now(), value: params.value});
 
             target.save(function(error) {
                 Mongo.resolvePromise(error, promise);

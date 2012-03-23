@@ -1,5 +1,8 @@
+"use strict";
+
 var Mongo = require('./mongo.js');
 var Relevance = require('./relevance');
+var _ = require('underscore');
 
 var API = {
 
@@ -43,9 +46,66 @@ var API = {
         });
     },
 
+    categoriseResults: function(results) {
+        results = results || [];
+
+        var nearestStartingQuarter = function(date) {
+            var minutes = date.getMinutes() % 15;
+            var seconds = date.getSeconds();
+            var milliseconds = date.getMilliseconds();
+
+            var substract = (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
+
+            return new Date(date.getTime() - substract);
+        };
+
+        var addQuarter = function(date) {
+            return new Date(date.getTime() + (1000 * 60 * 15));
+        }
+
+        var quarters = {};
+        results.forEach(function(result) {
+            var startQuarter = nearestStartingQuarter(result.timestamp).getTime();
+
+            var quarterResult = quarters[startQuarter] || {pos: 0, neg: 0};
+
+            if(result.value) {
+                quarterResult.pos++;
+            } else {
+                quarterResult.neg++;
+            }
+
+            quarters[startQuarter] = quarterResult;
+        });
+
+        if(_.isEmpty(quarters)) {
+            return null;
+        }
+
+        var history = [];
+        _.each(quarters, function(quarterValue, quarterKey) {
+            var quarterStart = new Date(parseInt(quarterKey, 10));
+            var quarterEnd = addQuarter(quarterStart);
+            history.push({start: quarterStart, end: quarterEnd, pos: quarterValue.pos, neg: quarterValue.neg});
+        });
+
+        return history;
+    },
+
     getTarget: function(req, res, next) {
         Mongo.findTargetById(req.params.id).then(function(data) {
-            res.send(200, {target: data});
+
+            // Filter
+            var target = API.selectFields(data, ['name', '_id', 'question']);
+
+            var history = API.categoriseResults(data.results);
+
+            if(history) {
+                target.results = {history: history};
+            }
+
+            res.send(200, {target: target});
+
             return next();
         }, function(error) {
             return next(error);
