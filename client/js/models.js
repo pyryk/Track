@@ -220,3 +220,12 @@ Result.include({
     });
   }
 });
+
+/* -------------------------------------- */
+/* user (logged in via facebook or other) */
+var User = Spine.Model.sub();
+User.configure("User", "name", "email", "logged", "token");
+
+User.getUser = function() {
+  return User.last() || User.create();
+};

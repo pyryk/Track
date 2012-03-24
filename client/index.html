@@ -56,46 +56,10 @@
     <header>
       <div id="back-button"></div>
       <h1><a href="#">Track</a></h1>
+      <div id="account-button"><span class="top-button"><a href="#!/login/">Account</a></span></div>
     </header>
     <div id="main" role="main">
     </div>
-    <div id="fb-root"></div>
-    <script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '167103313410896', // App ID
-          channelUrl : '//localhost/channel.html', // Channel File
-          status     : true, // check login status
-          cookie     : true, // enable cookies to allow the server to access the session
-          xfbml      : true  // parse XFBML
-        });
-
-        FB.Event.subscribe('auth.statusChange', handleStatusChange);
-      };
-
-      // Load the SDK Asynchronously
-      (function(d){
-         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement('script'); js.id = id; js.async = true;
-         js.src = "//connect.facebook.net/en_US/all.js";
-         ref.parentNode.insertBefore(js, ref);
-       }(document));
-    </script>
-    <script>
-      function handleStatusChange(response) {
-        document.body.className = response.authResponse ? 'connected' : 'not_connected';
-
-        if (response.authResponse) {
-          //updateUserInfo(response);
-        }
-      }
-    </script>
-    <script>
-      function loginUser() {    
-        FB.login(function(response) { }, {scope:'email'});     
-        }
-    </script>
     <!--<footer>
       footer will be here
     </footer>-->
@@ -129,8 +93,8 @@
           <form id="answer-form">
             <p class="target-question">{{question}}</p>
             <p class="target-answer">
-              <span class="answer negative"><img src="img/smiley-bad.png" alt=":("></span>
-              <span class="answer positive"><img src="img/smiley-good.png" alt=":)"></span>
+              <span class="active answer negative"><img src="img/smiley-bad.png" alt=":("></span>
+              <span class="active answer positive"><img src="img/smiley-good.png" alt=":)"></span>
             </p>
           </form>
           <p><span class="link-button view-results">View Results</span></p>
@@ -205,17 +169,21 @@
   
   <script id="template-backButton" type="text/x-handlebars-template">
     {{#if title}}
-      <span class="back-button">&lt; {{title}}</span>
+      <span class="login-button top-button">&lt; {{title}}</span>
     {{/if}}
   </script>
   
   <script id="template-loginScreen" type="text/x-handlebars-template">
-    <div id="login">
-      <p><button onClick="loginUser();">Login</button></p>
-    </div>
-    <div id="logout">
-      <p><button  onClick="FB.logout();">Logout</button></p>
-    </div>
+    {{#if logged}}
+      <p>Welcome!</p>
+      <div id="logout">
+        <p><button  onClick="FB.logout();">Logout</button></p>
+      </div>
+    {{else}}
+      <div id="login">
+        <p><button class="login-button">Login with Facebook</button></p>
+      </div>
+    {{/if}}
   </script>
 
   <!-- JavaScript at the bottom for fast page loading -->

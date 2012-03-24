@@ -95,8 +95,8 @@ var ownResult = BaseController.sub({
 
 var TargetDetails = BaseController.sub({
   events: {
-    "fastclick .answer.positive": "savePositiveAnswer",
-    "fastclick .answer.negative": "saveNegativeAnswer",
+    "fastclick .active.answer.positive": "savePositiveAnswer",
+    "fastclick .active.answer.negative": "saveNegativeAnswer",
     "fastclick .view-results": "viewResults"
   },
   init: function() {
@@ -296,7 +296,7 @@ var TargetResults = BaseController.sub({
 
 var BackButton = BaseController.sub({
   events: {
-    "fastclick .back-button": "clicked"
+    "fastclick .login-button": "clicked"
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -312,4 +312,23 @@ var BackButton = BaseController.sub({
 });
 
 var LoginScreen = BaseController.sub({
+  events: {
+    "fastclick .login-button": "loginUser"
+  },
+  init: function() {
+    BaseController.prototype.init.call(this);
+    User.bind("create update", this.proxy(this.loginUpdated));
+  },
+  loginUpdated: function() {
+    console.log('login updated!');
+    if (window.track.visiblePage == this) {
+      this.render();
+    }
+  },
+  getData: function() {
+    return User.last() || {};
+  },
+  loginUser: function() {    
+    FB.login(function(response) { }, {scope:'email'});     
+  }
 });

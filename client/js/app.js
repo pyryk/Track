@@ -37,32 +37,86 @@ var App = Spine.Controller.sub({
       template: $('#template-backButton'),
       app: this,
     }).render();
-    /*$('#back-button').click(this.proxy(function(e) {
-      this.goToPreviousPage();
-    }));*/
+    
+    // enable logins
+    if (window.trackConfig && window.trackConfig.enableAuth) {
+      this.addLogin();
+    }
   },
   renderView: function(name, className, id) {
-    // create controller if it doesnt already exist
-    if (!this.pages[name]) {
-      var tmpl = $('#template-' + name);
-      log("creating view " + name, "with template", tmpl);
-      this.pages[name] = new className({
-        el: $("#main"),
-        template: tmpl
-      });
-    }
+    if (name !== "loginScreen" && !this.loginOk()) {
+      this.redirect = {name: name, className: className, id: id};
+      Spine.Route.navigate("!/login/");
+    } else {
+      // create controller if it doesnt already exist
+      if (!this.pages[name]) {
+        var tmpl = $('#template-' + name);
+        log("creating view " + name, "with template", tmpl);
+        this.pages[name] = new className({
+          el: $("#main"),
+          template: tmpl
+        });
+      }
     
-    log("rendering view " + name);
-    this.pages[name].id = id; // set id if needed
-    this.pages[name].render();
-    this.visiblePage = this.pages[name];
+      log("rendering view " + name);
+      this.pages[name].id = id; // set id if needed
+      this.pages[name].render();
+      this.visiblePage = this.pages[name];
     
-    // add page to the page stack:
-    if (this.pageStack[this.pageStack.length-1] !== this.pages[name] &&
-      this.pageStack[this.pageStack.length-2] !== this.pages[name]) {
-      this.pageStack.push(this.pages[name]);
+      // add page to the page stack:
+      if (this.pageStack[this.pageStack.length-1] !== this.pages[name] &&
+        this.pageStack[this.pageStack.length-2] !== this.pages[name]) {
+        this.pageStack.push(this.pages[name]);
+      }
     }
     Spine.trigger('page:change');
+  },
+  addLogin: function() {
+    var fb = $('<div id="fb-root"></div>');
+    $('body').append(fb);
+    
+    var self = this;
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '167103313410896', // App ID
+        channelUrl : '//localhost/channel.html', // Channel File
+        status     : true, // check login status
+        cookie     : true, // enable cookies to allow the server to access the session
+        xfbml      : true  // parse XFBML
+      });
+      User.create({logged: false});
+
+      FB.Event.subscribe('auth.statusChange', handleStatusChange);
+    };
+    // Load the SDK Asynchronously
+    (function(d){
+       var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement('script'); js.id = id; js.async = true;
+       js.src = "//connect.facebook.net/en_US/all.js";
+       ref.parentNode.insertBefore(js, ref);
+     }(document));
+     
+     var handleStatusChange = this.proxy(function(response) {
+       //document.body.className = response.authResponse ? 'connected' : 'not_connected';
+       log("FB login response: ", response);
+       if (response.authResponse) {
+         var user = User.getUser();
+         user.token = response.authResponse.accessToken;
+         user.logged = true;
+         user.save();
+         
+         FB.api('/me', function(response) {
+           user.name = response.username;
+           user.email = response.email;
+           user.save();
+         });
+         
+         if (self.redirect) {
+           self.renderView(self.redirect.name, self.redirect.className, self.redirect.id); 
+         }
+       }
+     });
   },
   pageStack: [],
   getPreviousPage: function() {
@@ -101,6 +155,10 @@ var App = Spine.Controller.sub({
     } else {
       Spine.Route.navigate("!/targets/");
     }
+  },
+  loginOk: function() {
+    return !(window.trackConfig && window.trackConfig.enableAuth &&
+           !User.getUser().logged)
   },
 });
 

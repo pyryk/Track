@@ -3,6 +3,8 @@
 @import "compass/css3/box-shadow";
 @import "compass/css3/box";
 @import "compass";
+$use-mozilla-ellipsis-binding: true;
+@import "compass/typography/text/ellipsis";
 /* ==================== app specific styles ==================== */
 
 $header_gradient_1: #2DBCF8;
@@ -105,6 +107,7 @@ header {
     border-left: 1px solid $border_color;
     border-right: 1px solid $border_color;
     @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+    @include ellipsis;
     
     &:active {
       @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
@@ -251,13 +254,12 @@ header {
   }
 }
 
-#back-button {
+#back-button, #account-button {
   position: absolute; 
   top: 5px; 
-  left: 5px;
   height: 36px;
   display: block;
-  .back-button {
+  .top-button {
     display: inline-block;
     height: 16px;
     border: 1px solid rgba(0,0,0,0.3);
@@ -267,7 +269,20 @@ header {
     &:active {
       @include background-image(linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.05)));
     }
+    
+    a, a:link, a:active, a:visited {
+      color: inherit;
+      text-decoration: inherit;
+    }
   }
+}
+
+#back-button {
+  left: 5px;
+}
+
+#account-button {
+  right: 5px;
 }
 
 footer {
