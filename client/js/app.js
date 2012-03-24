@@ -45,7 +45,7 @@ var App = Spine.Controller.sub({
   },
   renderView: function(name, className, id) {
     if (name !== "loginScreen" && !this.loginOk()) {
-      this.redirect = {name: name, className: className, id: id};
+      this.redirect = Spine.Route.getFragment();
       Spine.Route.navigate("!/login/");
     } else {
       // create controller if it doesnt already exist
@@ -75,7 +75,6 @@ var App = Spine.Controller.sub({
     var fb = $('<div id="fb-root"></div>');
     $('body').append(fb);
     
-    var self = this;
     window.fbAsyncInit = function() {
       FB.init({
         appId      : '167103313410896', // App ID
@@ -112,8 +111,8 @@ var App = Spine.Controller.sub({
            user.save();
          });
          
-         if (self.redirect) {
-           self.renderView(self.redirect.name, self.redirect.className, self.redirect.id); 
+         if (this.redirect) {
+           Spine.Route.navigate(this.redirect); 
          }
        }
      });
