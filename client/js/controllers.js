@@ -6,9 +6,22 @@ var BaseController = Spine.Controller.sub({
   render: function() {
     var data = this.getData();
     this.html(this.template(data));
+    
+    this.addFastButtons();
   },
   getData: function() {
     return {};
+  },
+  addFastButtons: function() {
+    for (var i in this.events) {
+      var parts = i.split(" ");
+      if (parts[0] == "fastclick") {
+        var btn = $(parts[1]).get(0);
+        if (btn) {
+          new MBP.fastButton(btn, this.proxy(this[this.events[i]]));
+        }
+      }
+    }
   }
 });
 
@@ -21,7 +34,7 @@ var TargetsList = BaseController.sub({
     ".targets": "targets"  
   },
   events: {
-    "click #target-list li": "clicked"
+    "fastclick #target-list li": "clicked"
   },
   getTitle: function() {
     return "List";
@@ -56,7 +69,7 @@ var TargetsList = BaseController.sub({
 
 var ownResult = BaseController.sub({
   events: {
-    "click #view-results": "viewResults",
+    "fastclick .view-results": "viewResults",
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -82,9 +95,9 @@ var ownResult = BaseController.sub({
 
 var TargetDetails = BaseController.sub({
   events: {
-    "click .answer.positive": "savePositiveAnswer",
-    "click .answer.negative": "saveNegativeAnswer",
-    "click .view-results": "viewResults"
+    "fastclick .answer.positive": "savePositiveAnswer",
+    "fastclick .answer.negative": "saveNegativeAnswer",
+    "fastclick .view-results": "viewResults"
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -110,7 +123,7 @@ var TargetDetails = BaseController.sub({
   },
   render: function() {
     BaseController.prototype.render.call(this);
-
+    
     //console.log($(this.el).find('.view-results').length);
     /*this.el.find('.view-results').bind("click", this.proxy(function(e) {
       console.log('view results clicked');
@@ -268,9 +281,7 @@ var TargetResults = BaseController.sub({
         var pos = {left: pos.pageX - el.offset().left, top: pos.pageY - el.offset().top}
         var series = item.seriesIndex === 0 ? positives : negatives;
         var values = series.data[item.dataIndex];
-        console.log(series, values);
         
-        console.log(item);
         el.trackTooltip(series === positives ? values[1] : -1 * values[1], pos, item);
       });
     //} catch (e) {
@@ -285,7 +296,7 @@ var TargetResults = BaseController.sub({
 
 var BackButton = BaseController.sub({
   events: {
-    "click .back-button": "clicked"
+    "fastclick .back-button": "clicked"
   },
   init: function() {
     BaseController.prototype.init.call(this);
