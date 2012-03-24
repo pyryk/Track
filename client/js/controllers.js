@@ -259,6 +259,20 @@ var TargetResults = BaseController.sub({
       }
       
       $.plot(el, [ positives, negatives ], options);
+      
+      el.bind("plotclick", function(event, pos, item) {
+        if (!item) {
+          $('#tooltip').remove();
+          return; // no item selected
+        }
+        var pos = {left: pos.pageX - el.offset().left, top: pos.pageY - el.offset().top}
+        var series = item.seriesIndex === 0 ? positives : negatives;
+        var values = series.data[item.dataIndex];
+        console.log(series, values);
+        
+        console.log(item);
+        el.trackTooltip(series === positives ? values[1] : -1 * values[1], pos, item);
+      });
     //} catch (e) {
     //  console.error(e);
     //}

@@ -275,7 +275,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
 }
 /* line 196, ../scss/app.scss */
 #target-results .target-answers th {
-  font-size: 2em;
+  font-size: 1.5em;
   font-weight: bold;
   color: #333333;
   text-align: left;
@@ -285,7 +285,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   background-image: -o-linear-gradient(#d4d4d4, #e4e4e4);
   background-image: -ms-linear-gradient(#d4d4d4, #e4e4e4);
   background-image: linear-gradient(#d4d4d4, #e4e4e4);
-  padding-top: 20px;
+  padding: 10px 1em;
 }
 /* line 205, ../scss/app.scss */
 #target-results .target-answers td {

@@ -194,12 +194,12 @@ header {
     @include body-box;
     
     th {
-      font-size: 2em;
+      font-size: 1.5em;
       font-weight: bold;
       color: lighten($text_color, 20%);
       text-align: left;
       @include background-image(linear-gradient(darken($list_item_gradient_2, 10%), darken($list_item_gradient_1, 10%)));
-      padding-top: 20px;
+      padding: 10px 1em;
     }
     
     td {
