@@ -58,7 +58,44 @@
     </header>
     <div id="main" role="main">
     </div>
+    <div id="fb-root"></div>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '167103313410896', // App ID
+          channelUrl : '//localhost/channel.html', // Channel File
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true  // parse XFBML
+        });
 
+        FB.Event.subscribe('auth.statusChange', handleStatusChange);
+      };
+
+      // Load the SDK Asynchronously
+      (function(d){
+         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement('script'); js.id = id; js.async = true;
+         js.src = "//connect.facebook.net/en_US/all.js";
+         ref.parentNode.insertBefore(js, ref);
+       }(document));
+    </script>
+    <script>
+      function handleStatusChange(response) {
+        document.body.className = response.authResponse ? 'connected' : 'not_connected';
+
+        if (response.authResponse) {
+          console.log(response);
+          //updateUserInfo(response);
+        }
+      }
+    </script>
+    <script>
+      function loginUser() {    
+        FB.login(function(response) { }, {scope:'email'});     
+        }
+    </script>
     <!--<footer>
       footer will be here
     </footer>-->
@@ -119,8 +156,11 @@
             <div class="results">
             {{#with ../../aggregate}}
               <table>
+              <tr class="target-answers"><th colspan="2">Overall</th></tr>
               <tr class="target-answers"><td class="result-number positive">{{positives}}</td><td class="answer positive">:)</td></tr>
               <tr class="target-answers"><td class="result-number positive">{{negatives}}</td><td class="answer negative">:(</td></tr>
+              <tr class="target-answers"><th colspan="2">Recent</th></tr>
+              <tr class="target-answers"><td colspan="2"><div class="graph"></div></td>
               </table>
             {{/with}}
             </div>
@@ -168,6 +208,15 @@
       <span class="back-button">&lt; {{title}}</span>
     {{/if}}
   </script>
+  
+  <script id="template-loginScreen" type="text/x-handlebars-template">
+    <div id="login">
+      <p><button onClick="loginUser();">Login</button></p>
+    </div>
+    <div id="logout">
+      <p><button  onClick="FB.logout();">Logout</button></p>
+    </div>
+  </script>
 
   <!-- JavaScript at the bottom for fast page loading -->
   <!-- libraries -->
@@ -176,6 +225,7 @@
   <script src="js/libs/spine.route.js"></script>
   <script src="js/libs/handlebars.js"></script>
   <script src="js/libs/underscore-min.js"></script>
+  <script src="js/libs/jquery.flot.min.js"></script>
   <script src="js/libs/cordova-1.5.0.js"></script>
 
   <!-- our code -->

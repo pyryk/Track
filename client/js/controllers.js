@@ -205,6 +205,67 @@ var TargetResults = BaseController.sub({
       data.error = e;
     }
     return data;
+  },
+  displayChart: function(el) {
+    //try {
+      var target = Target.find(this.id);
+      
+      
+      // setup the chart properties
+      
+      var positives = {
+        data: [],
+        bars: {show: true},
+      }
+      var negatives = {
+        data: [],
+        bars: {show: true},
+      }
+      var options = {
+        grid: {
+          autoHilight: true,
+          clickable: true,
+          backgroundColor: null,
+        },
+        bars: {
+          barWidth: 900000, // ms, 15*60*1000
+        },
+        xaxis: {
+          mode: "time"
+        },
+        yaxis: {
+          tickDecimals: 0
+        },
+        colors: ["#00ff00","#ff0000"]
+      }
+      
+      var now = new Date();
+      
+      for (var i in target.results.history) {
+        var chunk = target.results.history[i];
+        
+        var date = new Date(chunk.start);
+        
+        // if too far (3h+) in the past
+        if (date.getTime() + 3*60*60*1000 < now.getTime()) {
+          continue;
+        }
+        
+        date.setUTCHours(date.getHours()); // workaround for flot showing only UTC
+        var millis = date.getTime();
+        
+        negatives.data.push([millis, -1*chunk.neg]);
+        positives.data.push([millis, chunk.pos]);
+      }
+      
+      $.plot(el, [ positives, negatives ], options);
+    //} catch (e) {
+    //  console.error(e);
+    //}
+  },
+  render: function() {
+    BaseController.prototype.render.call(this);
+    this.displayChart(this.el.find(".graph"));
   }
 });
 
@@ -218,10 +279,12 @@ var BackButton = BaseController.sub({
   },
   getData: function() {
     var title = this.app.getPreviousPage() ? this.app.getPreviousPage().getTitle() : undefined;
-    console.log(title);
     return {title: title};
   },
   clicked: function() {
     this.app.goToPreviousPage();
   }
+});
+
+var LoginScreen = BaseController.sub({
 });

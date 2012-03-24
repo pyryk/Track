@@ -192,8 +192,20 @@ header {
   }
   .target-answers {
     @include body-box;
-    color: lighten($text_color, 50%);
-    font-size: 3em;
+    
+    th {
+      font-size: 2em;
+      font-weight: bold;
+      color: lighten($text_color, 20%);
+      text-align: left;
+      @include background-image(linear-gradient(darken($list_item_gradient_2, 10%), darken($list_item_gradient_1, 10%)));
+      padding-top: 20px;
+    }
+    
+    td {
+      color: lighten($text_color, 50%);
+      font-size: 3em;
+    }
   }
   .result-number, .answer {
     padding: 20px 1em;
@@ -203,6 +215,18 @@ header {
   }
   .target-answers:last-child {
     @include body-box-last;
+  }
+  
+  .graph {
+    height: 300px; 
+    width: 100%;
+    
+    .yAxis .tickLabel {
+      font-size: 12px;
+    }
+    .xAxis .tickLabel {
+      font-size: 10px;
+    }
   }
 }
 

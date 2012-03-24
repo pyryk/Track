@@ -60,7 +60,7 @@ Target.include({
     },
     saved: false,
     detailsLoaded: false,
-    results: [],
+    results: {},
 });
 
 /**

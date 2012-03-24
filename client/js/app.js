@@ -3,6 +3,9 @@ var App = Spine.Controller.sub({
   visiblePage: undefined,
   init: function() {
     this.routes({
+      "!/login/": function(params) {
+        this.renderView('loginScreen', LoginScreen);
+      },
       "!/targets/": function(params) {
         this.renderView('targetList', TargetsList);
       },
