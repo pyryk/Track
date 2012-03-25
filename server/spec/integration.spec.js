@@ -110,6 +110,8 @@ describe('Integration test', function() {
         testRequest({method: 'GET', path: '/target/12345678901234567890abce'}, function(result) {
             var target = result.body.target;
 
+            console.log(result.body);
+
             expect(result.statusCode).toEqual(200);
             expect(target._id).toEqual('12345678901234567890abce');
             expect(target.name).toEqual('T-Talon ruokajono');
@@ -123,6 +125,13 @@ describe('Integration test', function() {
                 {start: '2012-03-23T13:30:00.000Z', end: '2012-03-23T13:45:00.000Z', pos: 2, neg: 0},
                 {start: '2012-03-23T13:45:00.000Z', end: '2012-03-23T14:00:00.000Z', pos: 1, neg: 1}
             ]);
+        });
+    });
+
+    it('GET /target/:id empty result', function() {
+        testRequest({method: 'GET', path: '/target/12345678901234567890FFFF'}, function(result) {
+            expect(result.statusCode).toEqual(404);
+            expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find target with ID 12345678901234567890FFFF'})
         });
     });
 
