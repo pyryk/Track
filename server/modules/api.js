@@ -3,6 +3,7 @@
 var Mongo = require('./mongo.js');
 var Relevance = require('./relevance');
 var _ = require('underscore');
+var restify = require('restify');
 
 var API = {
 
@@ -94,6 +95,9 @@ var API = {
 
     getTarget: function(req, res, next) {
         Mongo.findTargetById(req.params.id).then(function(data) {
+            if(data == null) {
+                return next(new restify.ResourceNotFoundError("Could not find target with ID " + req.params.id));
+            }
 
             // Filter
             var target = API.selectFields(data, ['name', '_id', 'question']);
@@ -131,6 +135,10 @@ var API = {
     },
 
     selectFields: function(obj, fields) {
+        if(obj == null) {
+            return null;
+        }
+
         var selectedFields = {};
 
         fields.forEach(function(value) {

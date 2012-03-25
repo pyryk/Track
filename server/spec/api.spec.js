@@ -26,7 +26,49 @@ describe('API', function() {
         req.params = {};
         res.send = jasmine.createSpy('res.send');
         next = jasmine.createSpy('next');
+            this.addMatchers({
+
+                toHaveBeenCalledWithError: function(expectedError) {
+                    var actual = this.actual;
+
+                    var error = this.actual.mostRecentCall.args[0]
+
+                    if(error.statusCode !== expectedError.status) {
+                        return false;
+                    }
+
+                    if(error.body.code !== expectedError.code) {
+                        return false;
+                    }
+
+                    if(error.body.message !== expectedError.message) {
+                        return false;
+                    }
+
+                    return true;
+                }
+            });
+
+
     });
+
+    describe('selectFields', function() {
+        var obj = {
+            name: "Name", size: "Size", address: "Address"
+        };
+
+        it('should return only selected fields', function() {
+            expect(API.selectFields(obj, ['name', 'size'])).toEqual({name: "Name", size: "Size"});
+        });
+
+        it('should ignore fields if they do not exist', function() {
+            expect(API.selectFields(obj, ['name', 'size', 'password'])).toEqual({name: "Name", size: "Size"});
+        });
+
+        it('should return null for null object', function() {
+            expect(API.selectFields(null, ['name', 'size', 'password'])).toBeNull();
+        })
+    })
 
     describe('categoriseResults', function() {
         it('should categorise results to quarters', function() {
@@ -104,6 +146,21 @@ describe('API', function() {
                     target: {name: "T-Talon ruokajono", _id: "accab1234", question: 'Kauanko jonotit?'}
                 });
                 expectStatus(res).toEqual(200);
+            });
+
+            itShouldCallNextWithError('getTarget', 'findTargetById');
+
+            it('should return 404 if no results for ID found', function() {
+                spyOnPromise(Mongo, 'findTargetById').andCallSuccess(null);
+                req.params.id = 'accab1234';
+
+                API.getTarget(req, res, next);
+
+                expect(next).toHaveBeenCalledWithError({
+                    status: 404,
+                    code: "ResourceNotFound",
+                    message: "Could not find target with ID accab1234"
+                });
             });
 
             itShouldCallNextWithError('getTarget', 'findTargetById');
