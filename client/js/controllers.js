@@ -89,7 +89,8 @@ var ownResult = BaseController.sub({
   },
   viewResults: function(e) {
     e.preventDefault();
-    Spine.Route.navigate(App.getRoute(Target.find(this.id)) + "/results");
+    var result = Result.find(this.id);
+    Spine.Route.navigate(App.getRoute(Target.find(result.target.id)) + "/results");
   }
 });
 
