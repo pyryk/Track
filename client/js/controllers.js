@@ -218,6 +218,7 @@ var TargetResults = BaseController.sub({
       Target.loadDetails(this.id, this);
       data.error = e;
     }
+    console.log(data);
     return data;
   },
   displayChart: function(el) {

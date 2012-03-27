@@ -257,18 +257,13 @@ header {
 #back-button, #account-button {
   position: absolute; 
   top: 5px; 
-  height: 36px;
+  height: 38px;
   display: block;
   .top-button {
     display: inline-block;
-    height: 16px;
-    border: 1px solid rgba(0,0,0,0.3);
+    height: 18px;
+    
     padding: 9px 5px;
-    @include background-image(linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.1)));
-    @include border-radius(5px);
-    &:active {
-      @include background-image(linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.05)));
-    }
     
     a, a:link, a:active, a:visited {
       color: inherit;
@@ -279,10 +274,26 @@ header {
 
 #back-button {
   left: 5px;
+  .top-button {
+    background-image: url("../img/back-icon.png?123");
+    background-repeat: no-repeat;
+    width: 60px;
+    &:active {
+      background-position: 0 -36px;
+    }
+  }
 }
 
 #account-button {
   right: 5px;
+  @include background-image(linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.1)));
+  @include border-radius(5px);
+  &:active {
+    @include background-image(linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.05)));
+  }
+  .top-button {
+    border: 1px solid rgba(0,0,0,0.3);
+  }
 }
 
 footer {

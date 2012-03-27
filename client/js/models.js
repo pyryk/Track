@@ -73,21 +73,43 @@ Target.loadList = function() {
     url += "/";
   }
   url += "targets";
-  
+  console.log('loading list');
+  var requestComplete = false;
+  try {
   $.ajax({
     url: url,
     dataType: 'json',
+    timeout: 5000,
+    cache: false,
     success: function(data, status, jqXHR) {
       for (var i in data.targets) {
         var target = data.targets[i];
         target["id"] = target["_id"]; // map mongo id
         target["detailsLoaded"] = false; // target details are only loaded individually
         target["saved"] = true; // saved i.e. got from backend
-        
+        requestComplete = true;
         Target.create(target);
       }
+    }, 
+    error: function(jqxhr, textStatus, error) {
+      
+      log('error: ' + textStatus + ', ' + error);
     }
   });
+  } catch(e) {
+    log(e);
+  }
+  
+  // workaround for android 2.3 bug: requests remain pending when loading the page from cache
+  var xmlHttpTimeout=setTimeout(ajaxTimeout,5000);
+  function ajaxTimeout(){
+    if (!requestComplete) {
+      log("Request timed out - reloading the whole page");
+      window.location.reload()
+    } else {
+      log("Request was completed");
+    }
+  }
 }
 
 Target.loadDetails = function(id, listener) {
@@ -224,7 +246,7 @@ Result.include({
 /* -------------------------------------- */
 /* user (logged in via facebook or other) */
 var User = Spine.Model.sub();
-User.configure("User", "name", "email", "logged", "token");
+User.configure("User", "name", "email", "logged", "token", "provider");
 
 User.getUser = function() {
   return User.last() || User.create();

@@ -106,8 +106,9 @@ var App = Spine.Controller.sub({
          user.save();
          
          FB.api('/me', function(response) {
-           user.name = response.username;
+           user.name = response.username ? response.username : response.id;
            user.email = response.email;
+           user.provider = "facebook";
            user.save();
          });
          
