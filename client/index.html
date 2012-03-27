@@ -119,15 +119,15 @@
         {{#if question}}
             <p class="target-question">{{question}}</p>
             <div class="results">
-            {{#with ../../aggregate}}
-              <table>
+            <table>
+              {{#with results.summary}}
               <tr class="target-answers"><th colspan="2">Overall</th></tr>
-              <tr class="target-answers"><td class="result-number positive">{{positives}}</td><td class="answer positive">:)</td></tr>
-              <tr class="target-answers"><td class="result-number positive">{{negatives}}</td><td class="answer negative">:(</td></tr>
+              <tr class="target-answers"><td class="result-number positive">{{pos}}</td><td class="answer positive">:)</td></tr>
+              <tr class="target-answers"><td class="result-number positive">{{neg}}</td><td class="answer negative">:(</td></tr>
+              {{/with}}
               <tr class="target-answers"><th colspan="2">Recent</th></tr>
               <tr class="target-answers"><td colspan="2"><div class="graph"></div></td>
-              </table>
-            {{/with}}
+            </table>
             </div>
         {{/if}}
       {{/with}}

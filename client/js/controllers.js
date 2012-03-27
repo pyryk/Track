@@ -213,7 +213,6 @@ var TargetResults = BaseController.sub({
     var data = {};
     try {
       data.target = Target.find(this.id);
-      data.aggregate = data.target.getResultAggregate();
     } catch (e) {
       Target.loadDetails(this.id, this);
       data.error = e;
