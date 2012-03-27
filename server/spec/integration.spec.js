@@ -110,12 +110,13 @@ describe('Integration test', function() {
         testRequest({method: 'GET', path: '/target/12345678901234567890abce'}, function(result) {
             var target = result.body.target;
 
-            console.log(result.body);
-
             expect(result.statusCode).toEqual(200);
             expect(target._id).toEqual('12345678901234567890abce');
             expect(target.name).toEqual('T-Talon ruokajono');
             expect(target.question).toEqual('Oliko paljon jonoa?');
+
+            expect(target.results.summary.pos).toEqual(9);
+            expect(target.results.summary.neg).toEqual(7);
 
             expect(target.results.history).toEqual([
                 {start: '2012-03-23T08:00:00.000Z', end: '2012-03-23T08:15:00.000Z', pos: 3, neg: 1},

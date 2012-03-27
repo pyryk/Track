@@ -71,24 +71,27 @@ describe('API', function() {
     })
 
     describe('categoriseResults', function() {
+        var results = [
+            { value : 1, timestamp : new Date('2012-03-23T08:03:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T08:04:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T08:05:48.223Z') },
+            { value : 0, timestamp : new Date('2012-03-23T08:10:48.223Z') },
+            { value : 0, timestamp : new Date('2012-03-23T08:50:48.223Z') },
+            { value : 0, timestamp : new Date('2012-03-23T08:51:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T10:03:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T10:13:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T10:14:48.223Z') },
+            { value : 0, timestamp : new Date('2012-03-23T12:01:48.223Z') },
+            { value : 0, timestamp : new Date('2012-03-23T12:03:48.223Z') },
+            { value : 0, timestamp : new Date('2012-03-23T12:05:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T13:33:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T13:43:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T13:50:48.223Z') },
+            { value : 0, timestamp : new Date('2012-03-23T13:51:48.223Z') } ];
+
+        var categorizedResult = API.categorizeResults(results);
+
         it('should categorise results to quarters', function() {
-            var results = [
-                { value : 1, timestamp : new Date('2012-03-23T08:03:48.223Z') },
-                { value : 1, timestamp : new Date('2012-03-23T08:04:48.223Z') },
-                { value : 1, timestamp : new Date('2012-03-23T08:05:48.223Z') },
-                { value : 0, timestamp : new Date('2012-03-23T08:10:48.223Z') },
-                { value : 0, timestamp : new Date('2012-03-23T08:50:48.223Z') },
-                { value : 0, timestamp : new Date('2012-03-23T08:51:48.223Z') },
-                { value : 1, timestamp : new Date('2012-03-23T10:03:48.223Z') },
-                { value : 1, timestamp : new Date('2012-03-23T10:13:48.223Z') },
-                { value : 1, timestamp : new Date('2012-03-23T10:14:48.223Z') },
-                { value : 0, timestamp : new Date('2012-03-23T12:01:48.223Z') },
-                { value : 0, timestamp : new Date('2012-03-23T12:03:48.223Z') },
-                { value : 0, timestamp : new Date('2012-03-23T12:05:48.223Z') },
-                { value : 1, timestamp : new Date('2012-03-23T13:33:48.223Z') },
-                { value : 1, timestamp : new Date('2012-03-23T13:43:48.223Z') },
-                { value : 1, timestamp : new Date('2012-03-23T13:50:48.223Z') },
-                { value : 0, timestamp : new Date('2012-03-23T13:51:48.223Z') } ];
             expected = [
                 {start: new Date('2012-03-23T08:00:00.000Z'), end: new Date('2012-03-23T08:15:00.000Z'), pos: 3, neg: 1},
                 {start: new Date('2012-03-23T08:45:00.000Z'), end: new Date('2012-03-23T09:00:00.000Z'), pos: 0, neg: 2},
@@ -97,8 +100,13 @@ describe('API', function() {
                 {start: new Date('2012-03-23T13:30:00.000Z'), end: new Date('2012-03-23T13:45:00.000Z'), pos: 2, neg: 0},
                 {start: new Date('2012-03-23T13:45:00.000Z'), end: new Date('2012-03-23T14:00:00.000Z'), pos: 1, neg: 1}];
 
-            expect(API.categoriseResults(results)).toEqual(expected);
-        })
+            expect(categorizedResult.history).toEqual(expected);
+        });
+
+        it('should calculate the result summary', function() {
+            expect(categorizedResult.summary.pos).toEqual(9);
+            expect(categorizedResult.summary.neg).toEqual(7);
+        });
     });
 
     describe('API methods', function() {
