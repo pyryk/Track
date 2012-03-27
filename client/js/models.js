@@ -65,7 +65,7 @@ Target.loadList = function() {
     url += "/";
   }
   url += "targets";
-  console.log('loading list');
+  
   var requestComplete = false;
   try {
   $.ajax({

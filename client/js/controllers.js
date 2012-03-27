@@ -217,12 +217,17 @@ var TargetResults = BaseController.sub({
       Target.loadDetails(this.id, this);
       data.error = e;
     }
-    console.log(data);
     return data;
   },
   displayChart: function(el) {
     //try {
-      var target = Target.find(this.id);
+      try {
+        var target = Target.find(this.id);
+      } catch(e) {
+        log(e);
+        return;
+      }
+    
       
       
       // setup the chart properties
