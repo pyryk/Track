@@ -47,7 +47,7 @@ var API = {
         });
     },
 
-    categoriseResults: function(results) {
+    categorizeResults: function(results) {
         results = results || [];
 
         var nearestStartingQuarter = function(date) {
@@ -65,6 +65,7 @@ var API = {
         }
 
         var quarters = {};
+        var summary = {pos: 0, neg: 0};
         results.forEach(function(result) {
             var startQuarter = nearestStartingQuarter(result.timestamp).getTime();
 
@@ -72,8 +73,10 @@ var API = {
 
             if(result.value) {
                 quarterResult.pos++;
+                summary.pos++;
             } else {
                 quarterResult.neg++;
+                summary.neg++;
             }
 
             quarters[startQuarter] = quarterResult;
@@ -90,7 +93,7 @@ var API = {
             history.push({start: quarterStart, end: quarterEnd, pos: quarterValue.pos, neg: quarterValue.neg});
         });
 
-        return history;
+        return {history: history, summary: summary};
     },
 
     getTarget: function(req, res, next) {
@@ -102,10 +105,9 @@ var API = {
             // Filter
             var target = API.selectFields(data, ['name', '_id', 'question']);
 
-            var history = API.categoriseResults(data.results);
-
-            if(history) {
-                target.results = {history: history};
+            var categorizedResults = API.categorizeResults(data.results);
+            if(categorizedResults) {
+                target.results = categorizedResults;
             }
 
             res.send(200, {target: target});
