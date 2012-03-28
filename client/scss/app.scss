@@ -44,6 +44,7 @@ $list_item_gradient_2: #eee;
 
 * {
   -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+  -webkit-touch-callout: none;
 }
 
 html {
@@ -109,7 +110,7 @@ header {
     @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
     @include ellipsis;
     
-    &:active {
+    &:active, &.fake-active {
       @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
     }
   }
@@ -169,7 +170,7 @@ header {
       text-align: center;
       @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
       
-      &:active {
+      &:active, &.fake-active {
         @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
       }
     }
@@ -278,7 +279,7 @@ header {
     background-image: url("../img/back-icon.png?123");
     background-repeat: no-repeat;
     width: 60px;
-    &:active {
+    &:active, &.fake-active {
       background-position: 0 -36px;
     }
   }
@@ -288,7 +289,7 @@ header {
   right: 5px;
   @include background-image(linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.1)));
   @include border-radius(5px);
-  &:active {
+  &:active, &.fake-active {
     @include background-image(linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.05)));
   }
   .top-button {
@@ -330,7 +331,7 @@ footer {
     text-decoration: none;
     color: lighten($text_color, 40%);
   }
-  &:active {
+  &:active, &.fake-active {
     @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
   }
 }

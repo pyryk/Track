@@ -185,6 +185,7 @@ App.fastClicksEnabled = function() {
   var disable = [
     {browser: "Safari", OS: "iPhone/iPod", version: /OS 4_(.)+/}
   ];
+
   //BrowserDetect = {browser: "Safari", OS: "iPhone/iPod", version: "4_3_3"};
   for (var i in disable) {
     if (BrowserDetect.browser === disable[i].browser &&

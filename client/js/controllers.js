@@ -8,6 +8,7 @@ var BaseController = Spine.Controller.sub({
     this.html(this.template(data));
     
     this.addFastButtons();
+    //this.addPseudoActiveSupport();
   },
   getData: function() {
     return {};
@@ -28,6 +29,21 @@ var BaseController = Spine.Controller.sub({
           buttons.bind("click", this.proxy(this[this.events[i]]));
         }
       }
+    }
+  },
+  // TODO remove if not needed
+  addPseudoActiveSupport: function() {
+    if (navigator.userAgent.toLowerCase().indexOf("android 2") > -1) {
+     $(".active-button")
+     .bind("touchstart", function () {
+         $(this).addClass("fake-active");
+     })
+     .bind("touchend", function() {
+         $(this).removeClass("fake-active");
+     })
+     .bind("touchcancel", function() {
+       $(this).removeClass("fake-active");
+      });
     }
   }
 });
@@ -235,7 +251,7 @@ var TargetResults = BaseController.sub({
         return;
       }
     
-      
+      var now = new Date();
       
       // setup the chart properties
       
@@ -251,22 +267,26 @@ var TargetResults = BaseController.sub({
         grid: {
           autoHilight: true,
           clickable: true,
-          backgroundColor: null,
+          backgroundColor: {colors: ["#fff", "#ddd"]},
+          markings: {xaxis: {from: -1, to: 1}, color: "#ff0000"}
         },
         bars: {
           barWidth: 900000, // ms, 15*60*1000
         },
         xaxis: {
-          mode: "time"
+          mode: "time",
+          ticks: 4,
+          tickLength: 0,
+          min: now.getTime()
         },
         yaxis: {
+          ticks: 1,
           tickDecimals: 0
         },
         colors: ["#00ff00","#ff0000"]
       }
       
-      var now = new Date();
-      
+      var maxTime = 0;
       for (var i in target.results.history) {
         var chunk = target.results.history[i];
         
@@ -280,9 +300,15 @@ var TargetResults = BaseController.sub({
         date.setUTCHours(date.getHours()); // workaround for flot showing only UTC
         var millis = date.getTime();
         
+        if (maxTime < millis) {
+          maxTime = millis;
+        }
+        
         negatives.data.push([millis, -1*chunk.neg]);
         positives.data.push([millis, chunk.pos]);
       }
+
+      options.xaxis.min = maxTime - 2*60*60*1000;
       
       $.plot(el, [ positives, negatives ], options);
       
