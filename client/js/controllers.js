@@ -16,14 +16,16 @@ var BaseController = Spine.Controller.sub({
     for (var i in this.events) {
       var parts = i.split(" ");
       if (parts[0] == "fastclick") {
-        var btn = $(parts[1]).get(0);
-        if (btn) {
-          // fast clicks are not supported on every browser
-          if (App.fastClicksEnabled()) {
+        var buttons = $(parts[1]);
+        // fast clicks are not supported on every browser
+        if (App.fastClicksEnabled()) {
+          buttons.each(this.proxy(function(no, btn) {
+            log("Adding a fast button listener");
             new MBP.fastButton(btn, this.proxy(this[this.events[i]]));
-          } else {
-            $(parts[1]).bind("click", this.proxy(this[this.events[i]]));
-          }
+          }));
+        } else {
+          log("Adding a traditional click listener");
+          buttons.bind("click", this.proxy(this[this.events[i]]));
         }
       }
     }

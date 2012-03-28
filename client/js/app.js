@@ -181,18 +181,17 @@ App.getRoute = function(obj) {
 //TODO url resolver?
 
 App.fastClicksEnabled = function() {
+  return true;
   var disable = [
-    {browser: "Safari", OS: "iPhone/iPod", version: "4.0"},
-    {browser: "Safari", OS: "iPhone/iPod", version: "4.1"},
-    {browser: "Safari", OS: "iPhone/iPod", version: "4.2"},
-    {browser: "Safari", OS: "iPhone/iPod", version: "4.3"},
+    {browser: "Safari", OS: "iPhone/iPod", version: /OS 4_(.)+/}
   ];
-  
+  //BrowserDetect = {browser: "Safari", OS: "iPhone/iPod", version: "4_3_3"};
   for (var i in disable) {
     if (BrowserDetect.browser === disable[i].browser &&
-        BrowserDetect.OS === disable[i].OS &&
-        BrowserDetect.version === disable[i].version) {
-      
+        BrowserDetect.OS === disable[i].OS/* &&
+        (BrowserDetect.version + "").match(disable[i].version)*/ &&
+        navigator.appVersion.match(disable[i].version)) {
+          
       return false;
     }
   }
