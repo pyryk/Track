@@ -74,12 +74,13 @@ Target.loadList = function() {
     timeout: 5000,
     cache: false,
     success: function(data, status, jqXHR) {
+      requestComplete = true;
       for (var i in data.targets) {
         var target = data.targets[i];
         target["id"] = target["_id"]; // map mongo id
         target["detailsLoaded"] = false; // target details are only loaded individually
         target["saved"] = true; // saved i.e. got from backend
-        requestComplete = true;
+        
         Target.create(target);
       }
     }, 
