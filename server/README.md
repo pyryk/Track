@@ -39,7 +39,7 @@ Requires authentication: Yes
 
 Status: 200 Ok
 
-Reponse body:
+Reponse body **Current**:
 
 	{
 		target: {
@@ -59,6 +59,28 @@ Reponse body:
 			}
 		}
 	}
+
+Reponse body **Draft**:
+
+	{
+		target: {
+			_id: “12faggf”,
+			name: “T-Talon ruokajono”,
+			question: “T-Talon ruokajonon jonotusaika”
+			
+			results: {
+				now: {
+					pos: 10, neg: 3, trend: 3, period: 15
+				},
+				alltime: {
+					pos: 300, neg: 100
+				}
+			}
+		}
+	}
+	
+* **trend**: integer [-3, 3], where -3 means getting worse with high speed, 0 not changing, 3 getting better with high speed
+* **period**: results from last XX minutes
 
 ### POST /target - Create a new target
 
