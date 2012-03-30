@@ -55,17 +55,33 @@ var API = {
             return null;
         }
 
+        // Times
         var now = DateUtils.now();
-        var minutes15 = 1000 * 60 * 15;
-        var minutes15ago = new Date(now.getTime() - minutes15);
+        var period = 1000 * 60 * 15;
+        var nowPeriod = new Date(now.getTime() - period);
+        var pastPeriod = new Date(now.getTime() - (2 * period));
 
+        // Results
+        var pastResults = {pos: 0, neg: 0}
         var nowResults = {pos: 0, neg: 0, trend: 0, period: 15};
         var alltimeResults = {pos: 0, neg: 0};
+
+        // Iterate and analyze
         results.forEach(function(result) {
             var val = result.value;
+            var timestamp = result.timestamp;
+
+            // Past
+            if(timestamp > pastPeriod && timestamp < nowPeriod) {
+                if(val) {
+                    pastResults.pos++;
+                } else {
+                    pastResults.neg++;
+                }
+            }
 
             // Now
-            if(result.timestamp.getTime() > minutes15ago) {
+            if(timestamp > nowPeriod) {
                 if(val) {
                     nowResults.pos++;
                 } else {
@@ -80,6 +96,34 @@ var API = {
                 alltimeResults.neg++;
             }
         });
+
+        var pastResultsPercentage = pastResults.pos / (pastResults.pos + pastResults.neg);
+        var nowResultsPercentage = nowResults.pos / (nowResults.pos + nowResults.neg);
+        var change = nowResultsPercentage - pastResultsPercentage;
+
+
+        var trend;
+
+        if(change <= -0.2) {
+            trend = -3;
+        } else if (change <= -0.1) {
+            trend = -2;
+        } else if (change < 0) {
+            trend = -1;
+        } else if (change === 0) {
+            trend = 0;
+        } else if (change < 0.1) {
+            trend = 1;
+        } else if (change < 0.2) {
+            trend = 2;
+        } else if (change >= 0.2) {
+            trend = 3;
+        } else {
+            trend = 0;
+        }
+
+
+        nowResults.trend = trend;
 
         return {alltime: alltimeResults, now: nowResults};
     },

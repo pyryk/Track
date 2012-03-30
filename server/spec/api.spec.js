@@ -82,6 +82,16 @@ describe('API', function() {
             { value : 1, timestamp : new Date('2012-03-23T07:59:48.223Z') },
             { value : 1, timestamp : new Date('2012-03-23T07:59:11.223Z') },
             { value : 1, timestamp : new Date('2012-03-23T07:53:48.223Z') },
+            // 15 min
+            { value : 0, timestamp : new Date('2012-03-23T07:43:48.223Z') },
+            { value : 0, timestamp : new Date('2012-03-23T07:43:48.223Z') },
+            { value : 0, timestamp : new Date('2012-03-23T07:43:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T07:43:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T07:43:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T07:43:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T07:43:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T07:43:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T07:43:48.223Z') },
             { value : 0, timestamp : new Date('2012-03-23T07:43:48.223Z') }];
 
         beforeEach(function() {
@@ -92,14 +102,44 @@ describe('API', function() {
             this.alltime = aggregatedResults.alltime;
         });
 
-        it('should calculate correct _now_ values from the last 15 minutes', function() {
-            expect(this.now.pos).toEqual(5);
-            expect(this.now.neg).toEqual(2);
+        describe('now and alltime results', function() {
+
+            it('should calculate correct _now_ values from the last 15 minutes', function() {
+                expect(this.now.pos).toEqual(5);
+                expect(this.now.neg).toEqual(2);
+            });
+
+            it('should calculate alltime values', function() {
+                expect(this.alltime.pos).toEqual(11);
+                expect(this.alltime.neg).toEqual(6);
+            });
         });
 
-        it('should calculate alltime values', function() {
-            expect(this.alltime.pos).toEqual(5);
-            expect(this.alltime.neg).toEqual(3);
+        describe('trend', function() {
+
+            var resultsNoPastData = [
+                { value : 1, timestamp : new Date('2012-03-23T08:03:48.223Z') },
+                { value : 1, timestamp : new Date('2012-03-23T08:02:48.223Z') },
+                { value : 0, timestamp : new Date('2012-03-23T08:01:48.223Z') },
+                { value : 0, timestamp : new Date('2012-03-23T08:01:18.223Z') },
+                { value : 1, timestamp : new Date('2012-03-23T07:59:48.223Z') },
+                { value : 1, timestamp : new Date('2012-03-23T07:59:11.223Z') },
+                { value : 1, timestamp : new Date('2012-03-23T07:53:48.223Z') }];
+
+            it('should calculate trend', function() {
+                var currentResult = 5/7; // 71,4%
+                var pastResult = 6/10; // 60%
+
+                // Growth is between 10% and 20% -> trend: 2
+                expect(this.now.trend).toEqual(2);
+            });
+
+            it('should return 0 trend if no past data available', function() {
+                var aggregatedResults = API.aggregateResults(resultsNoPastData);
+
+                expect(aggregatedResults.now.trend).toEqual(0);
+            });
+
         });
 
     });
