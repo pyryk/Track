@@ -235,7 +235,20 @@ var TargetResults = BaseController.sub({
   getData: function() {
     var data = {};
     try {
-      data.target = Target.find(this.id);
+      data.target = Target.find(this.id).toJSON();
+      
+      // preprocess "now" results
+      var now = data.target.results.now
+      
+      //now.pos = 4; now.neg = 7;
+      //now.trend = 1;
+      
+      if (now.pos == 0 && now.neg == 0) {
+        now.zerozero = true;
+      }
+      now.trendPos = Math.abs(Math.max(0, now.trend));
+      now.trendNeg = Math.abs(Math.min(0, now.trend));
+      
     } catch (e) {
       Target.loadDetails(this.id, this);
       data.error = e;
@@ -329,7 +342,7 @@ var TargetResults = BaseController.sub({
   },
   render: function() {
     BaseController.prototype.render.call(this);
-    this.displayChart(this.el.find(".graph"));
+    //this.displayChart(this.el.find(".graph"));
   }
 });
 

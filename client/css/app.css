@@ -318,20 +318,66 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   border-radius: 0px 0px 5px 5px;
 }
 /* line 224, ../scss/app.scss */
+#target-results .now-graph {
+  display: -moz-box;
+  display: -webkit-box;
+  display: -ms-box;
+  display: box;
+  -moz-box-orient: horizontal;
+  -webkit-box-orient: horizontal;
+  -ms-box-orient: horizontal;
+  box-orient: horizontal;
+  -moz-box-align: stretch;
+  -webkit-box-align: stretch;
+  -ms-box-align: stretch;
+  box-align: stretch;
+}
+/* line 229, ../scss/app.scss */
+#target-results .now-graph .pos, #target-results .now-graph .neg {
+  padding: 10px;
+  text-align: center;
+}
+/* line 233, ../scss/app.scss */
+#target-results .now-graph .pos .trend, #target-results .now-graph .neg .trend {
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  margin: 6px 10px;
+  width: 0;
+  height: 0;
+}
+/* line 242, ../scss/app.scss */
+#target-results .now-graph .pos {
+  background-color: rgba(0, 255, 0, 0.35);
+}
+/* line 245, ../scss/app.scss */
+#target-results .now-graph .pos .trend {
+  border-right: 20px solid rgba(255, 0, 0, 0.35);
+  float: left;
+}
+/* line 250, ../scss/app.scss */
+#target-results .now-graph .neg {
+  background-color: rgba(255, 0, 0, 0.35);
+}
+/* line 253, ../scss/app.scss */
+#target-results .now-graph .neg .trend {
+  border-left: 20px solid rgba(0, 255, 0, 0.5);
+  float: right;
+}
+/* line 260, ../scss/app.scss */
 #target-results .graph {
   height: 300px;
   width: 100%;
 }
-/* line 228, ../scss/app.scss */
+/* line 264, ../scss/app.scss */
 #target-results .graph .yAxis .tickLabel {
   font-size: 12px;
 }
-/* line 231, ../scss/app.scss */
+/* line 267, ../scss/app.scss */
 #target-results .graph .xAxis .tickLabel {
   font-size: 10px;
 }
 
-/* line 238, ../scss/app.scss */
+/* line 274, ../scss/app.scss */
 #target-ownResult h3 {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2dbcf8), color-stop(100%, #2499cb));
   background-image: -webkit-linear-gradient(#2dbcf8, #2499cb);
@@ -352,7 +398,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -khtml-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
 }
-/* line 241, ../scss/app.scss */
+/* line 277, ../scss/app.scss */
 #target-ownResult .result-info-body {
   margin: 0;
   border: 1px solid #cccccc;
@@ -366,11 +412,11 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   padding-left: 1em;
   color: #666666;
 }
-/* line 246, ../scss/app.scss */
+/* line 282, ../scss/app.scss */
 #target-ownResult .result-info-body .question, #target-ownResult .result-info-body .answer {
   display: none;
 }
-/* line 250, ../scss/app.scss */
+/* line 286, ../scss/app.scss */
 #target-ownResult .result-info-body:last-child {
   border-bottom: 1px solid #cccccc;
   -moz-border-radius: 0px 0px 5px 5px;
@@ -380,46 +426,46 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -khtml-border-radius: 0px 0px 5px 5px;
   border-radius: 0px 0px 5px 5px;
 }
-/* line 253, ../scss/app.scss */
+/* line 289, ../scss/app.scss */
 #target-ownResult .link-button {
   margin-top: 2em;
 }
 
-/* line 258, ../scss/app.scss */
+/* line 294, ../scss/app.scss */
 #back-button, #account-button {
   position: absolute;
   top: 5px;
   height: 38px;
   display: block;
 }
-/* line 263, ../scss/app.scss */
+/* line 299, ../scss/app.scss */
 #back-button .top-button, #account-button .top-button {
   display: inline-block;
   height: 18px;
   padding: 9px 5px;
 }
-/* line 269, ../scss/app.scss */
+/* line 305, ../scss/app.scss */
 #back-button .top-button a, #back-button .top-button a:link, #back-button .top-button a:active, #back-button .top-button a:visited, #account-button .top-button a, #account-button .top-button a:link, #account-button .top-button a:active, #account-button .top-button a:visited {
   color: inherit;
   text-decoration: inherit;
 }
 
-/* line 276, ../scss/app.scss */
+/* line 312, ../scss/app.scss */
 #back-button {
   left: 5px;
 }
-/* line 278, ../scss/app.scss */
+/* line 314, ../scss/app.scss */
 #back-button .top-button {
   background-image: url("../img/back-icon.png?123");
   background-repeat: no-repeat;
   width: 60px;
 }
-/* line 282, ../scss/app.scss */
+/* line 318, ../scss/app.scss */
 #back-button .top-button:active, #back-button .top-button.fake-active {
   background-position: 0 -36px;
 }
 
-/* line 288, ../scss/app.scss */
+/* line 324, ../scss/app.scss */
 #account-button {
   right: 5px;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(0, 0, 0, 0.05)), color-stop(100%, rgba(0, 0, 0, 0.1)));
@@ -435,7 +481,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -khtml-border-radius: 5px;
   border-radius: 5px;
 }
-/* line 292, ../scss/app.scss */
+/* line 328, ../scss/app.scss */
 #account-button:active, #account-button.fake-active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(0, 0, 0, 0.1)), color-stop(100%, rgba(0, 0, 0, 0.05)));
   background-image: -webkit-linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
@@ -444,12 +490,12 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   background-image: -ms-linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
   background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
 }
-/* line 295, ../scss/app.scss */
+/* line 331, ../scss/app.scss */
 #account-button .top-button {
   border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
-/* line 300, ../scss/app.scss */
+/* line 336, ../scss/app.scss */
 footer {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2f2f2f), color-stop(50%, #151515), color-stop(51%, #000000), color-stop(100%, #000000));
   background-image: -webkit-linear-gradient(top, #2f2f2f, #151515 50%, #000000 51%, #000000);
@@ -465,17 +511,17 @@ footer {
   left: 0;
 }
 
-/* line 310, ../scss/app.scss */
+/* line 346, ../scss/app.scss */
 .loading-indicator {
   margin: 10px;
 }
 
-/* line 314, ../scss/app.scss */
+/* line 350, ../scss/app.scss */
 .hide {
   display: none;
 }
 
-/* line 318, ../scss/app.scss */
+/* line 354, ../scss/app.scss */
 .link-button {
   display: block;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eeeeee), color-stop(100%, #fdfdfd));
@@ -501,12 +547,12 @@ footer {
   -o-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 }
-/* line 330, ../scss/app.scss */
+/* line 366, ../scss/app.scss */
 .link-button:link, .link-button:active, .link-button:visited {
   text-decoration: none;
   color: #666666;
 }
-/* line 334, ../scss/app.scss */
+/* line 370, ../scss/app.scss */
 .link-button:active, .link-button.fake-active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #eeeeee));
   background-image: -webkit-linear-gradient(#fdfdfd, #eeeeee);
@@ -516,14 +562,14 @@ footer {
   background-image: linear-gradient(#fdfdfd, #eeeeee);
 }
 
-/* line 339, ../scss/app.scss */
+/* line 375, ../scss/app.scss */
 input[type=text] {
   width: 100%;
   box-sizing: border-box;
 }
 
 /* no point to have red bg on untouched text boxes */
-/* line 345, ../scss/app.scss */
+/* line 381, ../scss/app.scss */
 input[type=text]:invalid {
   background-color: white;
 }

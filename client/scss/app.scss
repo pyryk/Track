@@ -221,6 +221,42 @@ header {
     @include body-box-last;
   }
   
+  .now-graph {
+    @include display-box;
+    @include box-orient(horizontal);
+    @include box-align(stretch);
+    
+    .pos, .neg {
+      padding: 10px;
+      text-align: center;
+      
+      .trend {
+        border-top: 20px solid transparent;
+      	border-bottom: 20px solid transparent;
+        margin: 6px 10px;
+      	width: 0;
+      	height: 0;
+      }
+    }
+    
+    .pos {
+      background-color: rgba(0,255,0,0.35);
+      
+      .trend {
+      	border-right: 20px solid rgba(255,0,0,0.35);
+      	float: left;
+      }
+    }
+    .neg {
+      background-color: rgba(255,0,0,0.35);
+      
+      .trend {
+      	border-left: 20px solid rgba(0,255,0,0.5);
+      	float: right;
+      }
+    }
+  }
+  
   .graph {
     height: 300px; 
     width: 100%;

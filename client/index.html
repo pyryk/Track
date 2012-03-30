@@ -120,13 +120,25 @@
             <p class="target-question">{{question}}</p>
             <div class="results">
             <table>
-              {{#with results.summary}}
-              <tr class="target-answers"><th colspan="2">Overall</th></tr>
-              <tr class="target-answers"><td class="result-number positive">{{pos}}</td><td class="answer positive">:)</td></tr>
-              <tr class="target-answers"><td class="result-number positive">{{neg}}</td><td class="answer negative">:(</td></tr>
+              {{#with results.alltime}}
+                <tr class="target-answers"><th colspan="2">Overall</th></tr>
+                <tr class="target-answers"><td class="result-number positive">{{pos}}</td><td class="answer positive">:)</td></tr>
+                <tr class="target-answers"><td class="result-number positive">{{neg}}</td><td class="answer negative">:(</td></tr>
               {{/with}}
-              <tr class="target-answers"><th colspan="2">Recent</th></tr>
-              <tr class="target-answers"><td colspan="2"><div class="graph"></div></td>
+              {{#with results.now}}
+                <tr class="target-answers"><th colspan="2">Now</th></tr>
+                <tr class="target-answers"><td colspan="2">
+                  <div class="now-graph">
+                    {{#if zerozero}}
+                      <div class="neg" style="-webkit-box-flex:1;">0</div>
+                      <div class="pos" style="-webkit-box-flex:1;">0</div>
+                    {{else}}
+                      <div class="neg" style="-webkit-box-flex:{{neg}}">{{neg}}{{trend trendPos}}</div>
+                      <div class="pos" style="-webkit-box-flex:{{pos}}">{{pos}}{{trend trendNeg}}</div>
+                    {{/if}}
+                  </div>
+                </td>
+              {{/with}}
             </table>
             </div>
         {{/if}}
