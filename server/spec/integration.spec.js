@@ -17,9 +17,37 @@ var isTimestamp = IntegrationHelpers.isTimestamp;
 Mongo.init(Mongo.profiles.test);
 
 beforeEach(function() {
+
+    function objectMeetsRequirements(obj, req) {
+
+        if(obj == null && req != null) {
+            return {passed: false};
+        }
+
+        var passed = {passed: true};
+
+        _.forEach(obj, function(objVal, key) {
+            var reqVal = req[key];
+
+            if(_.isFunction(reqVal)) {
+                if(!reqVal(objVal)) {
+                    passed = {passed: false, key: key, actualValue: objVal, expectedValue: reqVal};
+                    return;
+                }
+            } else {
+                if(objVal !== reqVal) {
+                    passed = {passed: false, key: key, actualValue: objVal, expectedValue: reqVal};
+                    return;
+                }
+            }
+        });
+
+        return passed;
+    }
+
     this.addMatchers({
 
-        toMeetRequirements: function(requirements) {
+        toMeetTargetArrayRequirements: function(requirements) {
             var actual = this.actual;
 
             if(actual.length == null || requirements.length == null) {
@@ -45,26 +73,24 @@ beforeEach(function() {
                 var actObj = actual[i];
                 var reqObj = findById(actObj._id);
 
-                _.forEach(actObj, function(actVal, key) {
-                    var reqVal = reqObj[key];
+                if(!objectMeetsRequirements(actObj, reqObj).passed) {
+                    passed = false;
+                    break;
+                }
 
-                    if(_.isFunction(reqVal)) {
-                        if(!reqVal(actVal)) {
-                            this.message = 'Test function failed';
-                            passed = false;
-                            return;
-                        }
-                    } else {
-                        if(actVal !== reqVal) {
-                            this.message = 'Value not equal';
-                            passed = false;
-                            return;
-                        }
-                    }
-                });
             }
 
             return passed;
+        },
+
+        toMeetObjectRequirements: function(requirements) {
+            var validationResult = objectMeetsRequirements(this.actual, requirements);
+            if(!validationResult.passed) {
+                this.message = "Object didn't meet the requirements, key: " + validationResult.key;
+                return false;
+            }
+
+            return true;
         }
 
     });
@@ -102,7 +128,7 @@ describe('Integration test', function() {
                 relevance: testRelevance
             }];
 
-            expect(result.body.targets).toMeetRequirements(expectedTargets);
+            expect(result.body.targets).toMeetTargetArrayRequirements(expectedTargets);
         });
     });
 
@@ -115,17 +141,29 @@ describe('Integration test', function() {
             expect(target.name).toEqual('T-Talon ruokajono');
             expect(target.question).toEqual('Oliko paljon jonoa?');
 
-            expect(target.results.summary.pos).toEqual(9);
-            expect(target.results.summary.neg).toEqual(7);
+            var isValidTrend = function(val) {
+                return _.isNumber(val) && val >= -3 && val <= 3;
+            };
 
-            expect(target.results.history).toEqual([
-                {start: '2012-03-23T08:00:00.000Z', end: '2012-03-23T08:15:00.000Z', pos: 3, neg: 1},
-                {start: '2012-03-23T08:45:00.000Z', end: '2012-03-23T09:00:00.000Z', pos: 0, neg: 2},
-                {start: '2012-03-23T10:00:00.000Z', end: '2012-03-23T10:15:00.000Z', pos: 3, neg: 0},
-                {start: '2012-03-23T12:00:00.000Z', end: '2012-03-23T12:15:00.000Z', pos: 0, neg: 3},
-                {start: '2012-03-23T13:30:00.000Z', end: '2012-03-23T13:45:00.000Z', pos: 2, neg: 0},
-                {start: '2012-03-23T13:45:00.000Z', end: '2012-03-23T14:00:00.000Z', pos: 1, neg: 1}
-            ]);
+            var isPositiveNumber = function(val) {
+                return _.isNumber(val) && val >= 0 && val <= 60;
+            };
+
+            var isPositiveNumber = function(val) {
+                return _.isNumber(val) && val >= 0;
+            };
+
+            expect(target.results.now).toMeetObjectRequirements({
+                pos: isPositiveNumber,
+                neg: isPositiveNumber,
+                trend: isValidTrend,
+                period: isPositiveNumber
+            });
+
+            expect(target.results.alltime).toMeetObjectRequirements({
+                pos: isPositiveNumber,
+                neg: isPositiveNumber
+            });
         });
     });
 
@@ -167,8 +205,17 @@ describe('Integration test', function() {
 
     it('POST /target/:id/result', function() {
         var id = '12345678901234567890abce';
-        var requestComplete;
         spyOn(DateUtils, 'now').andReturn(new Date('2012-03-23T13:59:00.000Z'));
+
+        // Guard assertion
+        runs(function() {
+            testRequest({method: 'GET', path: '/target/' + id}, function(result) {
+                expect(result.statusCode).toEqual(200);
+                expect(result.body.target.results.alltime.neg).toEqual(7);
+
+                requestComplete = true;
+            });
+        });
 
         runs(function() {
             testRequest({method: 'POST', path: '/target/' + id + '/result', body: {value: 0}}, function(result) {
@@ -179,14 +226,10 @@ describe('Integration test', function() {
             });
         });
 
-        waitsFor(function() {
-            return id;
-        });
-
         runs(function() {
             testRequest({method: 'GET', path: '/target/' + id}, function(result) {
                 expect(result.statusCode).toEqual(200);
-                expect(result.body.target.results.history[5].neg).toEqual(2);
+                expect(result.body.target.results.alltime.neg).toEqual(8);
             });
         });
     });

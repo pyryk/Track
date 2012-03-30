@@ -1,3 +1,5 @@
+// Now: Date('2012-03-23T08:03:48.223Z')
+
 module.exports = {
     targets: [{
         name: 'T-Talon ruokajono',
@@ -23,7 +25,18 @@ module.exports = {
     }, {
         name: 'Mikä fiilis?',
         _id: '12345678901234567890abcd',
-        question: 'Millainen fiilis sinulla on tällä hetkellä?'
+        question: 'Millainen fiilis sinulla on tällä hetkellä?',
+        results : [
+        { value : 1, timestamp : new Date('2012-03-23T08:03:48.223Z') },
+        { value : 1, timestamp : new Date('2012-03-23T08:02:48.223Z') },
+        { value : 1, timestamp : new Date('2012-03-23T08:02:28.223Z') },
+        { value : 0, timestamp : new Date('2012-03-23T08:01:48.223Z') },
+        { value : 0, timestamp : new Date('2012-03-23T08:01:18.223Z') },
+        { value : 0, timestamp : new Date('2012-03-23T08:00:08.223Z') },
+        { value : 1, timestamp : new Date('2012-03-23T07:59:48.223Z') },
+        { value : 1, timestamp : new Date('2012-03-23T07:59:11.223Z') },
+        { value : 1, timestamp : new Date('2012-03-23T07:53:48.223Z') },
+        { value : 0, timestamp : new Date('2012-03-23T07:43:48.223Z') }]
     }, {
         name: 'Putouksen munamiehen läpän taso',
         _id: '12345678901234567890abcf',

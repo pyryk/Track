@@ -8,6 +8,8 @@ var spyOnPromise = APIHelpers.spyOnPromise;
 var expectStatus = APIHelpers.expectStatus;
 var expectBody = APIHelpers.expectBody;
 
+var DateUtils = require('../modules/now.js');
+
 describe('API', function() {
     var req = {}, res = {}, next;
 
@@ -26,28 +28,28 @@ describe('API', function() {
         req.params = {};
         res.send = jasmine.createSpy('res.send');
         next = jasmine.createSpy('next');
-            this.addMatchers({
+        this.addMatchers({
 
-                toHaveBeenCalledWithError: function(expectedError) {
-                    var actual = this.actual;
+            toHaveBeenCalledWithError: function(expectedError) {
+                var actual = this.actual;
 
-                    var error = this.actual.mostRecentCall.args[0]
+                var error = this.actual.mostRecentCall.args[0]
 
-                    if(error.statusCode !== expectedError.status) {
-                        return false;
-                    }
-
-                    if(error.body.code !== expectedError.code) {
-                        return false;
-                    }
-
-                    if(error.body.message !== expectedError.message) {
-                        return false;
-                    }
-
-                    return true;
+                if(error.statusCode !== expectedError.status) {
+                    return false;
                 }
-            });
+
+                if(error.body.code !== expectedError.code) {
+                    return false;
+                }
+
+                if(error.body.message !== expectedError.message) {
+                    return false;
+                }
+
+                return true;
+            }
+        });
 
 
     });
@@ -68,45 +70,38 @@ describe('API', function() {
         it('should return null for null object', function() {
             expect(API.selectFields(null, ['name', 'size', 'password'])).toBeNull();
         })
-    })
+    });
 
-    describe('categoriseResults', function() {
+    describe('aggregateResults', function() {
+
         var results = [
             { value : 1, timestamp : new Date('2012-03-23T08:03:48.223Z') },
-            { value : 1, timestamp : new Date('2012-03-23T08:04:48.223Z') },
-            { value : 1, timestamp : new Date('2012-03-23T08:05:48.223Z') },
-            { value : 0, timestamp : new Date('2012-03-23T08:10:48.223Z') },
-            { value : 0, timestamp : new Date('2012-03-23T08:50:48.223Z') },
-            { value : 0, timestamp : new Date('2012-03-23T08:51:48.223Z') },
-            { value : 1, timestamp : new Date('2012-03-23T10:03:48.223Z') },
-            { value : 1, timestamp : new Date('2012-03-23T10:13:48.223Z') },
-            { value : 1, timestamp : new Date('2012-03-23T10:14:48.223Z') },
-            { value : 0, timestamp : new Date('2012-03-23T12:01:48.223Z') },
-            { value : 0, timestamp : new Date('2012-03-23T12:03:48.223Z') },
-            { value : 0, timestamp : new Date('2012-03-23T12:05:48.223Z') },
-            { value : 1, timestamp : new Date('2012-03-23T13:33:48.223Z') },
-            { value : 1, timestamp : new Date('2012-03-23T13:43:48.223Z') },
-            { value : 1, timestamp : new Date('2012-03-23T13:50:48.223Z') },
-            { value : 0, timestamp : new Date('2012-03-23T13:51:48.223Z') } ];
+            { value : 1, timestamp : new Date('2012-03-23T08:02:48.223Z') },
+            { value : 0, timestamp : new Date('2012-03-23T08:01:48.223Z') },
+            { value : 0, timestamp : new Date('2012-03-23T08:01:18.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T07:59:48.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T07:59:11.223Z') },
+            { value : 1, timestamp : new Date('2012-03-23T07:53:48.223Z') },
+            { value : 0, timestamp : new Date('2012-03-23T07:43:48.223Z') }];
 
-        var categorizedResult = API.categorizeResults(results);
+        beforeEach(function() {
+            spyOn(DateUtils, 'now').andReturn(new Date('2012-03-23T08:03:48.223Z'));
 
-        it('should categorise results to quarters', function() {
-            expected = [
-                {start: new Date('2012-03-23T08:00:00.000Z'), end: new Date('2012-03-23T08:15:00.000Z'), pos: 3, neg: 1},
-                {start: new Date('2012-03-23T08:45:00.000Z'), end: new Date('2012-03-23T09:00:00.000Z'), pos: 0, neg: 2},
-                {start: new Date('2012-03-23T10:00:00.000Z'), end: new Date('2012-03-23T10:15:00.000Z'), pos: 3, neg: 0},
-                {start: new Date('2012-03-23T12:00:00.000Z'), end: new Date('2012-03-23T12:15:00.000Z'), pos: 0, neg: 3},
-                {start: new Date('2012-03-23T13:30:00.000Z'), end: new Date('2012-03-23T13:45:00.000Z'), pos: 2, neg: 0},
-                {start: new Date('2012-03-23T13:45:00.000Z'), end: new Date('2012-03-23T14:00:00.000Z'), pos: 1, neg: 1}];
-
-            expect(categorizedResult.history).toEqual(expected);
+            var aggregatedResults = API.aggregateResults(results);
+            this.now = aggregatedResults.now;
+            this.alltime = aggregatedResults.alltime;
         });
 
-        it('should calculate the result summary', function() {
-            expect(categorizedResult.summary.pos).toEqual(9);
-            expect(categorizedResult.summary.neg).toEqual(7);
+        it('should calculate correct _now_ values from the last 15 minutes', function() {
+            expect(this.now.pos).toEqual(5);
+            expect(this.now.neg).toEqual(2);
         });
+
+        it('should calculate alltime values', function() {
+            expect(this.alltime.pos).toEqual(5);
+            expect(this.alltime.neg).toEqual(3);
+        });
+
     });
 
     describe('API methods', function() {

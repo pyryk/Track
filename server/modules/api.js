@@ -5,6 +5,8 @@ var Relevance = require('./relevance');
 var _ = require('underscore');
 var restify = require('restify');
 
+var DateUtils = require('../modules/now.js');
+
 var API = {
 
     rel: new Relevance(),
@@ -47,53 +49,39 @@ var API = {
         });
     },
 
-    categorizeResults: function(results) {
-        results = results || [];
+    aggregateResults: function(results) {
 
-        var nearestStartingQuarter = function(date) {
-            var minutes = date.getMinutes() % 15;
-            var seconds = date.getSeconds();
-            var milliseconds = date.getMilliseconds();
-
-            var substract = (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
-
-            return new Date(date.getTime() - substract);
-        };
-
-        var addQuarter = function(date) {
-            return new Date(date.getTime() + (1000 * 60 * 15));
-        }
-
-        var quarters = {};
-        var summary = {pos: 0, neg: 0};
-        results.forEach(function(result) {
-            var startQuarter = nearestStartingQuarter(result.timestamp).getTime();
-
-            var quarterResult = quarters[startQuarter] || {pos: 0, neg: 0};
-
-            if(result.value) {
-                quarterResult.pos++;
-                summary.pos++;
-            } else {
-                quarterResult.neg++;
-                summary.neg++;
-            }
-
-            quarters[startQuarter] = quarterResult;
-        });
-
-        if(_.isEmpty(quarters)) {
+        if(!_.isArray(results)) {
             return null;
         }
 
-        var history = [];
-        _.each(quarters, function(quarterValue, quarterKey) {
-            var quarterStart = new Date(parseInt(quarterKey, 10));
-            var quarterEnd = addQuarter(quarterStart);
-            history.push({start: quarterStart, end: quarterEnd, pos: quarterValue.pos, neg: quarterValue.neg});
+        var now = DateUtils.now();
+        var minutes15 = 1000 * 60 * 15;
+        var minutes15ago = new Date(now.getTime() - minutes15);
+
+        var nowResults = {pos: 0, neg: 0, trend: 0, period: 15};
+        var alltimeResults = {pos: 0, neg: 0};
+        results.forEach(function(result) {
+            var val = result.value;
+
+            // Now
+            if(result.timestamp.getTime() > minutes15ago) {
+                if(val) {
+                    nowResults.pos++;
+                } else {
+                    nowResults.neg++;
+                }
+            }
+
+            // Alltime
+            if(val) {
+                alltimeResults.pos++;
+            } else {
+                alltimeResults.neg++;
+            }
         });
 
-        return {history: history, summary: summary};
+        return {alltime: alltimeResults, now: nowResults};
     },
 
     getTarget: function(req, res, next) {
@@ -105,9 +93,11 @@ var API = {
             // Filter
             var target = API.selectFields(data, ['name', '_id', 'question']);
 
-            var categorizedResults = API.categorizeResults(data.results);
-            if(categorizedResults) {
-                target.results = categorizedResults;
+            // Aggregate
+            var aggregatedResults = API.aggregateResults(data.results);
+
+            if(aggregatedResults) {
+                target.results = aggregatedResults;
             }
 
             res.send(200, {target: target});
