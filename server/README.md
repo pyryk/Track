@@ -39,28 +39,7 @@ Requires authentication: Yes
 
 Status: 200 Ok
 
-Reponse body **Current**:
-
-	{
-		target: {
-			_id: “12faggf”,
-			name: “T-Talon ruokajono”,
-			question: “T-Talon ruokajonon jonotusaika”
-			
-			results: {
-				summary: {
-					pos: 150, neg: 50
-				},
-				history: {
-					{start: "2012-03-10T15:00:00.000Z", end: "2012-03-10T15:15:00.000Z", pos: 100, neg: 25},
-					{start: "2012-03-10T14:45:00.000Z", end: "2012-03-10T15:00:00.000Z", pos: 30, neg: 15}
-					{start: "2012-03-10T14:30:00.000Z", end: "2012-03-10T14:45:00.000Z", pos: 20, neg: 10}
-				}
-			}
-		}
-	}
-
-Reponse body **Draft**:
+Reponse body:
 
 	{
 		target: {
