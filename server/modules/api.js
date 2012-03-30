@@ -5,6 +5,8 @@ var Relevance = require('./relevance');
 var _ = require('underscore');
 var restify = require('restify');
 
+var DateUtils = require('../modules/now.js');
+
 var API = {
 
     rel: new Relevance(),
@@ -47,53 +49,83 @@ var API = {
         });
     },
 
-    categorizeResults: function(results) {
-        results = results || [];
+    aggregateResults: function(results) {
 
-        var nearestStartingQuarter = function(date) {
-            var minutes = date.getMinutes() % 15;
-            var seconds = date.getSeconds();
-            var milliseconds = date.getMilliseconds();
-
-            var substract = (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
-
-            return new Date(date.getTime() - substract);
-        };
-
-        var addQuarter = function(date) {
-            return new Date(date.getTime() + (1000 * 60 * 15));
-        }
-
-        var quarters = {};
-        var summary = {pos: 0, neg: 0};
-        results.forEach(function(result) {
-            var startQuarter = nearestStartingQuarter(result.timestamp).getTime();
-
-            var quarterResult = quarters[startQuarter] || {pos: 0, neg: 0};
-
-            if(result.value) {
-                quarterResult.pos++;
-                summary.pos++;
-            } else {
-                quarterResult.neg++;
-                summary.neg++;
-            }
-
-            quarters[startQuarter] = quarterResult;
-        });
-
-        if(_.isEmpty(quarters)) {
+        if(!_.isArray(results)) {
             return null;
         }
 
-        var history = [];
-        _.each(quarters, function(quarterValue, quarterKey) {
-            var quarterStart = new Date(parseInt(quarterKey, 10));
-            var quarterEnd = addQuarter(quarterStart);
-            history.push({start: quarterStart, end: quarterEnd, pos: quarterValue.pos, neg: quarterValue.neg});
+        // Times
+        var now = DateUtils.now();
+        var period = 1000 * 60 * 15;
+        var nowPeriod = new Date(now.getTime() - period);
+        var pastPeriod = new Date(now.getTime() - (2 * period));
+
+        // Results
+        var pastResults = {pos: 0, neg: 0}
+        var nowResults = {pos: 0, neg: 0, trend: 0, period: 15};
+        var alltimeResults = {pos: 0, neg: 0};
+
+        // Iterate and analyze
+        results.forEach(function(result) {
+            var val = result.value;
+            var timestamp = result.timestamp;
+
+            // Past
+            if(timestamp > pastPeriod && timestamp < nowPeriod) {
+                if(val) {
+                    pastResults.pos++;
+                } else {
+                    pastResults.neg++;
+                }
+            }
+
+            // Now
+            if(timestamp > nowPeriod) {
+                if(val) {
+                    nowResults.pos++;
+                } else {
+                    nowResults.neg++;
+                }
+            }
+
+            // Alltime
+            if(val) {
+                alltimeResults.pos++;
+            } else {
+                alltimeResults.neg++;
+            }
         });
 
-        return {history: history, summary: summary};
+        var pastResultsPercentage = pastResults.pos / (pastResults.pos + pastResults.neg);
+        var nowResultsPercentage = nowResults.pos / (nowResults.pos + nowResults.neg);
+        var change = nowResultsPercentage - pastResultsPercentage;
+
+
+        var trend;
+
+        if(change <= -0.2) {
+            trend = -3;
+        } else if (change <= -0.1) {
+            trend = -2;
+        } else if (change < 0) {
+            trend = -1;
+        } else if (change === 0) {
+            trend = 0;
+        } else if (change < 0.1) {
+            trend = 1;
+        } else if (change < 0.2) {
+            trend = 2;
+        } else if (change >= 0.2) {
+            trend = 3;
+        } else {
+            trend = 0;
+        }
+
+
+        nowResults.trend = trend;
+
+        return {alltime: alltimeResults, now: nowResults};
     },
 
     getTarget: function(req, res, next) {
@@ -105,9 +137,11 @@ var API = {
             // Filter
             var target = API.selectFields(data, ['name', '_id', 'question']);
 
-            var categorizedResults = API.categorizeResults(data.results);
-            if(categorizedResults) {
-                target.results = categorizedResults;
+            // Aggregate
+            var aggregatedResults = API.aggregateResults(data.results);
+
+            if(aggregatedResults) {
+                target.results = aggregatedResults;
             }
 
             res.send(200, {target: target});
