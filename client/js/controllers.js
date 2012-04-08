@@ -1,13 +1,18 @@
 var BaseController = Spine.Controller.sub({
   init: function() {
     this.rawTemplate = this.template;
-    this.template = Handlebars.compile(this.rawTemplate.html());
+    if (this.rawTemplate && this.rawTemplate.length > 0) {
+      this.template = Handlebars.compile(this.rawTemplate.html());
+    }
+    
   },
   render: function() {
     var data = this.getData();
-    this.html(this.template(data));
-    
-    this.addFastButtons();
+    if (typeof this.template === "function") {
+      this.html(this.template(data));
+
+      this.addFastButtons();
+    }
     //this.addPseudoActiveSupport();
   },
   getData: function() {
@@ -68,13 +73,26 @@ var TargetsList = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
     Target.bind("create", this.proxy(this.addOne));
+    Spine.bind('location:changed', this.proxy(this.locationChanged));
     
-    // load initial set of targets
-    Target.loadList();
+    // load list (without location data) even when no location gotten
+    Spine.bind('location:error', this.proxy(this.locationChanged));
+    
+    if (!window.track || !window.track.location.lat) {
+      log('Location not (yet) available - loading list without it');
+      Target.loadList();
+    }
   },
   addOne: function(task){
     if (window.track.visiblePage == this) {
       this.render();
+    }
+  },
+  locationChanged: function(location) {
+    // TODO update list also when list is not visible
+    if (window.track.visiblePage == this) {
+      log('location changed - reloading target list');
+      Target.loadList({lat: location.lat, lon: location.lon});
     }
   },
   clicked: function(e) {
@@ -174,7 +192,11 @@ var TargetDetails = BaseController.sub({
   saveAnswer: function(value) {
     log("Saving answer", value);
     var target = Target.find(this.id);
-    var result = Result.create({target: target, value: value});
+    var result = Result.create({
+      target: target, 
+      value: value, 
+      location: window.track.location
+    });
     result.bind('resultSent', this.answerSaved);
     result.post();
   },
@@ -205,12 +227,14 @@ var TargetCreate = BaseController.sub({
     if (success) {
       Spine.Route.navigate(App.getRoute(target)); 
     } else {
+      alert('For some reason, target was not saved to server. Please try again later.');
       // signal failure to the user
     }
   },
   saveTarget: function(e) {
     e.preventDefault();
     var target = Target.fromForm($(e.target));
+    target.location = window.track.location;
     target.bind("saveToServer", this.targetSavedToServer);
     target.saveToServer();
   }

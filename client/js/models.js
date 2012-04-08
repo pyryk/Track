@@ -4,7 +4,7 @@
  */
 var Target = Spine.Model.sub();
 
-Target.configure("Target", "name", "question", "results", "detailsLoaded", "saved");
+Target.configure("Target", "name", "question", "location", "results", "detailsLoaded", "saved");
 
 Target.include({
     getType: function() {
@@ -24,9 +24,14 @@ Target.include({
       }
       url += "target";
       
+      
+      // append the create location to the post
+      var location = window.track.location;
+      
       var toSend = {
         name: this.name,
-        question: this.question
+        question: this.question,
+        location: this.location
       }
       var data = JSON.stringify(toSend);
       
@@ -59,17 +64,20 @@ Target.include({
  * Loads a brief list of the track targets, containing only name and id
  * TODO: add more fields here, category/icon etc
  */
-Target.loadList = function() {
+Target.loadList = function(additionalData) {
   var url = App.serverURL;
   if (url.substring(url.length-1) !== "/") {
     url += "/";
   }
   url += "targets";
   
+  //var data = window.track.getAdditionalData();
+  
   var requestComplete = false;
   try {
   $.ajax({
     url: url,
+    data: additionalData,
     dataType: 'json',
     timeout: 5000,
     cache: false,
@@ -96,9 +104,10 @@ Target.loadList = function() {
   // workaround for android 2.3 bug: requests remain pending when loading the page from cache
   var xmlHttpTimeout=setTimeout(ajaxTimeout,5000);
   function ajaxTimeout(){
-    if (!requestComplete) {
+    // if request not complete and no sinon (xhr mock lib) present
+    if (!requestComplete && !window.sinon) {
       log("Request timed out - reloading the whole page");
-      window.location.reload()
+      //window.location.reload()
     } else {
       log("Request was completed");
     }
@@ -188,7 +197,7 @@ Target.fromForm = function(form) {
 /* result (answer of the target question) */
 var Result = Spine.Model.sub();
 
-Result.configure("Result", "value", "timestamp", "target", "saved");
+Result.configure("Result", "value", "timestamp", "location", "target", "saved");
 
 Result.include({
   getType: function() {
@@ -211,7 +220,8 @@ Result.include({
     url += "target/" + this.target.id + "/" + "result";
   
     var toSend = {
-      value: this.value
+      value: this.value,
+      location: this.location
     }
     var data = JSON.stringify(toSend);
     

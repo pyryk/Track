@@ -42,6 +42,11 @@ var App = Spine.Controller.sub({
     if (window.trackConfig && window.trackConfig.enableAuth) {
       this.addLogin();
     }
+    
+    // update location data once a minute...
+    this.updateLocation(); // ... and at once
+    window.setInterval(this.proxy(this.updateLocation), 60000);
+    
   },
   renderView: function(name, className, id) {
     if (name !== "loginScreen" && !this.loginOk()) {
@@ -118,12 +123,30 @@ var App = Spine.Controller.sub({
        }
      });
   },
+  updateLocation: function() {
+    navigator.geolocation.getCurrentPosition(this.proxy(function(position) {
+      this.location.lat = position.coords.latitude;
+      this.location.lon = position.coords.longitude;
+      this.location.timestamp = position.timestamp;
+      
+      // update list after location change
+      Spine.trigger('location:changed', this.location);
+    }), this.proxy(function(error) {
+      log("Could not get user location");
+      
+      // if location is undefined, trigger error, otherwise stay silent
+      if (!this.location.lat && !this.location.long) {
+        Spine.trigger('location:error', this.location);
+      }
+    }), {timeout:50000});
+  },
+  location: {lat: undefined, lon: undefined},
+  getAdditionalData: function() {
+    var data = {};
+    data.location = this.location;
+  },
   pageStack: [],
   getPreviousPage: function() {
-    // second last element of the stack
-    /*console.log("Page stack:", _.map(this.pageStack, function(it) { return it.getTitle(); }))
-    return this.pageStack[this.pageStack.length-2];*/
-    
     var current = this.visiblePage;
 
     // some hard-coded bits of back button logic
@@ -162,7 +185,12 @@ var App = Spine.Controller.sub({
   },
 });
 
-App.serverURL = window.trackConfig.serverURL || "http://mkos.futupeople.com/track/";
+if (window.trackConfig && window.trackConfig.serverURL) {
+  App.serverURL = window.trackConfig.serverURL
+} else{
+ App.serverURL = "http://mkos.futupeople.com/track/"; 
+}
+ 
 //App.serverURL = "http://localhost:9999/";
 
 /**
