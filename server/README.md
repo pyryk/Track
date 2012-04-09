@@ -20,6 +20,8 @@ The following parameters have to be sent with each request that requires authent
 
 Requires authentication: Yes
 
+GET params: lat, lon, i.e. GET /targets?lat=60.16981200000001&lon=24.93824
+
 Status: 200 Ok
 
 Response body:
@@ -69,7 +71,11 @@ Request body:
 
 	{
 		name: “Track target name”
-		question: "Kauanko/paljonko/jne plaa plaa plaa otsikkoa tarkentava kysymys"
+		question: "Kauanko/paljonko/jne plaa plaa plaa otsikkoa tarkentava kysymys",
+		location: {
+		  lat: 12.345,
+		  lon: 67.890
+		}
 	}
 	
 Status: 201 Created
@@ -85,7 +91,11 @@ Requires authentication: Yes
 Request body:
 
     {
-        value: 0 / 1
+        value: 0 / 1,
+        location: {
+    		  lat: 12.345,
+    		  lon: 67.890
+    		}
     }
 
 Status: 204 No content
