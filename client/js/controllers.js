@@ -261,6 +261,12 @@ var TargetResults = BaseController.sub({
     try {
       data.target = Target.find(this.id).toJSON();
       
+      // preprocess alltime results
+      var alltime = data.target.results.alltime;
+      if (alltime.pos == 0 && alltime.neg == 0) {
+        alltime.zerozero = true;
+      }
+      
       // preprocess "now" results
       var now = data.target.results.now
       

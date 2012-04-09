@@ -191,6 +191,12 @@ header {
   .target-question {
     @include header;
   }
+  .result-heading {
+    font-size: 1em;
+    color: lighten($text_color, 40%);
+    margin: 10px 0.5em;
+    font-weight: normal;
+  }
   table {
     width: 100%;
   }
@@ -198,12 +204,12 @@ header {
     @include body-box;
     
     th {
-      font-size: 1.5em;
+      font-size: 2em;
       font-weight: bold;
       color: lighten($text_color, 20%);
       text-align: left;
-      @include background-image(linear-gradient(darken($list_item_gradient_2, 10%), darken($list_item_gradient_1, 10%)));
-      padding: 10px 1em;
+      @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
+      padding: 1em;
     }
     
     td {
@@ -221,10 +227,13 @@ header {
     @include body-box-last;
   }
   
-  .now-graph {
+  .result-graph {
     @include display-box;
     @include box-orient(horizontal);
     @include box-align(stretch);
+    
+    margin: 20px 1%;
+    border: 1px solid lighten($text_color, 50%);
     
     .pos, .neg {
       padding: 10px;
@@ -249,6 +258,7 @@ header {
     }
     .neg {
       background-color: rgba(255,0,0,0.35);
+      border-right: 1px solid lighten($text_color, 50%);
       
       .trend {
       	border-left: 20px solid rgba(0,255,0,0.5);
