@@ -6,13 +6,14 @@ All the requests with body (POST requests) should have a application/json Conten
 
 **This is a DRAFT of the authentication functions, waiting for comments. NOT YET IMPLEMENTED**
 
-User has to be logged in to Facebook before accessing Track API. Client software is responsible of Facebook login.
+User has to be logged in Facebook before accessing Track API. Client software is responsible of Facebook login.
 
-The following parameters have to be sent with each request that requires authentication:
+The following parameters have to be sent in the HEADER of each request requiring authentication:
 
 **fbUserId** Facebook user ID
-
 **fbAccessToken** Access token received from Facebook after user login
+
+Status: 401 Unauthorized
 
 ## API endpoints
 
