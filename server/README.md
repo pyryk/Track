@@ -11,6 +11,7 @@ User has to be logged in Facebook before accessing Track API. Client software is
 The following parameters have to be sent in the HEADER of each request requiring authentication:
 
 **fbUserId** Facebook user ID
+
 **fbAccessToken** Access token received from Facebook after user login
 
 Status: 401 Unauthorized
