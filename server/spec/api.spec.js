@@ -2,9 +2,10 @@ var Mongo = require('../modules/mongo');
 var API = require('../modules/api');
 var Relevance = require('../modules/relevance');
 var APIHelpers = require('./helpers').API;
+var CommonHelpers = require('./helpers').Common;
 
 // Helper methods for API testing
-var spyOnPromise = APIHelpers.spyOnPromise;
+var spyOnPromise = CommonHelpers.spyOnPromise;
 var expectStatus = APIHelpers.expectStatus;
 var expectBody = APIHelpers.expectBody;
 

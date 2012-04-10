@@ -1,27 +1,8 @@
 var http = require('http');
 var Promise = require('node-promise').Promise;
+var _ = require('underscore');
 
 var API = {
-    spyOnPromise: function(Klass, method) {
-        var spy = spyOn(Klass, method);
-
-        return {
-            andCallSuccess: function(returnValue) {
-                spy.andReturn({
-                    then: function(callback) {
-                        callback(returnValue);
-                    }
-                })
-            },
-            andCallError: function(errorValue) {
-                spy.andReturn({
-                    then: function(callback, error) {
-                        error(errorValue);
-                    }
-                })
-            }
-        };
-    },
 
     expectStatus: function(res, status) {
         var args = res.send.mostRecentCall.args;
@@ -126,8 +107,68 @@ var Integration = {
     }
 };
 
+var Common = {
+    promiseReturned: function(promise) {
+        var promiseResult;
+        var promiseSuccess = false;
+        var promiseError = false;
+        var thenSuccessCallback;
+        var thenErrorCallback;
+        var returned = {
+            then: function(successCallback, errorCallback) {
+                thenSuccessCallback = successCallback;
+                thenErrorCallback = errorCallback;
+            }
+        }
+
+        promise.then(function() {
+            promiseResult = _.toArray(arguments);
+            promiseSuccess = true;
+        }, function() {
+            promiseResult = _.toArray(arguments);
+            promiseError = true;
+        });
+
+        waitsFor(function() {
+            return promiseSuccess || promiseError;
+        });
+
+        runs(function() {
+            if(promiseSuccess) {
+                thenSuccessCallback.apply(this, promiseResult);
+            } else {
+                thenErrorCallback.apply(this, promiseResult);
+            };
+        });
+
+        return returned;
+    },
+
+    spyOnPromise: function(Klass, method) {
+        var spy = spyOn(Klass, method);
+
+        return {
+            andCallSuccess: function(returnValue) {
+                spy.andReturn({
+                    then: function(callback) {
+                        callback(returnValue);
+                    }
+                })
+            },
+            andCallError: function(errorValue) {
+                spy.andReturn({
+                    then: function(callback, error) {
+                        error(errorValue);
+                    }
+                })
+            }
+        };
+    }
+}
+
 module.exports = {
     API: API,
     Mongo: Mongo,
-    Integration: Integration
+    Integration: Integration,
+    Common: Common
 };
