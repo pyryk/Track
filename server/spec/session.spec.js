@@ -226,7 +226,7 @@ describe('SessionStore', function() {
  * The reason is that we don't have access token which would be valid always. The access token
  * HAS TO BE CHANGED MANUALLY.
  */
-describe('Integration', function() {
+xdescribe('Integration', function() {
 
     var accessToken = "AAACXZBsWiZB1ABABQiRtKdgIPYdzmETZA2HGOMRAlHpSHWS6kcOlU3JW8b4atAhNWMAUTdZBxiaMrQsgGYnvbRGDdGng1u6yA43jy0AZBsAZDZD"; // CHANGE ME!
     var session;
