@@ -14,7 +14,7 @@ The following parameters have to be sent in the HEADER of each request requiring
 
 **fbAccessToken** Access token received from Facebook after user login
 
-Status: 401 Unauthorized
+Status (if authenticaion fails): 403 Forbidden
 
 ## API endpoints
 
