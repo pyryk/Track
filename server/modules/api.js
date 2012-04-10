@@ -4,18 +4,43 @@ var Mongo = require('./mongo.js');
 var Relevance = require('./relevance');
 var _ = require('underscore');
 var restify = require('restify');
+var Session = require('./session').Session;
+var FBClient = require('./session').FBClient;
+var SessionStore = require('./session').SessionStore;
+var Promise = require('node-promise').Promise;
 
 var DateUtils = require('../modules/now.js');
 
 var API = {
 
     rel: new Relevance(),
+    session: new Session(),
 
     start: function(server) {
+        this.session.sessionStore = new SessionStore;
+        this.session.fbClient = new FBClient();
+
         server.get("/targets", this.getTargets);
         server.get("/target/:id", this.getTarget);
         server.post("/target", this.postTarget);
         server.post("/target/:_id/result", this.postResult);
+        server.get("/login", this.getLogin);
+    },
+
+    authorize: function(req) {
+        var promise = new Promise();
+
+        var fbUserId = req.headers.fbuserid;
+        var fbAccessToken = req.headers.fbaccesstoken;
+
+        API.session.isAuthorized(fbUserId, fbAccessToken).then(function(userSession) {
+            var authorization = API.selectFields(userSession, ['fbUserId', 'sessionStarted']);
+            promise.resolve(authorization);
+        }, function() {
+            promise.reject();
+        });
+
+        return promise;
     },
 
     getTargets: function(req, res, next) {
@@ -167,6 +192,17 @@ var API = {
             return next();
         }, function(error) {
             return next(error);
+        });
+    },
+
+    getLogin: function(req, res, next) {
+        API.authorize(req).then(function(session) {
+            var body = API.selectFields(session, ['fbUserId', 'sessionStarted']);
+
+            res.send(200, body);
+            return next();
+        }, function error() {
+            return next(new restify.NotAuthorizedError("Not logged in"));
         });
     },
 

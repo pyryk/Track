@@ -59,9 +59,8 @@ var Integration = {
         var promise = Promise();
         opts = opts || {};
         opts.port = confs.port;
-        opts.headers = {
-            "Content-Type": "application/json"
-        };
+        opts.headers = opts.headers || {};
+        opts.headers["Content-Type"] = "application/json";
 
         var req = http.request(opts, function(res) {
             var statusCode = res.statusCode;

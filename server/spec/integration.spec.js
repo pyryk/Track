@@ -1,5 +1,6 @@
 var Mongo = require('../modules/mongo');
 var IntegrationHelpers = require('./helpers').Integration;
+var CommonHelpers = require('./helpers').Common;
 var _ = require('underscore');
 var DateUtils = require('../modules/now.js');
 
@@ -12,6 +13,7 @@ var testRequest = function(opts, callback) {
     return IntegrationHelpers.testRequest(opts, confs, callback);
 };
 var isTimestamp = IntegrationHelpers.isTimestamp;
+var spyOnPromise = CommonHelpers.spyOnPromise;
 
 // Initialize Mongo for integration tests
 Mongo.init(Mongo.profiles.test);
@@ -231,6 +233,25 @@ describe('Integration test', function() {
                 expect(result.statusCode).toEqual(200);
                 expect(result.body.target.results.alltime.neg).toEqual(8);
             });
+        });
+    });
+
+    it('GET /login failed', function() {
+        testRequest({method: 'GET', path: '/login'}, function(result) {
+            expect(result.statusCode).toEqual(403);
+        });
+    });
+
+    xit('GET /login success', function() {
+        // The access token has to be changed if you want this test to pass!
+        var accessToken = 'AAACXZBsWiZB1ABANUjZC6ltNPJ9ZBNM6T7PtZBP1jim7QHR6Fm9D4X6PCSm78BAyC24UbidaLLxVTLMLw28I37IaAFzh2ORcw1WtGJAZBEEwZDZD'; // CHANGE ME!
+
+        spyOn(DateUtils, 'now').andReturn(new Date('2012-03-23T13:59:00.000Z'));
+
+        testRequest({method: 'GET', path: '/login', headers: {fbUserId: '123456', fbAccessToken: accessToken}}, function(result) {
+            expect(result.statusCode).toEqual(200);
+            expect(result.body.fbUserId).toEqual('123456');
+            expect(result.body.sessionStarted).toEqual('2012-03-23T13:59:00.000Z');
         });
     });
 });

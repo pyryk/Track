@@ -12,7 +12,7 @@ var expectBody = APIHelpers.expectBody;
 var DateUtils = require('../modules/now.js');
 
 describe('API', function() {
-    var req = {}, res = {}, next;
+    var req, res, next;
 
     var itShouldCallNextWithError = function(apiMethod, mongoMethod) {
         it('should call next with error', function() {
@@ -26,14 +26,15 @@ describe('API', function() {
     };
 
     beforeEach(function() {
+        req = {};
         req.params = {};
+        req.headers = {};
+        res = {};
         res.send = jasmine.createSpy('res.send');
         next = jasmine.createSpy('next');
         this.addMatchers({
 
             toHaveBeenCalledWithError: function(expectedError) {
-                var actual = this.actual;
-
                 var error = this.actual.mostRecentCall.args[0]
 
                 if(error.statusCode !== expectedError.status) {
@@ -51,8 +52,6 @@ describe('API', function() {
                 return true;
             }
         });
-
-
     });
 
     describe('selectFields', function() {
@@ -245,6 +244,32 @@ describe('API', function() {
                 expectStatus(res).toEqual(204);
                 expectBody(res).toEqual();
             })
+        });
+
+        describe('getLogin', function() {
+            it('should return session and status 200 if logged in', function() {
+                spyOnPromise(API, 'authorize').andCallSuccess({fbUserId: '123456', fbAccessToken: 'ABCDEFG', sessionStarted: new Date('2012-03-23T13:39:00.000Z')});
+
+                API.getLogin(req, res, next);
+
+                expectStatus(res).toEqual(200);
+                expectBody(res).toEqual({
+                    fbUserId: '123456',
+                    sessionStarted: new Date('2012-03-23T13:39:00.000Z')
+                });
+            });
+
+            it('should return status 403 if not logged in', function() {
+                spyOnPromise(API, 'authorize').andCallError();
+
+                API.getLogin(req, res, next);
+
+                expect(next).toHaveBeenCalledWithError({
+                    status: 403,
+                    code: "NotAuthorized",
+                    message: "Not logged in"
+                });
+            });
         });
 
         afterEach(function() {
