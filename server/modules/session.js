@@ -18,7 +18,7 @@ Session.fn.isAuthorized = function(fbUserId, fbAccessToken) {
     }
 
     if(fbAccessToken == null || fbAccessToken === '') {
-        promise.resolve(false);
+        promise.reject();
         return promise;
     }
 
@@ -32,7 +32,7 @@ Session.fn.isAuthorized = function(fbUserId, fbAccessToken) {
         this.tryCreateSession(fbUserId, fbAccessToken).then(function(newSession) {
             promise.resolve(newSession);
         }, function() {
-            promise.resolve(false);
+            promise.reject();
         });
     }
 

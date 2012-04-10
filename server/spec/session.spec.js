@@ -82,11 +82,7 @@ describe('Session', function() {
         });
 
         it('should try to create session if no session exists but credentials are ok and return true if session created', function() {
-            spyOn(session, 'tryCreateSession').andReturn({
-                then: function(callback) {
-                    callback(fakeSession);
-                }
-            });
+            spyOnPromise(session, 'tryCreateSession').andCallSuccess(fakeSession);
 
             var fbUserId = authorizedUserWithoutSession.fbUserId;
             var fbAccessToken = authorizedUserWithoutSession.fbAccessToken;
@@ -97,17 +93,15 @@ describe('Session', function() {
         });
 
         it('should try to create session if no session exists but credentials are ok and return false if session creation failed', function() {
-            spyOn(session, 'tryCreateSession').andReturn({
-                then: function(success, error) {
-                    error();
-                }
-            });
+            spyOnPromise(session, 'tryCreateSession').andCallError();
 
             var fbUserId = authorizedUserWithoutSession.fbUserId;
             var fbAccessToken = authorizedUserWithoutSession.fbAccessToken;
 
-            promiseReturned(session.isAuthorized(fbUserId, fbAccessToken)).then(function(result) {
-                expect(result).toBeFalsy();
+            promiseReturned(session.isAuthorized(fbUserId, fbAccessToken)).then(function() {
+                expect(false).toBeTruthy(); // Should not be here
+            }, function() {
+                expect(true).toBeTruthy(); // Should be here
             });
         });
     });
@@ -232,7 +226,7 @@ describe('SessionStore', function() {
  * The reason is that we don't have access token which would be valid always. The access token
  * HAS TO BE CHANGED MANUALLY.
  */
-xdescribe('Integration', function() {
+describe('Integration', function() {
 
     var accessToken = "AAACXZBsWiZB1ABABQiRtKdgIPYdzmETZA2HGOMRAlHpSHWS6kcOlU3JW8b4atAhNWMAUTdZBxiaMrQsgGYnvbRGDdGng1u6yA43jy0AZBsAZDZD"; // CHANGE ME!
     var session;
@@ -244,6 +238,11 @@ xdescribe('Integration', function() {
     })
 
     it('should authorize user (assuming the access token is valid)', function() {
+
+        spyOn(DateUtils, 'now').andReturn(new Date('2012-03-23T13:59:00.000Z'));
+
+        // First: Should create new session
+
         spyOn(session, 'tryCreateSession').andCallThrough();
 
         var promise1Returned = false;
@@ -252,10 +251,10 @@ xdescribe('Integration', function() {
         expect(session.tryCreateSession.callCount).toEqual(0);
 
         runs(function() {
-            session.isAuthorized({fbUserId: '123456', fbAccessToken: accessToken}).then(function(result) {
+            session.isAuthorized('123456', accessToken).then(function(result) {
                 promise1Result = result;
                 promise1Returned = true;
-            });
+            }, function() {});
         });
 
         waitsFor(function() {
@@ -264,14 +263,16 @@ xdescribe('Integration', function() {
 
         runs(function() {
             expect(session.tryCreateSession.callCount).toEqual(1);
-            expect(promise1Result).toBeTruthy();
+            expect(promise1Result).toBeSession();
         });
+
+        // Second: Should return existing session
 
         var promise2Returned = false;
         var promise2Result;
 
         runs(function() {
-            session.isAuthorized({fbUserId: '123456', fbAccessToken: accessToken}).then(function(result) {
+            session.isAuthorized('123456', accessToken).then(function(result) {
                 promise2Result = result;
                 promise2Returned = true;
             });
@@ -283,10 +284,53 @@ xdescribe('Integration', function() {
 
         runs(function() {
             expect(session.tryCreateSession.callCount).toEqual(1);
-            expect(promise2Result).toBeTruthy();
+            expect(promise2Result).toBeSession();
         });
 
+        // Third: Should create new session because the old has timed out
 
+        var promise3Returned = false;
+        var promise3Result;
+
+        runs(function() {
+            DateUtils.now.andReturn(new Date('2012-03-23T16:59:00.000Z')); // +3 h
+            session.isAuthorized('123456', accessToken).then(function(result) {
+                promise3Result = result;
+                promise3Returned = true;
+            });
+        });
+
+        waitsFor(function() {
+            return promise3Returned;
+        });
+
+        runs(function() {
+            expect(session.tryCreateSession.callCount).toEqual(2);
+            expect(promise3Result).toBeSession();
+        });
+
+        // Forth:Completely wrong access token
+
+        var wrongAccessToken = '12345'; // Wrong access token, old session
+
+        var promise4Returned = false;
+
+        runs(function() {
+            session.isAuthorized('123456', wrongAccessToken).then(function(result) {
+
+            }, function() {
+                promise4Returned = true;
+            });
+        });
+
+        waitsFor(function() {
+            return promise4Returned;
+        });
+
+        runs(function() {
+            expect(session.tryCreateSession.callCount).toEqual(3);
+            expect(promise4Returned).toBeTruthy();
+        });
     });
 
 });
