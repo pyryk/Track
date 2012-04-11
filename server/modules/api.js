@@ -154,44 +154,56 @@ var API = {
     },
 
     getTarget: function(req, res, next) {
-        Mongo.findTargetById(req.params.id).then(function(data) {
-            if(data == null) {
-                return next(new restify.ResourceNotFoundError("Could not find target with ID " + req.params.id));
-            }
+        API.authorize(req).then(function(session) {
+            Mongo.findTargetById(req.params.id).then(function(data) {
+                if(data == null) {
+                    return next(new restify.ResourceNotFoundError("Could not find target with ID " + req.params.id));
+                }
 
-            // Filter
-            var target = API.selectFields(data, ['name', '_id', 'question']);
+                // Filter
+                var target = API.selectFields(data, ['name', '_id', 'question']);
 
-            // Aggregate
-            var aggregatedResults = API.aggregateResults(data.results);
+                // Aggregate
+                var aggregatedResults = API.aggregateResults(data.results);
 
-            if(aggregatedResults) {
-                target.results = aggregatedResults;
-            }
+                if(aggregatedResults) {
+                    target.results = aggregatedResults;
+                }
 
-            res.send(200, {target: target});
+                res.send(200, {target: target});
 
-            return next();
-        }, function(error) {
-            return next(error);
+                return next();
+            }, function(error) {
+                return next(error);
+            });
+        }, function error() {
+            return next(new restify.NotAuthorizedError("Not logged in"));
         });
     },
 
     postTarget: function(req, res, next) {
-        Mongo.createTarget(req.params).then(function(id) {
-            res.send(201, {_id: id});
-            return next();
-        }, function(error) {
-            return next(error);
+        API.authorize(req).then(function(session) {
+            Mongo.createTarget(req.params).then(function(id) {
+                res.send(201, {_id: id});
+                return next();
+            }, function(error) {
+                return next(error);
+            });
+        }, function error() {
+            return next(new restify.NotAuthorizedError("Not logged in"));
         });
     },
 
     postResult: function(req, res, next) {
-        Mongo.addResult(req.params).then(function() {
-            res.send(204, null);
-            return next();
-        }, function(error) {
-            return next(error);
+        API.authorize(req).then(function(session) {
+            Mongo.addResult(req.params).then(function() {
+                res.send(204, null);
+                return next();
+            }, function(error) {
+                return next(error);
+            });
+        }, function error() {
+            return next(new restify.NotAuthorizedError("Not logged in"));
         });
     },
 

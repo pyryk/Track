@@ -3,6 +3,7 @@ var IntegrationHelpers = require('./helpers').Integration;
 var CommonHelpers = require('./helpers').Common;
 var _ = require('underscore');
 var DateUtils = require('../modules/now.js');
+var API = require('../modules/api');
 
 // Initialize server for integration tests
 var confs = {port: 9999, name: "Track API integration test server"};
@@ -104,8 +105,153 @@ describe('Integration test', function() {
         Mongo.loadFixtures();
     });
 
+    describe('Requires authorization', function() {
+
+        var authHeaders;
+
+        beforeEach(function() {
+
+            authHeaders = {'FB-UserId': '123456', 'FB-AccessToken': 'ABCDEFG'};
+
+            // Authorize if FB-UserId: 123456 and FB-AccessToken: 'ABCDEFG'
+            var authorizeSpy = spyOn(API, 'authorize');
+            authorizeSpy.andCallFake(function(){
+                var headers = authorizeSpy.mostRecentCall.args[0].headers;
+                return {then: function(callback, error) {
+                    if(headers['fb-userid'] === '123456' && headers['fb-accesstoken'] === 'ABCDEFG') {
+                        callback();
+                    } else {
+                        error();
+                    }}
+                }
+            });
+        });
+
+        it('GET /target/:id', function() {
+            request = {method: 'GET', path: '/target/12345678901234567890abce', headers: authHeaders};
+            testRequest(request, function(result) {
+                var target = result.body.target;
+
+                expect(result.statusCode).toEqual(200);
+                expect(target._id).toEqual('12345678901234567890abce');
+                expect(target.name).toEqual('T-Talon ruokajono');
+                expect(target.question).toEqual('Oliko paljon jonoa?');
+
+                var isValidTrend = function(val) {
+                    return _.isNumber(val) && val >= -3 && val <= 3;
+                };
+
+                var isPositiveNumber = function(val) {
+                    return _.isNumber(val) && val >= 0 && val <= 60;
+                };
+
+                var isPositiveNumber = function(val) {
+                    return _.isNumber(val) && val >= 0;
+                };
+
+                expect(target.results.now).toMeetObjectRequirements({
+                    pos: isPositiveNumber,
+                    neg: isPositiveNumber,
+                    trend: isValidTrend,
+                    period: isPositiveNumber
+                });
+
+                expect(target.results.alltime).toMeetObjectRequirements({
+                    pos: isPositiveNumber,
+                    neg: isPositiveNumber
+                });
+            });
+        });
+
+        it('GET /target/:id empty result', function() {
+            request = {method: 'GET', path: '/target/12345678901234567890FFFF', headers: authHeaders};
+            testRequest(request, function(result) {
+                expect(result.statusCode).toEqual(404);
+                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find target with ID 12345678901234567890FFFF'})
+            });
+        });
+
+        it('POST /target', function() {
+            var id;
+
+            runs(function() {
+                var body = {
+                    name: "New track target",
+                    question: "Mitä mitä?"
+                };
+
+                request = {method: 'POST', path: '/target', body: body, headers: authHeaders}
+                testRequest(request, function(result) {
+                    expect(result.statusCode).toEqual(201);
+                    expect(result.body._id.length).toEqual(24); // Valid 24 length string
+                    id = result.body._id;
+                });
+            });
+
+            waitsFor(function() {
+                return id;
+            });
+
+            runs(function() {
+                testRequest({method: 'GET', path: '/target/' + id, headers: authHeaders}, function(result) {
+                    expect(result.statusCode).toEqual(200);
+                    expect(result.body.target.name).toEqual("New track target");
+                    expect(result.body.target.question).toEqual("Mitä mitä?");
+                });
+            });
+        });
+
+        it('POST /target/:id/result', function() {
+            var id = '12345678901234567890abce';
+            spyOn(DateUtils, 'now').andReturn(new Date('2012-03-23T13:59:00.000Z'));
+
+            // Guard assertion
+            runs(function() {
+                testRequest({method: 'GET', path: '/target/' + id, headers: authHeaders}, function(result) {
+                    expect(result.statusCode).toEqual(200);
+                    expect(result.body.target.results.alltime.neg).toEqual(7);
+
+                    requestComplete = true;
+                });
+            });
+
+            runs(function() {
+                request = {method: 'POST', path: '/target/' + id + '/result', body: {value: 0}, headers: authHeaders};
+                testRequest(request, function(result) {
+                    expect(result.statusCode).toEqual(204);
+                    expect(result.body).toEqual({});
+
+                    requestComplete = true;
+                });
+            });
+
+            runs(function() {
+                testRequest({method: 'GET', path: '/target/' + id, headers: authHeaders}, function(result) {
+                    expect(result.statusCode).toEqual(200);
+                    expect(result.body.target.results.alltime.neg).toEqual(8);
+                });
+            });
+        });
+
+        afterEach(function() {
+
+            // Test unauthorized request
+            expect(request).toBeDefined();
+
+            request.headers['FB-UserId'] = null;
+            request.headers['FB-AccessToken'] = null;
+
+            testRequest(request, function(result) {
+                expect(result.statusCode).toEqual(403);
+            });
+
+        });
+
+    });
+
     it('GET /targets', function() {
-        testRequest({method: 'GET', path: '/targets'}, function(result) {
+        request = {method: 'GET', path: '/targets'};
+        testRequest(request, function(result) {
             expect(result.statusCode).toEqual(200);
 
             var testRelevance = function(val) {
@@ -131,108 +277,6 @@ describe('Integration test', function() {
             }];
 
             expect(result.body.targets).toMeetTargetArrayRequirements(expectedTargets);
-        });
-    });
-
-    it('GET /target/:id', function() {
-        testRequest({method: 'GET', path: '/target/12345678901234567890abce'}, function(result) {
-            var target = result.body.target;
-
-            expect(result.statusCode).toEqual(200);
-            expect(target._id).toEqual('12345678901234567890abce');
-            expect(target.name).toEqual('T-Talon ruokajono');
-            expect(target.question).toEqual('Oliko paljon jonoa?');
-
-            var isValidTrend = function(val) {
-                return _.isNumber(val) && val >= -3 && val <= 3;
-            };
-
-            var isPositiveNumber = function(val) {
-                return _.isNumber(val) && val >= 0 && val <= 60;
-            };
-
-            var isPositiveNumber = function(val) {
-                return _.isNumber(val) && val >= 0;
-            };
-
-            expect(target.results.now).toMeetObjectRequirements({
-                pos: isPositiveNumber,
-                neg: isPositiveNumber,
-                trend: isValidTrend,
-                period: isPositiveNumber
-            });
-
-            expect(target.results.alltime).toMeetObjectRequirements({
-                pos: isPositiveNumber,
-                neg: isPositiveNumber
-            });
-        });
-    });
-
-    it('GET /target/:id empty result', function() {
-        testRequest({method: 'GET', path: '/target/12345678901234567890FFFF'}, function(result) {
-            expect(result.statusCode).toEqual(404);
-            expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find target with ID 12345678901234567890FFFF'})
-        });
-    });
-
-    it('POST /target', function() {
-        var id;
-
-        runs(function() {
-            var body = {
-                name: "New track target",
-                question: "Mitä mitä?"
-            };
-
-            testRequest({method: 'POST', path: '/target', body: body}, function(result) {
-                expect(result.statusCode).toEqual(201);
-                expect(result.body._id.length).toEqual(24); // Valid 24 length string
-                id = result.body._id;
-            });
-        });
-
-        waitsFor(function() {
-            return id;
-        });
-
-        runs(function() {
-            testRequest({method: 'GET', path: '/target/' + id}, function(result) {
-                expect(result.statusCode).toEqual(200);
-                expect(result.body.target.name).toEqual("New track target");
-                expect(result.body.target.question).toEqual("Mitä mitä?");
-            });
-        });
-    });
-
-    it('POST /target/:id/result', function() {
-        var id = '12345678901234567890abce';
-        spyOn(DateUtils, 'now').andReturn(new Date('2012-03-23T13:59:00.000Z'));
-
-        // Guard assertion
-        runs(function() {
-            testRequest({method: 'GET', path: '/target/' + id}, function(result) {
-                expect(result.statusCode).toEqual(200);
-                expect(result.body.target.results.alltime.neg).toEqual(7);
-
-                requestComplete = true;
-            });
-        });
-
-        runs(function() {
-            testRequest({method: 'POST', path: '/target/' + id + '/result', body: {value: 0}}, function(result) {
-                expect(result.statusCode).toEqual(204);
-                expect(result.body).toEqual({});
-
-                requestComplete = true;
-            });
-        });
-
-        runs(function() {
-            testRequest({method: 'GET', path: '/target/' + id}, function(result) {
-                expect(result.statusCode).toEqual(200);
-                expect(result.body.target.results.alltime.neg).toEqual(8);
-            });
         });
     });
 

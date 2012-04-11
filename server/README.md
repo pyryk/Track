@@ -20,7 +20,7 @@ Status (if authenticaion fails): 403 Forbidden
 
 ### GET /targets - Lists all targets
 
-Requires authentication: Yes
+Requires authentication: No
 
 GET params: lat, lon, i.e. GET /targets?lat=60.16981200000001&lon=24.93824
 

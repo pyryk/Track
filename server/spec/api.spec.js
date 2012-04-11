@@ -146,104 +146,112 @@ describe('API', function() {
 
     describe('API methods', function() {
 
-        describe('getTargets', function() {
+        describe('Run without login', function() {
 
-            it('should return list of targets', function() {
-                spyOnPromise(Mongo, 'findAllTargets').andCallSuccess([
-                    {name: "T-Talon ruokajono", _id: "accab1234", question: 'Oliko paljon jonoa?'},
-                    {name: "Putous", _id: "accab12345", question: 'Millainen fiilis sinulla on tällä hetkellä?'}
-                ]);
+            beforeEach(function() {
+                spyOnPromise(API, 'authorize').andCallSuccess();
+            });
 
-                spyOn(API.rel, 'calculate').andCallFake(function(targets) {
-                    var i = 0;
-                    targets.forEach(function(target) {
-                        target.relevance = i++;
+            describe('getTargets', function() {
+
+                it('should return list of targets', function() {
+                    spyOnPromise(Mongo, 'findAllTargets').andCallSuccess([
+                        {name: "T-Talon ruokajono", _id: "accab1234", question: 'Oliko paljon jonoa?'},
+                        {name: "Putous", _id: "accab12345", question: 'Millainen fiilis sinulla on tällä hetkellä?'}
+                    ]);
+
+                    spyOn(API.rel, 'calculate').andCallFake(function(targets) {
+                        var i = 0;
+                        targets.forEach(function(target) {
+                            target.relevance = i++;
+                        });
+                    });
+
+                    API.getTargets(req, res, next);
+
+                    expectBody(res).toEqual({
+                        targets: [
+                            {name: "Putous", _id: "accab12345", question: 'Millainen fiilis sinulla on tällä hetkellä?', relevance: 1},
+                            {name: "T-Talon ruokajono", _id: "accab1234", question: 'Oliko paljon jonoa?', relevance: 0}
+                        ]
+                    });
+                    expectStatus(res).toEqual(200);
+                });
+
+                itShouldCallNextWithError('getTargets', 'findAllTargets');
+            });
+
+            describe('getTarget', function() {
+
+                it('should return details of a target', function() {
+                    spyOnPromise(Mongo, 'findTargetById').andCallSuccess(
+                        {name: "T-Talon ruokajono", _id: "accab1234", question: 'Kauanko jonotit?'}
+                    );
+                    req.params.id = 'accab1234';
+
+                    API.getTarget(req, res, next);
+
+                    expectBody(res).toEqual({
+                        target: {name: "T-Talon ruokajono", _id: "accab1234", question: 'Kauanko jonotit?'}
+                    });
+                    expectStatus(res).toEqual(200);
+                });
+
+                itShouldCallNextWithError('getTarget', 'findTargetById');
+
+                it('should return 404 if no results for ID found', function() {
+                    spyOnPromise(Mongo, 'findTargetById').andCallSuccess(null);
+                    req.params.id = 'accab1234';
+
+                    API.getTarget(req, res, next);
+
+                    expect(next).toHaveBeenCalledWithError({
+                        status: 404,
+                        code: "ResourceNotFound",
+                        message: "Could not find target with ID accab1234"
                     });
                 });
 
-                API.getTargets(req, res, next);
-
-                expectBody(res).toEqual({
-                    targets: [
-                        {name: "Putous", _id: "accab12345", question: 'Millainen fiilis sinulla on tällä hetkellä?', relevance: 1},
-                        {name: "T-Talon ruokajono", _id: "accab1234", question: 'Oliko paljon jonoa?', relevance: 0}
-                    ]
-                });
-                expectStatus(res).toEqual(200);
+                itShouldCallNextWithError('getTarget', 'findTargetById');
             });
 
-            itShouldCallNextWithError('getTargets', 'findAllTargets');
-        });
+            describe('postTarget', function() {
 
-        describe('getTarget', function() {
+                it('should return details of a target', function() {
+                    spyOnPromise(Mongo, 'createTarget').andCallSuccess('12345678901234567890abce');
+                    req.params.name = 'New tracking target';
+                    req.params.question = 'How much time?';
 
-            it('should return details of a target', function() {
-                spyOnPromise(Mongo, 'findTargetById').andCallSuccess(
-                    {name: "T-Talon ruokajono", _id: "accab1234", question: 'Kauanko jonotit?'}
-                );
-                req.params.id = 'accab1234';
+                    API.postTarget(req, res, next);
 
-                API.getTarget(req, res, next);
-
-                expectBody(res).toEqual({
-                    target: {name: "T-Talon ruokajono", _id: "accab1234", question: 'Kauanko jonotit?'}
+                    expect(Mongo.createTarget).toHaveBeenCalledWith({
+                        name: 'New tracking target',
+                        question: 'How much time?'
+                    });
+                    expectStatus(res).toEqual(201);
+                    expectBody(res).toEqual({_id: '12345678901234567890abce'});
                 });
-                expectStatus(res).toEqual(200);
+
+                itShouldCallNextWithError('postTarget', 'createTarget');
             });
 
-            itShouldCallNextWithError('getTarget', 'findTargetById');
+            describe('postResult', function() {
+                it('should post result of a tracking', function() {
 
-            it('should return 404 if no results for ID found', function() {
-                spyOnPromise(Mongo, 'findTargetById').andCallSuccess(null);
-                req.params.id = 'accab1234';
+                    spyOnPromise(Mongo, 'addResult').andCallSuccess();
+                    req.params.id = '12345678901234567890abce';
+                    req.params.value = 1;
 
-                API.getTarget(req, res, next);
+                    API.postResult(req, res, next);
 
-                expect(next).toHaveBeenCalledWithError({
-                    status: 404,
-                    code: "ResourceNotFound",
-                    message: "Could not find target with ID accab1234"
-                });
+                    expect(Mongo.addResult).toHaveBeenCalledWith({
+                        id: '12345678901234567890abce',
+                        value: 1
+                    });
+                    expectStatus(res).toEqual(204);
+                    expectBody(res).toEqual();
+                })
             });
-
-            itShouldCallNextWithError('getTarget', 'findTargetById');
-        });
-
-        describe('postTarget', function() {
-
-            it('should return details of a target', function() {
-                spyOnPromise(Mongo, 'createTarget').andCallSuccess('12345678901234567890abce');
-                req.params.name = 'New tracking target';
-                req.params.question = 'How much time?';
-
-                API.postTarget(req, res, next);
-
-                expect(Mongo.createTarget).toHaveBeenCalledWith({
-                    name: 'New tracking target',
-                    question: 'How much time?'
-                });
-                expectStatus(res).toEqual(201);
-                expectBody(res).toEqual({_id: '12345678901234567890abce'});
-            });
-
-            itShouldCallNextWithError('postTarget', 'createTarget');
-        });
-
-        describe('postResult', function() {
-            it('should post result of a tracking', function() {
-                spyOnPromise(Mongo, 'addResult').andCallSuccess();
-                req.params.id = '12345678901234567890abce';
-                req.params.value = 1;
-
-                API.postResult(req, res, next);
-
-                expect(Mongo.addResult).toHaveBeenCalledWith({
-                    id: '12345678901234567890abce',
-                    value: 1
-                });
-                expectStatus(res).toEqual(204);
-                expectBody(res).toEqual();
-            })
         });
 
         describe('getLogin', function() {
