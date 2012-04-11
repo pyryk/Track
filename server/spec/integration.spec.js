@@ -286,7 +286,7 @@ describe('Integration test', function() {
         });
     });
 
-    it('GET /login success', function() {
+    xit('GET /login success', function() {
         // The access token has to be changed if you want this test to pass!
         var accessToken = 'AAACXZBsWiZB1ABAPt3gHOdSumjT2MR7MwZACmyWuRkELxGzNeKxM4mNsNrQuTgT7ejady5xwp7YuI71uT2W5m3bZBe0zFmPtrvtE09ojegZDZD'; // CHANGE ME!
 
