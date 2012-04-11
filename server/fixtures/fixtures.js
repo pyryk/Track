@@ -27,7 +27,7 @@ module.exports = {
         _id: '12345678901234567890abcd',
         question: 'Millainen fiilis sinulla on tällä hetkellä?',
         results : [
-        { value : 1, timestamp : new Date('2012-03-23T08:03:48.223Z') },
+        { value : 1, timestamp : new Date('2012-03-23T08:03:48.223Z'), fbUserId: '123456'},
         { value : 1, timestamp : new Date('2012-03-23T08:02:48.223Z') },
         { value : 1, timestamp : new Date('2012-03-23T08:02:28.223Z') },
         { value : 0, timestamp : new Date('2012-03-23T08:01:48.223Z') },

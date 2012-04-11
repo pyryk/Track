@@ -1,6 +1,7 @@
 var Mongo = require('../modules/mongo');
 var IntegrationHelpers = require('./helpers').Integration;
 var CommonHelpers = require('./helpers').Common;
+var MongoHelpers = require('./helpers').Mongo;
 var _ = require('underscore');
 var DateUtils = require('../modules/now.js');
 var API = require('../modules/api');
@@ -15,6 +16,7 @@ var testRequest = function(opts, callback) {
 };
 var isTimestamp = IntegrationHelpers.isTimestamp;
 var spyOnPromise = CommonHelpers.spyOnPromise;
+var testDB = MongoHelpers.testDB;
 
 // Initialize Mongo for integration tests
 Mongo.init(Mongo.profiles.test);
@@ -119,7 +121,7 @@ describe('Integration test', function() {
                 var headers = authorizeSpy.mostRecentCall.args[0].headers;
                 return {then: function(callback, error) {
                     if(headers['fb-userid'] === '123456' && headers['fb-accesstoken'] === 'ABCDEFG') {
-                        callback();
+                        callback({fbUserId: '123456', fbAccessToken: 'ABCDEFG'});
                     } else {
                         error();
                     }}
@@ -229,6 +231,13 @@ describe('Integration test', function() {
                 testRequest({method: 'GET', path: '/target/' + id, headers: authHeaders}, function(result) {
                     expect(result.statusCode).toEqual(200);
                     expect(result.body.target.results.alltime.neg).toEqual(8);
+                });
+            });
+
+            runs(function() {
+                // Should save the user id
+                testDB(Mongo.countTargetsUserTracked('123456'), function(count) {
+                    expect(count).toEqual(2);
                 });
             });
         });

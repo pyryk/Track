@@ -49,14 +49,37 @@ describe('Mongo', function() {
         it('should add a new result entry to the tracking target', function() {
             testDB(Mongo.addResult({
                 _id: '12345678901234567890abce',
-                value: 17
+                value: 17,
+                fbUserId: '123456'
             }), function() {
                 testDB(Mongo.findTargetById('12345678901234567890abce'), function(dbResult) {
                     expect(dbResult.results.length).toEqual(17);
-                    expect(dbResult.results[16].value).toEqual(17);
+                    var result = dbResult.results[16];
+                    expect(result.value).toEqual(17);
+                    expect(result.fbUserId).toEqual('123456');
                 });
             });
-        })
-    })
+        });
+
+        it('should be possible to add new entry without user', function() {
+            testDB(Mongo.addResult({
+                _id: '12345678901234567890abce',
+                value: 19
+            }), function() {
+                testDB(Mongo.findTargetById('12345678901234567890abce'), function(dbResult) {
+                    expect(dbResult.results.length).toEqual(17);
+                    expect(dbResult.results[16].value).toEqual(19);
+                });
+            });
+        });
+    });
+
+    describe('countTargetsUserTracked', function() {
+        it('should return target count for given user', function() {
+            testDB(Mongo.countTargetsUserTracked('123456'), function(count) {
+                expect(count).toEqual(1);
+            });
+        });
+    });
 
 });

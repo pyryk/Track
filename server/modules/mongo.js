@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Promise = require('node-promise').Promise;
 var Fixtures = require('../fixtures/fixtures');
 var DateUtils = require('../modules/now.js');
+var _ = require('underscore');
 
 var Mongo = {
 
@@ -19,8 +20,9 @@ var Mongo = {
             name: String,
             question: String,
             results: [{
-                timestamp: Date,
-                value: Number
+                timestamp: Date
+                , value: Number
+                , fbUserId: String
             }]
         });
 
@@ -80,6 +82,22 @@ var Mongo = {
         return promise;
     },
 
+    countTargetsUserTracked: function(fbUserId) {
+        var promise = Promise();
+
+        this.Target.find({'results.fbUserId': fbUserId}, function(error, data) {
+            var length = 0;
+            if(_.isArray(data)) {
+                length = data.length;
+            }
+
+            this.resolvePromise(error, length, promise);
+
+        }.bind(this));
+
+        return promise;
+    },
+
     createTarget: function(params) {
         var promise = Promise();
 
@@ -103,7 +121,12 @@ var Mongo = {
                 target.results = [];
             }
 
-            target.results.push({timestamp: DateUtils.now(), value: params.value});
+            var result = {timestamp: DateUtils.now(), value: params.value};
+            if(params.fbUserId) {
+                result.fbUserId = params.fbUserId;
+            }
+
+            target.results.push(result);
 
             target.save(function(error) {
                 Mongo.resolvePromise(error, promise);

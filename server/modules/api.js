@@ -196,7 +196,9 @@ var API = {
 
     postResult: function(req, res, next) {
         API.authorize(req).then(function(session) {
-            Mongo.addResult(req.params).then(function() {
+            var result = {_id: req.params._id, value: req.params.value, fbUserId: session.fbUserId};
+
+            Mongo.addResult(result).then(function() {
                 res.send(204, null);
                 return next();
             }, function(error) {

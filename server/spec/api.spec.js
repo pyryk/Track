@@ -149,7 +149,7 @@ describe('API', function() {
         describe('Run without login', function() {
 
             beforeEach(function() {
-                spyOnPromise(API, 'authorize').andCallSuccess();
+                spyOnPromise(API, 'authorize').andCallSuccess({fbUserId: '123456'});
             });
 
             describe('getTargets', function() {
@@ -239,14 +239,15 @@ describe('API', function() {
                 it('should post result of a tracking', function() {
 
                     spyOnPromise(Mongo, 'addResult').andCallSuccess();
-                    req.params.id = '12345678901234567890abce';
+                    req.params._id = '12345678901234567890abce';
                     req.params.value = 1;
 
                     API.postResult(req, res, next);
 
                     expect(Mongo.addResult).toHaveBeenCalledWith({
-                        id: '12345678901234567890abce',
-                        value: 1
+                        _id: '12345678901234567890abce',
+                        value: 1,
+                        fbUserId: '123456'
                     });
                     expectStatus(res).toEqual(204);
                     expectBody(res).toEqual();
