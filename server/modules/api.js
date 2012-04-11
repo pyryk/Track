@@ -30,8 +30,8 @@ var API = {
     authorize: function(req) {
         var promise = new Promise();
 
-        var fbUserId = req.headers.fbuserid;
-        var fbAccessToken = req.headers.fbaccesstoken;
+        var fbUserId = req.headers['fb-userid'];
+        var fbAccessToken = req.headers['fb-accesstoken'];
 
         API.session.isAuthorized(fbUserId, fbAccessToken).then(function(userSession) {
             var authorization = API.selectFields(userSession, ['fbUserId', 'sessionStarted']);

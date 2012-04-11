@@ -242,13 +242,13 @@ describe('Integration test', function() {
         });
     });
 
-    xit('GET /login success', function() {
+    it('GET /login success', function() {
         // The access token has to be changed if you want this test to pass!
-        var accessToken = 'AAACXZBsWiZB1ABANUjZC6ltNPJ9ZBNM6T7PtZBP1jim7QHR6Fm9D4X6PCSm78BAyC24UbidaLLxVTLMLw28I37IaAFzh2ORcw1WtGJAZBEEwZDZD'; // CHANGE ME!
+        var accessToken = 'AAACXZBsWiZB1ABAPt3gHOdSumjT2MR7MwZACmyWuRkELxGzNeKxM4mNsNrQuTgT7ejady5xwp7YuI71uT2W5m3bZBe0zFmPtrvtE09ojegZDZD'; // CHANGE ME!
 
         spyOn(DateUtils, 'now').andReturn(new Date('2012-03-23T13:59:00.000Z'));
 
-        testRequest({method: 'GET', path: '/login', headers: {fbUserId: '123456', fbAccessToken: accessToken}}, function(result) {
+        testRequest({method: 'GET', path: '/login', headers: {'FB-UserId': '123456', 'FB-AccessToken': accessToken}}, function(result) {
             expect(result.statusCode).toEqual(200);
             expect(result.body.fbUserId).toEqual('123456');
             expect(result.body.sessionStarted).toEqual('2012-03-23T13:59:00.000Z');
