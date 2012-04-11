@@ -20,11 +20,26 @@ var API = {
         this.session.sessionStore = new SessionStore;
         this.session.fbClient = new FBClient();
 
+        // Headers
+        server.use(this.defaultHeaders);
+
         server.get("/targets", this.getTargets);
         server.get("/target/:id", this.getTarget);
         server.post("/target", this.postTarget);
         server.post("/target/:_id/result", this.postResult);
         server.get("/login", this.getLogin);
+    },
+
+    defaultHeaders: function(req, res, next) {
+        var extraAllowedHeaders = 'FB-UserId, FB-AccessToken';
+
+        var allowedHeaders = res.headers['access-control-allow-headers'] || "";
+
+        allowedHeaders += (allowedHeaders.length ? ', ' : '') + extraAllowedHeaders;
+
+        res.header('Access-Control-Allow-Headers', allowedHeaders);
+
+        next();
     },
 
     authorize: function(req) {
