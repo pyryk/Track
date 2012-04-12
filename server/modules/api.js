@@ -4,6 +4,7 @@ var Mongo = require('./mongo.js');
 var Relevance = require('./relevance');
 var _ = require('underscore');
 var restify = require('restify');
+var Response = require('restify').Response;
 var Session = require('./session').Session;
 var FBClient = require('./session').FBClient;
 var SessionStore = require('./session').SessionStore;
@@ -21,7 +22,7 @@ var API = {
         this.session.fbClient = new FBClient();
 
         // Headers
-        server.use(this.defaultHeaders);
+        this.initializeHeaders();
 
         server.get("/targets", this.getTargets);
         server.get("/target/:id", this.getTarget);
@@ -30,16 +31,27 @@ var API = {
         server.get("/login", this.getLogin);
     },
 
-    defaultHeaders: function(req, res, next) {
-        var extraAllowedHeaders = 'FB-UserId, FB-AccessToken';
+    initializeHeaders: function() {
+        API.defaultHeaders = Response.prototype.defaultHeaders;
+        var extendHeaders = this.extendHeaders;
+        restify.defaultResponseHeaders = function(data) {
+            // 'this' is response object
+            var res = this;
 
+            // Run the node-restify default method
+            API.defaultHeaders.apply(res, data);
+
+            // Extend with own headers
+            extendHeaders(res);
+        }
+    },
+
+    extendHeaders: function(res) {
+        var newAllowedHeaders = 'FB-UserId, FB-AccessToken';
         var allowedHeaders = res.headers['access-control-allow-headers'] || "";
-
-        allowedHeaders += (allowedHeaders.length ? ', ' : '') + extraAllowedHeaders;
+        allowedHeaders += (allowedHeaders.length ? ', ' : '') + newAllowedHeaders;
 
         res.header('Access-Control-Allow-Headers', allowedHeaders);
-
-        next();
     },
 
     authorize: function(req) {

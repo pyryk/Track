@@ -291,7 +291,7 @@ describe('Integration test', function() {
 
     it('Should have FB-UserID and FB-AccessToken in Access-Control-Allow-Headers', function() {
         // Testing with get targets
-        testRequest({method: 'GET', path: '/targets'}, function(result) {
+        testRequest({method: 'OPTIONS', path: '/targets'}, function(result) {
             expect(result.statusCode).toEqual(200);
             expect(result.headers['access-control-allow-headers']).toMatch('FB-UserId, FB-AccessToken');
         });
