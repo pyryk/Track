@@ -1,17 +1,24 @@
 
 var Relevance = function() {
     this.maxScore = 10;
-    this.strategies = [new HourlyPopularity()];
+
+    var hourly = new HourlyPopularity();
+    hourly.weight = 0.5;
+
+    var favorite = new Favorite();
+    favorite.weight = 0.5;
+
+    this.strategies = [hourly, favorite];
 };
 
-Relevance.prototype.calculate = function(targets) {
+Relevance.prototype.calculate = function(targets, fbUserId) {
 
     var strategies = this.strategies;
     var maxScore = this.maxScore;
 
     strategies.forEach(function(strategy) {
         if(strategy.analyzeTargetsStarted) {
-            strategy.analyzeTargetsStarted(targets);
+            strategy.analyzeTargetsStarted(targets, fbUserId);
         }
     });
 
@@ -19,7 +26,7 @@ Relevance.prototype.calculate = function(targets) {
     targets.forEach(function(target) {
         strategies.forEach(function(strategy) {
             if(strategy.analyzeTarget) {
-                strategy.analyzeTarget(target, targets);
+                strategy.analyzeTarget(target, targets, fbUserId);
             }
         });
 
@@ -27,21 +34,21 @@ Relevance.prototype.calculate = function(targets) {
 
         strategies.forEach(function(strategy) {
             if(strategy.analyzeResultsStarted) {
-                strategy.analyzeResultsStarted(results, target, targets);
+                strategy.analyzeResultsStarted(results, target, targets, fbUserId);
             }
         });
 
         results.forEach(function(result) {
             strategies.forEach(function(strategy) {
                 if(strategy.analyzeResult) {
-                    strategy.analyzeResult(result, results, target, targets);
+                    strategy.analyzeResult(result, results, target, targets, fbUserId);
                 }
             });
         });
 
         strategies.forEach(function(strategy) {
             if(strategy.analyzeResultsFinished) {
-                strategy.analyzeResultsFinished(results, target, targets);
+                strategy.analyzeResultsFinished(results, target, targets, fbUserId);
             }
         });
     });
@@ -61,13 +68,20 @@ Relevance.prototype.calculate = function(targets) {
     // Calculate and set
     targets.forEach(function(target) {
         var totalRelevance = 0;
+        var relevanceFrom = [];
         strategies.forEach(function(strategy) {
             if(strategy.calculateRelevance) {
-                totalRelevance += strategy.calculateRelevance(target, targets) * maxScore * strategy.weight;
+                var points = strategy.calculateRelevance(target, targets) * maxScore * strategy.weight;
+                var result = {};
+                result[strategy.name] = points;
+
+                relevanceFrom.push(result);
+                totalRelevance += points;
             }
         });
 
         target.relevance = totalRelevance;
+        target.relevanceFrom = relevanceFrom; // DEBUGGING: Relevance from is only for debugging. Not used normally.
     });
 
     strategies.forEach(function(strategy) {
@@ -79,6 +93,7 @@ Relevance.prototype.calculate = function(targets) {
 
 var OverallPopularity = function (){
     this.weight = 1;
+    this.name = "Overall popularity";
 };
 
 OverallPopularity.prototype.analyzeTargetsStarted = function() {
@@ -106,6 +121,7 @@ OverallPopularity.prototype.calculateRelevance = function(target, maxScore) {
 
 var HourlyPopularity = function() {
     this.weight = 1;
+    this.name = "Hourly popularity";
 }
 
 HourlyPopularity.prototype.analyzeTargetsStarted = function() {
@@ -157,12 +173,67 @@ HourlyPopularity.prototype.calculateRelevance = function(target, targets) {
         return 0;
     }
 
+    console.log('Hourly: ', (target.unscaledHourlyRelevance - this.minValue) / delta);
+
     return (target.unscaledHourlyRelevance - this.minValue) / delta;
 }
 
+var Favorite = function() {
+    this.weight = 1;
+    this.responseCounts = [];
+    this.points = {}; // key: count, value: the point value
+
+    this.name = "User's favorite";
+};
+
+Favorite.fn = Favorite.prototype;
+
+Favorite.fn.analyzeTarget = function(target) {
+    target.userResponded = 0;
+};
+
+Favorite.fn.analyzeResult = function(result, results, target, targets, fbUserId) {
+    if(result.fbUserId && fbUserId && result.fbUserId === fbUserId) {
+        target.userResponded += 1;
+    }
+};
+
+Favorite.fn.analyzeResultsFinished = function(results, target) {
+    if(target.userResponded > 0) {
+        this.responseCounts.push(target.userResponded);
+    }
+};
+
+Favorite.fn.analyzeTargetsFinished = function() {
+    var counts = this.responseCounts;
+    counts.sort(function(a, b) {
+        return a - b;
+    });
+
+    var len = counts.length;
+    var incr = 1 / len; // Point increase
+
+    for(var i = 0, p = incr; i < len; i++, p += incr) {
+        this.points[counts[i]] = p;
+    }
+};
+
+Favorite.fn.calculateRelevance = function(target) {
+    if(target.userResponded === 0) {
+        return 0;
+    }
+
+    var points = this.points[target.userResponded];
+
+    console.log('Favorite, points and responses: ', points, target.userResponded);
+
+    return points;
+};
+
 Relevance.Strategy = {
     OverallPopularity: OverallPopularity,
-    HourlyPopularity: HourlyPopularity
+    HourlyPopularity: HourlyPopularity,
+    Favorite: Favorite
 }
 
 module.exports = Relevance;

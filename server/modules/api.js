@@ -72,14 +72,21 @@ var API = {
 
     getTargets: function(req, res, next) {
         var rel = API.rel;
+        var debugging = req.headers['debug'] === 'true';
 
         Mongo.findAllTargets().then(function(data) {
             var targets = data;
             rel.calculate(targets);
 
             // Filter
+            var selectedFields = ['name', '_id', 'question', 'relevance'];
+
+            if(debugging) {
+                selectedFields.push('relevanceFrom');
+            }
+
             targets = data.map(function(target) {
-                return API.selectFields(target, ['name', '_id', 'question', 'relevance']);
+                return API.selectFields(target, selectedFields);
             });
 
             // Sort

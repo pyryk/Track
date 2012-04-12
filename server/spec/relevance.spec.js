@@ -1,11 +1,13 @@
 var Relevance = require('../modules/relevance.js');
 var DateUtils = require('../modules/now.js');
+var _ = require('underscore');
 require('./helpers.js');
 
 describe('Relevance', function() {
-    var rel = new Relevance();
+    var rel;
 
     beforeEach(function() {
+        rel = new Relevance();
         rel.maxScore = 10;
     });
 
@@ -156,7 +158,48 @@ describe('Relevance', function() {
             rel.calculate([emptyTarget]);
             expect(emptyTarget.relevance).toBeGreaterThan(-0.1);
             expect(emptyTarget.relevance).toBeLessThan(10.1);
-        })
+        });
+    });
+
+    describe('Favorites strategy', function() {
+
+        beforeEach(function() {
+            var favorite = new Relevance.Strategy.Favorite();
+            favorite.weight = 1;
+            rel.strategies = [favorite];
+        });
+
+        it('should calculate relevancy based on tracking activity', function() {
+            var fbUserId = '123456';
+
+            function createTarget(opts) {
+                var target = {results: []};
+
+                _(opts.num).times(function() {
+                    target.results.push({fbUserId: opts.fbUserId});
+                });
+
+                return target;
+            }
+
+            var target1 = createTarget({fbUserId: '123456', num: 3});
+            var target2 = createTarget({fbUserId: '123456', num: 8});
+            var target3 = createTarget({fbUserId: '123456', num: 1});
+            var target4 = createTarget({fbUserId: '123456', num: 2});
+            var target5 = createTarget({fbUserId: '123456', num: 0});
+            var target6 = createTarget({fbUserId: '123456', num: 0});
+
+            var targets = [target1, target2, target3, target4, target5, target6];
+
+            rel.calculate(targets, fbUserId);
+
+            expect(target1.relevance).toEqual(7.5);
+            expect(target2.relevance).toEqual(10);
+            expect(target3.relevance).toEqual(2.5);
+            expect(target4.relevance).toEqual(5);
+            expect(target5.relevance).toEqual(0);
+            expect(target6.relevance).toEqual(0);
+        });
 
     });
 
