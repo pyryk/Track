@@ -1,6 +1,5 @@
 var Mongo = require('../modules/mongo');
 var API = require('../modules/api');
-var Relevance = require('../modules/relevance');
 var APIHelpers = require('./helpers').API;
 var CommonHelpers = require('./helpers').Common;
 
@@ -141,7 +140,6 @@ describe('API', function() {
             });
 
         });
-
     });
 
     describe('API methods', function() {
@@ -149,7 +147,7 @@ describe('API', function() {
         describe('Run without login', function() {
 
             beforeEach(function() {
-                spyOnPromise(API, 'authorize').andCallSuccess({fbUserId: '123456'});
+                // spyOn(API, 'isAuthorized').andReturn(true);
             });
 
             describe('getTargets', function() {
@@ -241,6 +239,7 @@ describe('API', function() {
                     spyOnPromise(Mongo, 'addResult').andCallSuccess();
                     req.params._id = '12345678901234567890abce';
                     req.params.value = 1;
+                    req.authorization = {fbUserId: '123456'};
 
                     API.postResult(req, res, next);
 
@@ -255,9 +254,22 @@ describe('API', function() {
             });
         });
 
+        describe('auth', function() {
+            it('should authorize the user and set headers', function() {
+                spyOnPromise(API.session, 'isAuthorized').andCallSuccess({fbUserId: '123456', fbAccessToken: 'ABCDEFG', sessionStarted: new Date('2012-03-23T13:39:00.000Z')});
+
+                next.andCallFake(function() {
+                    expect(req.authorization).toBeDefined();
+                    expect(req.authorization.fbUserId).toEqual('123456');
+                });
+
+                API.preAuth(req, res, next);
+            })
+        });
+
         describe('getLogin', function() {
             it('should return session and status 200 if logged in', function() {
-                spyOnPromise(API, 'authorize').andCallSuccess({fbUserId: '123456', fbAccessToken: 'ABCDEFG', sessionStarted: new Date('2012-03-23T13:39:00.000Z')});
+                req.authorization = {fbUserId: '123456', sessionStarted: new Date('2012-03-23T13:39:00.000Z')};
 
                 API.getLogin(req, res, next);
 
@@ -265,18 +277,6 @@ describe('API', function() {
                 expectBody(res).toEqual({
                     fbUserId: '123456',
                     sessionStarted: new Date('2012-03-23T13:39:00.000Z')
-                });
-            });
-
-            it('should return status 403 if not logged in', function() {
-                spyOnPromise(API, 'authorize').andCallError();
-
-                API.getLogin(req, res, next);
-
-                expect(next).toHaveBeenCalledWithError({
-                    status: 403,
-                    code: "NotAuthorized",
-                    message: "Not logged in"
                 });
             });
         });

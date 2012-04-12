@@ -173,8 +173,6 @@ HourlyPopularity.prototype.calculateRelevance = function(target, targets) {
         return 0;
     }
 
-    console.log('Hourly: ', (target.unscaledHourlyRelevance - this.minValue) / delta);
-
     return (target.unscaledHourlyRelevance - this.minValue) / delta;
 }
 
@@ -224,8 +222,6 @@ Favorite.fn.calculateRelevance = function(target) {
     }
 
     var points = this.points[target.userResponded];
-
-    console.log('Favorite, points and responses: ', points, target.userResponded);
 
     return points;
 };

@@ -18,17 +18,41 @@ var API = {
     session: new Session(),
 
     start: function(server) {
+        this.server = server;
         this.session.sessionStore = new SessionStore;
         this.session.fbClient = new FBClient();
 
         // Headers
         this.initializeHeaders();
 
-        server.get("/targets", this.getTargets);
-        server.get("/target/:id", this.getTarget);
-        server.post("/target", this.postTarget);
-        server.post("/target/:_id/result", this.postResult);
-        server.get("/login", this.getLogin);
+        // Put the handler inside closure to allow mocking
+        server.use(function(req, res, next) {
+            this.preAuth(req, res, next);
+        }.bind(this));
+
+        // A little tweak to allow optional auth per route
+        ['del', 'get', 'head', 'post', 'put'].forEach(function(method) {
+            this[method] = function(path, handler, requireAuth) {
+                this.server[method](path, function(req, res, next) {
+                    this.authorize(req, res, next, handler, requireAuth);
+                }.bind(this));
+            }
+        }.bind(this));
+
+        this.get("/targets", this.getTargets, false);
+        this.get("/target/:id", this.getTarget, true);
+        this.post("/target", this.postTarget, true);
+        this.post("/target/:_id/result", this.postResult, true);
+        this.get("/login", this.getLogin, true);
+    },
+
+    authorize: function(req, res, next, handler, requireAuth) {
+        if(requireAuth) {
+            if(!req.authorization || !req.authorization.fbUserId) {
+                return next(new restify.NotAuthorizedError("Not logged in"));
+            }
+        }
+        handler(req, res, next);
     },
 
     initializeHeaders: function() {
@@ -54,20 +78,17 @@ var API = {
         res.header('Access-Control-Allow-Headers', allowedHeaders);
     },
 
-    authorize: function(req) {
-        var promise = new Promise();
-
+    preAuth: function(req, res, next) {
         var fbUserId = req.headers['fb-userid'];
         var fbAccessToken = req.headers['fb-accesstoken'];
 
         API.session.isAuthorized(fbUserId, fbAccessToken).then(function(userSession) {
             var authorization = API.selectFields(userSession, ['fbUserId', 'sessionStarted']);
-            promise.resolve(authorization);
+            req.authorization = authorization;
+            return next();
         }, function() {
-            promise.reject();
+            return next();
         });
-
-        return promise;
     },
 
     getTargets: function(req, res, next) {
@@ -109,7 +130,6 @@ var API = {
     },
 
     aggregateResults: function(results) {
-
         if(!_.isArray(results)) {
             return null;
         }
@@ -188,70 +208,54 @@ var API = {
     },
 
     getTarget: function(req, res, next) {
-        API.authorize(req).then(function(session) {
-            Mongo.findTargetById(req.params.id).then(function(data) {
-                if(data == null) {
-                    return next(new restify.ResourceNotFoundError("Could not find target with ID " + req.params.id));
-                }
+        Mongo.findTargetById(req.params.id).then(function(data) {
+            if(data == null) {
+                return next(new restify.ResourceNotFoundError("Could not find target with ID " + req.params.id));
+            }
 
-                // Filter
-                var target = API.selectFields(data, ['name', '_id', 'question']);
+            // Filter
+            var target = API.selectFields(data, ['name', '_id', 'question']);
 
-                // Aggregate
-                var aggregatedResults = API.aggregateResults(data.results);
+            // Aggregate
+            var aggregatedResults = API.aggregateResults(data.results);
 
-                if(aggregatedResults) {
-                    target.results = aggregatedResults;
-                }
+            if(aggregatedResults) {
+                target.results = aggregatedResults;
+            }
 
-                res.send(200, {target: target});
+            res.send(200, {target: target});
 
-                return next();
-            }, function(error) {
-                return next(error);
-            });
-        }, function error() {
-            return next(new restify.NotAuthorizedError("Not logged in"));
+            return next();
+        }, function(error) {
+            return next(error);
         });
     },
 
     postTarget: function(req, res, next) {
-        API.authorize(req).then(function(session) {
-            Mongo.createTarget(req.params).then(function(id) {
-                res.send(201, {_id: id});
-                return next();
-            }, function(error) {
-                return next(error);
-            });
-        }, function error() {
-            return next(new restify.NotAuthorizedError("Not logged in"));
+        Mongo.createTarget(req.params).then(function(id) {
+            res.send(201, {_id: id});
+            return next();
+        }, function(error) {
+            return next(error);
         });
     },
 
     postResult: function(req, res, next) {
-        API.authorize(req).then(function(session) {
-            var result = {_id: req.params._id, value: req.params.value, fbUserId: session.fbUserId};
+        var result = {_id: req.params._id, value: req.params.value, fbUserId: req.authorization.fbUserId};
 
-            Mongo.addResult(result).then(function() {
-                res.send(204, null);
-                return next();
-            }, function(error) {
-                return next(error);
-            });
-        }, function error() {
-            return next(new restify.NotAuthorizedError("Not logged in"));
+        Mongo.addResult(result).then(function() {
+            res.send(204, null);
+            return next();
+        }, function(error) {
+            return next(error);
         });
     },
 
     getLogin: function(req, res, next) {
-        API.authorize(req).then(function(session) {
-            var body = API.selectFields(session, ['fbUserId', 'sessionStarted']);
+        var body = req.authorization;
 
-            res.send(200, body);
-            return next();
-        }, function error() {
-            return next(new restify.NotAuthorizedError("Not logged in"));
-        });
+        res.send(200, body);
+        return next();
     },
 
     selectFields: function(obj, fields) {

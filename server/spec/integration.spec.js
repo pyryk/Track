@@ -115,16 +115,15 @@ describe('Integration test', function() {
 
             authHeaders = {'FB-UserId': '123456', 'FB-AccessToken': 'ABCDEFG'};
 
-            // Authorize if FB-UserId: 123456 and FB-AccessToken: 'ABCDEFG'
-            var authorizeSpy = spyOn(API, 'authorize');
-            authorizeSpy.andCallFake(function(){
-                var headers = authorizeSpy.mostRecentCall.args[0].headers;
-                return {then: function(callback, error) {
-                    if(headers['fb-userid'] === '123456' && headers['fb-accesstoken'] === 'ABCDEFG') {
-                        callback({fbUserId: '123456', fbAccessToken: 'ABCDEFG'});
-                    } else {
-                        error();
-                    }}
+            spyOn(API.session, 'isAuthorized').andCallFake(function(fbUserId, fbAccessToken) {
+                return {
+                    then: function(success, error) {
+                        if(fbUserId === '123456' && fbAccessToken === 'ABCDEFG') {
+                            success({fbUserId: fbUserId, fbAccessToken: fbAccessToken, sessionStarted: DateUtils.now()});
+                        } else {
+                            error();
+                        }
+                    }
                 }
             });
         });
