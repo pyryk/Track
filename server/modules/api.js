@@ -94,10 +94,12 @@ var API = {
     getTargets: function(req, res, next) {
         var rel = API.rel;
         var debugging = req.headers['debug'] === 'true';
+        var fbUserId = req.authorization ? req.authorization.fbUserId : null;
 
         Mongo.findAllTargets().then(function(data) {
             var targets = data;
-            rel.calculate(targets);
+
+            rel.calculate(targets, fbUserId);
 
             // Filter
             var selectedFields = ['name', '_id', 'question', 'relevance'];

@@ -178,13 +178,15 @@ HourlyPopularity.prototype.calculateRelevance = function(target, targets) {
 
 var Favorite = function() {
     this.weight = 1;
-    this.responseCounts = [];
-    this.points = {}; // key: count, value: the point value
-
     this.name = "User's favorite";
 };
 
 Favorite.fn = Favorite.prototype;
+
+Favorite.fn.analyzeTargetsStarted = function() {
+    this.responseCounts = [];
+    this.points = {}; // key: count, value: the point value
+};
 
 Favorite.fn.analyzeTarget = function(target) {
     target.userResponded = 0;

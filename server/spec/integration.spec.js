@@ -304,7 +304,7 @@ describe('Integration test', function() {
 
     xit('GET /login success', function() {
         // The access token has to be changed if you want this test to pass!
-        var accessToken = 'AAACXZBsWiZB1ABAPt3gHOdSumjT2MR7MwZACmyWuRkELxGzNeKxM4mNsNrQuTgT7ejady5xwp7YuI71uT2W5m3bZBe0zFmPtrvtE09ojegZDZD'; // CHANGE ME!
+        var accessToken = 'AAACXZBsWiZB1ABAIsUBELlVcjGrdmIZAQXZCqt1EUWSZAJT58tfYXXk6lPi8NlGRfnb0DZCpWi5Jcwg3VcfY5gDcsjYGGOhAgyEio05immzwZDZ'; // CHANGE ME!
 
         spyOn(DateUtils, 'now').andReturn(new Date('2012-03-23T13:59:00.000Z'));
 

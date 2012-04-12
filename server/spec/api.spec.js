@@ -146,10 +146,6 @@ describe('API', function() {
 
         describe('Run without login', function() {
 
-            beforeEach(function() {
-                // spyOn(API, 'isAuthorized').andReturn(true);
-            });
-
             describe('getTargets', function() {
 
                 it('should return list of targets', function() {
