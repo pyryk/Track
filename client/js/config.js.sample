@@ -1,6 +1,6 @@
 /* local config file. Copy this file to config.js to customize configuration */
 window.trackConfig = {
-  enableAuth: false,
+  enableAuth: true,
   serverURL: "http://mkos.futupeople.com/track/",
   //serverURL: "http://localhost:9999/",
 };

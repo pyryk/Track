@@ -301,10 +301,41 @@ header {
   }
 }
 
+#login {
+  h2 {
+    @include header;
+    margin-top: 20px;
+  }
+  
+  .content {
+    margin: 0;
+    padding: 1em 1em;
+    border: 0;
+    border-bottom: 1px solid $border_color;
+    border-left: 1px solid $border_color;
+    border-right: 1px solid $border_color;
+    @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+    
+    .no-login {
+      @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+      &:active {
+        @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
+      }
+    }
+    
+    .login-button {
+      width: 100%;
+      @include background-image(linear-gradient(lighten($header_gradient_1, 20%), lighten($header_gradient_2, 20%)));
+      &:active {
+        @include background-image(linear-gradient(lighten($header_gradient_2, 20%), lighten($header_gradient_1,20%)));
+      }
+    }
+  }
+}
+
 #back-button, #account-button {
   position: absolute; 
   top: 5px; 
-  height: 38px;
   display: block;
   .top-button {
     display: inline-block;
@@ -319,8 +350,19 @@ header {
   }
 }
 
+#account-button {
+  height: 35px;
+  
+  .top-button {
+    border-radius: 6px;
+    height: 15px;
+    padding-top: 8px;
+  }
+}
+
 #back-button {
   left: 5px;
+  height: 38px;
   .top-button {
     background-image: url("../img/back-icon.png?123");
     background-repeat: no-repeat;
@@ -363,7 +405,7 @@ footer {
 
 .link-button {
   display: block;
-  @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
+  @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
   @include border-radius(25px);
   border: 1px solid $border_color;
   padding: 0.5em;
@@ -378,7 +420,7 @@ footer {
     color: lighten($text_color, 40%);
   }
   &:active, &.fake-active {
-    @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+    @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
   }
 }
 

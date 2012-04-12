@@ -1,5 +1,5 @@
 /* local config file */
 window.trackConfig = {
-  enableAuth: false,
+  enableAuth: true,
   serverURL: "http://mkos.futupeople.com/track/",
 };

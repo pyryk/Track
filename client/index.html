@@ -56,7 +56,7 @@
     <header>
       <div id="back-button"></div>
       <h1><a href="#">Track</a></h1>
-      <!--<div id="account-button"><span class="top-button"><a href="#!/login/">Account</a></span></div>-->
+      <div id="account-button"><span class="top-button"><a href="#!/login/">Account</a></span></div>
     </header>
     <div id="main" role="main">
       <noscript>This application requires JavaScript support. Currently it is tested only on iPhone and Android devices.</noscript>
@@ -203,7 +203,16 @@
       </div>
     {{else}}
       <div id="login">
-        <p><button class="login-button">Login with Facebook</button></p>
+        <h2>Welcome!</h2>
+        <div class="content">
+        <p>
+          Track can be used without logging in. However, the social aspect of 
+          Track can be used only after login. Currently, we provide logging in
+          only via Facebook Connect.
+        </p>
+        <p><span class="no-login link-button">Continue without logging in</span></p>
+        <p><button class="login-button link-button">Login with Facebook</button></p>
+        </div>
       </div>
     {{/if}}
   </script>

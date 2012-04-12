@@ -180,9 +180,14 @@ var App = Spine.Controller.sub({
     }
   },
   loginOk: function() {
-    return !(window.trackConfig && window.trackConfig.enableAuth &&
-           !User.getUser().logged)
+    // no config - no need to login
+    if (!window.trackConfig || !window.trackConfig.enableAuth) {
+      return true;
+    }
+    
+    return (User.getUser().logged || this.noLogin)
   },
+  noLogin: false
 });
 
 if (window.trackConfig && window.trackConfig.serverURL) {
@@ -229,7 +234,6 @@ App.fastClicksEnabled = function() {
 }
 
 Handlebars.registerHelper('trend', function(value) {
-  console.log(value);
   var str = '';
   for (var i=0; i<value; i++) {
     str += '<div class="trend"></div>';  

@@ -77,11 +77,10 @@ var TargetsList = BaseController.sub({
     
     // load list (without location data) even when no location gotten
     Spine.bind('location:error', this.proxy(this.locationChanged));
-    
-    if (!window.track || !window.track.location.lat) {
-      log('Location not (yet) available - loading list without it');
-      Target.loadList();
-    }
+    this.loadList();
+  },
+  loadList: function(additionalData) {
+    Target.loadList(additionalData);
   },
   addOne: function(task){
     if (window.track.visiblePage == this) {
@@ -92,7 +91,7 @@ var TargetsList = BaseController.sub({
     // TODO update list also when list is not visible
     if (window.track.visiblePage == this) {
       log('location changed - reloading target list');
-      Target.loadList({lat: location.lat, lon: location.lon});
+      this.loadList({lat: location.lat, lon: location.lon});
     }
   },
   clicked: function(e) {
@@ -198,7 +197,8 @@ var TargetDetails = BaseController.sub({
       location: window.track.location
     });
     result.bind('resultSent', this.answerSaved);
-    result.post();
+      var user = User.getUser();
+      result.post();
   },
   savePositiveAnswer: function() {
     this.saveAnswer(1);
@@ -395,7 +395,8 @@ var BackButton = BaseController.sub({
 
 var LoginScreen = BaseController.sub({
   events: {
-    "fastclick .login-button": "loginUser"
+    "fastclick .login-button": "loginUser",
+    "fastclick .no-login": "setNoLogin"
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -412,5 +413,9 @@ var LoginScreen = BaseController.sub({
   },
   loginUser: function() {    
     FB.login(function(response) { }, {scope:'email'});     
+  }, 
+  setNoLogin: function() {
+    window.track.noLogin = true;
+    Spine.Route.navigate('/');
   }
 });

@@ -24,6 +24,11 @@ Target.include({
       }
       url += "target";
       
+      var user = User.getUser();
+      var headers = {
+          'FB-UserId': user.name,
+          'FB-AccessToken': user.token
+        };
       
       // append the create location to the post
       var location = window.track.location;
@@ -42,6 +47,7 @@ Target.include({
         contentType: "application/json",
         dataType: "json",
         data: data,
+        headers: user.logged ? headers : {},
         success: function(data) {
           that.id = data._id;
           that.saved = true;
@@ -73,6 +79,12 @@ Target.loadList = function(additionalData) {
   
   //var data = window.track.getAdditionalData();
   
+  var user = User.getUser();
+  var headers = {
+      'FB-UserId': user.name,
+      'FB-AccessToken': user.token
+    };
+  
   var requestComplete = false;
   try {
   $.ajax({
@@ -81,6 +93,7 @@ Target.loadList = function(additionalData) {
     dataType: 'json',
     timeout: 5000,
     cache: false,
+    headers: user.logged ? headers : {},
     success: function(data, status, jqXHR) {
       requestComplete = true;
       for (var i in data.targets) {
@@ -121,9 +134,16 @@ Target.loadDetails = function(id, listener) {
   }
   url += "target/" + id;
   
+  var user = User.getUser();
+  var headers = {
+      'FB-UserId': user.name,
+      'FB-AccessToken': user.token
+    };
+  
   $.ajax({
     url: url,
     dataType: 'json',
+    headers: user.logged ? headers : {},
     success: function(data, status, jqXHR) {
       var targetData = data.target;
       targetData["id"] = targetData["_id"]; // map mongo id
@@ -213,11 +233,20 @@ Result.include({
     }
     
     var url = App.serverURL;
+    
+    
+    var headers
   
     if (url.substring(url.length-1) !== "/") {
       url += "/";
     }
     url += "target/" + this.target.id + "/" + "result";
+    
+    var user = User.getUser();
+    var headers = {
+        'FB-UserId': user.name,
+        'FB-AccessToken': user.token
+      };
   
     var toSend = {
       value: this.value,
@@ -231,6 +260,7 @@ Result.include({
       contentType: "application/json",
       dataType: "json",
       data: data,
+      headers: user.logged ? headers : {},
       success: this.proxy(function(data) {
         this.saved = true;
         this.save();
