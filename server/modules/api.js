@@ -40,9 +40,9 @@ var API = {
         }.bind(this));
 
         this.get("/targets", this.getTargets, false);
-        this.get("/target/:id", this.getTarget, true);
-        this.post("/target", this.postTarget, true);
-        this.post("/target/:_id/result", this.postResult, true);
+        this.get("/target/:id", this.getTarget, false);
+        this.post("/target", this.postTarget, false);
+        this.post("/target/:_id/result", this.postResult, false);
         this.get("/login", this.getLogin, true);
     },
 

@@ -107,7 +107,7 @@ describe('Integration test', function() {
         Mongo.loadFixtures();
     });
 
-    describe('Requires authorization', function() {
+    describe('Do request with authorization', function() {
 
         var authHeaders;
 
@@ -240,21 +240,6 @@ describe('Integration test', function() {
                 });
             });
         });
-
-        afterEach(function() {
-
-            // Test unauthorized request
-            expect(request).toBeDefined();
-
-            request.headers['FB-UserId'] = null;
-            request.headers['FB-AccessToken'] = null;
-
-            testRequest(request, function(result) {
-                expect(result.statusCode).toEqual(403);
-            });
-
-        });
-
     });
 
     it('GET /targets', function() {
