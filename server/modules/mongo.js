@@ -19,10 +19,19 @@ var Mongo = {
         var Target = new mongoose.Schema({
             name: String,
             question: String,
+
+            createdLocation: {
+                lat: Number
+                , lon: Number
+            },
             results: [{
                 timestamp: Date
                 , value: Number
                 , fbUserId: String
+                , location: {
+                    lat: Number
+                    , lon: Number
+                }
             }]
         });
 
@@ -105,6 +114,11 @@ var Mongo = {
         target.name = params.name;
         target.question = params.question;
 
+        var loc = params.location;
+        if(loc) {
+            target.createdLocation = {lat: loc.lat, lon: loc.lon};
+        }
+
         target.save(function(error) {
             var id = target._id;
             this.resolvePromise(error, id, promise)
@@ -124,6 +138,11 @@ var Mongo = {
             var result = {timestamp: DateUtils.now(), value: params.value};
             if(params.fbUserId) {
                 result.fbUserId = params.fbUserId;
+            }
+
+            var loc = params.location;
+            if(loc) {
+                result.location = {lat: loc.lat, lon: loc.lon};
             }
 
             target.results.push(result);

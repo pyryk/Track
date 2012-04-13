@@ -178,7 +178,11 @@ describe('Integration test', function() {
             runs(function() {
                 var body = {
                     name: "New track target",
-                    question: "Mitä mitä?"
+                    question: "Mitä mitä?",
+                    location: {
+                        lat: 12.3456
+                        ,lon : 23.4567
+                    }
                 };
 
                 request = {method: 'POST', path: '/target', body: body, headers: authHeaders}
@@ -199,6 +203,11 @@ describe('Integration test', function() {
                     expect(result.body.target.name).toEqual("New track target");
                     expect(result.body.target.question).toEqual("Mitä mitä?");
                 });
+
+                testDB(Mongo.findTargetById(id), function(target) {
+                    expect(target.createdLocation.lat).toEqual(12.3456);
+                    expect(target.createdLocation.lon).toEqual(23.4567);
+                });
             });
         });
 
@@ -217,7 +226,15 @@ describe('Integration test', function() {
             });
 
             runs(function() {
-                request = {method: 'POST', path: '/target/' + id + '/result', body: {value: 0}, headers: authHeaders};
+                var body = {
+                    value: 0
+                    , location: {
+                        lat: 12.3456
+                        ,lon : 23.4567
+                    }
+                };
+
+                request = {method: 'POST', path: '/target/' + id + '/result', body: body, headers: authHeaders};
                 testRequest(request, function(result) {
                     expect(result.statusCode).toEqual(204);
                     expect(result.body).toEqual({});
@@ -230,6 +247,11 @@ describe('Integration test', function() {
                 testRequest({method: 'GET', path: '/target/' + id, headers: authHeaders}, function(result) {
                     expect(result.statusCode).toEqual(200);
                     expect(result.body.target.results.alltime.neg).toEqual(8);
+                });
+
+                testDB(Mongo.findTargetById(id), function(target) {
+                    expect(_.last(target.results).location.lat).toEqual(12.3456);
+                    expect(_.last(target.results).location.lon).toEqual(23.4567);
                 });
             });
 

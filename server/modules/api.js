@@ -210,6 +210,8 @@ var API = {
     },
 
     getTarget: function(req, res, next) {
+        var debugging = req.headers['debug'] === 'true';
+
         Mongo.findTargetById(req.params.id).then(function(data) {
             if(data == null) {
                 return next(new restify.ResourceNotFoundError("Could not find target with ID " + req.params.id));
@@ -223,6 +225,10 @@ var API = {
 
             if(aggregatedResults) {
                 target.results = aggregatedResults;
+            }
+
+            if(debugging) {
+                target.results.all = data.results;
             }
 
             res.send(200, {target: target});
@@ -243,7 +249,16 @@ var API = {
     },
 
     postResult: function(req, res, next) {
-        var result = {_id: req.params._id, value: req.params.value, fbUserId: req.authorization.fbUserId};
+        var result = {_id: req.params._id, value: req.params.value};
+
+        if(req.authorization) {
+            result.fbUserId = req.authorization.fbUserId;
+        }
+
+        var loc = req.params.location
+        if(req.params.location) {
+            result.location = {lat: loc.lat, lon: loc.lon};
+        }
 
         Mongo.addResult(result).then(function() {
             res.send(204, null);

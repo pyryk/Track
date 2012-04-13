@@ -215,12 +215,14 @@ describe('API', function() {
                     spyOnPromise(Mongo, 'createTarget').andCallSuccess('12345678901234567890abce');
                     req.params.name = 'New tracking target';
                     req.params.question = 'How much time?';
+                    req.params.location = {lat: 12.3456, lon: 23.4567};
 
                     API.postTarget(req, res, next);
 
                     expect(Mongo.createTarget).toHaveBeenCalledWith({
                         name: 'New tracking target',
-                        question: 'How much time?'
+                        question: 'How much time?',
+                        location: {lat: 12.3456, lon: 23.4567}
                     });
                     expectStatus(res).toEqual(201);
                     expectBody(res).toEqual({_id: '12345678901234567890abce'});
@@ -236,13 +238,15 @@ describe('API', function() {
                     req.params._id = '12345678901234567890abce';
                     req.params.value = 1;
                     req.authorization = {fbUserId: '123456'};
+                    req.params.location = {lat: 12.34567, lon: 23.45678};
 
                     API.postResult(req, res, next);
 
                     expect(Mongo.addResult).toHaveBeenCalledWith({
                         _id: '12345678901234567890abce',
                         value: 1,
-                        fbUserId: '123456'
+                        fbUserId: '123456',
+                        location: {lat: 12.34567, lon: 23.45678}
                     });
                     expectStatus(res).toEqual(204);
                     expectBody(res).toEqual();
