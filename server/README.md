@@ -109,3 +109,23 @@ Status: 204 No content
 Response body:
 
     { }
+    
+### GET /leaderboard - Returns leader board
+
+**Status: DRAFT! Not yet implemented**
+
+Requires authentication: Yes(?)
+
+Status: 200 Ok
+
+Response body:
+
+	{
+		users: [
+			{name: "Mikko Koski", picture: "https://graph.facebook.com/566268546/picture", points: 56},
+			{name: "Pyry Kröger", picture: "https://graph.facebook.com/<fb_id>/picture", points: 44},
+			{name: "Antti Heikkonen", picture: "https://graph.facebook.com/<fb_id>/picture", points: 39},
+			{name: "Lauri Orkoneva", picture: "https://graph.facebook.com/<fb_id>/picture", points: 21},
+			{name: "Heikki Korhonen", picture: "https://graph.facebook.com/<fb_id>/picture", points: 9},
+		]
+	}
