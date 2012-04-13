@@ -8,7 +8,7 @@ var Response = require('restify').Response;
 var Session = require('./session').Session;
 var FBClient = require('./session').FBClient;
 var SessionStore = require('./session').SessionStore;
-var Promise = require('node-promise').Promise;
+var p = require('node-promise');
 
 var DateUtils = require('../modules/now.js');
 
@@ -44,6 +44,7 @@ var API = {
         this.post("/target", this.postTarget, false);
         this.post("/target/:_id/result", this.postResult, false);
         this.get("/login", this.getLogin, true);
+        this.get("/leaderboard", this.getLeaderboard, false);
     },
 
     authorize: function(req, res, next, handler, requireAuth) {
@@ -241,24 +242,41 @@ var API = {
 
     postTarget: function(req, res, next) {
         var target = req.params;
+        var promises = [];
+        var fbUserId = req.authorization ? req.authorization.fbUserId : null;
+        var isAuthorized = !!fbUserId;
 
-        if(req.authorization) {
-            target.fbUserId = req.authorization.fbUserId;
+        if(isAuthorized) {
+            target.fbUserId = fbUserId;
         }
 
-        Mongo.createTarget(target).then(function(id) {
+        // Create the new target
+        promises.push(Mongo.createTarget(target))
+
+        // Add points
+        if(isAuthorized) {
+            promises.push(Mongo.addPoints(fbUserId, 5));
+        }
+
+        // All ready
+        p.allOrNone(promises).then(function success(createTargetResult) {
+            var id = createTargetResult[0]
             res.send(201, {_id: id});
             return next();
-        }, function(error) {
-            return next(error);
+        }, function error(err) {
+            return next(err);
         });
+
     },
 
     postResult: function(req, res, next) {
         var result = {_id: req.params._id, value: req.params.value};
+        var fbUserId = req.authorization ? req.authorization.fbUserId : null;
+        var isAuthorized = !!fbUserId;
+        var promises = [];
 
-        if(req.authorization) {
-            result.fbUserId = req.authorization.fbUserId;
+        if(isAuthorized) {
+            result.fbUserId = fbUserId;
         }
 
         var loc = req.params.location
@@ -266,10 +284,19 @@ var API = {
             result.location = {lat: loc.lat, lon: loc.lon};
         }
 
-        Mongo.addResult(result).then(function() {
+        // Add result
+        promises.push(Mongo.addResult(result));
+
+        // Add points
+        if(isAuthorized) {
+            promises.push(Mongo.addPoints(fbUserId, 1));
+        }
+
+        // All ready
+        p.allOrNone(promises).then(function success() {
             res.send(204, null);
             return next();
-        }, function(error) {
+        }, function error(error) {
             return next(error);
         });
     },
@@ -279,6 +306,28 @@ var API = {
 
         res.send(200, body);
         return next();
+    },
+
+    getLeaderboard: function(req, res, next) {
+        Mongo.findUsersWithMostPoints().then(function success(users) {
+
+            var usersToReturn = [];
+
+            _.each(users, function(user) {
+                usersToReturn.push({
+                    _id: user._id,
+                    fbUserId: user.fbUserId,
+                    name: user.fbInformation.name,
+                    picture: 'https://graph.facebook.com/' + user.fbUserId + '/picture',
+                    points: user.points
+                });
+            });
+
+            res.send(200, {users: usersToReturn});
+            return next();
+        }, function error(err) {
+            return next(err);
+        })
     },
 
     selectFields: function(obj, fields) {

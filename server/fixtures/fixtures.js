@@ -42,5 +42,22 @@ module.exports = {
         _id: '12345678901234567890abcf',
         question: 'No millasta läpyskää puskee?',
         results: [1, 2, 3, 4]
-    }]
+    }],
+
+    users: [
+        {_id: '111111111111111111111100', fbUserId: '111111', fbInformation: {name: 'Pyry Kröger'}},
+        {_id: '111111111111111111111101', fbUserId: '123456', fbInformation: {name: 'Mikko Koski'}},
+        {_id: '111111111111111111111119', fbUserId: '000009', fbInformation: {name: 'James Dean'}, points: 41},
+        {_id: '111111111111111111111111', fbUserId: '000001', fbInformation: {name: 'John Doe'}, points: 102},
+        {_id: '111111111111111111111112', fbUserId: '000002', fbInformation: {name: 'Joe Doe'}, points: 100},
+        {_id: '111111111111111111111113', fbUserId: '000003', fbInformation: {name: 'Matt Doe'}, points: 99},
+        {_id: '111111111111111111111117', fbUserId: '000007', fbInformation: {name: 'Matt Duncan'}, points: 71},
+        {_id: '111111111111111111111114', fbUserId: '000004', fbInformation: {name: 'John McDonald'}, points: 89},
+        {_id: '111111111111111111111115', fbUserId: '000005', fbInformation: {name: 'John Warren'}, points: 78},
+        {_id: '111111111111111111111116', fbUserId: '000006', fbInformation: {name: 'Jamie Oliver'}, points: 76},
+        {_id: '111111111111111111111118', fbUserId: '000008', fbInformation: {name: 'Dean Martin'}, points: 66},
+        {_id: '111111111111111111111120', fbUserId: '000010', fbInformation: {name: 'James Bond'}, points: 3},
+        {_id: '111111111111111111111121', fbUserId: '000011', fbInformation: {name: 'Jack Black'}, points: 2},
+        {_id: '111111111111111111111122', fbUserId: '000012', fbInformation: {name: 'Jane Doe'}, points: 1}
+    ]
 };

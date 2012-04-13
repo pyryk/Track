@@ -10,7 +10,15 @@ Mongo.init(Mongo.profiles.test);
 describe('Mongo', function() {
 
     beforeEach(function() {
-        Mongo.loadFixtures();
+        var promiseResolved;
+
+        Mongo.loadFixtures().then(function() {
+            promiseResolved = true;
+        });
+
+        waitsFor(function() {
+            return promiseResolved;
+        });
     });
 
     describe('findAllTargets', function() {
@@ -88,5 +96,81 @@ describe('Mongo', function() {
             });
         });
     });
+
+    describe('findUserByFBUserId', function() {
+        it('should return User by fbUserId', function() {
+            testDB(Mongo.findUserByFBUserId('123456'), function(user) {
+                expect(user.fbInformation.name).toEqual('Mikko Koski');
+            });
+        });
+    });
+
+    describe('findOrCreateUserByFBUserId', function() {
+        it('should return User by fbUserId', function() {
+            testDB(Mongo.findOrCreateUserByFBUserId('123456'), function(user) {
+                expect(user.fbInformation.name).toEqual('Mikko Koski');
+            });
+        });
+
+        it('should create a new user and return it', function() {
+            testDB(Mongo.findOrCreateUserByFBUserId('999999'), function(user) {
+                expect(user.fbUserId).toEqual('999999');
+            });
+        })
+    });
+
+    describe('updateUsersFacebookInformation', function() {
+        it('should save given Facebook information', function() {
+            testDB(Mongo.updateUsersFacebookInformation('123456', {name: "Mikko Tapio Koski"}), function() {
+                testDB(Mongo.findUserByFBUserId('123456'), function(user) {
+                    expect(user.fbInformation.name).toEqual('Mikko Tapio Koski')
+                })
+            });
+        });
+
+        it('should be able to create a new user', function() {
+            testDB(Mongo.updateUsersFacebookInformation('999999', {name: "Pyry Kröger"}), function() {
+                testDB(Mongo.findUserByFBUserId('999999'), function(user) {
+                    expect(user.fbInformation.name).toEqual('Pyry Kröger')
+                })
+            });
+        })
+    });
+
+    describe('addPoints', function() {
+        it('should add given amount of points to the user', function() {
+            // Current points: null. Add 5.
+            testDB(Mongo.addPoints('123456', 5), function() {
+                testDB(Mongo.findUserByFBUserId('123456'), function(user) {
+                    expect(user.points).toEqual(5);
+
+                    // Current points: 5. Add 20.
+                    testDB(Mongo.addPoints('123456', 20), function() {
+                        testDB(Mongo.findUserByFBUserId('123456'), function(user) {
+                            expect(user.points).toEqual(25);
+                        });
+                    });
+                })
+            });
+        });
+    });
+
+    describe('findUsersWithMostPoints', function() {
+        it('should find 10 users with the most points and sort by points', function() {
+            testDB(Mongo.findUsersWithMostPoints(), function(users) {
+                expect(users.length).toEqual(10);
+                expect(users[0].fbUserId).toEqual('000001');
+                expect(users[1].fbUserId).toEqual('000002');
+                expect(users[2].fbUserId).toEqual('000003');
+                expect(users[3].fbUserId).toEqual('000004');
+                expect(users[4].fbUserId).toEqual('000005');
+                expect(users[5].fbUserId).toEqual('000006');
+                expect(users[6].fbUserId).toEqual('000007');
+                expect(users[7].fbUserId).toEqual('000008');
+                expect(users[8].fbUserId).toEqual('000009');
+                expect(users[9].fbUserId).toEqual('000010');
+            });
+        });
+    })
 
 });

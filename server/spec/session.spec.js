@@ -5,16 +5,28 @@ var FBClient = SessionNamespace.FBClient;
 var CommonHelpers = require('./helpers.js').Common;
 var _ = require('underscore');
 var DateUtils = require('../modules/now.js');
+var Mongo = require('../modules/mongo.js');
+var Promise = require('node-promise').Promise;
 
 // Helper methods for testing
 var promiseReturned = CommonHelpers.promiseReturned;
 var spyOnPromise = CommonHelpers.spyOnPromise;
+var waitsForPromise = CommonHelpers.waitsForPromise;
+var testDB = require('./helpers').Mongo.testDB;
 
 beforeEach(function() {
     this.addMatchers({
         toBeSession: function() {
             var s = this.actual;
             return _.isString(s.fbUserId) && _.isString(s.fbAccessToken) && _.isDate(s.sessionStarted);
+        },
+
+        toBeResolved: function() {
+            return this.actual.resolved;
+        },
+
+        toBeRejected: function() {
+            return this.actual.rejected;
         }
     });
 });
@@ -69,15 +81,15 @@ describe('Session', function() {
         });
 
         it('should return false if credentials are not present or invalid', function() {
-            promiseReturned(session.isAuthorized('', '')).then(function() {
-                expect(false).toBeTruthy(); // Should not come here
-            }, function() {
-                expect(true).toBeTruthy(); // Should come here
-            });
-            promiseReturned(session.isAuthorized()).then(function() {
-                expect(false).toBeTruthy(); // Should not come here
-            }, function() {
-                expect(true).toBeTruthy(); // Should come here
+            var failed1 = session.isAuthorized('', '');
+            var failed2 = session.isAuthorized();
+
+            waitsForPromise(failed1);
+            waitsForPromise(failed2);
+
+            runs(function() {
+                expect(failed1).toBeRejected();
+                expect(failed2).toBeRejected();
             });
         });
 
@@ -109,26 +121,26 @@ describe('Session', function() {
     describe('tryCreateSession', function() {
 
         it('should create a new session if me request was successful', function() {
-            spyOnPromise(session.fbClient, 'getMe').andCallSuccess();
+            spyOnPromise(session.fbClient, 'getMe').andCallSuccess({name: "Mikko Koski"});
             spyOn(session.sessionStore, 'createSession').andReturn(fakeSession);
+            spyOn(session, 'updateUsersFacebookInformation');
 
-            var promiseResolved = false;
-            var promiseReturned;
             var tryCreateSessionPromise = session.tryCreateSession('123456', 'AAAAAA');
 
+            var promiseResult, promiseResolved;
+
             tryCreateSessionPromise.then(function(result) {
+                promiseResult = result;
                 promiseResolved = true;
-                promiseReturned = result;
             });
 
-            waitsFor(function() {
-                return promiseResolved;
-            });
+            waitsForPromise(tryCreateSessionPromise);
 
             runs(function() {
                 expect(promiseResolved).toBeTruthy();
                 expect(session.sessionStore.createSession).toHaveBeenCalledWith('123456', 'AAAAAA');
-                expect(promiseReturned).toBeSession();
+                expect(promiseResult).toBeSession();
+                expect(session.updateUsersFacebookInformation).toHaveBeenCalledWith('123456', {name: "Mikko Koski"});
             });
         });
 
@@ -148,6 +160,41 @@ describe('Session', function() {
 
             runs(function() {
                 expect(promiseRejected).toBeTruthy();
+            });
+        });
+    });
+
+    describe('updateUsersFacebookInformation', function() {
+        var getMeResult = {
+            "name": "Mikko Koski"
+        }
+
+
+        it('should save to Mongo successfully', function() {
+            spyOnPromise(Mongo, 'updateUsersFacebookInformation').andCallSuccess();
+
+            var promise = session.updateUsersFacebookInformation('123456', getMeResult);
+
+            expect(Mongo.updateUsersFacebookInformation).toHaveBeenCalledWith('123456', {name: 'Mikko Koski'});
+
+            promiseReturned(promise).then(function resolved() {
+                expect(true).toBeTruthy();
+            }, function rejected() {
+                expect(false).toBeTruthy(); // Shouldn't be here
+            });
+        });
+
+        it('should reject promise if Facebook information saving to Mongo failed', function() {
+            spyOnPromise(Mongo, 'updateUsersFacebookInformation').andCallError();
+
+            var promise = session.updateUsersFacebookInformation('123456', getMeResult);
+
+            expect(Mongo.updateUsersFacebookInformation).toHaveBeenCalledWith('123456', {name: 'Mikko Koski'});
+
+            promiseReturned(promise).then(function resolved() {
+                expect(false).toBeTruthy(); // Shouldn't be here
+            }, function rejected() {
+                expect(true).toBeTruthy();
             });
         });
     });
@@ -228,7 +275,8 @@ describe('SessionStore', function() {
  */
 xdescribe('Integration', function() {
 
-    var accessToken = "AAACXZBsWiZB1ABABQiRtKdgIPYdzmETZA2HGOMRAlHpSHWS6kcOlU3JW8b4atAhNWMAUTdZBxiaMrQsgGYnvbRGDdGng1u6yA43jy0AZBsAZDZD"; // CHANGE ME!
+    var fbUserId = "566268546";
+    var accessToken = "AAAEUwOpxv0ABAN9gapdlOhbWnaEqZAjXQhORI6XZA--change-me-GhJYXZCIeUxW2NZAqFZANnCr1v3qDRbqTs2NzZCI9iS9Ne2h29bPHmRAXsujAZDZD"; // CHANGE ME!
     var session;
 
     beforeEach(function() {
@@ -251,7 +299,7 @@ xdescribe('Integration', function() {
         expect(session.tryCreateSession.callCount).toEqual(0);
 
         runs(function() {
-            session.isAuthorized('123456', accessToken).then(function(result) {
+            session.isAuthorized(fbUserId, accessToken).then(function(result) {
                 promise1Result = result;
                 promise1Returned = true;
             }, function() {});
@@ -272,7 +320,7 @@ xdescribe('Integration', function() {
         var promise2Result;
 
         runs(function() {
-            session.isAuthorized('123456', accessToken).then(function(result) {
+            session.isAuthorized(fbUserId, accessToken).then(function(result) {
                 promise2Result = result;
                 promise2Returned = true;
             });
@@ -294,7 +342,7 @@ xdescribe('Integration', function() {
 
         runs(function() {
             DateUtils.now.andReturn(new Date('2012-03-23T16:59:00.000Z')); // +3 h
-            session.isAuthorized('123456', accessToken).then(function(result) {
+            session.isAuthorized(fbUserId, accessToken).then(function(result) {
                 promise3Result = result;
                 promise3Returned = true;
             });
@@ -316,7 +364,7 @@ xdescribe('Integration', function() {
         var promise4Returned = false;
 
         runs(function() {
-            session.isAuthorized('123456', wrongAccessToken).then(function(result) {
+            session.isAuthorized(fbUserId, wrongAccessToken).then(function(result) {
 
             }, function() {
                 promise4Returned = true;
@@ -331,6 +379,13 @@ xdescribe('Integration', function() {
             expect(session.tryCreateSession.callCount).toEqual(3);
             expect(promise4Returned).toBeTruthy();
         });
+
+        // Should save name from Facebook
+        runs(function() {
+            testDB(Mongo.findUserByFBUserId(fbUserId), function(user) {
+                expect(user.fbInformation.name).toEqual('Mikko Koski');
+            });
+        })
     });
 
 });

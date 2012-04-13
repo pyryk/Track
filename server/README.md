@@ -114,7 +114,7 @@ Response body:
 
 **Status: DRAFT! Not yet implemented**
 
-Requires authentication: Yes(?)
+Requires authentication: No
 
 Status: 200 Ok
 
@@ -122,10 +122,10 @@ Response body:
 
 	{
 		users: [
-			{name: "Mikko Koski", picture: "https://graph.facebook.com/566268546/picture", points: 56},
-			{name: "Pyry Kröger", picture: "https://graph.facebook.com/<fb_id>/picture", points: 44},
-			{name: "Antti Heikkonen", picture: "https://graph.facebook.com/<fb_id>/picture", points: 39},
-			{name: "Lauri Orkoneva", picture: "https://graph.facebook.com/<fb_id>/picture", points: 21},
-			{name: "Heikki Korhonen", picture: "https://graph.facebook.com/<fb_id>/picture", points: 9},
+			{fbUserId: "566268546", name: "Mikko Koski", picture: "https://graph.facebook.com/566268546/picture", points: 56},
+			{fbUserId: "566268547", name: "Pyry Kröger", picture: "https://graph.facebook.com/<fb_id>/picture", points: 44},
+			{fbUserId: "566268548", name: "Antti Heikkonen", picture: "https://graph.facebook.com/<fb_id>/picture", points: 39},
+			{fbUserId: "566268549", name: "Lauri Orkoneva", picture: "https://graph.facebook.com/<fb_id>/picture", points: 21},
+			{fbUserId: "5662685410", name: "Heikki Korhonen", picture: "https://graph.facebook.com/<fb_id>/picture", points: 9},
 		]
 	}

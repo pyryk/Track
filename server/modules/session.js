@@ -2,6 +2,7 @@ var restify = require('restify');
 var Promise = require('node-promise').Promise;
 var DateUtils = require('../modules/now.js');
 var _ = require('underscore');
+var Mongo = require('./mongo.js');
 
 var Session = function() {
 
@@ -44,8 +45,23 @@ Session.fn.tryCreateSession = function(fbUserId, fbAccessToken) {
 
     this.fbClient.getMe(fbAccessToken).then(function success(res) {
         var newSession = this.sessionStore.createSession(fbUserId, fbAccessToken);
+        this.updateUsersFacebookInformation(fbUserId, res)
         promise.resolve(newSession);
     }.bind(this), function error() {
+        promise.reject();
+    });
+
+    return promise;
+};
+
+Session.fn.updateUsersFacebookInformation = function(fbUserId, getMeInformation) {
+    var promise = new Promise();
+
+    var informationToSave = {name: getMeInformation.name};
+
+    Mongo.updateUsersFacebookInformation(fbUserId, informationToSave).then(function resolved() {
+        promise.resolve();
+    }, function rejected() {
         promise.reject();
     });
 

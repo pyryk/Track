@@ -209,6 +209,10 @@ describe('Integration test', function() {
                     expect(target.createdLocation.lat).toEqual(12.3456);
                     expect(target.createdLocation.lon).toEqual(23.4567);
                 });
+
+                testDB(Mongo.findUserByFBUserId('123456'), function(user) {
+                    expect(user.points).toEqual(5);
+                });
             });
         });
 
@@ -254,6 +258,10 @@ describe('Integration test', function() {
                     expect(_.last(target.results).location.lat).toEqual(12.3456);
                     expect(_.last(target.results).location.lon).toEqual(23.4567);
                 });
+
+                testDB(Mongo.findUserByFBUserId('123456'), function(user) {
+                    expect(user.points).toEqual(1);
+                });
             });
 
             runs(function() {
@@ -261,6 +269,29 @@ describe('Integration test', function() {
                 testDB(Mongo.countTargetsUserTracked('123456'), function(count) {
                     expect(count).toEqual(2);
                 });
+            });
+        });
+
+        it('GET /leaderboard', function() {
+            testRequest({method: 'GET', path: '/leaderboard'}, function(result) {
+
+                function isId(id) {
+                    return _.isString(id) && id.length === 24;
+                }
+
+                expect(result.statusCode).toEqual(200);
+                expect(result.body.users).toEqual([
+                    {_id: '111111111111111111111111', fbUserId: '000001', name: 'John Doe', points: 102, picture: "https://graph.facebook.com/000001/picture"},
+                    {_id: '111111111111111111111112', fbUserId: '000002', name: 'Joe Doe', points: 100, picture: "https://graph.facebook.com/000002/picture"},
+                    {_id: '111111111111111111111113', fbUserId: '000003', name: 'Matt Doe', points: 99, picture: "https://graph.facebook.com/000003/picture"},
+                    {_id: '111111111111111111111114', fbUserId: '000004', name: 'John McDonald', points: 89, picture: "https://graph.facebook.com/000004/picture"},
+                    {_id: '111111111111111111111115', fbUserId: '000005', name: 'John Warren', points: 78, picture: "https://graph.facebook.com/000005/picture"},
+                    {_id: '111111111111111111111116', fbUserId: '000006', name: 'Jamie Oliver', points: 76, picture: "https://graph.facebook.com/000006/picture"},
+                    {_id: '111111111111111111111117', fbUserId: '000007', name: 'Matt Duncan', points: 71, picture: "https://graph.facebook.com/000007/picture"},
+                    {_id: '111111111111111111111118', fbUserId: '000008', name: 'Dean Martin', points: 66, picture: "https://graph.facebook.com/000008/picture"},
+                    {_id: '111111111111111111111119', fbUserId: '000009', name: 'James Dean', points: 41, picture: "https://graph.facebook.com/000009/picture"},
+                    {_id: '111111111111111111111120', fbUserId: '000010', name: 'James Bond', points: 3, picture: "https://graph.facebook.com/000010/picture"}
+                ]);
             });
         });
     });

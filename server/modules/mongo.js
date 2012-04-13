@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
-var Promise = require('node-promise').Promise;
+var p = require('node-promise');
+var Promise = p.Promise;
 var Fixtures = require('../fixtures/fixtures');
 var DateUtils = require('../modules/now.js');
 var _ = require('underscore');
@@ -38,14 +39,30 @@ var Mongo = {
 
         mongoose.model('Target', Target);
         this.Target = mongoose.model('Target');
+
+        var User = new mongoose.Schema({
+            fbUserId: String,
+            fbInformation: {
+                name: String
+            },
+            points: Number
+        });
+
+        mongoose.model('User', User);
+        this.User = mongoose.model('User');
     },
 
     loadFixtures: function() {
+        var fixturesSaved = new Promise();
 
-        this.Target.remove({}, function() {});
+        // ... Targets ... //
+        var Target = this.Target;
+        Target.remove({}, function() {});
+
+        var savePromises = [];
 
         Fixtures.targets.forEach(function(targetHash) {
-            var target = new this.Target();
+            var target = new Target();
 
             for(key in targetHash) {
                 target[key] = targetHash[key];
@@ -64,12 +81,56 @@ var Mongo = {
                 }
             };
 
+            var targetSaved = new Promise();
+
             target.save(function(error) {
                 if(error) {
                     console.error(error);
+                    return targetSaved.reject();
                 }
+
+                targetSaved.resolve();
             });
-        }, this);
+
+            savePromises.push(targetSaved)
+        });
+
+        // ... Users ... //
+
+        var User = this.User;
+        User.remove({}, function() {
+
+            Fixtures.users.forEach(function(userHash) {
+                var user = new User();
+
+                for(key in userHash) {
+                    user[key] = userHash[key];
+                }
+
+                var userSaved = new Promise();
+
+                user.save(function(error) {
+                    if(error) {
+                        console.error(error);
+                        return userSaved.reject();
+                    }
+
+                    userSaved.resolve();
+                });
+
+                savePromises.push(userSaved);
+            });
+
+        });
+
+        p.all(savePromises).then(function success() {
+            fixturesSaved.resolve();
+        }, function error() {
+            throw "Failed to load fixtures";
+        });
+
+        return fixturesSaved;
+
     },
 
     findAllTargets: function() {
@@ -163,6 +224,81 @@ var Mongo = {
         return promise;
     },
 
+    updateUsersFacebookInformation: function(fbUserId, fbInformation) {
+        var promise = Promise();
+
+        this.findOrCreateUserByFBUserId(fbUserId).then(function(user) {
+            user.fbInformation = fbInformation;
+
+            user.save(function(error) {
+                Mongo.resolvePromise(error, promise);
+            });
+        });
+
+        return promise;
+    },
+
+    findUserByFBUserId: function(fbUserId) {
+        var promise = new Promise();
+
+        this.User.findOne({fbUserId: fbUserId}, function(error, data) {
+            this.resolvePromise(error, data, promise)
+        }.bind(this));
+
+        return promise;
+    },
+
+    findOrCreateUserByFBUserId: function(fbUserId) {
+        var promise = new Promise();
+
+        this.User.findOne({fbUserId: fbUserId}, function(error, data) {
+            if(data) {
+                return this.resolvePromise(error, data, promise);
+            }
+
+            var user = new this.User();
+            user.fbUserId = fbUserId;
+
+            user.save(function(error) {
+                this.resolvePromise(error, user, promise)
+            }.bind(this));
+
+        }.bind(this));
+
+        return promise;
+    },
+
+    addPoints: function(fbUserId, points) {
+        var promise = new Promise();
+
+        var findUser = this.findOrCreateUserByFBUserId(fbUserId);
+
+        findUser.then(function success(user) {
+            var userPoints = user.points || 0;
+            userPoints += points;
+            user.points = userPoints;
+
+            user.save(function(error) {
+                this.resolvePromise(error, user, promise);
+            }.bind(this));
+
+        }.bind(this), function error(err) {
+            this.resolvePromise(err);
+        }.bind(this));
+
+        return promise;
+    },
+
+    findUsersWithMostPoints: function() {
+        var promise = new Promise();
+
+        this.User.find({}, null, {skip:0, limit:10, sort: {points: -1}}, function(error, data) {
+            return this.resolvePromise(error, data, promise);
+        }.bind(this));
+
+        return promise;
+    },
+
     resolvePromise: function(error) {
         var data, promise;
 
@@ -181,7 +317,6 @@ var Mongo = {
             promise.resolve(data);
         }
     }
-
 }
 
 module.exports = Mongo;

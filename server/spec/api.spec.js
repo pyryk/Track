@@ -5,6 +5,7 @@ var CommonHelpers = require('./helpers').Common;
 
 // Helper methods for API testing
 var spyOnPromise = CommonHelpers.spyOnPromise;
+var waitsForPromise = CommonHelpers.waitsForPromise;
 var expectStatus = APIHelpers.expectStatus;
 var expectBody = APIHelpers.expectBody;
 
@@ -21,6 +22,21 @@ describe('API', function() {
             API[apiMethod](req, res, next);
 
             expect(next).toHaveBeenCalledWith(error);
+        });
+    };
+
+    var itShouldCallNextWithRealError = function(apiMethod, mongoMethod) {
+        it('should call next with error', function() {
+            var error = {message: "An error occured"};
+            var errorPromise = spyOnPromise(Mongo, mongoMethod).andCallRealError(error);
+
+            API[apiMethod](req, res, next);
+
+            waitsForPromise(errorPromise);
+
+            runs(function() {
+                expect(next).toHaveBeenCalledWith(error);
+            });
         });
     };
 
@@ -205,54 +221,158 @@ describe('API', function() {
                         message: "Could not find target with ID accab1234"
                     });
                 });
-
-                itShouldCallNextWithError('getTarget', 'findTargetById');
             });
 
             describe('postTarget', function() {
 
-                it('should return details of a target', function() {
-                    spyOnPromise(Mongo, 'createTarget').andCallSuccess('12345678901234567890abce');
-                    req.params.name = 'New tracking target';
-                    req.params.question = 'How much time?';
-                    req.params.location = {lat: 12.3456, lon: 23.4567};
-                    req.authorization = {fbUserId: '123456'};
+                describe('successfully created', function() {
 
-                    API.postTarget(req, res, next);
+                    var createTargetPromise, addPointsPromise;
 
-                    expect(Mongo.createTarget).toHaveBeenCalledWith({
-                        name: 'New tracking target',
-                        question: 'How much time?',
-                        location: {lat: 12.3456, lon: 23.4567},
-                        fbUserId: '123456'
+                    beforeEach(function() {
+                        createTargetPromise = spyOnPromise(Mongo, 'createTarget').andCallRealSuccess('12345678901234567890abce');
+                        addPointsPromise = spyOnPromise(Mongo, 'addPoints').andCallRealSuccess();
+
+                        req.params.name = 'New tracking target';
+                        req.params.question = 'How much time?';
+                        req.params.location = {lat: 12.3456, lon: 23.4567};
+                    })
+
+                    it('should create a new tracking target', function() {
+                        req.authorization = {fbUserId: '123456'};
+
+                        API.postTarget(req, res, next);
+
+                        expect(Mongo.createTarget).toHaveBeenCalledWith({
+                            name: 'New tracking target',
+                            question: 'How much time?',
+                            location: {lat: 12.3456, lon: 23.4567},
+                            fbUserId: '123456'
+                        });
+
+                        expect(Mongo.addPoints).toHaveBeenCalledWith('123456', 5);
+
+                        waitsForPromise(createTargetPromise);
+                        waitsForPromise(addPointsPromise);
                     });
-                    expectStatus(res).toEqual(201);
-                    expectBody(res).toEqual({_id: '12345678901234567890abce'});
-                });
 
-                itShouldCallNextWithError('postTarget', 'createTarget');
+                    it('should be able to create a new target without authorization', function() {
+                        API.postTarget(req, res, next);
+
+                        expect(Mongo.createTarget).toHaveBeenCalledWith({
+                            name: 'New tracking target',
+                            question: 'How much time?',
+                            location: {lat: 12.3456, lon: 23.4567}
+                        });
+
+                        waitsForPromise(createTargetPromise);
+                    });
+
+                    afterEach(function() {
+                        expectStatus(res).toEqual(201);
+                        expectBody(res).toEqual({_id: '12345678901234567890abce'});
+                    });
+
+                });
+                itShouldCallNextWithRealError('postTarget', 'createTarget');
             });
 
             describe('postResult', function() {
-                it('should post result of a tracking', function() {
 
-                    spyOnPromise(Mongo, 'addResult').andCallSuccess();
-                    req.params._id = '12345678901234567890abce';
-                    req.params.value = 1;
-                    req.authorization = {fbUserId: '123456'};
-                    req.params.location = {lat: 12.34567, lon: 23.45678};
+                describe('success', function() {
 
-                    API.postResult(req, res, next);
+                    var addResultPromise, addPointsPromise;
 
-                    expect(Mongo.addResult).toHaveBeenCalledWith({
-                        _id: '12345678901234567890abce',
-                        value: 1,
-                        fbUserId: '123456',
-                        location: {lat: 12.34567, lon: 23.45678}
+                    beforeEach(function() {
+                        addResultPromise = spyOnPromise(Mongo, 'addResult').andCallRealSuccess();
+                        addPointsPromise = spyOnPromise(Mongo, 'addPoints').andCallRealSuccess();
+
+                        req.params._id = '12345678901234567890abce';
+                        req.params.value = 1;
+
+                        req.params.location = {lat: 12.34567, lon: 23.45678};
                     });
-                    expectStatus(res).toEqual(204);
-                    expectBody(res).toEqual();
-                })
+
+                    it('should post result of a tracking', function() {
+                        req.authorization = {fbUserId: '123456'};
+
+                        API.postResult(req, res, next);
+
+                        expect(Mongo.addResult).toHaveBeenCalledWith({
+                            _id: '12345678901234567890abce',
+                            value: 1,
+                            fbUserId: '123456',
+                            location: {lat: 12.34567, lon: 23.45678}
+                        });
+
+                        expect(Mongo.addPoints).toHaveBeenCalledWith('123456', 1);
+
+                        waitsForPromise(addResultPromise);
+                        waitsForPromise(addPointsPromise);
+                    });
+
+                    it('should be able to post result without authorization', function() {
+
+                        API.postResult(req, res, next);
+
+                        expect(Mongo.addResult).toHaveBeenCalledWith({
+                            _id: '12345678901234567890abce',
+                            value: 1,
+                            location: {lat: 12.34567, lon: 23.45678}
+                        });
+
+                        waitsForPromise(addResultPromise);
+                    });
+
+                    afterEach(function() {
+                        expectStatus(res).toEqual(204);
+                        expectBody(res).toEqual();
+                    });
+
+                });
+
+                describe('error', function(){
+                    beforeEach(function() {
+                        spyOnPromise(Mongo, 'addPoints').andCallRealSuccess();
+                    });
+
+                    itShouldCallNextWithRealError('postResult', 'addResult');
+                });
+            });
+
+            describe('getLeaderboard', function() {
+                it('should return the leaderboard', function() {
+                    spyOnPromise(Mongo, 'findUsersWithMostPoints').andCallSuccess(
+                        [
+                            {fbUserId: '000001', fbInformation: {name: 'John Doe'}, points: 102},
+                            {fbUserId: '000002', fbInformation: {name: 'Joe Doe'}, points: 100},
+                            {fbUserId: '000003', fbInformation: {name: 'Matt Doe'}, points: 99},
+                            {fbUserId: '000004', fbInformation: {name: 'John McDonald'}, points: 89},
+                            {fbUserId: '000005', fbInformation: {name: 'John Warren'}, points: 78},
+                            {fbUserId: '000006', fbInformation: {name: 'Jamie Oliver'}, points: 76},
+                            {fbUserId: '000007', fbInformation: {name: 'Matt Duncan'}, points: 71},
+                            {fbUserId: '000008', fbInformation: {name: 'Dean Martin'}, points: 66},
+                            {fbUserId: '000009', fbInformation: {name: 'James Dean'}, points: 41},
+                            {fbUserId: '000010', fbInformation: {name: 'James Bond'}, points: 3}
+                        ]
+                    );
+
+                    API.getLeaderboard(req, res, next);
+
+                    expectBody(res).toEqual({users: [
+                        {fbUserId: '000001', name: 'John Doe', points: 102, picture: "https://graph.facebook.com/000001/picture"},
+                        {fbUserId: '000002', name: 'Joe Doe', points: 100, picture: "https://graph.facebook.com/000002/picture"},
+                        {fbUserId: '000003', name: 'Matt Doe', points: 99, picture: "https://graph.facebook.com/000003/picture"},
+                        {fbUserId: '000004', name: 'John McDonald', points: 89, picture: "https://graph.facebook.com/000004/picture"},
+                        {fbUserId: '000005', name: 'John Warren', points: 78, picture: "https://graph.facebook.com/000005/picture"},
+                        {fbUserId: '000006', name: 'Jamie Oliver', points: 76, picture: "https://graph.facebook.com/000006/picture"},
+                        {fbUserId: '000007', name: 'Matt Duncan', points: 71, picture: "https://graph.facebook.com/000007/picture"},
+                        {fbUserId: '000008', name: 'Dean Martin', points: 66, picture: "https://graph.facebook.com/000008/picture"},
+                        {fbUserId: '000009', name: 'James Dean', points: 41, picture: "https://graph.facebook.com/000009/picture"},
+                        {fbUserId: '000010', name: 'James Bond', points: 3, picture: "https://graph.facebook.com/000010/picture"}
+                    ]});
+                    expectStatus(res).toEqual(200);
+                });
             });
         });
 
