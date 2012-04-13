@@ -19,6 +19,7 @@ var Mongo = {
         var Target = new mongoose.Schema({
             name: String,
             question: String,
+            creatorFbUserId: String,
 
             createdLocation: {
                 lat: Number
@@ -113,6 +114,10 @@ var Mongo = {
         var target = new this.Target();
         target.name = params.name;
         target.question = params.question;
+
+        if(params.fbUserId) {
+            target.creatorFbUserId = params.fbUserId;
+        }
 
         var loc = params.location;
         if(loc) {

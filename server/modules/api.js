@@ -240,7 +240,13 @@ var API = {
     },
 
     postTarget: function(req, res, next) {
-        Mongo.createTarget(req.params).then(function(id) {
+        var target = req.params;
+
+        if(req.authorization) {
+            target.fbUserId = req.authorization.fbUserId;
+        }
+
+        Mongo.createTarget(target).then(function(id) {
             res.send(201, {_id: id});
             return next();
         }, function(error) {

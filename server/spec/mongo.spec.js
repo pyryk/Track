@@ -36,12 +36,14 @@ describe('Mongo', function() {
             testDB(Mongo.createTarget({
                 name: 'Virgin oil mikä meno?',
                 question: 'Millanen fiilis Virgin Oilissa on?',
-                location: {lat: 12.3456, lon: 23.45678}
+                location: {lat: 12.3456, lon: 23.45678},
+                fbUserId: '123456'
             }), function(id) {
                 testDB(Mongo.findTargetById(id), function(dbResult) {
                     expect(dbResult.name).toEqual('Virgin oil mikä meno?');
                     expect(dbResult.question).toEqual('Millanen fiilis Virgin Oilissa on?');
                     expect(dbResult.createdLocation.lat).toEqual(12.3456);
+                    expect(dbResult.creatorFbUserId).toEqual('123456');
                 });
             });
         });

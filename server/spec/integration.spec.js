@@ -205,6 +205,7 @@ describe('Integration test', function() {
                 });
 
                 testDB(Mongo.findTargetById(id), function(target) {
+                    expect(target.creatorFbUserId).toEqual('123456');
                     expect(target.createdLocation.lat).toEqual(12.3456);
                     expect(target.createdLocation.lon).toEqual(23.4567);
                 });

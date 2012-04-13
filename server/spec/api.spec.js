@@ -216,13 +216,15 @@ describe('API', function() {
                     req.params.name = 'New tracking target';
                     req.params.question = 'How much time?';
                     req.params.location = {lat: 12.3456, lon: 23.4567};
+                    req.authorization = {fbUserId: '123456'};
 
                     API.postTarget(req, res, next);
 
                     expect(Mongo.createTarget).toHaveBeenCalledWith({
                         name: 'New tracking target',
                         question: 'How much time?',
-                        location: {lat: 12.3456, lon: 23.4567}
+                        location: {lat: 12.3456, lon: 23.4567},
+                        fbUserId: '123456'
                     });
                     expectStatus(res).toEqual(201);
                     expectBody(res).toEqual({_id: '12345678901234567890abce'});
