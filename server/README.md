@@ -4,9 +4,13 @@ All the requests with body (POST requests) should have a application/json Conten
 
 ## Authentication
 
-**This is a DRAFT of the authentication functions, waiting for comments. NOT YET IMPLEMENTED**
+###Background
 
-User has to be logged in Facebook before accessing Track API. Client software is responsible of Facebook login.
+Most of the methods in the Track API are accessible without logging in. However, logging in provides better results for the user, for example more relevant targets on the top of the target list.
+
+User logs in with her Facebook account. The mobile client is responsible for Facebook login. Client then sends the FB user id and FB AccessToken to the backend. User is identified by the fbUserId. The backend does a query to the Facebook API to make sure the AccessToken is valid.
+
+### Loging
 
 The following parameters have to be sent in the HEADER of each request requiring authentication:
 
@@ -39,7 +43,7 @@ Response body:
 
 ### GET /target/:_id - Returns specific target with detailed info
 
-Requires authentication: Yes
+Requires authentication: No
 
 Status: 200 Ok
 
@@ -67,7 +71,7 @@ Reponse body:
 
 ### POST /target - Create a new target
 
-Requires authentication: Yes
+Requires authentication: No
 
 Request body:
 
@@ -88,7 +92,7 @@ Response body:
 
 ### POST /target/:_id/result - Send tracking result
 
-Requires authentication: Yes
+Requires authentication: No
 
 Request body:
 
