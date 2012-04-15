@@ -21,6 +21,9 @@ var App = Spine.Controller.sub({
       "!/targets/:id/results": function(params) {
         this.renderView('targetResults', TargetResults, params.id);
       },
+      "!/leaderboard": function(params) {
+        this.renderView('leaderboard', Leaderboard);
+      },
       // default route
       "*others": function(params) {
         log("Invalid route ", params.match.input, " - redirecting to default");
@@ -232,11 +235,3 @@ App.fastClicksEnabled = function() {
   
   return true;
 }
-
-Handlebars.registerHelper('trend', function(value) {
-  var str = '';
-  for (var i=0; i<value; i++) {
-    str += '<div class="trend"></div>';  
-  }
-  return new Handlebars.SafeString(str);
-});

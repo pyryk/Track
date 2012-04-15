@@ -30,6 +30,16 @@ $list_item_gradient_2: #eee;
   @include border-radius(5px 5px 0px 0px);
 }
 
+@mixin body-item {
+  padding: 1em 1em;
+  border: 0;
+  border-bottom: 1px solid $border_color;
+  border-left: 1px solid $border_color;
+  border-right: 1px solid $border_color;
+  @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+  @include ellipsis;
+}
+
 @mixin body-box {
   margin: 0;
   border: 1px solid $border_color;
@@ -385,6 +395,36 @@ header {
   }
 }
 
+#leaderboard {
+  margin-top: 1em;
+  
+  table {
+    width: 100%;
+    
+    tr.header {
+      border: 0;
+    }
+    
+    th {
+      @include header;
+    }
+    
+    tr {
+      @include body-item;
+      td {
+        padding: 0.5em;
+        vertical-align: middle;
+        &.position {
+          padding-left: 1em;
+        }
+        &.name img {
+          padding-right: 1em;
+        }
+      }
+    }
+  }
+}
+
 footer {
   @include background-image(linear-gradient(top, #2F2F2F, #151515 50%, #000000 51%, #000000));
   border: 1px solid #222;
@@ -422,6 +462,10 @@ footer {
   &:active, &.fake-active {
     @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
   }
+}
+
+button.link-button {
+  width: 100%;
 }
 
 input[type=text] {

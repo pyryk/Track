@@ -376,6 +376,34 @@ var TargetResults = BaseController.sub({
   }
 });
 
+var Leaderboard = BaseController.sub({
+  init: function() {
+    BaseController.prototype.init.call(this);
+    
+    LeaderboardEntry.bind('create update', this.proxy(this.entryAdded));
+    
+    // update the list
+    LeaderboardEntry.load();
+  },
+  entryAdded: function() {
+    log('leaderboard entry added');
+    
+    if (window.track.visiblePage == this) {
+      this.render();
+    }
+  },
+  getData: function() {
+    // sort data and add positions accordingly
+    var entries = _.sortBy(LeaderboardEntry.all(), function(item) {
+      return -1*item.points;
+    });
+    for (var i in entries) {
+      entries[i].position = parseInt(i) + 1;
+    }
+    return {entries: entries};
+  }
+});
+
 var BackButton = BaseController.sub({
   events: {
     "fastclick .login-button": "clicked"
@@ -396,7 +424,8 @@ var BackButton = BaseController.sub({
 var LoginScreen = BaseController.sub({
   events: {
     "fastclick .login-button": "loginUser",
-    "fastclick .no-login": "setNoLogin"
+    "fastclick .no-login": "setNoLogin",
+    "fastclick #view-leaderboard": "viewLeaderboard" 
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -417,5 +446,8 @@ var LoginScreen = BaseController.sub({
   setNoLogin: function() {
     window.track.noLogin = true;
     Spine.Route.navigate('/');
+  },
+  viewLeaderboard: function(e) {
+    Spine.Route.navigate('!/leaderboard');
   }
 });

@@ -284,3 +284,25 @@ User.configure("User", "name", "email", "logged", "token", "provider");
 User.getUser = function() {
   return User.last() || User.create();
 };
+
+var LeaderboardEntry = Spine.Model.sub();
+LeaderboardEntry.configure("LeaderboardEntry", "position", "name", "picture", "points");
+
+LeaderboardEntry.load = function() {
+  window.setTimeout(function() {
+    var data = {
+        users: [
+            {name: "Mikko Koski", picture: "https://graph.facebook.com/566268546/picture", points: 56},
+            {name: "Pyry Kröger", picture: "https://graph.facebook.com/pyryk/picture", points: 44},
+            {name: "Antti Heikkonen", picture: "https://graph.facebook.com/751414439/picture", points: 39},
+            {name: "Lauri Orkoneva", picture: "https://graph.facebook.com/lauri.orkoneva/picture", points: 21},
+            {name: "Heikki Korhonen", picture: "https://graph.facebook.com/heikki.korhonen/picture", points: 9},
+        ]
+    }
+    for (var i in data.users) {
+      var user = data.users[i];
+      user.id = user.picture; // map the id to picture (should be unique) by default
+      LeaderboardEntry.create(user);
+    }
+  }, 100);
+}

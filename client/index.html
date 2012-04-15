@@ -199,7 +199,8 @@
     {{#if logged}}
       <p>Welcome!</p>
       <div id="logout">
-        <p><button  onClick="FB.logout();">Logout</button></p>
+        <p><span class="link-button" id="view-leaderboard">View leaderboard</span></p>
+        <p><button class="link-button" onClick="FB.logout();">Logout</button></p>
       </div>
     {{else}}
       <div id="login">
@@ -216,6 +217,24 @@
       </div>
     {{/if}}
   </script>
+  
+  <script id="template-leaderboard" type="text/x-handlebars-template">
+    {{#if error}}
+      {{error}}
+    {{/if}}
+    <div id="leaderboard">
+      <table>
+        <tr class="header"><th colspan="3">Leaderboard</th></tr>
+          {{#each entries}}
+            <tr>
+              <td class="position">{{this.position}}</td>
+              <td class="name"><img src="{{this.picture}}" alt=""> {{this.name}}</td>
+              <td class="points">{{this.points}}</td>
+            </tr>
+          {{/each}}
+        </table>
+    </div>
+  </script>
 
   <!-- JavaScript at the bottom for fast page loading -->
   <!-- libraries -->
@@ -224,6 +243,7 @@
   <script src="js/libs/spine.js"></script>
   <script src="js/libs/spine.route.js"></script>
   <script src="js/libs/handlebars.js"></script>
+  <script src="js/handlebars-helpers.js"></script>
   <script src="js/libs/underscore-min.js"></script>
   <script src="js/libs/jquery.flot.min.js"></script>
   <script src="js/libs/jquery.tooltip.js"></script>
