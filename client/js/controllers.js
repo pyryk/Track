@@ -6,6 +6,9 @@ var BaseController = Spine.Controller.sub({
     }
     
   },
+  show: function() {
+    this.render();
+  },
   render: function() {
     var data = this.getData();
     if (typeof this.template === "function") {
@@ -383,7 +386,12 @@ var Leaderboard = BaseController.sub({
     LeaderboardEntry.bind('create update', this.proxy(this.entryAdded));
     
     // update the list
+    //LeaderboardEntry.load();
+  },
+  show: function() {
+    // update the list
     LeaderboardEntry.load();
+    BaseController.prototype.show.call(this);
   },
   entryAdded: function() {
     log('leaderboard entry added');

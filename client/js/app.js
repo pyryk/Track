@@ -68,7 +68,7 @@ var App = Spine.Controller.sub({
     
       log("rendering view " + name);
       this.pages[name].id = id; // set id if needed
-      this.pages[name].render();
+      this.pages[name].show();
       this.visiblePage = this.pages[name];
     
       // add page to the page stack:
@@ -114,7 +114,7 @@ var App = Spine.Controller.sub({
          user.save();
          
          FB.api('/me', function(response) {
-           user.name = response.username ? response.username : response.id;
+           user.name = response.id;
            user.email = response.email;
            user.provider = "facebook";
            user.save();
