@@ -45,8 +45,8 @@ module.exports = {
     }],
 
     users: [
-        {_id: '111111111111111111111100', fbUserId: '111111', fbInformation: {name: 'Pyry Kröger'}},
-        {_id: '111111111111111111111101', fbUserId: '123456', fbInformation: {name: 'Mikko Koski'}},
+        {_id: '111111111111111111111100', fbUserId: '111111', fbInformation: {name: 'Pyry Kröger'}}, // No points
+        {_id: '111111111111111111111101', fbUserId: '123456', fbInformation: {name: 'Mikko Koski'}}, // No points
         {_id: '111111111111111111111119', fbUserId: '000009', fbInformation: {name: 'James Dean'}, points: 41},
         {_id: '111111111111111111111111', fbUserId: '000001', fbInformation: {name: 'John Doe'}, points: 102},
         {_id: '111111111111111111111112', fbUserId: '000002', fbInformation: {name: 'Joe Doe'}, points: 100},

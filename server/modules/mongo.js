@@ -292,7 +292,7 @@ var Mongo = {
     findUsersWithMostPoints: function() {
         var promise = new Promise();
 
-        this.User.find({}, null, {skip:0, limit:10, sort: {points: -1}}, function(error, data) {
+        this.User.find({points: { $gt: 0}}, null, {skip:0, limit:10, sort: {points: -1}}, function(error, data) {
             return this.resolvePromise(error, data, promise);
         }.bind(this));
 

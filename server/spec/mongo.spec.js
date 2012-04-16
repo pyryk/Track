@@ -1,5 +1,6 @@
 var Mongo = require('../modules/mongo');
 var MongoHelpers = require('./helpers').Mongo;
+var Query = require('mongoose').Query;
 
 // Helper methods for Mongo testing
 var testDB = MongoHelpers.testDB;
@@ -171,6 +172,47 @@ describe('Mongo', function() {
                 expect(users[9].fbUserId).toEqual('000010');
             });
         });
-    })
 
+        it('should not return users without any points', function() {
+            // Remove some users first (leave only 000001 and 000002)
+            var q = new Query();
+            q.nor([{ fbUserId: '000001' }, { fbUserId: '000002' }, { fbUserId: '111111' }, { fbUserId: '123456' }]);
+
+            var removed = false;
+            Mongo.User.remove(q, function() {
+                removed = true;
+            });
+
+            waitsFor(function() {
+                return removed;
+            });
+
+            var usersFound = false;
+            var usersLength = 0;
+            runs(function() {
+                // Guard assertion: Make sure the remove was successful
+                Mongo.User.find({}, function(error, users) {
+                    usersLength = users.length;
+                    usersFound = true;
+                });
+            });
+
+            waitsFor(function() {
+                return usersFound;
+            });
+
+            runs(function() {
+                expect(usersLength).toEqual(4);
+            });
+
+            // Now, the actual test
+
+            testDB(Mongo.findUsersWithMostPoints(), function(users) {
+                expect(users.length).toEqual(2);
+                expect(users[0].fbUserId).toEqual('000001');
+                expect(users[1].fbUserId).toEqual('000002');
+            });
+
+        });
+    });
 });
