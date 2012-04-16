@@ -121,28 +121,33 @@ describe('Session', function() {
     describe('tryCreateSession', function() {
 
         it('should create a new session if me request was successful', function() {
-            spyOnPromise(session.fbClient, 'getMe').andCallSuccess({name: "Mikko Koski"});
+            spyOnPromise(session.fbClient, 'getMe').andCallSuccess({id: '123456', name: "Mikko Koski"});
             spyOn(session.sessionStore, 'createSession').andReturn(fakeSession);
             spyOn(session, 'updateUsersFacebookInformation');
 
             var tryCreateSessionPromise = session.tryCreateSession('123456', 'AAAAAA');
 
-            var promiseResult, promiseResolved;
+            waitsForPromise(tryCreateSessionPromise);
 
-            tryCreateSessionPromise.then(function(result) {
-                promiseResult = result;
-                promiseResolved = true;
+            runs(function() {
+                expect(tryCreateSessionPromise.resolved).toBeTruthy();
+                expect(session.sessionStore.createSession).toHaveBeenCalledWith('123456', 'AAAAAA');
+                expect(tryCreateSessionPromise.result[0]).toBeSession();
+                expect(session.updateUsersFacebookInformation).toHaveBeenCalledWith('123456', {id: '123456', name: "Mikko Koski"});
             });
+        });
+
+        it('should reject promise if fbUserId does not match to the one returned by Facebook', function() {
+            spyOnPromise(session.fbClient, 'getMe').andCallSuccess({id: '111111', name: "Mikko Koski"});
+
+            var tryCreateSessionPromise = session.tryCreateSession('123456', 'AAAAAA');
 
             waitsForPromise(tryCreateSessionPromise);
 
             runs(function() {
-                expect(promiseResolved).toBeTruthy();
-                expect(session.sessionStore.createSession).toHaveBeenCalledWith('123456', 'AAAAAA');
-                expect(promiseResult).toBeSession();
-                expect(session.updateUsersFacebookInformation).toHaveBeenCalledWith('123456', {name: "Mikko Koski"});
+                expect(tryCreateSessionPromise.rejected).toBeTruthy();
             });
-        });
+        })
 
         it('should reject promise if me request failed', function() {
             spyOnPromise(session.fbClient, 'getMe').andCallError();

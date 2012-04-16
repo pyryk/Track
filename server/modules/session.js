@@ -44,6 +44,11 @@ Session.fn.tryCreateSession = function(fbUserId, fbAccessToken) {
     var promise = new Promise();
 
     this.fbClient.getMe(fbAccessToken).then(function success(res) {
+        // Verify fbUserId
+        if(res.id == null || res.id !== fbUserId) {
+            return promise.reject();
+        }
+
         var newSession = this.sessionStore.createSession(fbUserId, fbAccessToken);
         this.updateUsersFacebookInformation(fbUserId, res)
         promise.resolve(newSession);
