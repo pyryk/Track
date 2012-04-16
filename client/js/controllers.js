@@ -186,7 +186,9 @@ var TargetDetails = BaseController.sub({
   },
   answerSaved: function(answer, success) {
     if (success) {
-      Spine.Route.navigate(App.getRoute(answer));
+      this.viewResults();
+      // uncomment to show thanks view
+      // Spine.Route.navigate(App.getRoute(answer));
     } else {
       log("Answer not saved!");
     }
@@ -199,9 +201,9 @@ var TargetDetails = BaseController.sub({
       value: value, 
       location: window.track.location
     });
-    result.bind('resultSent', this.answerSaved);
-      var user = User.getUser();
-      result.post();
+    result.bind('resultSent', this.proxy(this.answerSaved));
+    var user = User.getUser();
+    result.post();
   },
   savePositiveAnswer: function() {
     this.saveAnswer(1);
@@ -421,8 +423,7 @@ var BackButton = BaseController.sub({
     Spine.bind('page:change', this.proxy(this.render));
   },
   getData: function() {
-    var title = this.app.getPreviousPage() ? this.app.getPreviousPage().getTitle() : undefined;
-    return {title: title};
+    return {previous: this.app.getPreviousPage() !== undefined};
   },
   clicked: function() {
     this.app.goToPreviousPage();
@@ -438,12 +439,15 @@ var LoginScreen = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
     User.bind("create update", this.proxy(this.loginUpdated));
+    Spine.bind("logout", this.proxy(this.loggedOut));
   },
   loginUpdated: function() {
-    console.log('login updated!');
     if (window.track.visiblePage == this) {
       this.render();
     }
+  },
+  loggedOut: function() {
+    this.show();
   },
   getData: function() {
     return User.last() || {};

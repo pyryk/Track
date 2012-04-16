@@ -122,7 +122,13 @@ var App = Spine.Controller.sub({
          
          if (this.redirect) {
            Spine.Route.navigate(this.redirect); 
+         } else {
+           Spine.Route.navigate("!/"); 
          }
+       }
+       else {
+         var user = User.getUser().destroy();
+         Spine.trigger("logout");
        }
      });
   },
@@ -160,6 +166,10 @@ var App = Spine.Controller.sub({
       case this.pages['ownResult']:
       case this.pages['targetResults']:
         return this.pages['targetDetails'];
+      case this.pages['loginScreen']:
+        return this.pages['targetList'];
+      case this.pages['leaderboard']:
+        return this.pages['loginScreen'];
       default: 
         return undefined;
     }
@@ -175,9 +185,14 @@ var App = Spine.Controller.sub({
     if (!prev) {
       return;
     }
+    //console.log(prev.url);
+    //Spine.Route.navigate(prev.url);
     
     if (prev.id) {
       Spine.Route.navigate(App.getRoute(Target.find(prev.id)))
+      // hard coded. couldnt come up with anything better :(
+    } else if (prev == this.pages['loginScreen']) {
+      Spine.Route.navigate("!/login/");
     } else {
       Spine.Route.navigate("!/targets/");
     }
