@@ -167,12 +167,6 @@ var TargetDetails = BaseController.sub({
   },
   render: function() {
     BaseController.prototype.render.call(this);
-    
-    //console.log($(this.el).find('.view-results').length);
-    /*this.el.find('.view-results').bind("click", this.proxy(function(e) {
-      console.log('view results clicked');
-      this.viewResults(e);
-    }));*/
   },
   error: function(reason) {
     if (reason == "notfound") {
@@ -186,7 +180,8 @@ var TargetDetails = BaseController.sub({
   },
   answerSaved: function(answer, success) {
     if (success) {
-      this.viewResults();
+      //this.viewResults();
+      Spine.Route.navigate(App.getRoute(Target.find(this.id)) + "/results");
       // uncomment to show thanks view
       // Spine.Route.navigate(App.getRoute(answer));
     } else {
@@ -290,94 +285,8 @@ var TargetResults = BaseController.sub({
     }
     return data;
   },
-  displayChart: function(el) {
-    //try {
-      try {
-        var target = Target.find(this.id);
-      } catch(e) {
-        log(e);
-        return;
-      }
-    
-      var now = new Date();
-      
-      // setup the chart properties
-      
-      var positives = {
-        data: [],
-        bars: {show: true},
-      }
-      var negatives = {
-        data: [],
-        bars: {show: true},
-      }
-      var options = {
-        grid: {
-          autoHilight: true,
-          clickable: true,
-          backgroundColor: {colors: ["#fff", "#ddd"]},
-          markings: {xaxis: {from: -1, to: 1}, color: "#ff0000"}
-        },
-        bars: {
-          barWidth: 900000, // ms, 15*60*1000
-        },
-        xaxis: {
-          mode: "time",
-          ticks: 4,
-          tickLength: 0,
-          min: now.getTime()
-        },
-        yaxis: {
-          ticks: 1,
-          tickDecimals: 0
-        },
-        colors: ["#00ff00","#ff0000"]
-      }
-      
-      var maxTime = 0;
-      for (var i in target.results.history) {
-        var chunk = target.results.history[i];
-        
-        var date = new Date(chunk.start);
-        
-        // if too far (3h+) in the past
-        if (date.getTime() + 3*60*60*1000 < now.getTime()) {
-          continue;
-        }
-        
-        date.setUTCHours(date.getHours()); // workaround for flot showing only UTC
-        var millis = date.getTime();
-        
-        if (maxTime < millis) {
-          maxTime = millis;
-        }
-        
-        negatives.data.push([millis, -1*chunk.neg]);
-        positives.data.push([millis, chunk.pos]);
-      }
-
-      options.xaxis.min = maxTime - 2*60*60*1000;
-      
-      $.plot(el, [ positives, negatives ], options);
-      
-      el.bind("plotclick", function(event, pos, item) {
-        if (!item) {
-          $('#tooltip').remove();
-          return; // no item selected
-        }
-        var pos = {left: pos.pageX - el.offset().left, top: pos.pageY - el.offset().top}
-        var series = item.seriesIndex === 0 ? positives : negatives;
-        var values = series.data[item.dataIndex];
-        
-        el.trackTooltip(series === positives ? values[1] : -1 * values[1], pos, item);
-      });
-    //} catch (e) {
-    //  console.error(e);
-    //}
-  },
   render: function() {
     BaseController.prototype.render.call(this);
-    //this.displayChart(this.el.find(".graph"));
   }
 });
 
@@ -416,14 +325,16 @@ var Leaderboard = BaseController.sub({
 
 var BackButton = BaseController.sub({
   events: {
-    "fastclick .login-button": "clicked"
+    "fastclick .back-button": "clicked"
   },
   init: function() {
     BaseController.prototype.init.call(this);
     Spine.bind('page:change', this.proxy(this.render));
+    Spine.bind('logout', this.proxy(this.render));
   },
   getData: function() {
-    return {previous: this.app.getPreviousPage() !== undefined};
+    var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
+    return {previous: showButton};
   },
   clicked: function() {
     this.app.goToPreviousPage();

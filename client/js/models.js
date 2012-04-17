@@ -7,6 +7,20 @@ var Target = Spine.Model.sub();
 Target.configure("Target", "name", "question", "location", "results", "detailsLoaded", "saved");
 
 Target.include({
+    setDefaults: function() {
+      this.results = this.results || {};
+      
+      this.results.now = this.results.now || {};
+      this.results.now.pos = this.results.now.pos || 0;
+      this.results.now.neg = this.results.now.neg || 0;
+      this.results.now.trend = this.results.now.trend || 0;
+      this.results.now.period = this.results.now.period || 0;
+      
+      this.results.alltime = this.results.alltime || {};
+      this.results.alltime.pos = this.results.alltime.pos || 0;
+      this.results.alltime.neg = this.results.alltime.neg || 0;
+      
+    },
     getType: function() {
       return "target"
     },
@@ -40,7 +54,6 @@ Target.include({
       }
       var data = JSON.stringify(toSend);
       
-      var that = this;
       $.ajax({
         url: url,
         type: "POST",
@@ -48,17 +61,18 @@ Target.include({
         dataType: "json",
         data: data,
         headers: user.logged ? headers : {},
-        success: function(data) {
-          that.id = data._id;
-          that.saved = true;
-          that.detailsLoaded = true;
-          that.save();
-          that.trigger("saveToServer", true);
-        }, 
-        error: function(jqxhr, status, err) {
-          that.trigger("saveToServer", false);
+        success: this.proxy(function(data) {
+          this.id = data._id;
+          this.saved = true;
+          this.detailsLoaded = true;
+          
+          this.save();
+          this.trigger("saveToServer", true);
+        }), 
+        error: this.proxy(function(jqxhr, status, err) {
+          this.trigger("saveToServer", false);
           alert(status + ': ' + err);
-        }
+        })
       });
     },
     saved: false,
@@ -210,7 +224,9 @@ Target.fromForm = function(form) {
       data[nameParts[0]] = fieldVal;
     }
   });
-  return Target.create(data);
+  var target = Target.create(data);
+  target.setDefaults();
+  return target;
 } 
 
 /* -------------------------------------- */
