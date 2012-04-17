@@ -295,7 +295,34 @@ Result.include({
 /* -------------------------------------- */
 /* user (logged in via facebook or other) */
 var User = Spine.Model.sub();
-User.configure("User", "name", "email", "logged", "token", "provider");
+User.configure("User", "name", "logged", "token", "expires", "provider");
+
+User.include({
+  loadFromCookies: function() {
+    var user = User.getUser();
+    user.name = $.cookie('fb_user');
+    user.token = $.cookie('fb_token');
+    
+    if (user.name && user.token) {
+      user.logged = true;
+      user.provider = "facebook";
+    }
+    
+    user.save();
+  },
+  /**
+  * Saves user id and access token to a cookie for quicker return to app
+  * @param expires, access token expiry, in days after today
+  */
+  saveCookies: function(expires) {
+    $.cookie('fb_user', this.name, {expires: expires});
+    $.cookie('fb_token', this.token, {expires: expires});
+  },
+  destroyCookies: function() {
+    $.cookie('fb_user', null);
+    $.cookie('fb_token', null);
+  }
+});
 
 User.getUser = function() {
   return User.last() || User.create();
