@@ -8,7 +8,7 @@ var Response = require('restify').Response;
 var Session = require('./session').Session;
 var FBClient = require('./session').FBClient;
 var SessionStore = require('./session').SessionStore;
-var p = require('node-promise');
+var p = require("promised-io/promise");
 
 var DateUtils = require('../modules/now.js');
 
@@ -259,7 +259,7 @@ var API = {
         }
 
         // All ready
-        p.allOrNone(promises).then(function success(createTargetResult) {
+        p.all(promises).then(function success(createTargetResult) {
             var id = createTargetResult[0]
             res.send(201, {_id: id});
             return next();
@@ -293,7 +293,7 @@ var API = {
         }
 
         // All ready
-        p.allOrNone(promises).then(function success() {
+        p.all(promises).then(function success() {
             res.send(204, null);
             return next();
         }, function error(error) {

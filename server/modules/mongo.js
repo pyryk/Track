@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var p = require('node-promise');
+var p = require("promised-io/promise");
 var Promise = p.Promise;
 var Fixtures = require('../fixtures/fixtures');
 var DateUtils = require('../modules/now.js');

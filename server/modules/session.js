@@ -1,5 +1,5 @@
 var restify = require('restify');
-var Promise = require('node-promise').Promise;
+var Promise = require("promised-io/promise").Promise;
 var DateUtils = require('../modules/now.js');
 var _ = require('underscore');
 var Mongo = require('./mongo.js');
