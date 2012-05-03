@@ -18,7 +18,7 @@ $background_gradient_1: #FFFFFF;
 $background_gradient_2: #D9D9D9;
 $text_color: rgba(0,0,0,1);
 $list_item_gradient_1: #fdfdfd;
-$list_item_gradient_2: #eee;
+$list_item_gradient_2: darken(#fdfdfd, 3%);
 
 /* Default jQuery mobile blue theme */
 /*
@@ -118,21 +118,19 @@ header {
 
 #main {
   padding-top: $header_height;
-  padding-bottom: $header_height;
-  padding-left: 5px;
-  padding-right: 5px;
+  // padding-bottom: $header_height;
 }
 
 .primary-list {
   list-style-type: none;
   padding: 0;
-  
+  margin: 0;
+
   li {
     padding: 1em 1em;
     border: 0;
+    border-top: 1px solid #fff;
     border-bottom: 1px solid $border_color;
-    border-left: 1px solid $border_color;
-    border-right: 1px solid $border_color;
     @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
     @include ellipsis;
     
@@ -176,18 +174,22 @@ header {
   }
 }
 
+.target-name {
+    margin: 10px 10px;
+}
+
 #target-details {
   .target-question {
-    @include header;
+    padding: 0em 10px;
+    font-size: 140%;
   }
   .target-answer {
     @include display-box;
     @include box-orient(horizontal);
     @include box-align(stretch);
-    margin: 0;
+    margin: 40px 10px;
     
     .answer {
-      border: 1px solid $border_color;
       border-right: none;
       padding: 1em;
       display: block;
@@ -201,46 +203,52 @@ header {
       }
     }
     .answer:first-child {
-      @include border-radius(0px 0px 0px 5px);
+      @include border-radius(20px 0px 0px 20px);
     }
     .answer:last-child {
       border-right: 1px solid $border_color;
-      @include border-radius(0px 0px 5px 0px);
+      @include border-radius(0px 20px 20px 0px);
     }
   }
   .link-button {
-    margin-top: 2em;
+    position: absolute;
+  	bottom: 1em;
+    left: 0.8em;
+    right: 0.8em;
   }
 }
 
 #target-results {
   .target-question {
-    @include header;
+    padding: 0em 10px;
+    font-size: 140%;
   }
   .result-heading {
-    font-size: 1em;
-    color: lighten($text_color, 40%);
-    margin: 10px 0.5em;
-    font-weight: normal;
+    font-size: 0.5em;
+    // color: lighten($text_color, 40%);
+    margin: 5px 10px;
+    padding-bottom: 0px;
+    font-weight: bold;
   }
   table {
     width: 100%;
   }
   .target-answers {
-    @include body-box;
+    // @include body-box;
     
     th {
       font-size: 2em;
       font-weight: bold;
-      color: lighten($text_color, 20%);
+      // color: lighten($text_color, 20%);
       text-align: left;
-      @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
-      padding: 1em;
+      // @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
+      // padding: 1em;
     }
     
     td {
-      color: lighten($text_color, 50%);
+      // color: lighten($text_color, 50%);
       font-size: 3em;
+      border-width: 0px
     }
   }
   .result-number, .answer {
@@ -254,15 +262,17 @@ header {
   }
   
   .result-graph {
+      color: #fff;
     @include display-box;
     @include box-orient(horizontal);
     @include box-align(stretch);
     
-    margin: 20px 1%;
-    border: 1px solid lighten($text_color, 50%);
+    // margin: 20px 1%;
+    margin: 10px 10px;
+    // border: 1px solid lighten($text_color, 50%);
     
     .pos, .neg {
-      padding: 10px;
+      padding: 5px;
       text-align: center;
       
       .trend {
@@ -275,19 +285,23 @@ header {
     }
     
     .pos {
-      background-color: rgba(0,255,0,0.35);
+	  $pos_color: rgb(0,181,9);
+      @include background-image(linear-gradient($pos_color, lighten($pos_color, 10%)));
+      @include border-radius(0px 10px 10px 0px);
       
       .trend {
-      	border-right: 20px solid rgba(255,0,0,0.35);
+      	border-right: 20px solid rgb(255,0,0);
       	float: left;
       }
     }
     .neg {
-      background-color: rgba(255,0,0,0.35);
+	  $neg_color: rgb(255,0,0);
+      @include background-image(linear-gradient($neg_color, lighten($neg_color, 15%)));
+      @include border-radius(10px 0px 0px 10px);
       border-right: 1px solid lighten($text_color, 50%);
-      
+
       .trend {
-      	border-left: 20px solid rgba(0,255,0,0.5);
+      	border-left: 20px solid rgb(0,181,9);
       	float: right;
       }
     }
