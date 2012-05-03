@@ -2,6 +2,9 @@ var App = Spine.Controller.sub({
   pages: {},
   visiblePage: undefined,
   init: function() {
+    // load the user from cookies, if there is one
+    User.getUser().loadFromCookies();
+    
     this.routes({
       "!/login/": function(params) {
         this.renderView('loginScreen', LoginScreen);
@@ -79,9 +82,14 @@ var App = Spine.Controller.sub({
     }
     Spine.trigger('page:change');
   },
+  loggedOut: function() {
+    log('logged out - displaying login page');
+    Spine.Route.navigate('!/login');
+  },
   addLogin: function() {
     var fb = $('<div id="fb-root"></div>');
     $('body').append(fb);
+    Spine.bind('logout', this.proxy(this.loggedOut));
     
     window.fbAsyncInit = function() {
       FB.init({
@@ -91,7 +99,17 @@ var App = Spine.Controller.sub({
         cookie     : true, // enable cookies to allow the server to access the session
         xfbml      : true  // parse XFBML
       });
-      User.create({logged: false});
+      User.getUser();
+      
+      // check login status; may conflict with cookies (if e.g. logged out from fb elsewhere)
+      FB.getLoginStatus(function(response) {
+        if (!response.authResponse) {
+          var user = User.getUser();
+          user.destroyCookies();
+          user.destroy();
+          Spine.trigger("logout");
+        }
+      });
 
       FB.Event.subscribe('auth.statusChange', handleStatusChange);
     };
@@ -111,18 +129,61 @@ var App = Spine.Controller.sub({
          var user = User.getUser();
          user.token = response.authResponse.accessToken;
          user.logged = true;
+         user.name = response.authResponse.userID;
+         //user.expires = 1;
+         user.provider = "facebook";
          user.save();
          
-         FB.api('/me', function(response) {
+         // get long-term access token for user
+         // see https://developers.facebook.com/roadmap/offline-access-removal/
+         // the token expires in 60 days
+         $.ajax({
+           url: "https://graph.facebook.com/oauth/access_token?client_id=167103313410896&client_secret=c11d366378f47c931da7770583617ece&grant_type=fb_exchange_token&fb_exchange_token="+user.token,
+           success: function(data) {
+             // parse params (in url param format)
+             var parts = data.split("&");
+             var params = {};
+             for (var i in parts) {
+               var param = parts[i].split("=");
+               params[param[0]] = param[1];
+             }
+             
+             // update the user attributes
+             user.token = params['access_token'];
+             user.expires = params['expires'];
+             var expires;
+             try {
+               expires = Math.floor(parseInt(params['expires'])/86400) // seconds to days
+             } catch(e) { // numberformatexception
+               expires = 59;
+             }
+             // persist the token and userid in cookies
+             user.saveCookies(expires);
+           },
+           error: function() {
+             log('Error getting long-term FB token. Using short-term one instead.');
+           }
+         });
+         
+         /*FB.api('/me', function(response) {
            user.name = response.id;
            user.email = response.email;
            user.provider = "facebook";
            user.save();
-         });
+         });*/
          
          if (this.redirect) {
            Spine.Route.navigate(this.redirect); 
+         } else {
+           Spine.Route.navigate("!/"); 
          }
+       }
+       else {
+         console.log('destroy user');
+         var user = User.getUser();
+         user.destroyCookies();
+         user.destroy();
+         Spine.trigger("logout");
        }
      });
   },
@@ -160,6 +221,10 @@ var App = Spine.Controller.sub({
       case this.pages['ownResult']:
       case this.pages['targetResults']:
         return this.pages['targetDetails'];
+      case this.pages['loginScreen']:
+        return this.pages['targetList'];
+      case this.pages['leaderboard']:
+        return this.pages['loginScreen'];
       default: 
         return undefined;
     }
@@ -175,9 +240,14 @@ var App = Spine.Controller.sub({
     if (!prev) {
       return;
     }
+    //console.log(prev.url);
+    //Spine.Route.navigate(prev.url);
     
     if (prev.id) {
       Spine.Route.navigate(App.getRoute(Target.find(prev.id)))
+      // hard coded. couldnt come up with anything better :(
+    } else if (prev == this.pages['loginScreen']) {
+      Spine.Route.navigate("!/login/");
     } else {
       Spine.Route.navigate("!/targets/");
     }

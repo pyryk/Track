@@ -120,6 +120,7 @@
             <p class="target-question">{{question}}</p>
             <div class="results">
             <table>
+              {{#if results.alltime}}
               {{#with results.alltime}}
                 <tr class="target-answers"><td>
                   <h2 class="result-heading">Overall</h2>
@@ -134,6 +135,8 @@
                   </div>
                 </td></tr>
               {{/with}}
+              {{/if}}
+              {{#if results.now}}
               {{#with results.now}}
                 <tr class="target-answers"><td>
                   <h2 class="result-heading">Now</h2>
@@ -148,6 +151,7 @@
                   </div>
                 </td>
               {{/with}}
+              {{/if}}
             </table>
             </div>
         {{/if}}
@@ -190,8 +194,8 @@
   </script>
   
   <script id="template-backButton" type="text/x-handlebars-template">
-    {{#if title}}
-      <span class="login-button top-button">Back</span>
+    {{#if previous}}
+      <span class="back-button top-button">Back</span>
     {{/if}}
   </script>
   
@@ -245,8 +249,9 @@
   <script src="js/libs/handlebars.js"></script>
   <script src="js/handlebars-helpers.js"></script>
   <script src="js/libs/underscore-min.js"></script>
-  <script src="js/libs/jquery.flot.min.js"></script>
-  <script src="js/libs/jquery.tooltip.js"></script>
+  <!--<script src="js/libs/jquery.flot.min.js"></script>
+  <script src="js/libs/jquery.tooltip.js"></script>-->
+  <script src="js/libs/jquery.cookie.js"></script>
   <script src="js/libs/browserdetect.js"></script>
 
   <!-- our code -->
