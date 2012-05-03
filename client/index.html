@@ -55,7 +55,7 @@
   <div id="container">
     <header>
       <div id="back-button"></div>
-      <h1><a href="#">Track</a></h1>
+      <h1><!-- <img src="img/aalto.jpg" style="height: 26px; padding-bottom: 5px; padding-right: 10px"></img> --><a href="#">A! - Aalto Track</a></h1>
       <div id="account-button"><span class="top-button"><a href="#!/login/">Account</a></span></div>
     </header>
     <div id="main" role="main">
@@ -201,14 +201,14 @@
   
   <script id="template-loginScreen" type="text/x-handlebars-template">
     {{#if logged}}
-      <p>Welcome!</p>
+      <p>Welcome to Aalto Track!</p>
       <div id="logout">
         <p><span class="link-button" id="view-leaderboard">View leaderboard</span></p>
         <p><button class="link-button" onClick="FB.logout();">Logout</button></p>
       </div>
     {{else}}
       <div id="login">
-        <h2>Welcome!</h2>
+        <h2>Welcome to Aalto Track!</h2>
         <div class="content">
         <p>
           Track can be used without logging in. However, the social aspect of 
