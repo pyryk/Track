@@ -178,7 +178,7 @@ var App = Spine.Controller.sub({
          if (this.redirect) {
            Spine.Route.navigate(this.redirect); 
          } else {
-           Spine.Route.navigate("!/"); 
+           //Spine.Route.navigate("!/"); 
          }
        }
        else {
