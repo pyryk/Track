@@ -367,9 +367,30 @@ var LoginScreen = BaseController.sub({
   getData: function() {
     return User.last() || {};
   },
-  loginUser: function() {    
-    FB.login(function(response) { }, {scope:'email'});     
-  }, 
+  loginUser: function() {
+    var opts = {scope:'email'};
+    if (this.useRedirectURI()) {
+      opts.redirect_uri = document.location.href;
+    }
+    FB.login(function(response) { }, opts);     
+  },
+  useRedirectURI: function() {
+    var ua = navigator.userAgent;
+    
+    // no iphone, ipod or ipad => no redirect URI
+    if (ua.indexOf('iPhone') == -1 && ua.indexOf('iPad') == -1 && ua.indexOf('iPod') == -1) {
+      return false;
+    }
+    
+    // ua contains safari => not homescreen app => no redirect URI
+    if (ua.indexOf('Safari') > -1) {
+      return false;
+    }
+    
+    // ios but not safari => add redirect URI
+    return true;
+    
+  },
   setNoLogin: function() {
     window.track.noLogin = true;
     Spine.Route.navigate('/');
