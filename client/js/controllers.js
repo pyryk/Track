@@ -271,7 +271,7 @@ var TargetResults = BaseController.sub({
       var now = data.target.results.now
       
       //now.pos = 4; now.neg = 7;
-      //now.trend = 1;
+      //now.trend = -2;
       
       if (now.pos == 0 && now.neg == 0) {
         now.zerozero = true;
@@ -333,11 +333,15 @@ var BackButton = BaseController.sub({
     Spine.bind('logout', this.proxy(this.render));
   },
   getData: function() {
+    //var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
     var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
     return {previous: showButton};
   },
   clicked: function() {
-    this.app.goToPreviousPage();
+    //this.app.goToPreviousPage();
+    if (window.history.length > 0) {
+      window.history.back();
+    }
   }
 });
 

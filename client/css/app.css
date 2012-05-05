@@ -102,8 +102,8 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   background-image: linear-gradient(#fdfdfd, #f5f5f5);
   white-space: nowrap;
   overflow: hidden;
-  -ms-text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
   text-overflow: ellipsis;
   -moz-binding: url('/css/xml/ellipsis.xml#ellipsis');
 }
@@ -146,18 +146,20 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
 /* line 167, ../scss/app.scss */
 .primary-list li:first-child {
   border-top: 1px solid #cccccc;
-  -webkit-border-radius: 5px 5px 0px 0px;
   -moz-border-radius: 5px 5px 0px 0px;
-  -ms-border-radius: 5px 5px 0px 0px;
+  -webkit-border-radius: 5px 5px 0px 0px;
   -o-border-radius: 5px 5px 0px 0px;
+  -ms-border-radius: 5px 5px 0px 0px;
+  -khtml-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
 }
 /* line 172, ../scss/app.scss */
 .primary-list li:last-child {
-  -webkit-border-radius: 0px 0px 5px 5px;
   -moz-border-radius: 0px 0px 5px 5px;
-  -ms-border-radius: 0px 0px 5px 5px;
+  -webkit-border-radius: 0px 0px 5px 5px;
   -o-border-radius: 0px 0px 5px 5px;
+  -ms-border-radius: 0px 0px 5px 5px;
+  -khtml-border-radius: 0px 0px 5px 5px;
   border-radius: 0px 0px 5px 5px;
 }
 
@@ -173,16 +175,16 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
 }
 /* line 186, ../scss/app.scss */
 #target-details .target-answer {
-  display: -webkit-box;
   display: -moz-box;
+  display: -webkit-box;
   display: -ms-box;
   display: box;
-  -webkit-box-orient: horizontal;
   -moz-box-orient: horizontal;
+  -webkit-box-orient: horizontal;
   -ms-box-orient: horizontal;
   box-orient: horizontal;
-  -webkit-box-align: stretch;
   -moz-box-align: stretch;
+  -webkit-box-align: stretch;
   -ms-box-align: stretch;
   box-align: stretch;
   margin: 40px 10px;
@@ -198,13 +200,14 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   background-image: -o-linear-gradient(#fdfdfd, #f5f5f5);
   background-image: -ms-linear-gradient(#fdfdfd, #f5f5f5);
   background-image: linear-gradient(#fdfdfd, #f5f5f5);
-  -webkit-box-flex: 1;
   -moz-box-flex: 1;
+  -webkit-box-flex: 1;
   -ms-box-flex: 1;
   box-flex: 1;
   text-align: center;
-  -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  -o-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 }
 /* line 201, ../scss/app.scss */
@@ -218,19 +221,21 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
 }
 /* line 205, ../scss/app.scss */
 #target-details .target-answer .answer:first-child {
-  -webkit-border-radius: 20px 0px 0px 20px;
   -moz-border-radius: 20px 0px 0px 20px;
-  -ms-border-radius: 20px 0px 0px 20px;
+  -webkit-border-radius: 20px 0px 0px 20px;
   -o-border-radius: 20px 0px 0px 20px;
+  -ms-border-radius: 20px 0px 0px 20px;
+  -khtml-border-radius: 20px 0px 0px 20px;
   border-radius: 20px 0px 0px 20px;
 }
 /* line 208, ../scss/app.scss */
 #target-details .target-answer .answer:last-child {
   border-right: 1px solid #cccccc;
-  -webkit-border-radius: 0px 20px 20px 0px;
   -moz-border-radius: 0px 20px 20px 0px;
-  -ms-border-radius: 0px 20px 20px 0px;
+  -webkit-border-radius: 0px 20px 20px 0px;
   -o-border-radius: 0px 20px 20px 0px;
+  -ms-border-radius: 0px 20px 20px 0px;
+  -khtml-border-radius: 0px 20px 20px 0px;
   border-radius: 0px 20px 20px 0px;
 }
 /* line 213, ../scss/app.scss */
@@ -279,25 +284,26 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
 /* line 260, ../scss/app.scss */
 #target-results .target-answers:last-child {
   border-bottom: 1px solid #cccccc;
-  -webkit-border-radius: 0px 0px 5px 5px;
   -moz-border-radius: 0px 0px 5px 5px;
-  -ms-border-radius: 0px 0px 5px 5px;
+  -webkit-border-radius: 0px 0px 5px 5px;
   -o-border-radius: 0px 0px 5px 5px;
+  -ms-border-radius: 0px 0px 5px 5px;
+  -khtml-border-radius: 0px 0px 5px 5px;
   border-radius: 0px 0px 5px 5px;
 }
 /* line 264, ../scss/app.scss */
 #target-results .result-graph {
   color: #fff;
-  display: -webkit-box;
   display: -moz-box;
+  display: -webkit-box;
   display: -ms-box;
   display: box;
-  -webkit-box-orient: horizontal;
   -moz-box-orient: horizontal;
+  -webkit-box-orient: horizontal;
   -ms-box-orient: horizontal;
   box-orient: horizontal;
-  -webkit-box-align: stretch;
   -moz-box-align: stretch;
+  -webkit-box-align: stretch;
   -ms-box-align: stretch;
   box-align: stretch;
   margin: 10px 10px;
@@ -323,15 +329,16 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   background-image: -o-linear-gradient(#00b509, #00e80c);
   background-image: -ms-linear-gradient(#00b509, #00e80c);
   background-image: linear-gradient(#00b509, #00e80c);
-  -webkit-border-radius: 0px 10px 10px 0px;
   -moz-border-radius: 0px 10px 10px 0px;
-  -ms-border-radius: 0px 10px 10px 0px;
+  -webkit-border-radius: 0px 10px 10px 0px;
   -o-border-radius: 0px 10px 10px 0px;
+  -ms-border-radius: 0px 10px 10px 0px;
+  -khtml-border-radius: 0px 10px 10px 0px;
   border-radius: 0px 10px 10px 0px;
 }
 /* line 292, ../scss/app.scss */
 #target-results .result-graph .pos .trend {
-  border-right: 20px solid red;
+  border-right: 20px solid #00b509;
   float: left;
 }
 /* line 297, ../scss/app.scss */
@@ -342,16 +349,17 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   background-image: -o-linear-gradient(#ff0000, #ff4d4d);
   background-image: -ms-linear-gradient(#ff0000, #ff4d4d);
   background-image: linear-gradient(#ff0000, #ff4d4d);
-  -webkit-border-radius: 10px 0px 0px 10px;
   -moz-border-radius: 10px 0px 0px 10px;
-  -ms-border-radius: 10px 0px 0px 10px;
+  -webkit-border-radius: 10px 0px 0px 10px;
   -o-border-radius: 10px 0px 0px 10px;
+  -ms-border-radius: 10px 0px 0px 10px;
+  -khtml-border-radius: 10px 0px 0px 10px;
   border-radius: 10px 0px 0px 10px;
   border-right: 1px solid gray;
 }
 /* line 303, ../scss/app.scss */
 #target-results .result-graph .neg .trend {
-  border-left: 20px solid #00b509;
+  border-left: 20px solid #ce1e1e;
   float: right;
 }
 /* line 310, ../scss/app.scss */
@@ -382,10 +390,11 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   font-weight: bold;
   color: white;
   text-shadow: 0 1px 1px #444444;
-  -webkit-border-radius: 5px 5px 0px 0px;
   -moz-border-radius: 5px 5px 0px 0px;
-  -ms-border-radius: 5px 5px 0px 0px;
+  -webkit-border-radius: 5px 5px 0px 0px;
   -o-border-radius: 5px 5px 0px 0px;
+  -ms-border-radius: 5px 5px 0px 0px;
+  -khtml-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
 }
 /* line 327, ../scss/app.scss */
@@ -409,10 +418,11 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
 /* line 336, ../scss/app.scss */
 #target-ownResult .result-info-body:last-child {
   border-bottom: 1px solid #cccccc;
-  -webkit-border-radius: 0px 0px 5px 5px;
   -moz-border-radius: 0px 0px 5px 5px;
-  -ms-border-radius: 0px 0px 5px 5px;
+  -webkit-border-radius: 0px 0px 5px 5px;
   -o-border-radius: 0px 0px 5px 5px;
+  -ms-border-radius: 0px 0px 5px 5px;
+  -khtml-border-radius: 0px 0px 5px 5px;
   border-radius: 0px 0px 5px 5px;
 }
 /* line 339, ../scss/app.scss */
@@ -434,10 +444,11 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   font-weight: bold;
   color: white;
   text-shadow: 0 1px 1px #444444;
-  -webkit-border-radius: 5px 5px 0px 0px;
   -moz-border-radius: 5px 5px 0px 0px;
-  -ms-border-radius: 5px 5px 0px 0px;
+  -webkit-border-radius: 5px 5px 0px 0px;
   -o-border-radius: 5px 5px 0px 0px;
+  -ms-border-radius: 5px 5px 0px 0px;
+  -khtml-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
   margin-top: 20px;
 }
@@ -548,10 +559,11 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   background-image: -o-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: -ms-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
-  -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
+  -webkit-border-radius: 5px;
   -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -khtml-border-radius: 5px;
   border-radius: 5px;
 }
 /* line 420, ../scss/app.scss */
@@ -594,10 +606,11 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   font-weight: bold;
   color: white;
   text-shadow: 0 1px 1px #444444;
-  -webkit-border-radius: 5px 5px 0px 0px;
   -moz-border-radius: 5px 5px 0px 0px;
-  -ms-border-radius: 5px 5px 0px 0px;
+  -webkit-border-radius: 5px 5px 0px 0px;
   -o-border-radius: 5px 5px 0px 0px;
+  -ms-border-radius: 5px 5px 0px 0px;
+  -khtml-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
 }
 /* line 442, ../scss/app.scss */
@@ -615,8 +628,8 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   background-image: linear-gradient(#fdfdfd, #f5f5f5);
   white-space: nowrap;
   overflow: hidden;
-  -ms-text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
   text-overflow: ellipsis;
   -moz-binding: url('/css/xml/ellipsis.xml#ellipsis');
 }
@@ -669,10 +682,11 @@ footer {
   background-image: -o-linear-gradient(#fdfdfd, #f5f5f5);
   background-image: -ms-linear-gradient(#fdfdfd, #f5f5f5);
   background-image: linear-gradient(#fdfdfd, #f5f5f5);
-  -webkit-border-radius: 25px;
   -moz-border-radius: 25px;
-  -ms-border-radius: 25px;
+  -webkit-border-radius: 25px;
   -o-border-radius: 25px;
+  -ms-border-radius: 25px;
+  -khtml-border-radius: 25px;
   border-radius: 25px;
   border: 1px solid #cccccc;
   padding: 0.5em;
@@ -680,8 +694,9 @@ footer {
   font-size: 18px;
   font-weight: bold;
   color: #666666;
-  -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  -o-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 }
 /* line 488, ../scss/app.scss */

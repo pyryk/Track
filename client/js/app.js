@@ -75,6 +75,9 @@ var App = Spine.Controller.sub({
       this.visiblePage = this.pages[name];
     
       // add page to the page stack:
+      // page should not be added, if
+      // a) it is the current page (lenght-1)
+      // b) is is the previous page (length-2)
       if (this.pageStack[this.pageStack.length-1] !== this.pages[name] &&
         this.pageStack[this.pageStack.length-2] !== this.pages[name]) {
         this.pageStack.push(this.pages[name]);

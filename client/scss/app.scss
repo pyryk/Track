@@ -290,8 +290,8 @@ header {
       @include border-radius(0px 10px 10px 0px);
       
       .trend {
-      	border-right: 20px solid rgb(255,0,0);
-      	float: left;
+        border-right: 20px solid rgb(0,181,9);
+        float: left;
       }
     }
     .neg {
@@ -301,8 +301,8 @@ header {
       border-right: 1px solid lighten($text_color, 50%);
 
       .trend {
-      	border-left: 20px solid rgb(0,181,9);
-      	float: right;
+        border-left: 20px solid rgb(206,30,30);
+        float: right;
       }
     }
   }
