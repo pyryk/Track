@@ -135,11 +135,8 @@
 					</div>
 				</div>
 				<div class="span5 chart-span">
+					<h2>Results by time</h2>
 					<div id="chart2"></div>
-					<div id="legend_container2">
-						<div id="smoother2" title="Smoothing"></div>
-						<div id="legend2"></div>
-					</div>
 				</div>
 			</div>
 			<!-- TODO Change these -->
@@ -147,6 +144,7 @@
 			<br />
 			<div class="row">
 				<div class="span5 chart-span">
+					<h2>Precentage results by time</h2>
 					<div id="chart3"></div>
 				</div>
 				<div class="span5 chart-span">
@@ -247,13 +245,32 @@ graph = new Rickshaw.Graph( {
 
 graph.render();
 
-// Chart 2 ---------------------------------------------------------------------------------------------------------
+// Data ---------------------------------------------------------------------------------------------------------
 
-seriesData = [ [], [], [] ];
-random = new Rickshaw.Fixtures.RandomData(150);
+var votes = [];
+var prevPos = Math.random(20) + 10;
+var prevNeg = Math.random(20) + 10;
 
 for (var i = 0; i < 150; i++) {
-	random.addData(seriesData);
+	var pos = prevPos + Math.round((Math.random() * 4) - 2);
+	var neg = prevNeg + Math.round((Math.random() * 4) - 2);
+
+	pos = pos <= 0 ? 0 : pos;
+	neg = neg <= 0 ? 0 : neg;
+
+	votes.push({pos: pos, neg: neg});
+
+	prevPos = pos;
+	prevNeg = neg;
+}
+
+// Chart 2 ---------------------------------------------------------------------------------------------------------
+
+seriesData = [ [], [] ];
+
+for (var i = 0; i < 150; i++) {
+	seriesData[0].push({x: i, y: votes[i].pos});
+	seriesData[1].push({x: i, y: votes[i].neg});
 }
 
 // instantiate our graph!
@@ -262,40 +279,23 @@ graph = new Rickshaw.Graph( {
 	element: document.getElementById("chart2"),
 	width: 470,
 	height: 300,
-	renderer: 'line',
+	renderer: 'area',
+	stroke: true,
 	series: [
 		{
-			color: "#c05020",
-			data: seriesData[0],
-			name: 'New York'
-		}, {
 			color: "#30c020",
+			data: seriesData[0],
+			name: 'Positive'
+		},
+		{
+			color: "#c05020",
 			data: seriesData[1],
-			name: 'London'
-		}, {
-			color: "#6060c0",
-			data: seriesData[2],
-			name: 'Tokyo'
+			name: 'Negative'
 		}
 	]
 } );
 
 graph.render();
-
-var hoverDetail = new Rickshaw.Graph.HoverDetail( {
-	graph: graph
-} );
-
-var legend = new Rickshaw.Graph.Legend( {
-	graph: graph,
-	element: document.getElementById('legend2')
-
-} );
-
-var shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
-	graph: graph,
-	legend: legend
-} );
 
 var axes = new Rickshaw.Graph.Axis.Time( {
 	graph: graph
@@ -304,14 +304,18 @@ axes.render();
 
 // Chart 3 ---------------------------------------------------------------------------------------------------------
 
-seriesData = [ [], [], [], [], [], [], [], [], [] ];
-random = new Rickshaw.Fixtures.RandomData(150);
+seriesData = [ [] ];
 
 for (var i = 0; i < 150; i++) {
-	random.addData(seriesData);
-}
+	var total = votes[i].pos + votes[i].neg;
+	var value = total === 0 ? 0 : votes[i].pos / total;
 
-var palette = new Rickshaw.Color.Palette( { scheme: 'classic9' } );
+	value = Math.round(value * 100);
+
+	console.log(votes[i].pos, votes[i].neg, total, value);
+
+	seriesData[0].push({x: i, y: value});
+}
 
 // instantiate our graph!
 
@@ -319,40 +323,21 @@ graph = new Rickshaw.Graph( {
 	element: document.getElementById("chart3"),
 	width: 470,
 	height: 300,
-	renderer: 'area',
-	stroke: true,
+	renderer: 'line',
 	series: [
 		{
-			color: palette.color(),
+			color: "#333333",
 			data: seriesData[0],
 			name: 'Moscow'
-		}, {
-			color: palette.color(),
-			data: seriesData[1],
-			name: 'Shanghai'
-		}, {
-			color: palette.color(),
-			data: seriesData[2],
-			name: 'Amsterdam'
-		}, {
-			color: palette.color(),
-			data: seriesData[3],
-			name: 'Paris'
-		}, {
-			color: palette.color(),
-			data: seriesData[4],
-			name: 'Tokyo'
-		}, {
-			color: palette.color(),
-			data: seriesData[5],
-			name: 'London'
-		}, {
-			color: palette.color(),
-			data: seriesData[6],
-			name: 'New York'
 		}
 	]
 } );
+
+var yAxis = new Rickshaw.Graph.Axis.Y({
+    graph: graph
+});
+
+yAxis.render();
 
 graph.render();
 
