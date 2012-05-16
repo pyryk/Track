@@ -144,8 +144,8 @@
                       <div class="neg" style="-webkit-box-flex:1;">0</div>
                       <div class="pos" style="-webkit-box-flex:1;">0</div>
                     {{else}}
-                      <div class="neg" style="-webkit-box-flex:{{neg}}">{{neg}}{{trend trendPos}}</div>
-                      <div class="pos" style="-webkit-box-flex:{{pos}}">{{pos}}{{trend trendNeg}}</div>
+                      <div class="neg" style="-webkit-box-flex:{{neg}}">{{neg}}{{trend trendNeg}}</div>
+                      <div class="pos" style="-webkit-box-flex:{{pos}}">{{pos}}{{trend trendPos}}</div>
                     {{/if}}
                   </div>
                 </td>
@@ -200,11 +200,13 @@
   
   <script id="template-loginScreen" type="text/x-handlebars-template">
     {{#if logged}}
-      <p>Welcome to Aalto Track!</p>
-      <div id="logout">
+    <div id="login">
+      <h2>Account</h2>
+      <div id="logout" class="content">
         <p><span class="link-button" id="view-leaderboard">View leaderboard</span></p>
         <p><button class="link-button" onClick="FB.logout();">Logout</button></p>
       </div>
+    </div>
     {{else}}
       <div id="login">
         <h2>Welcome to Aalto Track!</h2>

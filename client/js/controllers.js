@@ -271,7 +271,7 @@ var TargetResults = BaseController.sub({
       var now = data.target.results.now
       
       //now.pos = 4; now.neg = 7;
-      //now.trend = 1;
+      //now.trend = -2;
       
       if (now.pos == 0 && now.neg == 0) {
         now.zerozero = true;
@@ -333,11 +333,15 @@ var BackButton = BaseController.sub({
     Spine.bind('logout', this.proxy(this.render));
   },
   getData: function() {
+    //var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
     var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
     return {previous: showButton};
   },
   clicked: function() {
-    this.app.goToPreviousPage();
+    //this.app.goToPreviousPage();
+    if (window.history.length > 0) {
+      window.history.back();
+    }
   }
 });
 
@@ -363,9 +367,30 @@ var LoginScreen = BaseController.sub({
   getData: function() {
     return User.last() || {};
   },
-  loginUser: function() {    
-    FB.login(function(response) { }, {scope:'email'});     
-  }, 
+  loginUser: function() {
+    var opts = {scope:'email'};
+    if (this.useRedirectURI()) {
+      opts.redirect_uri = document.location.href;
+    }
+    FB.login(function(response) { }, opts);     
+  },
+  useRedirectURI: function() {
+    var ua = navigator.userAgent;
+    
+    // no iphone, ipod or ipad => no redirect URI
+    if (ua.indexOf('iPhone') == -1 && ua.indexOf('iPad') == -1 && ua.indexOf('iPod') == -1) {
+      return false;
+    }
+    
+    // ua contains safari => not homescreen app => no redirect URI
+    if (ua.indexOf('Safari') > -1) {
+      return false;
+    }
+    
+    // ios but not safari => add redirect URI
+    return true;
+    
+  },
   setNoLogin: function() {
     window.track.noLogin = true;
     Spine.Route.navigate('/');
