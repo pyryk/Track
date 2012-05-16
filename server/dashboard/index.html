@@ -100,7 +100,39 @@
 		<div class="span10">
 			<div class="row">
 				<div class="span5 chart-span">
+					<h2>Results by age and gender</h2>
 					<div id="chart1"></div>
+					<div class="chart1-labels gender-labels">
+						<div>M</div>
+						<div>N</div>
+						<div>M</div>
+						<div>N</div>
+						<div>M</div>
+						<div>N</div>
+						<div>M</div>
+						<div>N</div>
+						<div>M</div>
+						<div>N</div>
+						<div>M</div>
+						<div>N</div>
+						<div>M</div>
+						<div>N</div>
+						<div>M</div>
+						<div>N</div>
+						<div>M</div>
+						<div>N</div>
+					</div>
+					<div class="chart1-labels age-labels">
+						<div>0-10</div>
+						<div>10-15</div>
+						<div>15-20</div>
+						<div>20-25</div>
+						<div>25-30</div>
+						<div>30-40</div>
+						<div>40-50</div>
+						<div>50-60</div>
+						<div>60+</div>
+					</div>
 				</div>
 				<div class="span5 chart-span">
 					<div id="chart2"></div>
@@ -169,11 +201,29 @@
 
 // set up our data series with 50 random data points
 
-seriesData = [ [], [], [] ];
-random = new Rickshaw.Fixtures.RandomData(150);
+seriesData = [ [], [] ];
 
-for (var i = 0; i < 70; i++) {
-	random.addData(seriesData);
+// Age categories
+// 0: 0-10
+// 1: 10-15
+// 2: 15-20
+// 3: 20-25
+// 4: 25-30
+// 5: 30-40
+// 6: 40-50
+// 7: 50-60
+// 8: 60-
+for (var ageCategory = 0; ageCategory < 9; ageCategory++) {
+	for(var gender = 0; gender < 2; gender++) {
+		var votes = Math.round(Math.random() * 100);
+		var pos = Math.round(Math.random() * votes);
+		var neg = votes - pos;
+
+		var ageAndGender = (ageCategory * 2) + gender;
+
+		seriesData[0].push({x: ageAndGender, y: pos}); // pos
+		seriesData[1].push({x: ageAndGender, y: neg}); // neg
+	}
 }
 
 // instantiate our graph!
@@ -191,9 +241,6 @@ graph = new Rickshaw.Graph( {
 		}, {
 			color: "#30c020",
 			data: seriesData[1]
-		}, {
-			color: "#6060c0",
-			data: seriesData[2]
 		}
 	]
 } );
