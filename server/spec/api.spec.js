@@ -162,7 +162,7 @@ describe('API', function() {
         it('calls connect without trailing root directory', function() {
             spyOn(API, 'staticFileServer');
 
-            req.url = "public/images/smiley.png";
+            req.url = "dashboard/images/smiley.png";
 
             API.getPublic(req, res, next);
 

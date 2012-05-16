@@ -327,8 +327,8 @@ describe('Integration test', function() {
         });
     });
 
-    it('GET /public/index.html', function() {
-        testRequest({method: 'GET', path: '/public/index.html', headers: {"Content-Type": "text/html"}}, function(result) {
+    it('GET /dashboard/index.html', function() {
+        testRequest({method: 'GET', path: '/dashboard/index.html', headers: {"Content-Type": "text/html"}}, function(result) {
             expect(result.statusCode).toEqual(200);
             expect(result.body).toMatch("<title>Track Dashboard</title>");
         });

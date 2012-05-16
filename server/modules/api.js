@@ -50,7 +50,7 @@ var API = {
         this.post("/target/:_id/result", this.postResult, false);
         this.get("/login", this.getLogin, true);
         this.get("/leaderboard", this.getLeaderboard, false);
-        this.get(/\/public\/*/, this.getPublic, false);
+        this.get(/\/dashboard\/*/, this.getPublic, false);
     },
 
     authorize: function(req, res, next, handler, requireAuth) {
@@ -90,7 +90,7 @@ var API = {
      * Uses connect to serve files
      */
     initializeStaticFileServer: function() {
-        var root = __dirname + '/../public';
+        var root = __dirname + '/../dashboard';
         console.log('Static file server root: ', root);
         API.staticFileServer = connect.static(root);
     },
@@ -109,7 +109,7 @@ var API = {
     },
 
     getPublic: function(req, res, next) {
-        req.url = req.url.substr('/public'.length); // take off leading /public so that connect locates it correctly
+        req.url = req.url.substr('/dashboard'.length); // take off leading /public so that connect locates it correctly
         return API.staticFileServer(req, res, next);
     },
 

@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Track Dashboard</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- Le styles -->
+	<link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+	<style type="text/css">
+		body {
+			padding-top: 60px;
+			padding-bottom: 40px;
+		}
+		.sidebar-nav {
+			padding: 9px 0;
+		}
+	</style>
+	<link href="css/bootstrap/bootstrap-responsive.css" rel="stylesheet">
+
+	<link href="css/lib/rickshaw.css" rel="stylesheet">
+
+	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Le fav and touch icons -->
+	<!--
+    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+    -->
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+			<a class="brand" href="#">Dashboard</a>
+			<div class="btn-group pull-right">
+				<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+					<i class="icon-user"></i> Username
+					<span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="#">Profile</a></li>
+					<li class="divider"></li>
+					<li><a href="#">Sign Out</a></li>
+				</ul>
+			</div>
+			<div class="nav-collapse">
+				<ul class="nav">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="#about">About</a></li>
+					<li><a href="#contact">Contact</a></li>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="span2">
+			<div class="well sidebar-nav">
+				<ul class="nav nav-list">
+					<li class="nav-header">Sidebar</li>
+					<li class="active"><a href="#">Link</a></li>
+					<li><a href="#">Link</a></li>
+					<li><a href="#">Link</a></li>
+					<li><a href="#">Link</a></li>
+					<li class="nav-header">Sidebar</li>
+					<li><a href="#">Link</a></li>
+					<li><a href="#">Link</a></li>
+					<li><a href="#">Link</a></li>
+					<li><a href="#">Link</a></li>
+					<li><a href="#">Link</a></li>
+					<li><a href="#">Link</a></li>
+					<li class="nav-header">Sidebar</li>
+					<li><a href="#">Link</a></li>
+					<li><a href="#">Link</a></li>
+					<li><a href="#">Link</a></li>
+				</ul>
+			</div><!--/.well -->
+		</div><!--/span-->
+		<div class="span10">
+			<div class="row">
+				<div class="span5">
+					<div id="chart1"></div>
+				</div>
+				<div class="span5">
+					<div id="chart2"></div>
+					<div id="legend_container2">
+						<div id="smoother2" title="Smoothing"></div>
+						<div id="legend2"></div>
+					</div>
+				</div>
+			</div>
+			<!-- TODO Change these -->
+			<br />
+			<br />
+			<div class="row">
+				<div class="span5">
+					<div id="chart3"></div>
+				</div>
+				<div class="span5">
+					<div id="chart4"></div>
+					<div id="legend_container4">
+						<div id="smoother4" title="Smoothing"></div>
+						<div id="legend4"></div>
+					</div>
+				</div>
+			</div>
+		</div><!--/span-->
+	</div><!--/row-->
+
+	<hr>
+
+	<footer>
+		<p>&copy; Company 2012</p>
+	</footer>
+
+</div><!--/.fluid-container-->
+
+<!-- Le javascript
+	================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/lib/jquery.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.15/jquery-ui.min.js"></script>
+<script src="js/bootstrap/bootstrap.js"></script>
+
+<script src="js/lib/d3.min.js"></script>
+<script src="js/lib/d3.layout.min.js"></script>
+
+<script src="js/lib/rickshaw.js"></script>
+<!--
+	<script src="js/bootstrap-transition.js"></script>
+	<script src="js/bootstrap-alert.js"></script>
+	<script src="js/bootstrap-modal.js"></script>
+	<script src="js/bootstrap-dropdown.js"></script>
+	<script src="js/bootstrap-scrollspy.js"></script>
+	<script src="js/bootstrap-tab.js"></script>
+	<script src="js/bootstrap-tooltip.js"></script>
+	<script src="js/bootstrap-popover.js"></script>
+	<script src="js/bootstrap-button.js"></script>
+	<script src="js/bootstrap-collapse.js"></script>
+	<script src="js/bootstrap-carousel.js"></script>
+	<script src="js/bootstrap-typeahead.js"></script>
+-->
+
+<!-- Test rickshaw -->
+<script>
+
+// Chart 1 ---------------------------------------------------------------------------------------------------------
+
+// set up our data series with 50 random data points
+
+seriesData = [ [], [], [] ];
+random = new Rickshaw.Fixtures.RandomData(150);
+
+for (var i = 0; i < 70; i++) {
+	random.addData(seriesData);
+}
+
+// instantiate our graph!
+
+var graph;
+graph = new Rickshaw.Graph( {
+	element: document.getElementById("chart1"),
+	width: 470,
+	height: 300,
+	renderer: 'bar',
+	series: [
+		{
+			color: "#c05020",
+			data: seriesData[0]
+		}, {
+			color: "#30c020",
+			data: seriesData[1]
+		}, {
+			color: "#6060c0",
+			data: seriesData[2]
+		}
+	]
+} );
+
+graph.render();
+
+// Chart 2 ---------------------------------------------------------------------------------------------------------
+
+seriesData = [ [], [], [] ];
+random = new Rickshaw.Fixtures.RandomData(150);
+
+for (var i = 0; i < 150; i++) {
+	random.addData(seriesData);
+}
+
+// instantiate our graph!
+
+graph = new Rickshaw.Graph( {
+	element: document.getElementById("chart2"),
+	width: 470,
+	height: 300,
+	renderer: 'line',
+	series: [
+		{
+			color: "#c05020",
+			data: seriesData[0],
+			name: 'New York'
+		}, {
+			color: "#30c020",
+			data: seriesData[1],
+			name: 'London'
+		}, {
+			color: "#6060c0",
+			data: seriesData[2],
+			name: 'Tokyo'
+		}
+	]
+} );
+
+graph.render();
+
+var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+	graph: graph
+} );
+
+var legend = new Rickshaw.Graph.Legend( {
+	graph: graph,
+	element: document.getElementById('legend2')
+
+} );
+
+var shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
+	graph: graph,
+	legend: legend
+} );
+
+var axes = new Rickshaw.Graph.Axis.Time( {
+	graph: graph
+} );
+axes.render();
+
+// Chart 3 ---------------------------------------------------------------------------------------------------------
+
+seriesData = [ [], [], [], [], [], [], [], [], [] ];
+random = new Rickshaw.Fixtures.RandomData(150);
+
+for (var i = 0; i < 150; i++) {
+	random.addData(seriesData);
+}
+
+var palette = new Rickshaw.Color.Palette( { scheme: 'classic9' } );
+
+// instantiate our graph!
+
+graph = new Rickshaw.Graph( {
+	element: document.getElementById("chart3"),
+	width: 470,
+	height: 300,
+	renderer: 'area',
+	stroke: true,
+	series: [
+		{
+			color: palette.color(),
+			data: seriesData[0],
+			name: 'Moscow'
+		}, {
+			color: palette.color(),
+			data: seriesData[1],
+			name: 'Shanghai'
+		}, {
+			color: palette.color(),
+			data: seriesData[2],
+			name: 'Amsterdam'
+		}, {
+			color: palette.color(),
+			data: seriesData[3],
+			name: 'Paris'
+		}, {
+			color: palette.color(),
+			data: seriesData[4],
+			name: 'Tokyo'
+		}, {
+			color: palette.color(),
+			data: seriesData[5],
+			name: 'London'
+		}, {
+			color: palette.color(),
+			data: seriesData[6],
+			name: 'New York'
+		}
+	]
+} );
+
+graph.render();
+
+// Chart 4 ---------------------------------------------------------------------------------------------------------
+
+seriesData = [ [], [], [] ];
+random = new Rickshaw.Fixtures.RandomData(150);
+
+for (var i = 0; i < 150; i++) {
+	random.addData(seriesData);
+}
+
+// instantiate our graph!
+
+graph = new Rickshaw.Graph( {
+	element: document.getElementById("chart4"),
+	width: 470,
+	height: 300,
+	renderer: 'line',
+	series: [
+		{
+			color: "#c05020",
+			data: seriesData[0],
+			name: 'New York'
+		}, {
+			color: "#30c020",
+			data: seriesData[1],
+			name: 'London'
+		}, {
+			color: "#6060c0",
+			data: seriesData[2],
+			name: 'Tokyo'
+		}
+	]
+} );
+
+graph.render();
+
+var legend = document.querySelector('#legend4');
+
+var Hover = Rickshaw.Class.create(Rickshaw.Graph.HoverDetail, {
+
+	render: function(args) {
+
+		legend.innerHTML = args.formattedXValue;
+
+		args.detail.sort(function(a, b) { return a.order - b.order }).forEach( function(d) {
+
+			var line = document.createElement('div');
+			line.className = 'line';
+
+			var swatch = document.createElement('div');
+			swatch.className = 'swatch';
+			swatch.style.backgroundColor = d.series.color;
+
+			var label = document.createElement('div');
+			label.className = 'label';
+			label.innerHTML = d.name + ": " + d.formattedYValue;
+
+			line.appendChild(swatch);
+			line.appendChild(label);
+
+			legend.appendChild(line);
+
+			var dot = document.createElement('div');
+			dot.className = 'dot';
+			dot.style.top = graph.y(d.value.y0 + d.value.y) + 'px';
+			dot.style.backgroundColor = d.series.color;
+
+			this.element.appendChild(dot);
+
+			dot.className = 'dot active';
+
+			this.show();
+
+		}, this );
+	}
+});
+
+var hover = new Hover( { graph: graph } );
+
+</script>
+
+</body>
+</html>
