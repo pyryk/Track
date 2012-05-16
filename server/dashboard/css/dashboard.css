@@ -1,0 +1,26 @@
+.chart-span {
+    min-width: 470px;
+}
+
+.chart1-labels {
+    clear: both;
+}
+
+.chart1-labels::after {
+    /* Is this correct? */
+    clear: both;
+}
+
+.chart1-labels > div {
+    padding-top: 4px;
+    float: left;
+    text-align: center;
+}
+
+.gender-labels > div {
+    width: 26px;
+}
+
+.age-labels > div {
+    width: 52px;
+}
