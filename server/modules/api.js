@@ -4,11 +4,13 @@ var Mongo = require('./mongo.js');
 var Relevance = require('./relevance');
 var _ = require('underscore');
 var restify = require('restify');
+var connect = require('connect');
 var Response = require('restify').Response;
 var Session = require('./session').Session;
 var FBClient = require('./session').FBClient;
 var SessionStore = require('./session').SessionStore;
 var p = require("promised-io/promise");
+var path = require("path");
 
 var DateUtils = require('../modules/now.js');
 
@@ -30,6 +32,9 @@ var API = {
             this.preAuth(req, res, next);
         }.bind(this));
 
+        // Static file server
+        this.initializeStaticFileServer();
+
         // A little tweak to allow optional auth per route
         ['del', 'get', 'head', 'post', 'put'].forEach(function(method) {
             this[method] = function(path, handler, requireAuth) {
@@ -45,6 +50,7 @@ var API = {
         this.post("/target/:_id/result", this.postResult, false);
         this.get("/login", this.getLogin, true);
         this.get("/leaderboard", this.getLeaderboard, false);
+        this.get(/\/public\/*/, this.getPublic, false);
     },
 
     authorize: function(req, res, next, handler, requireAuth) {
@@ -54,6 +60,14 @@ var API = {
             }
         }
         handler(req, res, next);
+    },
+
+    extendHeaders: function(res) {
+        var newAllowedHeaders = 'FB-UserId, FB-AccessToken';
+        var allowedHeaders = res.headers['access-control-allow-headers'] || "";
+        allowedHeaders += (allowedHeaders.length ? ', ' : '') + newAllowedHeaders;
+
+        res.header('Access-Control-Allow-Headers', allowedHeaders);
     },
 
     initializeHeaders: function() {
@@ -71,12 +85,14 @@ var API = {
         }
     },
 
-    extendHeaders: function(res) {
-        var newAllowedHeaders = 'FB-UserId, FB-AccessToken';
-        var allowedHeaders = res.headers['access-control-allow-headers'] || "";
-        allowedHeaders += (allowedHeaders.length ? ', ' : '') + newAllowedHeaders;
-
-        res.header('Access-Control-Allow-Headers', allowedHeaders);
+    /**
+     * Initializes static file server
+     * Uses connect to serve files
+     */
+    initializeStaticFileServer: function() {
+        var root = __dirname + '/../public';
+        console.log('Static file server root: ', root);
+        API.staticFileServer = connect.static(root);
     },
 
     preAuth: function(req, res, next) {
@@ -90,6 +106,11 @@ var API = {
         }, function() {
             return next();
         });
+    },
+
+    getPublic: function(req, res, next) {
+        req.url = req.url.substr('/public'.length); // take off leading /public so that connect locates it correctly
+        return API.staticFileServer(req, res, next);
     },
 
     getTargets: function(req, res, next) {

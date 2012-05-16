@@ -158,6 +158,18 @@ describe('API', function() {
         });
     });
 
+    describe('Static file server', function() {
+        it('calls connect without trailing root directory', function() {
+            spyOn(API, 'staticFileServer');
+
+            req.url = "public/images/smiley.png";
+
+            API.getPublic(req, res, next);
+
+            expect(API.staticFileServer.mostRecentCall.args[0].url).toEqual('images/smiley.png');
+        });
+    });
+
     describe('API methods', function() {
 
         describe('Run without login', function() {

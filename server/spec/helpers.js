@@ -60,7 +60,10 @@ var Integration = {
         opts = opts || {};
         opts.port = confs.port;
         opts.headers = opts.headers || {};
-        opts.headers["Content-Type"] = "application/json";
+
+        _.defaults(opts.headers, {
+            "Content-Type": "application/json"
+        });
 
         var req = http.request(opts, function(res) {
             var statusCode = res.statusCode;
@@ -71,7 +74,10 @@ var Integration = {
                 body += chunk;
             });
             res.on('end', function () {
-                body = body !== '' ? JSON.parse(body) : {};
+
+                if(opts.headers["Content-Type"] === "application/json") {
+                    body = body !== '' ? JSON.parse(body) : {};
+                }
 
                 promise.resolve({statusCode: statusCode, headers: headers, body: body});
             });

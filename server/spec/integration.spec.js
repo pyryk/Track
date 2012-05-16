@@ -327,6 +327,13 @@ describe('Integration test', function() {
         });
     });
 
+    it('GET /public/index.html', function() {
+        testRequest({method: 'GET', path: '/public/index.html', headers: {"Content-Type": "text/html"}}, function(result) {
+            expect(result.statusCode).toEqual(200);
+            expect(result.body).toMatch("<title>Track Dashboard</title>");
+        });
+    })
+
     it('Should have FB-UserID and FB-AccessToken in Access-Control-Allow-Headers', function() {
         // Testing with get targets
         testRequest({method: 'OPTIONS', path: '/targets'}, function(result) {
