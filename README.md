@@ -1,10 +1,6 @@
-Test /laurijaheikki
-
 # Track
 
 ## Server
-
-Test /heikki
 
 Server status
 
