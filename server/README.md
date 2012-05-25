@@ -39,7 +39,7 @@ Response body:
 			{_id: “12fa113f”, name: “Mikä fiilis?”, relevancy: 1.2427254}
 		]
 	}
-  
+
 
 ### GET /target/:_id - Returns specific target with detailed info
 
@@ -54,7 +54,7 @@ Reponse body:
 			_id: “12faggf”,
 			name: “T-Talon ruokajono”,
 			question: “T-Talon ruokajonon jonotusaika”
-			
+
 			results: {
 				now: {
 					pos: 10, neg: 3, trend: 3, period: 15
@@ -65,7 +65,7 @@ Reponse body:
 			}
 		}
 	}
-	
+
 * **trend**: integer [-3, 3], where -3 means getting worse with high speed, 0 not changing, 3 getting better with high speed
 * **period**: results from last XX minutes
 
@@ -83,12 +83,22 @@ Request body:
 		  lon: 67.890
 		}
 	}
-	
+
 Status: 201 Created
 
-Response body: 
+Response body:
 
 	{_id: "12345678901234567890abcd"}
+
+### DELETE /target/:_id - Delete the specified target
+
+Requires authentication: No
+
+Request body:
+
+	{_id: "12345678901234567890abcd"}
+
+Status: 204 No Content or 404 Not Found
 
 ### POST /target/:_id/result - Send tracking result
 
@@ -109,7 +119,7 @@ Status: 204 No content
 Response body:
 
     { }
-    
+
 ### GET /leaderboard - Returns leader board
 
 **Status: DRAFT! Not yet implemented**
