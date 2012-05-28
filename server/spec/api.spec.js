@@ -235,6 +235,20 @@ describe('API', function() {
                 });
             });
 
+
+            /*
+            describe('deleteTarget', function() {
+                it('should delete a target', function() {
+                    spyOnPromise(Mongo, 'deleteTargetById').andCallSuccess(
+                        {}
+                    )
+
+                });
+                expectStatus(res).toEqual(204);
+
+            });
+            */
+
             describe('postTarget', function() {
 
                 describe('successfully created', function() {
