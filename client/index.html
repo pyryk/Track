@@ -1,7 +1,8 @@
 <!doctype html>
 <!-- Conditional comment for mobile ie7 blogs.msdn.com/b/iemobile/ -->
 <!--[if IEMobile 7 ]>    <html class="no-js iem7" lang="en"> <![endif]-->
-<!--[if (gt IEMobile 7)|!(IEMobile)]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<!--[if (gt IEMobile 7)|!(IEMobile)]><!-->
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/html"> <!--<![endif]-->
 
 <head>
   <meta charset="utf-8">
@@ -52,6 +53,7 @@
 
 <body>
 
+  <!-- on the top of the screen -->
   <div id="container">
     <header>
       <div id="back-button"></div>
@@ -65,7 +67,20 @@
       footer will be here
     </footer>-->
   </div> <!--! end of #container -->
-  
+
+  <script id="template-customerList" type="text/x-handlebars-template">
+    <div class="search-box">
+      <div class="search-field">
+        <input name="" type="text"  id="search" placeholder="Search..." autocomplete="off" class="search-box-bg" />
+      </div>
+    </div>
+    <ul class="primary-list" id="customer-list">
+      {{#each items}}
+        <li data-id="{{this.id}}"><img class="customer-list-image" src="{{this.logo}}" alt="">{{this.name}}<img class="customer-list-next" src="img/next.png" alt=""></li>
+      {{/each}}}
+    </ul>
+  </script>
+
   <script id="template-targetList" type="text/x-handlebars-template">
     {{#if error}}
       {{error}}

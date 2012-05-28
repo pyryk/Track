@@ -56,6 +56,59 @@ var BaseController = Spine.Controller.sub({
   }
 });
 
+var Search = BaseController.sub({
+  events: {
+    "keyup #search": "search_customer"
+  },
+
+  search_customer: function() {
+    var search_text = $('#search').val();
+    var rg = new RegExp(search_text,'i');
+    $('#customer_list').each(function(){
+      if($.trim($(this).html()).search(rg) == -1) {
+        $(this).parent().css('display', 'none');
+        $(this).css('display', 'none');
+        $(this).next().css('display', 'none');
+        $(this).next().next().css('display', 'none');
+      }
+      else {
+        $(this).parent().css('display', '');
+        $(this).css('display', '');
+        $(this).next().css('display', '');
+        $(this).next().next().css('display', '');
+      }
+    });
+  }
+})
+
+var CustomersList = BaseController.sub({
+  events: {
+    "click #customer-list": "clicked_customer"
+  },
+  getData: function() {
+    return {items: [
+      Customer.create({logo: "img/templogos/subway.png", name: "Subway"}),
+      Customer.create({logo: "img/templogos/mcdonalds.png", name: "McDonald's"}),
+      Customer.create({logo: "img/templogos/hesburger.png", name: "Hesburger"}),
+      Customer.create({logo: "img/templogos/finnkino.png", name: "Finnkino"}),
+      Customer.create({logo: "img/templogos/aalto_university.png", name: "Aalto university"}),
+      Customer.create({logo: "img/templogos/tector.png", name: "Tector"}),
+      Customer.create({logo: "img/templogos/roberts_coffee.png", name: "Robert's Coffee"}),
+      Customer.create({logo: "img/templogos/unisport.png", name: "Unisport"}),
+      Customer.create({logo: "img/templogos/elisa.png", name: "Elisa"}),
+      Customer.create({logo: "img/templogos/abc.png", name: "ABC"}),
+      Customer.create({logo: "img/templogos/HSL.png", name: "HSL"}),
+      Customer.create({logo: "img/templogos/subway.png", name: "SOK Restaurants"}),
+      Customer.create({logo: "img/templogos/hesburger.png", name: "VR"}),
+      Customer.create({logo: "img/templogos/mcdonalds.png", name: "Picnic"})
+    ]};
+  },
+
+  clicked_customer: function() {
+      Spine.Route.navigate("!/targets/");
+  }
+});
+
 /**
  * A controller for the target item list
  *
@@ -65,7 +118,8 @@ var TargetsList = BaseController.sub({
     ".targets": "targets"  
   },
   events: {
-    "fastclick #target-list li": "clicked"
+    "fastclick #target-list li": "clicked",
+    "hover #target-list li": "print"
   },
   getTitle: function() {
     return "List";
@@ -96,6 +150,9 @@ var TargetsList = BaseController.sub({
       log('location changed - reloading target list');
       this.loadList({lat: location.lat, lon: location.lon});
     }
+  },
+  print: function(e) {
+      console.log("testiprintti");
   },
   clicked: function(e) {
     var el = $(e.target);

@@ -9,6 +9,10 @@ var App = Spine.Controller.sub({
       "!/login/": function(params) {
         this.renderView('loginScreen', LoginScreen);
       },
+      "!/customer/": function(params) {
+        this.renderView('pure-search', Search);
+        this.renderView('customerList', CustomersList);
+      },
       "!/targets/": function(params) {
         this.renderView('targetList', TargetsList);
       },
