@@ -48,10 +48,11 @@ var API = {
         this.get("/target/:id", this.getTarget, false);
         this.post("/target", this.postTarget, false);
         this.post("/target/:_id/result", this.postResult, false);
+        this.del("/target/:_id", this.deleteTarget, false);
         this.get("/login", this.getLogin, true);
         this.get("/leaderboard", this.getLeaderboard, false);
         this.get(/\/dashboard\/*/, this.getPublic, false);
-        this.del("/target/:id", this.deleteTarget, false);
+
     },
 
     authorize: function(req, res, next, handler, requireAuth) {
@@ -297,6 +298,8 @@ var API = {
         Mongo.deleteTarget(target);
 
         res.send(204);
+
+        return(next());
 
     },
 
