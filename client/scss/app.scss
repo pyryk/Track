@@ -10,6 +10,8 @@ $use-mozilla-ellipsis-binding: true;
 /* Aalto template **/
 $header_gradient_1: lighten(#FECB00, 20%);
 $header_gradient_2: #FECB00;
+$header_gradient_3: #6ACCE1;
+$header_gradient_4: #1CBFD6;
 $header_text_color: #fff;
 $footer_color: rgba(100,100,100,1);
 $header_height: 46px;
@@ -36,7 +38,7 @@ $list_item_gradient_2: #eee;
 */
 
 @mixin header {
-  @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
+  @include background-image(linear-gradient($header_gradient_3, $header_gradient_4));
   padding: 0.7em 1em;
   margin: 0;
   font-size: 18px;
@@ -96,7 +98,7 @@ header {
   width: 100%;
   margin-top: 0;
   padding-top: 0;
-  @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
+  @include background-image(linear-gradient($header_gradient_3, $header_gradient_4));
   color: $header_text_color;
   border-bottom: 1px solid $border_color;
   text-align: center;
@@ -121,10 +123,27 @@ header {
   // padding-bottom: $header_height;
 }
 
+.customer-list-image {
+  padding-right: 20px;
+  margin-top: -5px;
+  width: 60px;
+  height: 20px;
+}
+
+.customer-list-next {
+  float: right;
+}
+
+.page {
+  display: none;
+}
+
 .primary-list {
   list-style-type: none;
+  width: 90%;
   padding: 0;
-  margin: 0;
+  margin-left: auto;
+  margin-right: auto;
 
   li {
     padding: 1em 1em;
@@ -133,12 +152,12 @@ header {
     border-bottom: 1px solid $border_color;
     @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
     @include ellipsis;
-    
+
     &:active, &.fake-active {
       @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
     }
   }
-  
+
   li.header {
     @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
     padding: 0.7em 1em;
@@ -146,14 +165,14 @@ header {
     font-weight: bold;
     color: $header_text_color;
     text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
-    
+
   }
-  
+
   li.create-new {
-    
+
     padding-top: 1em;
-    
-    
+
+
     .text {
       display: inline-block;
       background-image: url("../img/add-new-small.png");
@@ -163,19 +182,46 @@ header {
       height: 18px;
     }
   }
-  
+
   li:first-child {
     border-top: 1px solid $border_color;
-    @include border-radius(5px 5px 0px 0px);
+    @include border-radius(15px 15px 0px 0px);
   }
 
   li:last-child {
-    @include border-radius(0px 0px 5px 5px);
+    @include border-radius(0px 0px 15px 15px);
   }
 }
 
 .target-name {
     margin: 10px 10px;
+}
+
+
+
+.search-box {
+  width: 90%;
+  padding: 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  border: 0;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid $border_color;
+  @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+  @include ellipsis;
+  @include border-radius(15px 15px 15px 15px);
+  &:active, &.fake-active {
+    @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
+  }
+}
+
+.search-field {
+  padding: 0.7em 1em;
+  font-size: 18px;
+  font-weight: bold;
+  color: $header_text_color;
+  text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
 }
 
 #target-details {
