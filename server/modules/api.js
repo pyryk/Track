@@ -293,13 +293,8 @@ var API = {
     },
 
     deleteTarget: function(req, res, next) {
-        var target = req.params;
-
-        Mongo.deleteTarget(target);
-
-        res.send(204);
-
-        return(next());
+        console.log("deleteTarget function of api.js");
+        document.writeln("deleteTarget function of api.js");
 
     },
 
