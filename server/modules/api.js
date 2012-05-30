@@ -293,8 +293,7 @@ var API = {
     },
 
     deleteTarget: function(req, res, next) {
-        console.log("deleteTarget function of api.js");
-        document.writeln("deleteTarget function of api.js");
+        console.log("deleteTarget function of api.js test");
 
     },
 
