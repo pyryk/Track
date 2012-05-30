@@ -1,0 +1,313 @@
+<!doctype html>
+<!-- Conditional comment for mobile ie7 blogs.msdn.com/b/iemobile/ -->
+<!--[if IEMobile 7 ]>    <html class="no-js iem7" lang="en"> <![endif]-->
+<!--[if (gt IEMobile 7)|!(IEMobile)]><!-->
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/html"> <!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Track</title>
+  <meta name="description" content="mobile feedback collection service">
+
+  <!-- Mobile viewport optimization h5bp.com/ad -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+
+  <!-- Home screen icon  Mathias Bynens mathiasbynens.be/notes/touch-icons -->
+  <!-- For iPhone 4 with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/h/apple-touch-icon.png">
+  <!-- For first-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/m/apple-touch-icon.png">
+  <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="img/l/apple-touch-icon-precomposed.png">
+  <!-- For nokia devices: -->
+  <link rel="shortcut icon" href="img/l/apple-touch-icon.png">
+
+  <!-- iOS web app, delete if not needed. https://github.com/h5bp/mobile-boilerplate/issues/94 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <script>(function(){var a;if(navigator.platform==="iPad"){a=window.orientation!==90||window.orientation===-90?"img/startup-tablet-landscape.png":"img/startup-tablet-portrait.png"}else{a=window.devicePixelRatio===2?"img/startup-retina.png":"img/startup.png"}document.write('<link rel="apple-touch-startup-image" href="'+a+'"/>')})()</script>
+
+  <!-- The script prevents links from opening in mobile safari. https://gist.github.com/1042026 -->
+  <script>(function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(d.href.indexOf("http")||~d.href.indexOf(e.host))&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone")</script>
+
+  <!-- Mobile IE allows us to activate ClearType technology for smoothing fonts for easy reading -->
+  <meta http-equiv="cleartype" content="on">
+
+  <!-- more tags for your 'head' to consider h5bp.com/d/head-Tips -->
+
+  <!-- MBP Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- App Stylesheet -->
+  <link href="css/app.css" rel="stylesheet" type="text/css" />
+  <link href="css/jquery.tooltip.css" rel="stylesheet" type="text/css" />
+
+
+  <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
+  <script src="js/libs/modernizr-2.0.6.min.js"></script>
+  <script src="js/config.js"></script>
+  <!--<script src="http://86.50.142.161:8000/target/target-script-min.js#anonymous"></script>-->
+</head>
+
+<body>
+
+<!-- on the top of the screen -->
+<div id="container">
+  <header>
+    <div id="back-button"></div>
+    <h1><!-- <img src="img/aalto.jpg" style="height: 26px; padding-bottom: 5px; padding-right: 10px"></img> --><a href="#"><img src="img/templogos/subway_original.png" width="80" height="27" alt=""></a></h1>
+    <div id="account-button"><span class="top-button"><a href="#!/login/">Account</a></span></div>
+  </header>
+  <div id="main" role="main">
+    <noscript>This application requires JavaScript support. Currently it is tested only on iPhone and Android devices.</noscript>
+  </div>
+  <!--<footer>
+    footer will be here
+  </footer>-->
+</div> <!--! end of #container -->
+
+<script id="template-customerList" type="text/x-handlebars-template">
+  <div class="search-field">
+    <input name="" type="text"  id="search" placeholder="Etsi..." autocomplete="off" class="search-field_input" />
+  </div>
+  <ul class="primary-list" id="customer-list">
+    {{#each items}}
+    <li data-id="{{this.id}}"><img class="customer-list-image" src="{{this.logo}}" alt="">{{this.name}}<img class="customer-list-next" src="img/next.png" alt=""></li>
+    {{/each}}}
+  </ul>
+</script>
+
+<script id="template-targetList" type="text/x-handlebars-template">
+  <div class="search-field">
+    <input name="" type="text"  id="search_1" class="search-field_input" placeholder="Etsi..." autocomplete="off" />
+  </div>
+  {{#if error}}
+  {{error}}
+  {{/if}}
+  <ul class="primary-list" id="target-list">
+    <li>Columbus<img class="customer-list-next" src="img/next.png" alt=""></li>
+    <li>Hakaniemi<img class="customer-list-next" src="img/next.png" alt=""></li>
+    <li>Herttoniemi<img class="customer-list-next" src="img/next.png" alt=""></li>
+    <li>Itäkeskus Piazza<img class="customer-list-next" src="img/next.png" alt=""></li>
+    <li>Jätkäsaari<img class="customer-list-next" src="img/next.png" alt=""></li>
+    <li>Kaisaniemi<img class="customer-list-next" src="img/next.png" alt=""></li>
+    <li>Kaivopiha<img class="customer-list-next" src="img/next.png" alt=""></li>
+    <li>Kamppi<img class="customer-list-next" src="img/next.png" alt=""></li>
+    <li>Konala<img class="customer-list-next" src="img/next.png" alt=""></li>
+    <li>Lönnrotinkatu<img class="customer-list-next" src="img/next.png" alt=""></li>
+    <li>Malmi<img class="customer-list-next" src="img/next.png" alt=""></li>
+    <li>Mannerheimintie<img class="customer-list-next" src="img/next.png" alt=""></li>
+    <li>Kempele<img class="customer-list-next" src="img/next.png" alt=""></li>
+    <li>Kerava<img class="customer-list-next" src="img/next.png" alt=""></li>
+    <li class="create-new"><span class="create-new text">Create a new target</span></li>
+  </ul>
+</script>
+
+<script id="template-targetDetails" type="text/x-handlebars-template">
+  {{#if error}}
+  {{error}}
+  {{/if}}
+  <div id="target-details">
+    {{#if target}}
+    {{#with target}}
+    <h2 class="target-name">{{name}}</h2>
+    {{#unless detailsLoaded}}
+    <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
+    {{/unless}}
+    {{#if question}}
+    <form id="answer-form">
+      <p class="target-question">{{question}}</p>
+      <p class="target-answer">
+        <span class="active answer negative"><img src="img/smiley-bad.png" alt=":("></span>
+        <span class="active answer positive"><img src="img/smiley-good.png" alt=":)"></span>
+      </p>
+    </form>
+    <p><span class="link-button view-results">View Results</span></p>
+    {{/if}}
+    {{/with}}
+    {{/if}}
+  </div>
+</script>
+
+<script id="template-targetResults" type="text/x-handlebars-template">
+  {{#if error}}
+  {{error}}
+  {{/if}}
+  <div id="target-results">
+    {{#if target}}
+    {{#with target}}
+    <h2 class="target-name">{{name}}</h2>
+    {{#unless detailsLoaded}}
+    <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
+    {{/unless}}
+    {{#if question}}
+    <p class="target-question">{{question}}</p>
+    <div class="results">
+      <table>
+        {{#if results.alltime}}
+        {{#with results.alltime}}
+        <tr class="target-answers"><td>
+          <h2 class="result-heading">Overall</h2>
+          <div class="result-graph">
+            {{#if zerozero}}
+            <div class="neg" style="-webkit-box-flex:1;">0</div>
+            <div class="pos" style="-webkit-box-flex:1;">0</div>
+            {{else}}
+            <div class="neg" style="-webkit-box-flex:{{neg}}">{{neg}}{{trend trendPos}}</div>
+            <div class="pos" style="-webkit-box-flex:{{pos}}">{{pos}}{{trend trendNeg}}</div>
+            {{/if}}
+          </div>
+        </td></tr>
+        {{/with}}
+        {{/if}}
+        {{#if results.now}}
+        {{#with results.now}}
+        <tr class="target-answers"><td>
+          <h2 class="result-heading">Now</h2>
+          <div class="result-graph">
+            {{#if zerozero}}
+            <div class="neg" style="-webkit-box-flex:1;">0</div>
+            <div class="pos" style="-webkit-box-flex:1;">0</div>
+            {{else}}
+            <div class="neg" style="-webkit-box-flex:{{neg}}">{{neg}}{{trend trendNeg}}</div>
+            <div class="pos" style="-webkit-box-flex:{{pos}}">{{pos}}{{trend trendPos}}</div>
+            {{/if}}
+          </div>
+        </td>
+          {{/with}}
+          {{/if}}
+      </table>
+    </div>
+    {{/if}}
+    {{/with}}
+    {{/if}}
+  </div>
+</script>
+
+<script id="template-targetCreate" type="text/x-handlebars-template">
+  <div id="target-create">
+    <form id="create-target-form">
+      <h2 class="target-name"><input type="text" name="name" placeholder="Name" required /></h2>
+      <p class="target-question"><input type="text" name="question" placeholder="Question" required /></p>
+      <button class="save-target" type="submit">Create</button>
+    </form>
+  </div>
+</script>
+
+<script id="template-ownResult" type="text/x-handlebars-template">
+  <div id="target-ownResult">
+    {{#if error}}
+    {{error}}
+    {{else}}
+    {{#with result}}
+    <h2>Thanks!</h2>
+    <div class="result-info">
+      <div class="target">
+        <h3 class="name">{{target.name}}</h3>
+        <div class="result-info-body">
+          <p>Your answer was saved!</p>
+          <p class="question">{{target.question}}</p>
+          <p class="answer">{{value}}</p>
+        </div>
+      </div>
+    </div>
+    <p><span class="link-button view-results">View Results</span></p>
+    {{/with}}
+    {{/if}}
+  </div>
+</script>
+
+<script id="template-backButton" type="text/x-handlebars-template">
+  {{#if previous}}
+  <span class="back-button top-button">Back</span>
+  {{/if}}
+</script>
+
+<script id="template-loginScreen" type="text/x-handlebars-template">
+  {{#if logged}}
+  <div id="login">
+    <h2>Account</h2>
+    <div id="logout" class="content">
+      <p><span class="link-button" id="view-leaderboard">View leaderboard</span></p>
+      <p><button class="link-button" onClick="FB.logout();">Logout</button></p>
+    </div>
+  </div>
+  {{else}}
+  <div id="login">
+    <h2>Welcome to Aalto Track!</h2>
+    <div class="content">
+      <p>
+        Track can be used without logging in. However, the social aspect of
+        Track can be used only after login. Currently, we provide logging in
+        only via Facebook Connect.
+      </p>
+      <p><span class="no-login link-button">Continue without logging in</span></p>
+      <p><button class="login-button link-button">Login with Facebook</button></p>
+    </div>
+  </div>
+  {{/if}}
+</script>
+
+<script id="template-leaderboard" type="text/x-handlebars-template">
+  {{#if error}}
+  {{error}}
+  {{/if}}
+  <div id="leaderboard">
+    <table>
+      <tr class="header"><th colspan="3">Leaderboard</th></tr>
+      {{#each entries}}
+      <tr>
+        <td class="position">{{this.position}}</td>
+        <td class="name"><img src="{{this.picture}}" alt=""> {{this.name}}</td>
+        <td class="points">{{this.points}}</td>
+      </tr>
+      {{/each}}
+    </table>
+  </div>
+</script>
+
+<!-- JavaScript at the bottom for fast page loading -->
+<!-- libraries -->
+<script src="js/libs/jquery-1.7.1.min.js"></script>
+<script src="js/libs/jquery.xdr.js"></script>
+<script src="js/libs/spine.js"></script>
+<script src="js/libs/spine.route.js"></script>
+<script src="js/libs/handlebars.js"></script>
+<script src="js/handlebars-helpers.js"></script>
+<script src="js/libs/underscore-min.js"></script>
+<!--<script src="js/libs/jquery.flot.min.js"></script>
+<script src="js/libs/jquery.tooltip.js"></script>-->
+<script src="js/libs/jquery.cookie.js"></script>
+<script src="js/libs/browserdetect.js"></script>
+
+<!-- our code -->
+<script src="js/models.js"></script>
+<script src="js/controllers.js"></script>
+<script src="js/app.js"></script>
+
+<!-- scripts concatenated and minified via ant build script-->
+<script src="js/helper.js"></script>
+<script src="js/plugins.js"></script>
+<!-- end scripts-->
+
+<!-- Debugger - remove for production -->
+<!-- <script src="https://getfirebug.com/firebug-lite.js"></script> -->
+
+<!-- Asynchronous Google Analytics snippet. Change UA-XXXXX-X to be your site's ID.
+mathiasbynens.be/notes/async-analytics-snippet -->
+<!--
+<script>
+ var _gaq=[["_setAccount","UA-XXXXX-X"],["_trackPageview"]];
+ (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
+ g.src=("https:"==location.protocol?"//ssl":"//www")+".google-analytics.com/ga.js";
+ s.parentNode.insertBefore(g,s)}(document,"script"));
+</script> -->
+<script type="text/javascript">
+  jQuery(function($) {
+    window.track = new App();
+  });
+</script>
+</body>
+</html>

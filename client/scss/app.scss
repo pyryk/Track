@@ -7,20 +7,41 @@ $use-mozilla-ellipsis-binding: true;
 @import "compass/typography/text/ellipsis";
 /* ==================== app specific styles ==================== */
 
+/* Defining the layout-profile: frontpage, aalto, rosso, subway */
+$customer: "frontpage";
+
 /* Aalto template **/
 $header_gradient_1: lighten(#FECB00, 20%);
 $header_gradient_2: #FECB00;
-$header_gradient_3: #6ACCE1;
-$header_gradient_4: #1CBFD6;
 $header_text_color: #fff;
 $footer_color: rgba(100,100,100,1);
 $header_height: 46px;
 $border_color: #ccc;
-$background_gradient_1: #FFFFFF;
+$background_gradient_1: darken(#ffffff, 2%);
 $background_gradient_2: #D9D9D9;
 $text_color: rgba(0,0,0,1);
 $list_item_gradient_1: #fdfdfd;
 $list_item_gradient_2: darken(#fdfdfd, 3%);
+
+/* If some else customer or layout */
+@if $customer == frontpage {
+  $header_gradient_1: #6ACCE1;
+  $header_gradient_2: #1CBFD6;
+  $background_gradient_1: darken(#ffffff, 2%);
+  $background_gradient_2: #D9D9D9;
+}
+@if $customer == rosso {
+  $header_gradient_1: #ffffff;
+  $header_gradient_2: #fdfdfd;
+  $background_gradient_1: #bd1627;
+  $background_gradient_2: #bd1627;
+}
+@if $customer == subway {
+  $header_gradient_1: #009f4f;
+  $header_gradient_2: #009f4f;
+  $background_gradient_1: darken(#ffffff, 2%);
+  $background_gradient_2: #D9D9D9;
+}
 
 /* Default jQuery mobile blue theme */
 /*
@@ -38,7 +59,7 @@ $list_item_gradient_2: #eee;
 */
 
 @mixin header {
-  @include background-image(linear-gradient($header_gradient_3, $header_gradient_4));
+  @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
   padding: 0.7em 1em;
   margin: 0;
   font-size: 18px;
@@ -76,14 +97,14 @@ $list_item_gradient_2: #eee;
 }
 
 html {
-  background-color: $background_gradient_2;
+  background-color: $background_gradient_1;
 }
 
 body {
   color: $text_color;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 14px;
-  @include background-image(linear-gradient($background_gradient_1, $background_gradient_2 100%));
+  @include background-image(linear-gradient($background_gradient_1, $list_item_gradient_1 100%));
 }
 
 #container {
@@ -98,7 +119,7 @@ header {
   width: 100%;
   margin-top: 0;
   padding-top: 0;
-  @include background-image(linear-gradient($header_gradient_3, $header_gradient_4));
+  @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
   color: $header_text_color;
   border-bottom: 1px solid $border_color;
   text-align: center;
@@ -144,6 +165,10 @@ header {
   padding: 0;
   margin-left: auto;
   margin-right: auto;
+  font-weight: 500;
+  border-left: 1px solid #999;
+  border-right: 1px solid #999;
+  @include border-radius(15px 15px 15px 15px);
 
   li {
     padding: 1em 1em;
@@ -197,31 +222,22 @@ header {
     margin: 10px 10px;
 }
 
-
-
-.search-box {
+.search-field {
   width: 90%;
-  padding: 0;
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
-  border: 0;
-  border-top: 1px solid #fff;
-  border-bottom: 1px solid $border_color;
-  @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
-  @include ellipsis;
-  @include border-radius(15px 15px 15px 15px);
-  &:active, &.fake-active {
-    @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
-  }
+  font-size: 14px;
+  font-weight: bold;
+  color: $text_color;
+  text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
 }
 
-.search-field {
-  padding: 0.7em 1em;
-  font-size: 18px;
-  font-weight: bold;
-  color: $header_text_color;
-  text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
+.search-field_input {
+  @include border-radius(11px 11px 11px 11px);
+  color: $text_color;
+  padding: 0.5em;
+  outline: none;
 }
 
 #target-details {
@@ -462,6 +478,7 @@ header {
 #account-button {
   right: 5px;
   @include background-image(linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.1)));
+  //@include background-image(linear-gradient($background_gradient_1, $background_gradient_1));
   @include border-radius(5px);
   &:active, &.fake-active {
     @include background-image(linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.05)));
