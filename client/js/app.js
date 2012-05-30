@@ -10,7 +10,6 @@ var App = Spine.Controller.sub({
         this.renderView('loginScreen', LoginScreen);
       },
       "!/customer/": function(params) {
-        this.renderView('pure-search', Search);
         this.renderView('customerList', CustomersList);
       },
       "!/targets/": function(params) {
@@ -39,13 +38,12 @@ var App = Spine.Controller.sub({
     });
     
     Spine.Route.setup();
-    
-    
+
     // enable back button
     new BackButton({
       el: $('#back-button'),
       template: $('#template-backButton'),
-      app: this,
+      app: this
     }).render();
     
     // enable logins
@@ -59,6 +57,9 @@ var App = Spine.Controller.sub({
     
   },
   renderView: function(name, className, id) {
+    //view.className{name, className, id};
+
+    //name, className, id
     if (name !== "loginScreen" && !this.loginOk()) {
       this.redirect = Spine.Route.getFragment();
       Spine.Route.navigate("!/login/");
@@ -77,7 +78,7 @@ var App = Spine.Controller.sub({
       this.pages[name].id = id; // set id if needed
       this.pages[name].show();
       this.visiblePage = this.pages[name];
-    
+
       // add page to the page stack:
       // page should not be added, if
       // a) it is the current page (lenght-1)

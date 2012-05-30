@@ -4,7 +4,6 @@ var BaseController = Spine.Controller.sub({
     if (this.rawTemplate && this.rawTemplate.length > 0) {
       this.template = Handlebars.compile(this.rawTemplate.html());
     }
-    
   },
   show: function() {
     this.render();
@@ -42,70 +41,83 @@ var BaseController = Spine.Controller.sub({
   // TODO remove if not needed
   addPseudoActiveSupport: function() {
     if (navigator.userAgent.toLowerCase().indexOf("android 2") > -1) {
-     $(".active-button")
-     .bind("touchstart", function () {
+      $(".active-button")
+      .bind("touchstart", function () {
          $(this).addClass("fake-active");
-     })
-     .bind("touchend", function() {
+      })
+      .bind("touchend", function() {
          $(this).removeClass("fake-active");
-     })
-     .bind("touchcancel", function() {
-       $(this).removeClass("fake-active");
+      })
+      .bind("touchcancel", function() {
+        $(this).removeClass("fake-active");
       });
     }
   }
 });
 
-var Search = BaseController.sub({
-  events: {
-    "keyup #search": "search_customer"
-  },
-
-  search_customer: function() {
-    var search_text = $('#search').val();
-    var rg = new RegExp(search_text,'i');
-    $('#customer_list').each(function(){
-      if($.trim($(this).html()).search(rg) == -1) {
-        $(this).parent().css('display', 'none');
-        $(this).css('display', 'none');
-        $(this).next().css('display', 'none');
-        $(this).next().next().css('display', 'none');
-      }
-      else {
-        $(this).parent().css('display', '');
-        $(this).css('display', '');
-        $(this).next().css('display', '');
-        $(this).next().next().css('display', '');
-      }
-    });
-  }
-})
-
+/**
+ * A controller for the customer item list
+ *
+ */
 var CustomersList = BaseController.sub({
   events: {
-    "click #customer-list": "clicked_customer"
+    "click #customer-list": "clicked_customer",
+    "keyup #search_customer_input": "search_customer"
   },
   getData: function() {
     return {items: [
       Customer.create({logo: "img/templogos/subway.png", name: "Subway"}),
+      Customer.create({logo: "img/templogos/rosso.png", name: "Rosso"}),
       Customer.create({logo: "img/templogos/mcdonalds.png", name: "McDonald's"}),
       Customer.create({logo: "img/templogos/hesburger.png", name: "Hesburger"}),
       Customer.create({logo: "img/templogos/finnkino.png", name: "Finnkino"}),
       Customer.create({logo: "img/templogos/aalto_university.png", name: "Aalto university"}),
-      Customer.create({logo: "img/templogos/tector.png", name: "Tector"}),
+      Customer.create({logo: "img/templogos/chicos.png", name: "Chico's"}),
       Customer.create({logo: "img/templogos/roberts_coffee.png", name: "Robert's Coffee"}),
       Customer.create({logo: "img/templogos/unisport.png", name: "Unisport"}),
       Customer.create({logo: "img/templogos/elisa.png", name: "Elisa"}),
       Customer.create({logo: "img/templogos/abc.png", name: "ABC"}),
       Customer.create({logo: "img/templogos/HSL.png", name: "HSL"}),
-      Customer.create({logo: "img/templogos/subway.png", name: "SOK Restaurants"}),
       Customer.create({logo: "img/templogos/hesburger.png", name: "VR"}),
       Customer.create({logo: "img/templogos/mcdonalds.png", name: "Picnic"})
     ]};
   },
-
   clicked_customer: function() {
-      Spine.Route.navigate("!/targets/");
+    Spine.Route.navigate("!/targets/");
+  },
+
+  /* List search using jQuery */
+  search_customer: function() {
+    var $first = true;
+    var $indexLast = -1;
+    var $hotElement;
+    var $search_text = $('#search_customer_input').val().toLowerCase();
+    $('li').each(function(i){
+      var $customerName = $(this).text().toLowerCase();
+      if($customerName.indexOf($search_text) == -1) {
+        $(this).css('display', 'none');
+      }
+      else {
+        $(this).css('display', '');
+
+        if ($first) {
+          $(this).css('border-top', '1px solid #ccc');
+          $(this).css('border-radius', '15px 15px 15px 15px');
+          $(this).css('border-bottom', '1px solid #ccc');
+          if ($indexLast != -1) {
+            $(this).css('border-top', '1px solid #fff');
+            $(this).css('border-top-left-radius', '0px');
+            $(this).css('border-top-right-radius', '0px');
+            $hotElement.css('border-bottom', '1px solid #fff');
+            $hotElement.css('border-bottom-left-radius', '15px 15px');
+            $hotElement.css('border-bottom-right-radius', '15px 15px');
+          }
+          $indexLast = i;
+          $hotElement = this;
+          $first = false;
+        }
+      }
+    });
   }
 });
 
@@ -119,7 +131,7 @@ var TargetsList = BaseController.sub({
   },
   events: {
     "fastclick #target-list li": "clicked",
-    "hover #target-list li": "print"
+    "keyup #search_target_input": "search_target"
   },
   getTitle: function() {
     return "List";
@@ -151,9 +163,6 @@ var TargetsList = BaseController.sub({
       this.loadList({lat: location.lat, lon: location.lon});
     }
   },
-  print: function(e) {
-      console.log("testiprintti");
-  },
   clicked: function(e) {
     var el = $(e.target);
     var id = el.attr('data-id');
@@ -164,12 +173,26 @@ var TargetsList = BaseController.sub({
     } else if (el.hasClass("create-new")) {
       Spine.Route.navigate(App.getRoute("create_target"));
     }
+  },
+
+  /* List search using jQuery */
+  search_target: function() {
+    var $search_target = $('#search_target_input').val().toLowerCase();
+    $('li').each(function(index){
+      var $targetName = $(this).text().toLowerCase();
+      if($targetName.indexOf($search_target) == -1) {
+        $(this).css('display', 'none');
+      }
+      else {
+        $(this).css('display', '');
+      }
+    });
   }
 });
 
 var ownResult = BaseController.sub({
   events: {
-    "fastclick .view-results": "viewResults",
+    "fastclick .view-results": "viewResults"
   },
   init: function() {
     BaseController.prototype.init.call(this);
