@@ -88,9 +88,7 @@ var CustomersList = BaseController.sub({
 
   /* List search using jQuery */
   search_customer: function() {
-    var $first = true;
-    var $indexLast = -1;
-    var $hotElement;
+    var $lastElement = null;
     var $search_text = $('#search_customer_input').val().toLowerCase();
     $('li').each(function(i){
       var $customerName = $(this).text().toLowerCase();
@@ -100,22 +98,18 @@ var CustomersList = BaseController.sub({
       else {
         $(this).css('display', '');
 
-        if ($first) {
+        $(this).css('border-top', '1px solid #ccc');
+        $(this).css('border-radius', '15px 15px 15px 15px');
+        $(this).css('border-bottom', '1px solid #ccc');
+        if ($lastElement != null) {
           $(this).css('border-top', '1px solid #ccc');
-          $(this).css('border-radius', '15px 15px 15px 15px');
-          $(this).css('border-bottom', '1px solid #ccc');
-          if ($indexLast != -1) {
-            $(this).css('border-top', '1px solid #fff');
-            $(this).css('border-top-left-radius', '0px');
-            $(this).css('border-top-right-radius', '0px');
-            $hotElement.css('border-bottom', '1px solid #fff');
-            $hotElement.css('border-bottom-left-radius', '15px 15px');
-            $hotElement.css('border-bottom-right-radius', '15px 15px');
-          }
-          $indexLast = i;
-          $hotElement = this;
-          $first = false;
+          $(this).css('border-top-left-radius', '0px');
+          $(this).css('border-top-right-radius', '0px');
+          $($lastElement).css('border-bottom', '1px solid #fff');
+          $($lastElement).css('border-bottom-left-radius', '0px');
+          $($lastElement).css('border-bottom-right-radius', '0px')
         }
+        $lastElement = this;
       }
     });
   }
@@ -131,6 +125,8 @@ var TargetsList = BaseController.sub({
   },
   events: {
     "fastclick #target-list li": "clicked",
+    "fastclick #target-list li span": "clicked",
+    "fastclick #target-list li img": "clicked",
     "keyup #search_target_input": "search_target"
   },
   getTitle: function() {
@@ -178,13 +174,29 @@ var TargetsList = BaseController.sub({
   /* List search using jQuery */
   search_target: function() {
     var $search_target = $('#search_target_input').val().toLowerCase();
+    var $test = 1;
+    var $lastTarget = null;
     $('li').each(function(index){
       var $targetName = $(this).text().toLowerCase();
+      $test += 1;
+      console.log($test);
       if($targetName.indexOf($search_target) == -1) {
         $(this).css('display', 'none');
       }
       else {
         $(this).css('display', '');
+        $(this).css('border-top', '1px solid #ccc');
+        $(this).css('border-radius', '15px 15px 15px 15px');
+        $(this).css('border-bottom', '1px solid #ccc');
+        if ($lastTarget != null) {
+          $(this).css('border-top', '1px solid #ccc');
+          $(this).css('border-top-left-radius', '0px');
+          $(this).css('border-top-right-radius', '0px');
+          $($lastTarget).css('border-bottom', '1px solid #fff');
+          $($lastTarget).css('border-bottom-left-radius', '0px');
+          $($lastTarget).css('border-bottom-right-radius', '0px')
+        }
+        $lastTarget = this;
       }
     });
   }
@@ -414,14 +426,18 @@ var BackButton = BaseController.sub({
   },
   getData: function() {
     //var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
-    var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
+    //var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
+    var showButton = true;
     return {previous: showButton};
   },
   clicked: function() {
-    //this.app.goToPreviousPage();
-    if (window.history.length > 0) {
+    // app.js have put App.visiblePage as undefined and it works great
+    if (App.visiblePage == undefined) {
+      Spine.Route.navigate('!/customer/');
+    } else if (window.history.length > 0) {
       window.history.back();
     }
+
   }
 });
 
