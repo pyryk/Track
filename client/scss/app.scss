@@ -1,3 +1,4 @@
+/* ==================== imports ========================================================================= */
 @import "compass/css3/border-radius";
 @import "compass/css3/font-face";
 @import "compass/css3/box-shadow";
@@ -5,59 +6,65 @@
 @import "compass";
 $use-mozilla-ellipsis-binding: true;
 @import "compass/typography/text/ellipsis";
-/* ==================== app specific styles ==================== */
 
+/**
+* Colorpalette is available in http://dribbble.com/shots/290228-Dell-Mobile-App-Ph3
+*/
+/* ==================== app specific styles ========================================================================= */
 /* Defining the layout-profile: frontpage, aalto, rosso, subway */
 $customer: "frontpage";
 
-/* Aalto template **/
-$header_gradient_1: lighten(#FECB00, 20%);
-$header_gradient_2: #FECB00;
+/* Default template **/
+$header_gradient_1: lighten(#0F68A3, 20%);
+$header_gradient_2: #0F68A3;
 $header_text_color: #fff;
 $footer_color: rgba(100,100,100,1);
 $header_height: 46px;
 $border_color: #ccc;
-$background_gradient_1: darken(#ffffff, 2%);
-$background_gradient_2: #D9D9D9;
-$text_color: rgba(0,0,0,1);
-$list_item_gradient_1: #fdfdfd;
-$list_item_gradient_2: darken(#fdfdfd, 3%);
+$background_gradient_1: darken(#f6f6f6, 2%);
+$background_gradient_2: #f6f6f6;
+$text_color: #606967;
+$list_item_gradient_1: #ffffff;
+$list_item_gradient_2: darken(#ffffff, 1%);
 
-/* If some else customer or layout */
-@if $customer == frontpage {
-  $header_gradient_1: #6ACCE1;
-  $header_gradient_2: #1CBFD6;
+/* Aalto-layout */
+@if $customer == aalto {
+  $header_gradient_1: lighten(#FECB00, 20%);
+  $header_gradient_2: #FECB00;
   $background_gradient_1: darken(#ffffff, 2%);
   $background_gradient_2: #D9D9D9;
+  $list_item_gradient_1: #fdfdfd;
+  $list_item_gradient_2: darken(#fdfdfd, 3%);
+  $text_color: rgba(0,0,0,1);
 }
-@if $customer == rosso {
-  $header_gradient_1: #ffffff;
-  $header_gradient_2: #fdfdfd;
-  $background_gradient_1: #bd1627;
-  $background_gradient_2: #bd1627;
-}
-@if $customer == subway {
-  $header_gradient_1: #009f4f;
-  $header_gradient_2: #009f4f;
-  $background_gradient_1: darken(#ffffff, 2%);
-  $background_gradient_2: #D9D9D9;
-}
+/* Track frontpage-layout */
+  @if $customer == frontpage {
+    $header_gradient_1: lighten(#0F68A3, 20%);
+    $header_gradient_2: #0F68A3;
+    $background_gradient_1: darken(#f6f6f6, 2%);
+    $background_gradient_2: #f6f6f6;
+    $list_item_gradient_1: #ffffff;
+    $list_item_gradient_2: darken(#ffffff, 1%);
+    $text_color: #606967;
+  }
 
-/* Default jQuery mobile blue theme */
-/*
-$header_gradient_1: #2DBCF8;
-$header_gradient_2: #2499CB;
-$header_text_color: #fff;
-$footer_color: rgba(100,100,100,1);
-$header_height: 46px;
-$border_color: #ccc;
-$background_gradient_1: #FFFFFF;
-$background_gradient_2: #D9D9D9;
-$text_color: rgba(0,0,0,1);
-$list_item_gradient_1: #fdfdfd;
-$list_item_gradient_2: #eee;
-*/
+/* Rosso-layout */
+  @if $customer == rosso {
+    $header_gradient_1: #ffffff;
+    $header_gradient_2: #fdfdfd;
+    $background_gradient_1: #bd1627;
+    $background_gradient_2: #bd1627;
+  }
 
+/* Subway-layout */
+  @if $customer == subway {
+    $header_gradient_1: #009f4f;
+    $header_gradient_2: #009f4f;
+    $background_gradient_1: darken(#ffffff, 2%);
+    $background_gradient_2: #D9D9D9;
+  }
+
+/* ==================== mixin elements ========================================================================= */
 @mixin header {
   @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
   padding: 0.7em 1em;
@@ -91,21 +98,24 @@ $list_item_gradient_2: #eee;
   @include border-radius(0px 0px 5px 5px);
 }
 
+/* ==================== basic elements ========================================================================= */
 * {
   -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
   -webkit-touch-callout: none;
 }
 
 html {
-  background-color: $background_gradient_1;
+  background-color: $background_gradient_2;
 }
 
 body {
   color: $text_color;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 14px;
-  @include background-image(linear-gradient($background_gradient_1, $list_item_gradient_1 100%));
+  @include background-image(linear-gradient($background_gradient_1, $background_gradient_2 100%));
 }
+
+/* ==================== container elements ========================================================================= */
 
 #container {
   padding: 0;
@@ -153,6 +163,7 @@ header {
 
 .customer-list-next {
   float: right;
+
 }
 
 .page {
@@ -190,13 +201,11 @@ header {
     font-weight: bold;
     color: $header_text_color;
     text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
-
   }
 
   li.create-new {
 
     padding-top: 1em;
-
 
     .text {
       display: inline-block;
@@ -218,6 +227,17 @@ header {
   }
 }
 
+ul li span {
+  margin: 0px;
+  padding: 0px;
+  float: left;
+  width: 86%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  //display: inline-block;
+}
+
 .target-name {
     margin: 10px 10px;
 }
@@ -229,14 +249,21 @@ header {
   margin-top: 10px;
   font-size: 14px;
   font-weight: bold;
-  color: $text_color;
+  @include border-radius(11px 11px 11px 11px);
   text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
 }
 
 .search-field_input {
+  border: 1px solid #999;
   @include border-radius(11px 11px 11px 11px);
+  background-image: url(../img/search_icon.png);
+  background-repeat: no-repeat;
+  background-position: 6px 50%;
   color: $text_color;
   padding: 0.5em;
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
+  padding-left: 2.2em;
   outline: none;
 }
 
@@ -324,7 +351,7 @@ header {
   }
   
   .result-graph {
-      color: #fff;
+    color: #fff;
     @include display-box;
     @include box-orient(horizontal);
     @include box-align(stretch);
@@ -453,38 +480,38 @@ header {
 }
 
 #account-button {
-  height: 35px;
-  
+  height: 36px;
+
   .top-button {
+    border: 1px solid rgba(0,0,0,0.3);
     border-radius: 6px;
     height: 15px;
     padding-top: 8px;
   }
+  right: 10px;
+  @include background-image(linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.1)));
+  @include background-image(linear-gradient($header_gradient_2, $header_gradient_2));
+  @include border-radius(35px);
+  &:active, &.fake-active {
+    //@include background-image(linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.05)));
+  }
 }
 
 #back-button {
-  left: 5px;
-  height: 38px;
-  .top-button {
-    background-image: url("../img/back-icon.png?123");
-    background-repeat: no-repeat;
-    width: 60px;
-    &:active, &.fake-active {
-      background-position: 0 -36px;
-    }
-  }
-}
+  height: 36px;
 
-#account-button {
-  right: 5px;
-  @include background-image(linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.1)));
-  //@include background-image(linear-gradient($background_gradient_1, $background_gradient_1));
-  @include border-radius(5px);
-  &:active, &.fake-active {
-    @include background-image(linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.05)));
-  }
   .top-button {
     border: 1px solid rgba(0,0,0,0.3);
+    border-radius: 6px;
+    height: 15px;
+    padding-top: 8px;
+  }
+  left: 10px;
+  @include background-image(linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.1)));
+  @include background-image(linear-gradient($header_gradient_2, $header_gradient_2));
+  @include border-radius(35px);
+  &:active, &.fake-active {
+    //background-position: 0 -36px;
   }
 }
 

@@ -233,6 +233,8 @@ var App = Spine.Controller.sub({
         return this.pages['targetList'];
       case this.pages['leaderboard']:
         return this.pages['loginScreen'];
+      case this.pages['targetList']:
+        return this.pages['customerList'];
       default: 
         return undefined;
     }

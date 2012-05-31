@@ -43,7 +43,7 @@
   <!-- App Stylesheet -->
   <link href="css/app.css" rel="stylesheet" type="text/css" />
   <link href="css/jquery.tooltip.css" rel="stylesheet" type="text/css" />
-  
+  <link rel="stylesheet" href="css/jquery.mobile-1.1.0.min.css" type="text/css">
 
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
   <script src="js/libs/modernizr-2.0.6.min.js"></script>
@@ -57,9 +57,11 @@
   <!-- on the top of the screen -->
   <div id="container">
     <header>
-      <div id="back-button"></div>
-      <h1><a href="#"><img src="img/tracktive_logo_pieni.png" style="height: 26px; padding-bottom: 5px; padding-right: 10px"></img></a><!----><!--<a href="#">aalto</a>--></h1>
-      <div id="account-button"><span class="top-button"><a href="#!/login/">Account</a></span></div>
+      <div id="back-button"><a href="#!/customer/"><img src="img/home-icon.png" alt=""></a></div>
+      <h1><a href="#"><img src="img/tracktive_logo_pieni.png" style="padding-bottom: 5px; padding-right: 10px"></a><!----><!--<a href="#">aalto</a>--></h1>
+      <!--<div id="account-button"><span class="top-button"><a href="#!/login/"><img src="img/account-icon.png" alt=""></a></span></div>-->
+      <div id="account-button"><a href="#!/login/"><img src="img/account-icon.png" alt=""></a></div>
+      <!--<div id="account-button"></div>-->
     </header>
     <div id="main" role="main">
       <noscript>This application requires JavaScript support. Currently it is tested only on iPhone and Android devices.</noscript>
@@ -71,7 +73,7 @@
 
   <script id="template-customerList" type="text/x-handlebars-template">
     <div class="search-field">
-      <input type="text"  id="search_customer_input" placeholder="Etsi..." autocomplete="off" class="search-field_input" />
+      <input type="text" id="search_customer_input" placeholder="Etsi..." autocomplete="off" class="search-field_input" />
     </div>
     <ul class="primary-list" data-role="listview" data-inset="true" data-filter="true" id="customer-list">
       {{#each items}}
@@ -82,15 +84,17 @@
 
   <script id="template-targetList" type="text/x-handlebars-template">
     <div class="search-field">
-      <input type="text"  id="search_target_input" placeholder="Etsi..." autocomplete="off" class="search-field_input" />
-      <!-- -->
+      <input type="text" id="search_target_input" placeholder="Etsi..." autocomplete="off" class="search-field_input" />
     </div>
     {{#if error}}
       {{error}}
     {{/if}}
     <ul class="primary-list" id="target-list">
       {{#each items}}
-        <li name="{{this.name}}" data-id="{{this.id}}">{{this.name}}</li>
+        <li name="{{this.name}}" data-id="{{this.id}}">
+          <span data-id="{{this.id}}">{{this.name}}</span>
+          <img data-id="{{this.id}}" class="customer-list-next" src="img/next.png" alt="">
+        </li>
       {{/each}}
       <li class="create-new"><span class="create-new text">Create a new target</span></li>
     </ul>
@@ -212,7 +216,7 @@
   
   <script id="template-backButton" type="text/x-handlebars-template">
     {{#if previous}}
-      <span class="back-button top-button">Back</span>
+      <span class="back-button"><img src="img/back-icon.png" alt=""></span>
     {{/if}}
   </script>
   

@@ -1,51 +1,47 @@
-/* ==================== app specific styles ==================== */
-/* Defining the layout-profile: frontpage, aalto, rosso, subway */
-/* Aalto template **/
-/* If some else customer or layout */
-/* Default jQuery mobile blue theme */
-/*
-$header_gradient_1: #2DBCF8;
-$header_gradient_2: #2499CB;
-$header_text_color: #fff;
-$footer_color: rgba(100,100,100,1);
-$header_height: 46px;
-$border_color: #ccc;
-$background_gradient_1: #FFFFFF;
-$background_gradient_2: #D9D9D9;
-$text_color: rgba(0,0,0,1);
-$list_item_gradient_1: #fdfdfd;
-$list_item_gradient_2: #eee;
+/* ==================== imports ========================================================================= */
+/**
+* Colorpalette is available in http://dribbble.com/shots/290228-Dell-Mobile-App-Ph3
 */
-/* line 94, ../scss/app.scss */
+/* ==================== app specific styles ========================================================================= */
+/* Defining the layout-profile: frontpage, aalto, rosso, subway */
+/* Default template **/
+/* Aalto-layout */
+/* Track frontpage-layout */
+/* Rosso-layout */
+/* Subway-layout */
+/* ==================== mixin elements ========================================================================= */
+/* ==================== basic elements ========================================================================= */
+/* line 102, ../scss/app.scss */
 * {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
   -webkit-touch-callout: none;
 }
 
-/* line 99, ../scss/app.scss */
+/* line 107, ../scss/app.scss */
 html {
-  background-color: #fafafa;
+  background-color: #f6f6f6;
 }
 
-/* line 103, ../scss/app.scss */
+/* line 111, ../scss/app.scss */
 body {
-  color: black;
+  color: #606967;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 14px;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fafafa), color-stop(100%, #fdfdfd));
-  background-image: -webkit-linear-gradient(#fafafa, #fdfdfd 100%);
-  background-image: -moz-linear-gradient(#fafafa, #fdfdfd 100%);
-  background-image: -o-linear-gradient(#fafafa, #fdfdfd 100%);
-  background-image: -ms-linear-gradient(#fafafa, #fdfdfd 100%);
-  background-image: linear-gradient(#fafafa, #fdfdfd 100%);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f1f1f1), color-stop(100%, #f6f6f6));
+  background-image: -webkit-linear-gradient(#f1f1f1, #f6f6f6 100%);
+  background-image: -moz-linear-gradient(#f1f1f1, #f6f6f6 100%);
+  background-image: -o-linear-gradient(#f1f1f1, #f6f6f6 100%);
+  background-image: -ms-linear-gradient(#f1f1f1, #f6f6f6 100%);
+  background-image: linear-gradient(#f1f1f1, #f6f6f6 100%);
 }
 
-/* line 110, ../scss/app.scss */
+/* ==================== container elements ========================================================================= */
+/* line 120, ../scss/app.scss */
 #container {
   padding: 0;
 }
 
-/* line 114, ../scss/app.scss */
+/* line 124, ../scss/app.scss */
 header {
   position: fixed;
   top: 0;
@@ -54,37 +50,37 @@ header {
   width: 100%;
   margin-top: 0;
   padding-top: 0;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6acce1), color-stop(100%, #1cbfd6));
-  background-image: -webkit-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -moz-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -o-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -ms-linear-gradient(#6acce1, #1cbfd6);
-  background-image: linear-gradient(#6acce1, #1cbfd6);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #0f68a3));
+  background-image: -webkit-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -moz-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -o-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -ms-linear-gradient(#2c9fec, #0f68a3);
+  background-image: linear-gradient(#2c9fec, #0f68a3);
   color: white;
   border-bottom: 1px solid #cccccc;
   text-align: center;
 }
-/* line 127, ../scss/app.scss */
+/* line 137, ../scss/app.scss */
 header h1 {
   padding: 0.25em;
   margin: 0;
   font-size: 24px;
   font-weight: bold;
 }
-/* line 133, ../scss/app.scss */
+/* line 143, ../scss/app.scss */
 header h1 a:link, header h1 a:visited, header h1 a:active {
-  color: black;
+  color: #606967;
   text-decoration: none;
   color: white;
   text-shadow: 0 1px 1px #444444;
 }
 
-/* line 142, ../scss/app.scss */
+/* line 152, ../scss/app.scss */
 #main {
   padding-top: 46px;
 }
 
-/* line 147, ../scss/app.scss */
+/* line 157, ../scss/app.scss */
 .customer-list-image {
   padding-right: 20px;
   margin-top: -5px;
@@ -92,17 +88,17 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   height: 20px;
 }
 
-/* line 154, ../scss/app.scss */
+/* line 164, ../scss/app.scss */
 .customer-list-next {
   float: right;
 }
 
-/* line 158, ../scss/app.scss */
+/* line 169, ../scss/app.scss */
 .page {
   display: none;
 }
 
-/* line 162, ../scss/app.scss */
+/* line 173, ../scss/app.scss */
 .primary-list {
   list-style-type: none;
   width: 90%;
@@ -118,18 +114,18 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -o-border-radius: 15px 15px 15px 15px;
   border-radius: 15px 15px 15px 15px;
 }
-/* line 173, ../scss/app.scss */
+/* line 184, ../scss/app.scss */
 .primary-list li {
   padding: 1em 1em;
   border: 0;
   border-top: 1px solid #fff;
   border-bottom: 1px solid #cccccc;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #f5f5f5));
-  background-image: -webkit-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -moz-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -o-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -ms-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: linear-gradient(#fdfdfd, #f5f5f5);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
+  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -moz-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -o-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
+  background-image: linear-gradient(#ffffff, #fcfcfc);
   white-space: nowrap;
   overflow: hidden;
   -ms-text-overflow: ellipsis;
@@ -137,34 +133,34 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   text-overflow: ellipsis;
   -moz-binding: url('/css/xml/ellipsis.xml#ellipsis');
 }
-/* line 181, ../scss/app.scss */
+/* line 192, ../scss/app.scss */
 .primary-list li:active, .primary-list li.fake-active {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5f5f5), color-stop(100%, #fdfdfd));
-  background-image: -webkit-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: -moz-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: -o-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: -ms-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: linear-gradient(#f5f5f5, #fdfdfd);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
+  background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
+  background-image: -moz-linear-gradient(#fcfcfc, #ffffff);
+  background-image: -o-linear-gradient(#fcfcfc, #ffffff);
+  background-image: -ms-linear-gradient(#fcfcfc, #ffffff);
+  background-image: linear-gradient(#fcfcfc, #ffffff);
 }
-/* line 186, ../scss/app.scss */
+/* line 197, ../scss/app.scss */
 .primary-list li.header {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6acce1), color-stop(100%, #1cbfd6));
-  background-image: -webkit-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -moz-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -o-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -ms-linear-gradient(#6acce1, #1cbfd6);
-  background-image: linear-gradient(#6acce1, #1cbfd6);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #0f68a3));
+  background-image: -webkit-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -moz-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -o-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -ms-linear-gradient(#2c9fec, #0f68a3);
+  background-image: linear-gradient(#2c9fec, #0f68a3);
   padding: 0.7em 1em;
   font-size: 18px;
   font-weight: bold;
   color: white;
   text-shadow: 0 1px 1px #444444;
 }
-/* line 196, ../scss/app.scss */
+/* line 206, ../scss/app.scss */
 .primary-list li.create-new {
   padding-top: 1em;
 }
-/* line 201, ../scss/app.scss */
+/* line 210, ../scss/app.scss */
 .primary-list li.create-new .text {
   display: inline-block;
   background-image: url("../img/add-new-small.png");
@@ -173,7 +169,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   padding-left: 25px;
   height: 18px;
 }
-/* line 211, ../scss/app.scss */
+/* line 220, ../scss/app.scss */
 .primary-list li:first-child {
   border-top: 1px solid #cccccc;
   -webkit-border-radius: 15px 15px 0px 0px;
@@ -182,7 +178,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -o-border-radius: 15px 15px 0px 0px;
   border-radius: 15px 15px 0px 0px;
 }
-/* line 216, ../scss/app.scss */
+/* line 225, ../scss/app.scss */
 .primary-list li:last-child {
   -webkit-border-radius: 0px 0px 15px 15px;
   -moz-border-radius: 0px 0px 15px 15px;
@@ -191,12 +187,23 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   border-radius: 0px 0px 15px 15px;
 }
 
-/* line 221, ../scss/app.scss */
+/* line 230, ../scss/app.scss */
+ul li span {
+  margin: 0px;
+  padding: 0px;
+  float: left;
+  width: 86%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* line 241, ../scss/app.scss */
 .target-name {
   margin: 10px 10px;
 }
 
-/* line 225, ../scss/app.scss */
+/* line 245, ../scss/app.scss */
 .search-field {
   width: 90%;
   margin-left: auto;
@@ -204,28 +211,39 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   margin-top: 10px;
   font-size: 14px;
   font-weight: bold;
-  color: black;
-  text-shadow: 0 1px 1px #444444;
-}
-
-/* line 236, ../scss/app.scss */
-.search-field_input {
   -webkit-border-radius: 11px 11px 11px 11px;
   -moz-border-radius: 11px 11px 11px 11px;
   -ms-border-radius: 11px 11px 11px 11px;
   -o-border-radius: 11px 11px 11px 11px;
   border-radius: 11px 11px 11px 11px;
-  color: black;
+  text-shadow: 0 1px 1px #444444;
+}
+
+/* line 256, ../scss/app.scss */
+.search-field_input {
+  border: 1px solid #999;
+  -webkit-border-radius: 11px 11px 11px 11px;
+  -moz-border-radius: 11px 11px 11px 11px;
+  -ms-border-radius: 11px 11px 11px 11px;
+  -o-border-radius: 11px 11px 11px 11px;
+  border-radius: 11px 11px 11px 11px;
+  background-image: url(../img/search_icon.png);
+  background-repeat: no-repeat;
+  background-position: 6px 50%;
+  color: #606967;
   padding: 0.5em;
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
+  padding-left: 2.2em;
   outline: none;
 }
 
-/* line 244, ../scss/app.scss */
+/* line 271, ../scss/app.scss */
 #target-details .target-question {
   padding: 0em 10px;
   font-size: 140%;
 }
-/* line 248, ../scss/app.scss */
+/* line 275, ../scss/app.scss */
 #target-details .target-answer {
   display: -webkit-box;
   display: -moz-box;
@@ -241,17 +259,17 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   box-align: stretch;
   margin: 40px 10px;
 }
-/* line 254, ../scss/app.scss */
+/* line 281, ../scss/app.scss */
 #target-details .target-answer .answer {
   border-right: none;
   padding: 1em;
   display: block;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #f5f5f5));
-  background-image: -webkit-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -moz-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -o-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -ms-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: linear-gradient(#fdfdfd, #f5f5f5);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
+  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -moz-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -o-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
+  background-image: linear-gradient(#ffffff, #fcfcfc);
   -webkit-box-flex: 1;
   -moz-box-flex: 1;
   -ms-box-flex: 1;
@@ -261,16 +279,16 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 }
-/* line 263, ../scss/app.scss */
+/* line 290, ../scss/app.scss */
 #target-details .target-answer .answer:active, #target-details .target-answer .answer.fake-active {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5f5f5), color-stop(100%, #fdfdfd));
-  background-image: -webkit-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: -moz-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: -o-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: -ms-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: linear-gradient(#f5f5f5, #fdfdfd);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
+  background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
+  background-image: -moz-linear-gradient(#fcfcfc, #ffffff);
+  background-image: -o-linear-gradient(#fcfcfc, #ffffff);
+  background-image: -ms-linear-gradient(#fcfcfc, #ffffff);
+  background-image: linear-gradient(#fcfcfc, #ffffff);
 }
-/* line 267, ../scss/app.scss */
+/* line 294, ../scss/app.scss */
 #target-details .target-answer .answer:first-child {
   -webkit-border-radius: 20px 0px 0px 20px;
   -moz-border-radius: 20px 0px 0px 20px;
@@ -278,7 +296,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -o-border-radius: 20px 0px 0px 20px;
   border-radius: 20px 0px 0px 20px;
 }
-/* line 270, ../scss/app.scss */
+/* line 297, ../scss/app.scss */
 #target-details .target-answer .answer:last-child {
   border-right: 1px solid #cccccc;
   -webkit-border-radius: 0px 20px 20px 0px;
@@ -287,7 +305,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -o-border-radius: 0px 20px 20px 0px;
   border-radius: 0px 20px 20px 0px;
 }
-/* line 275, ../scss/app.scss */
+/* line 302, ../scss/app.scss */
 #target-details .link-button {
   position: absolute;
   bottom: 1em;
@@ -295,42 +313,42 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   right: 0.8em;
 }
 
-/* line 284, ../scss/app.scss */
+/* line 311, ../scss/app.scss */
 #target-results .target-question {
   padding: 0em 10px;
   font-size: 140%;
 }
-/* line 288, ../scss/app.scss */
+/* line 315, ../scss/app.scss */
 #target-results .result-heading {
   font-size: 0.5em;
   margin: 5px 10px;
   padding-bottom: 0px;
   font-weight: bold;
 }
-/* line 295, ../scss/app.scss */
+/* line 322, ../scss/app.scss */
 #target-results table {
   width: 100%;
 }
-/* line 301, ../scss/app.scss */
+/* line 328, ../scss/app.scss */
 #target-results .target-answers th {
   font-size: 2em;
   font-weight: bold;
   text-align: left;
 }
-/* line 310, ../scss/app.scss */
+/* line 337, ../scss/app.scss */
 #target-results .target-answers td {
   font-size: 3em;
   border-width: 0px;
 }
-/* line 316, ../scss/app.scss */
+/* line 343, ../scss/app.scss */
 #target-results .result-number, #target-results .answer {
   padding: 20px 1em;
 }
-/* line 319, ../scss/app.scss */
+/* line 346, ../scss/app.scss */
 #target-results .result-number {
   text-align: right;
 }
-/* line 322, ../scss/app.scss */
+/* line 349, ../scss/app.scss */
 #target-results .target-answers:last-child {
   border-bottom: 1px solid #cccccc;
   -webkit-border-radius: 0px 0px 5px 5px;
@@ -339,7 +357,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -o-border-radius: 0px 0px 5px 5px;
   border-radius: 0px 0px 5px 5px;
 }
-/* line 326, ../scss/app.scss */
+/* line 353, ../scss/app.scss */
 #target-results .result-graph {
   color: #fff;
   display: -webkit-box;
@@ -356,12 +374,12 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   box-align: stretch;
   margin: 10px 10px;
 }
-/* line 336, ../scss/app.scss */
+/* line 363, ../scss/app.scss */
 #target-results .result-graph .pos, #target-results .result-graph .neg {
   padding: 5px;
   text-align: center;
 }
-/* line 340, ../scss/app.scss */
+/* line 367, ../scss/app.scss */
 #target-results .result-graph .pos .trend, #target-results .result-graph .neg .trend {
   border-top: 20px solid transparent;
   border-bottom: 20px solid transparent;
@@ -369,7 +387,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   width: 0;
   height: 0;
 }
-/* line 349, ../scss/app.scss */
+/* line 376, ../scss/app.scss */
 #target-results .result-graph .pos {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #00b509), color-stop(100%, #00e80c));
   background-image: -webkit-linear-gradient(#00b509, #00e80c);
@@ -383,12 +401,12 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -o-border-radius: 0px 10px 10px 0px;
   border-radius: 0px 10px 10px 0px;
 }
-/* line 354, ../scss/app.scss */
+/* line 381, ../scss/app.scss */
 #target-results .result-graph .pos .trend {
   border-right: 20px solid #00b509;
   float: left;
 }
-/* line 359, ../scss/app.scss */
+/* line 386, ../scss/app.scss */
 #target-results .result-graph .neg {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff0000), color-stop(100%, #ff4d4d));
   background-image: -webkit-linear-gradient(#ff0000, #ff4d4d);
@@ -401,35 +419,35 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -ms-border-radius: 10px 0px 0px 10px;
   -o-border-radius: 10px 0px 0px 10px;
   border-radius: 10px 0px 0px 10px;
-  border-right: 1px solid gray;
+  border-right: 1px solid #e3e5e5;
 }
-/* line 365, ../scss/app.scss */
+/* line 392, ../scss/app.scss */
 #target-results .result-graph .neg .trend {
   border-left: 20px solid #ce1e1e;
   float: right;
 }
-/* line 372, ../scss/app.scss */
+/* line 399, ../scss/app.scss */
 #target-results .graph {
   height: 300px;
   width: 100%;
 }
-/* line 376, ../scss/app.scss */
+/* line 403, ../scss/app.scss */
 #target-results .graph .yAxis .tickLabel {
   font-size: 12px;
 }
-/* line 379, ../scss/app.scss */
+/* line 406, ../scss/app.scss */
 #target-results .graph .xAxis .tickLabel {
   font-size: 10px;
 }
 
-/* line 386, ../scss/app.scss */
+/* line 413, ../scss/app.scss */
 #target-ownResult h3 {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6acce1), color-stop(100%, #1cbfd6));
-  background-image: -webkit-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -moz-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -o-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -ms-linear-gradient(#6acce1, #1cbfd6);
-  background-image: linear-gradient(#6acce1, #1cbfd6);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #0f68a3));
+  background-image: -webkit-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -moz-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -o-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -ms-linear-gradient(#2c9fec, #0f68a3);
+  background-image: linear-gradient(#2c9fec, #0f68a3);
   padding: 0.7em 1em;
   margin: 0;
   font-size: 18px;
@@ -442,25 +460,25 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -o-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
 }
-/* line 389, ../scss/app.scss */
+/* line 416, ../scss/app.scss */
 #target-ownResult .result-info-body {
   margin: 0;
   border: 1px solid #cccccc;
   border-bottom: none;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #f5f5f5));
-  background-image: -webkit-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -moz-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -o-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -ms-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: linear-gradient(#fdfdfd, #f5f5f5);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
+  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -moz-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -o-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
+  background-image: linear-gradient(#ffffff, #fcfcfc);
   padding-left: 1em;
-  color: #666666;
+  color: #c8cdcc;
 }
-/* line 394, ../scss/app.scss */
+/* line 421, ../scss/app.scss */
 #target-ownResult .result-info-body .question, #target-ownResult .result-info-body .answer {
   display: none;
 }
-/* line 398, ../scss/app.scss */
+/* line 425, ../scss/app.scss */
 #target-ownResult .result-info-body:last-child {
   border-bottom: 1px solid #cccccc;
   -webkit-border-radius: 0px 0px 5px 5px;
@@ -469,19 +487,19 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -o-border-radius: 0px 0px 5px 5px;
   border-radius: 0px 0px 5px 5px;
 }
-/* line 401, ../scss/app.scss */
+/* line 428, ../scss/app.scss */
 #target-ownResult .link-button {
   margin-top: 2em;
 }
 
-/* line 407, ../scss/app.scss */
+/* line 434, ../scss/app.scss */
 #login h2 {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6acce1), color-stop(100%, #1cbfd6));
-  background-image: -webkit-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -moz-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -o-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -ms-linear-gradient(#6acce1, #1cbfd6);
-  background-image: linear-gradient(#6acce1, #1cbfd6);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #0f68a3));
+  background-image: -webkit-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -moz-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -o-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -ms-linear-gradient(#2c9fec, #0f68a3);
+  background-image: linear-gradient(#2c9fec, #0f68a3);
   padding: 0.7em 1em;
   margin: 0;
   font-size: 18px;
@@ -495,7 +513,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   border-radius: 5px 5px 0px 0px;
   margin-top: 20px;
 }
-/* line 412, ../scss/app.scss */
+/* line 439, ../scss/app.scss */
 #login .content {
   margin: 0;
   padding: 1em 1em;
@@ -503,145 +521,149 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   border-bottom: 1px solid #cccccc;
   border-left: 1px solid #cccccc;
   border-right: 1px solid #cccccc;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #f5f5f5));
-  background-image: -webkit-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -moz-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -o-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -ms-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: linear-gradient(#fdfdfd, #f5f5f5);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
+  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -moz-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -o-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
+  background-image: linear-gradient(#ffffff, #fcfcfc);
 }
-/* line 421, ../scss/app.scss */
+/* line 448, ../scss/app.scss */
 #login .content .no-login {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #f5f5f5));
-  background-image: -webkit-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -moz-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -o-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -ms-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: linear-gradient(#fdfdfd, #f5f5f5);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
+  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -moz-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -o-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
+  background-image: linear-gradient(#ffffff, #fcfcfc);
 }
-/* line 423, ../scss/app.scss */
+/* line 450, ../scss/app.scss */
 #login .content .no-login:active {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5f5f5), color-stop(100%, #fdfdfd));
-  background-image: -webkit-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: -moz-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: -o-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: -ms-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: linear-gradient(#f5f5f5, #fdfdfd);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
+  background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
+  background-image: -moz-linear-gradient(#fcfcfc, #ffffff);
+  background-image: -o-linear-gradient(#fcfcfc, #ffffff);
+  background-image: -ms-linear-gradient(#fcfcfc, #ffffff);
+  background-image: linear-gradient(#fcfcfc, #ffffff);
 }
-/* line 428, ../scss/app.scss */
+/* line 455, ../scss/app.scss */
 #login .content .login-button {
   width: 100%;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #bfe9f2), color-stop(100%, #6cdcec));
-  background-image: -webkit-linear-gradient(#bfe9f2, #6cdcec);
-  background-image: -moz-linear-gradient(#bfe9f2, #6cdcec);
-  background-image: -o-linear-gradient(#bfe9f2, #6cdcec);
-  background-image: -ms-linear-gradient(#bfe9f2, #6cdcec);
-  background-image: linear-gradient(#bfe9f2, #6cdcec);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8acaf4), color-stop(100%, #2c9fec));
+  background-image: -webkit-linear-gradient(#8acaf4, #2c9fec);
+  background-image: -moz-linear-gradient(#8acaf4, #2c9fec);
+  background-image: -o-linear-gradient(#8acaf4, #2c9fec);
+  background-image: -ms-linear-gradient(#8acaf4, #2c9fec);
+  background-image: linear-gradient(#8acaf4, #2c9fec);
 }
-/* line 431, ../scss/app.scss */
+/* line 458, ../scss/app.scss */
 #login .content .login-button:active {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6cdcec), color-stop(100%, #bfe9f2));
-  background-image: -webkit-linear-gradient(#6cdcec, #bfe9f2);
-  background-image: -moz-linear-gradient(#6cdcec, #bfe9f2);
-  background-image: -o-linear-gradient(#6cdcec, #bfe9f2);
-  background-image: -ms-linear-gradient(#6cdcec, #bfe9f2);
-  background-image: linear-gradient(#6cdcec, #bfe9f2);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #8acaf4));
+  background-image: -webkit-linear-gradient(#2c9fec, #8acaf4);
+  background-image: -moz-linear-gradient(#2c9fec, #8acaf4);
+  background-image: -o-linear-gradient(#2c9fec, #8acaf4);
+  background-image: -ms-linear-gradient(#2c9fec, #8acaf4);
+  background-image: linear-gradient(#2c9fec, #8acaf4);
 }
 
-/* line 438, ../scss/app.scss */
+/* line 465, ../scss/app.scss */
 #back-button, #account-button {
   position: absolute;
   top: 5px;
   display: block;
 }
-/* line 442, ../scss/app.scss */
+/* line 469, ../scss/app.scss */
 #back-button .top-button, #account-button .top-button {
   display: inline-block;
   height: 18px;
   padding: 9px 5px;
 }
-/* line 448, ../scss/app.scss */
+/* line 475, ../scss/app.scss */
 #back-button .top-button a, #back-button .top-button a:link, #back-button .top-button a:active, #back-button .top-button a:visited, #account-button .top-button a, #account-button .top-button a:link, #account-button .top-button a:active, #account-button .top-button a:visited {
   color: inherit;
   text-decoration: inherit;
 }
 
-/* line 455, ../scss/app.scss */
+/* line 482, ../scss/app.scss */
 #account-button {
-  height: 35px;
-}
-/* line 458, ../scss/app.scss */
-#account-button .top-button {
-  border-radius: 6px;
-  height: 15px;
-  padding-top: 8px;
-}
-
-/* line 465, ../scss/app.scss */
-#back-button {
-  left: 5px;
-  height: 38px;
-}
-/* line 468, ../scss/app.scss */
-#back-button .top-button {
-  background-image: url("../img/back-icon.png?123");
-  background-repeat: no-repeat;
-  width: 60px;
-}
-/* line 472, ../scss/app.scss */
-#back-button .top-button:active, #back-button .top-button.fake-active {
-  background-position: 0 -36px;
-}
-
-/* line 478, ../scss/app.scss */
-#account-button {
-  right: 5px;
+  height: 36px;
+  right: 10px;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(0, 0, 0, 0.05)), color-stop(100%, rgba(0, 0, 0, 0.1)));
   background-image: -webkit-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: -moz-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: -o-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: -ms-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  border-radius: 5px;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0f68a3), color-stop(100%, #0f68a3));
+  background-image: -webkit-linear-gradient(#0f68a3, #0f68a3);
+  background-image: -moz-linear-gradient(#0f68a3, #0f68a3);
+  background-image: -o-linear-gradient(#0f68a3, #0f68a3);
+  background-image: -ms-linear-gradient(#0f68a3, #0f68a3);
+  background-image: linear-gradient(#0f68a3, #0f68a3);
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  -ms-border-radius: 35px;
+  -o-border-radius: 35px;
+  border-radius: 35px;
 }
-/* line 483, ../scss/app.scss */
-#account-button:active, #account-button.fake-active {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(0, 0, 0, 0.1)), color-stop(100%, rgba(0, 0, 0, 0.05)));
-  background-image: -webkit-linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
-  background-image: -moz-linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
-  background-image: -o-linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
-  background-image: -ms-linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
-  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
-}
-/* line 486, ../scss/app.scss */
+/* line 485, ../scss/app.scss */
 #account-button .top-button {
   border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  height: 15px;
+  padding-top: 8px;
 }
 
-/* line 491, ../scss/app.scss */
+/* line 500, ../scss/app.scss */
+#back-button {
+  height: 36px;
+  left: 10px;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(0, 0, 0, 0.05)), color-stop(100%, rgba(0, 0, 0, 0.1)));
+  background-image: -webkit-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+  background-image: -moz-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+  background-image: -o-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+  background-image: -ms-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+  background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0f68a3), color-stop(100%, #0f68a3));
+  background-image: -webkit-linear-gradient(#0f68a3, #0f68a3);
+  background-image: -moz-linear-gradient(#0f68a3, #0f68a3);
+  background-image: -o-linear-gradient(#0f68a3, #0f68a3);
+  background-image: -ms-linear-gradient(#0f68a3, #0f68a3);
+  background-image: linear-gradient(#0f68a3, #0f68a3);
+  -webkit-border-radius: 35px;
+  -moz-border-radius: 35px;
+  -ms-border-radius: 35px;
+  -o-border-radius: 35px;
+  border-radius: 35px;
+}
+/* line 503, ../scss/app.scss */
+#back-button .top-button {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  height: 15px;
+  padding-top: 8px;
+}
+
+/* line 518, ../scss/app.scss */
 #leaderboard {
   margin-top: 1em;
 }
-/* line 494, ../scss/app.scss */
+/* line 521, ../scss/app.scss */
 #leaderboard table {
   width: 100%;
 }
-/* line 497, ../scss/app.scss */
+/* line 524, ../scss/app.scss */
 #leaderboard table tr.header {
   border: 0;
 }
-/* line 501, ../scss/app.scss */
+/* line 528, ../scss/app.scss */
 #leaderboard table th {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6acce1), color-stop(100%, #1cbfd6));
-  background-image: -webkit-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -moz-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -o-linear-gradient(#6acce1, #1cbfd6);
-  background-image: -ms-linear-gradient(#6acce1, #1cbfd6);
-  background-image: linear-gradient(#6acce1, #1cbfd6);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #0f68a3));
+  background-image: -webkit-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -moz-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -o-linear-gradient(#2c9fec, #0f68a3);
+  background-image: -ms-linear-gradient(#2c9fec, #0f68a3);
+  background-image: linear-gradient(#2c9fec, #0f68a3);
   padding: 0.7em 1em;
   margin: 0;
   font-size: 18px;
@@ -654,19 +676,19 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -o-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
 }
-/* line 505, ../scss/app.scss */
+/* line 532, ../scss/app.scss */
 #leaderboard table tr {
   padding: 1em 1em;
   border: 0;
   border-bottom: 1px solid #cccccc;
   border-left: 1px solid #cccccc;
   border-right: 1px solid #cccccc;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #f5f5f5));
-  background-image: -webkit-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -moz-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -o-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -ms-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: linear-gradient(#fdfdfd, #f5f5f5);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
+  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -moz-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -o-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
+  background-image: linear-gradient(#ffffff, #fcfcfc);
   white-space: nowrap;
   overflow: hidden;
   -ms-text-overflow: ellipsis;
@@ -674,21 +696,21 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   text-overflow: ellipsis;
   -moz-binding: url('/css/xml/ellipsis.xml#ellipsis');
 }
-/* line 507, ../scss/app.scss */
+/* line 534, ../scss/app.scss */
 #leaderboard table tr td {
   padding: 0.5em;
   vertical-align: middle;
 }
-/* line 510, ../scss/app.scss */
+/* line 537, ../scss/app.scss */
 #leaderboard table tr td.position {
   padding-left: 1em;
 }
-/* line 513, ../scss/app.scss */
+/* line 540, ../scss/app.scss */
 #leaderboard table tr td.name img {
   padding-right: 1em;
 }
 
-/* line 521, ../scss/app.scss */
+/* line 548, ../scss/app.scss */
 footer {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2f2f2f), color-stop(50%, #151515), color-stop(51%, #000000), color-stop(100%, #000000));
   background-image: -webkit-linear-gradient(top, #2f2f2f, #151515 50%, #000000 51%, #000000);
@@ -704,25 +726,25 @@ footer {
   left: 0;
 }
 
-/* line 531, ../scss/app.scss */
+/* line 558, ../scss/app.scss */
 .loading-indicator {
   margin: 10px;
 }
 
-/* line 535, ../scss/app.scss */
+/* line 562, ../scss/app.scss */
 .hide {
   display: none;
 }
 
-/* line 539, ../scss/app.scss */
+/* line 566, ../scss/app.scss */
 .link-button {
   display: block;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #f5f5f5));
-  background-image: -webkit-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -moz-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -o-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: -ms-linear-gradient(#fdfdfd, #f5f5f5);
-  background-image: linear-gradient(#fdfdfd, #f5f5f5);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
+  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -moz-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -o-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
+  background-image: linear-gradient(#ffffff, #fcfcfc);
   -webkit-border-radius: 25px;
   -moz-border-radius: 25px;
   -ms-border-radius: 25px;
@@ -733,39 +755,39 @@ footer {
   text-align: center;
   font-size: 18px;
   font-weight: bold;
-  color: #666666;
+  color: #c8cdcc;
   -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 }
-/* line 551, ../scss/app.scss */
+/* line 578, ../scss/app.scss */
 .link-button:link, .link-button:active, .link-button:visited {
   text-decoration: none;
-  color: #666666;
+  color: #c8cdcc;
 }
-/* line 555, ../scss/app.scss */
+/* line 582, ../scss/app.scss */
 .link-button:active, .link-button.fake-active {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5f5f5), color-stop(100%, #fdfdfd));
-  background-image: -webkit-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: -moz-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: -o-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: -ms-linear-gradient(#f5f5f5, #fdfdfd);
-  background-image: linear-gradient(#f5f5f5, #fdfdfd);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
+  background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
+  background-image: -moz-linear-gradient(#fcfcfc, #ffffff);
+  background-image: -o-linear-gradient(#fcfcfc, #ffffff);
+  background-image: -ms-linear-gradient(#fcfcfc, #ffffff);
+  background-image: linear-gradient(#fcfcfc, #ffffff);
 }
 
-/* line 560, ../scss/app.scss */
+/* line 587, ../scss/app.scss */
 button.link-button {
   width: 100%;
 }
 
-/* line 564, ../scss/app.scss */
+/* line 591, ../scss/app.scss */
 input[type=text] {
   width: 100%;
   box-sizing: border-box;
 }
 
 /* no point to have red bg on untouched text boxes */
-/* line 570, ../scss/app.scss */
+/* line 597, ../scss/app.scss */
 input[type=text]:invalid {
   background-color: white;
 }
