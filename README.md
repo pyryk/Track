@@ -1,5 +1,3 @@
-Test /laurijaheikki
-
 # Track
 
 ## Server

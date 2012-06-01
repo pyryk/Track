@@ -51,6 +51,7 @@ var API = {
         this.get("/login", this.getLogin, true);
         this.get("/leaderboard", this.getLeaderboard, false);
         this.get(/\/dashboard\/*/, this.getPublic, false);
+
     },
 
     authorize: function(req, res, next, handler, requireAuth) {
