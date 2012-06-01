@@ -120,7 +120,11 @@
     <div id="target-details">
     {{#if target}}
       {{#with target}}
-        <h2 class="target-name">{{name}}</h2>
+        <div id="target-header">
+          <div class="target-name">{{name}}</div>
+          <div class="target-points"><span class="target-points-font">60 pts</span></div>
+          <div id="target-header-clear"/>
+        </div>
         {{#unless detailsLoaded}}
           <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
         {{/unless}}
@@ -128,11 +132,26 @@
           <form id="answer-form">
             <p class="target-question">{{question}}</p>
             <p class="target-answer">
-              <span class="active answer negative"><img src="img/smiley-bad.png" alt=":("></span>
-              <span class="active answer positive"><img src="img/smiley-good.png" alt=":)"></span>
+              <span class="active answer positive"><img src="img/smiley-thump-up.png" width="60" height="60" alt=":)"></span>
+              <span class="active answer negative"><img src="img/smiley-thump-down.png" width="60" height="60" alt=":("></span>
+            </p>
+            <p class="target-question">{{question}} ja toinen kysymys</p>
+            <p class="target-answer">
+              <span class="active answer positive"><img src="img/smiley-thump-up.png" width="60" height="60" alt=":)"></span>
+              <span class="active answer negative"><img src="img/smiley-thump-down.png" width="60" height="60" alt=":("></span>
+            </p>
+            <p class="target-question">{{question}} ja kolmas kysymys</p>
+            <p class="target-answer">
+              <span class="active answer positive"><img src="img/smiley-thump-up.png" width="60" height="60" alt=":)"></span>
+              <span class="active answer negative"><img src="img/smiley-thump-down.png" width="60" height="60" alt=":("></span>
+            </p>
+            <p class="target-question">{{question}} ja neljäs kysymys</p>
+            <p class="target-answer">
+              <span class="active answer positive"><img src="img/smiley-thump-up.png" width="60" height="60" alt=":)"></span>
+              <span class="active answer negative"><img src="img/smiley-thump-down.png" width="60" height="60" alt=":("></span>
             </p>
           </form>
-          <p><span class="link-button view-results">View Results</span></p>
+          <!--<p><span class="link-button view-results">View Results</span></p>-->
         {{/if}}
       {{/with}}
     {{/if}}

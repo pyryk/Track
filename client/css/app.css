@@ -56,12 +56,12 @@ header {
   width: 100%;
   margin-top: 0;
   padding-top: 0;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #0f68a3));
-  background-image: -webkit-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -moz-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -o-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -ms-linear-gradient(#2c9fec, #0f68a3);
-  background-image: linear-gradient(#2c9fec, #0f68a3);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   color: white;
   border-bottom: 1px solid #cccccc;
   text-align: center;
@@ -81,14 +81,14 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   text-shadow: 0 1px 1px #444444;
 }
 
-/* line 159, ../scss/app.scss */
+/* line 158, ../scss/app.scss */
 #main {
   padding-top: 46px;
 }
 
 /* list elements
 * =================================================================================================================== */
-/* line 165, ../scss/app.scss */
+/* line 164, ../scss/app.scss */
 .customer-list-image {
   padding-right: 20px;
   margin-top: -5px;
@@ -96,17 +96,17 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   height: 20px;
 }
 
-/* line 172, ../scss/app.scss */
+/* line 171, ../scss/app.scss */
 .customer-list-arrow {
   float: right;
 }
 
-/* line 176, ../scss/app.scss */
+/* line 175, ../scss/app.scss */
 .page {
   display: none;
 }
 
-/* line 180, ../scss/app.scss */
+/* line 179, ../scss/app.scss */
 .primary-list {
   list-style-type: none;
   width: 90%;
@@ -122,7 +122,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -o-border-radius: 15px 15px 15px 15px;
   border-radius: 15px 15px 15px 15px;
 }
-/* line 191, ../scss/app.scss */
+/* line 190, ../scss/app.scss */
 .primary-list li {
   padding: 1em 1em;
   border: 0;
@@ -141,7 +141,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   text-overflow: ellipsis;
   -moz-binding: url('/css/xml/ellipsis.xml#ellipsis');
 }
-/* line 199, ../scss/app.scss */
+/* line 198, ../scss/app.scss */
 .primary-list li:active, .primary-list li.fake-active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
   background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
@@ -150,25 +150,25 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   background-image: -ms-linear-gradient(#fcfcfc, #ffffff);
   background-image: linear-gradient(#fcfcfc, #ffffff);
 }
-/* line 204, ../scss/app.scss */
+/* line 203, ../scss/app.scss */
 .primary-list li.header {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #0f68a3));
-  background-image: -webkit-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -moz-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -o-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -ms-linear-gradient(#2c9fec, #0f68a3);
-  background-image: linear-gradient(#2c9fec, #0f68a3);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   padding: 0.7em 1em;
   font-size: 18px;
   font-weight: bold;
   color: white;
   text-shadow: 0 1px 1px #444444;
 }
-/* line 213, ../scss/app.scss */
+/* line 212, ../scss/app.scss */
 .primary-list li.create-new {
   padding-top: 1em;
 }
-/* line 215, ../scss/app.scss */
+/* line 214, ../scss/app.scss */
 .primary-list li.create-new .text {
   display: inline-block;
   background-image: url("../img/add-new-small.png");
@@ -177,7 +177,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   padding-left: 25px;
   height: 18px;
 }
-/* line 225, ../scss/app.scss */
+/* line 224, ../scss/app.scss */
 .primary-list li:first-child {
   border-top: 1px solid #cccccc;
   -webkit-border-radius: 15px 15px 0px 0px;
@@ -186,7 +186,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -o-border-radius: 15px 15px 0px 0px;
   border-radius: 15px 15px 0px 0px;
 }
-/* line 230, ../scss/app.scss */
+/* line 229, ../scss/app.scss */
 .primary-list li:last-child {
   -webkit-border-radius: 0px 0px 15px 15px;
   -moz-border-radius: 0px 0px 15px 15px;
@@ -195,7 +195,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   border-radius: 0px 0px 15px 15px;
 }
 
-/* line 235, ../scss/app.scss */
+/* line 234, ../scss/app.scss */
 ul li span {
   margin: 0px;
   padding: 0px;
@@ -206,14 +206,9 @@ ul li span {
   white-space: nowrap;
 }
 
-/* line 246, ../scss/app.scss */
-.target-name {
-  margin: 10px 10px;
-}
-
 /* list search elements
 * =================================================================================================================== */
-/* line 252, ../scss/app.scss */
+/* line 247, ../scss/app.scss */
 .search-field {
   width: 90%;
   margin-left: auto;
@@ -229,7 +224,7 @@ ul li span {
   text-shadow: 0 1px 1px #444444;
 }
 
-/* line 263, ../scss/app.scss */
+/* line 258, ../scss/app.scss */
 .search-field_input {
   border: 1px solid #999;
   -webkit-border-radius: 11px 11px 11px 11px;
@@ -250,12 +245,85 @@ ul li span {
 
 /* target-details elements
 * =================================================================================================================== */
-/* line 280, ../scss/app.scss */
-#target-details .target-question {
-  padding: 0em 10px;
-  font-size: 140%;
+/* line 274, ../scss/app.scss */
+#target-header {
+  margin-top: 15px;
+  margin-left: 7px;
+  margin-right: 7px;
 }
-/* line 284, ../scss/app.scss */
+
+/* line 280, ../scss/app.scss */
+.target-name {
+  float: left;
+  font-style: italic;
+  font-size: 140%;
+  font-weight: 350;
+  width: 69%;
+  text-wrap: unrestricted;
+}
+
+/* line 289, ../scss/app.scss */
+.target-points {
+  float: right;
+  max-width: 65px;
+  margin-top: 3px;
+}
+
+/* line 295, ../scss/app.scss */
+#target-header-clear {
+  clear: both;
+}
+
+/* line 299, ../scss/app.scss */
+.target-points-font {
+  font-size: 130%;
+  font-weight: 600;
+  padding: 5px;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #67b04f), color-stop(100%, #5d9e47));
+  background-image: -webkit-linear-gradient(#67b04f, #5d9e47);
+  background-image: -moz-linear-gradient(#67b04f, #5d9e47);
+  background-image: -o-linear-gradient(#67b04f, #5d9e47);
+  background-image: -ms-linear-gradient(#67b04f, #5d9e47);
+  background-image: linear-gradient(#67b04f, #5d9e47);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-box-flex: 1;
+  box-flex: 1;
+  -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  color: #f9f9f9;
+}
+
+/* line 312, ../scss/app.scss */
+#target-details .target-question {
+  margin-left: 1.5em;
+  margin-right: 1.5em;
+  margin-top: 20px;
+  font-size: 110%;
+  padding: 7px 10px;
+  -webkit-border-radius: 10px 10px 10px 10px;
+  -moz-border-radius: 10px 10px 10px 10px;
+  -ms-border-radius: 10px 10px 10px 10px;
+  -o-border-radius: 10px 10px 10px 10px;
+  border-radius: 10px 10px 10px 10px;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
+  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -moz-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -o-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
+  background-image: linear-gradient(#ffffff, #fcfcfc);
+  -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+}
+/* line 324, ../scss/app.scss */
 #target-details .target-answer {
   display: -webkit-box;
   display: -moz-box;
@@ -269,9 +337,11 @@ ul li span {
   -moz-box-align: stretch;
   -ms-box-align: stretch;
   box-align: stretch;
-  margin: 40px 10px;
+  margin-left: 1.5em;
+  margin-right: 1.5em;
+  margin-top: -7px;
 }
-/* line 290, ../scss/app.scss */
+/* line 332, ../scss/app.scss */
 #target-details .target-answer .answer {
   border-right: none;
   padding: 1em;
@@ -291,7 +361,7 @@ ul li span {
   -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 }
-/* line 299, ../scss/app.scss */
+/* line 341, ../scss/app.scss */
 #target-details .target-answer .answer:active, #target-details .target-answer .answer.fake-active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
   background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
@@ -300,7 +370,7 @@ ul li span {
   background-image: -ms-linear-gradient(#fcfcfc, #ffffff);
   background-image: linear-gradient(#fcfcfc, #ffffff);
 }
-/* line 303, ../scss/app.scss */
+/* line 345, ../scss/app.scss */
 #target-details .target-answer .answer:first-child {
   -webkit-border-radius: 20px 0px 0px 20px;
   -moz-border-radius: 20px 0px 0px 20px;
@@ -308,7 +378,7 @@ ul li span {
   -o-border-radius: 20px 0px 0px 20px;
   border-radius: 20px 0px 0px 20px;
 }
-/* line 306, ../scss/app.scss */
+/* line 348, ../scss/app.scss */
 #target-details .target-answer .answer:last-child {
   border-right: 1px solid #cccccc;
   -webkit-border-radius: 0px 20px 20px 0px;
@@ -317,52 +387,56 @@ ul li span {
   -o-border-radius: 0px 20px 20px 0px;
   border-radius: 0px 20px 20px 0px;
 }
-/* line 311, ../scss/app.scss */
+/* line 353, ../scss/app.scss */
 #target-details .link-button {
   position: absolute;
   bottom: 1em;
   left: 0.8em;
   right: 0.8em;
 }
+/* line 360, ../scss/app.scss */
+#target-details .answer-form-hide {
+  overflow: hidden;
+}
 
 /* target results elements
 * =================================================================================================================== */
-/* line 322, ../scss/app.scss */
+/* line 368, ../scss/app.scss */
 #target-results .target-question {
   padding: 0em 10px;
   font-size: 140%;
 }
-/* line 326, ../scss/app.scss */
+/* line 372, ../scss/app.scss */
 #target-results .result-heading {
   font-size: 0.5em;
   margin: 5px 10px;
   padding-bottom: 0px;
   font-weight: bold;
 }
-/* line 333, ../scss/app.scss */
+/* line 379, ../scss/app.scss */
 #target-results table {
   width: 100%;
 }
-/* line 339, ../scss/app.scss */
+/* line 385, ../scss/app.scss */
 #target-results .target-answers th {
   font-size: 2em;
   font-weight: bold;
   text-align: left;
 }
-/* line 348, ../scss/app.scss */
+/* line 394, ../scss/app.scss */
 #target-results .target-answers td {
   font-size: 3em;
   border-width: 0px;
 }
-/* line 354, ../scss/app.scss */
+/* line 400, ../scss/app.scss */
 #target-results .result-number, #target-results .answer {
   padding: 20px 1em;
 }
-/* line 357, ../scss/app.scss */
+/* line 403, ../scss/app.scss */
 #target-results .result-number {
   text-align: right;
 }
-/* line 360, ../scss/app.scss */
+/* line 406, ../scss/app.scss */
 #target-results .target-answers:last-child {
   border-bottom: 1px solid #cccccc;
   -webkit-border-radius: 0px 0px 5px 5px;
@@ -371,7 +445,7 @@ ul li span {
   -o-border-radius: 0px 0px 5px 5px;
   border-radius: 0px 0px 5px 5px;
 }
-/* line 364, ../scss/app.scss */
+/* line 410, ../scss/app.scss */
 #target-results .result-graph {
   color: #fff;
   display: -webkit-box;
@@ -388,12 +462,12 @@ ul li span {
   box-align: stretch;
   margin: 10px 10px;
 }
-/* line 374, ../scss/app.scss */
+/* line 420, ../scss/app.scss */
 #target-results .result-graph .pos, #target-results .result-graph .neg {
   padding: 5px;
   text-align: center;
 }
-/* line 378, ../scss/app.scss */
+/* line 424, ../scss/app.scss */
 #target-results .result-graph .pos .trend, #target-results .result-graph .neg .trend {
   border-top: 20px solid transparent;
   border-bottom: 20px solid transparent;
@@ -401,7 +475,7 @@ ul li span {
   width: 0;
   height: 0;
 }
-/* line 387, ../scss/app.scss */
+/* line 433, ../scss/app.scss */
 #target-results .result-graph .pos {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #00b509), color-stop(100%, #00e80c));
   background-image: -webkit-linear-gradient(#00b509, #00e80c);
@@ -415,12 +489,12 @@ ul li span {
   -o-border-radius: 0px 10px 10px 0px;
   border-radius: 0px 10px 10px 0px;
 }
-/* line 392, ../scss/app.scss */
+/* line 438, ../scss/app.scss */
 #target-results .result-graph .pos .trend {
   border-right: 20px solid #00b509;
   float: left;
 }
-/* line 397, ../scss/app.scss */
+/* line 443, ../scss/app.scss */
 #target-results .result-graph .neg {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff0000), color-stop(100%, #ff4d4d));
   background-image: -webkit-linear-gradient(#ff0000, #ff4d4d);
@@ -435,33 +509,33 @@ ul li span {
   border-radius: 10px 0px 0px 10px;
   border-right: 1px solid #e3e5e5;
 }
-/* line 403, ../scss/app.scss */
+/* line 449, ../scss/app.scss */
 #target-results .result-graph .neg .trend {
   border-left: 20px solid #ce1e1e;
   float: right;
 }
-/* line 410, ../scss/app.scss */
+/* line 456, ../scss/app.scss */
 #target-results .graph {
   height: 300px;
   width: 100%;
 }
-/* line 414, ../scss/app.scss */
+/* line 460, ../scss/app.scss */
 #target-results .graph .yAxis .tickLabel {
   font-size: 12px;
 }
-/* line 417, ../scss/app.scss */
+/* line 463, ../scss/app.scss */
 #target-results .graph .xAxis .tickLabel {
   font-size: 10px;
 }
 
-/* line 424, ../scss/app.scss */
+/* line 470, ../scss/app.scss */
 #target-ownResult h3 {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #0f68a3));
-  background-image: -webkit-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -moz-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -o-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -ms-linear-gradient(#2c9fec, #0f68a3);
-  background-image: linear-gradient(#2c9fec, #0f68a3);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   padding: 0.7em 1em;
   margin: 0;
   font-size: 18px;
@@ -474,7 +548,7 @@ ul li span {
   -o-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
 }
-/* line 427, ../scss/app.scss */
+/* line 473, ../scss/app.scss */
 #target-ownResult .result-info-body {
   margin: 0;
   border: 1px solid #cccccc;
@@ -488,11 +562,11 @@ ul li span {
   padding-left: 1em;
   color: #c8cdcc;
 }
-/* line 432, ../scss/app.scss */
+/* line 478, ../scss/app.scss */
 #target-ownResult .result-info-body .question, #target-ownResult .result-info-body .answer {
   display: none;
 }
-/* line 436, ../scss/app.scss */
+/* line 482, ../scss/app.scss */
 #target-ownResult .result-info-body:last-child {
   border-bottom: 1px solid #cccccc;
   -webkit-border-radius: 0px 0px 5px 5px;
@@ -501,21 +575,21 @@ ul li span {
   -o-border-radius: 0px 0px 5px 5px;
   border-radius: 0px 0px 5px 5px;
 }
-/* line 439, ../scss/app.scss */
+/* line 485, ../scss/app.scss */
 #target-ownResult .link-button {
   margin-top: 2em;
 }
 
 /* button elements
 * =================================================================================================================== */
-/* line 447, ../scss/app.scss */
+/* line 493, ../scss/app.scss */
 #login h2 {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #0f68a3));
-  background-image: -webkit-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -moz-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -o-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -ms-linear-gradient(#2c9fec, #0f68a3);
-  background-image: linear-gradient(#2c9fec, #0f68a3);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   padding: 0.7em 1em;
   margin: 0;
   font-size: 18px;
@@ -529,7 +603,7 @@ ul li span {
   border-radius: 5px 5px 0px 0px;
   margin-top: 20px;
 }
-/* line 452, ../scss/app.scss */
+/* line 498, ../scss/app.scss */
 #login .content {
   margin: 0;
   padding: 1em 1em;
@@ -544,7 +618,7 @@ ul li span {
   background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
   background-image: linear-gradient(#ffffff, #fcfcfc);
 }
-/* line 461, ../scss/app.scss */
+/* line 507, ../scss/app.scss */
 #login .content .no-login {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
   background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
@@ -553,7 +627,7 @@ ul li span {
   background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
   background-image: linear-gradient(#ffffff, #fcfcfc);
 }
-/* line 463, ../scss/app.scss */
+/* line 509, ../scss/app.scss */
 #login .content .no-login:active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
   background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
@@ -562,45 +636,45 @@ ul li span {
   background-image: -ms-linear-gradient(#fcfcfc, #ffffff);
   background-image: linear-gradient(#fcfcfc, #ffffff);
 }
-/* line 468, ../scss/app.scss */
+/* line 514, ../scss/app.scss */
 #login .content .login-button {
   width: 100%;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8acaf4), color-stop(100%, #2c9fec));
-  background-image: -webkit-linear-gradient(#8acaf4, #2c9fec);
-  background-image: -moz-linear-gradient(#8acaf4, #2c9fec);
-  background-image: -o-linear-gradient(#8acaf4, #2c9fec);
-  background-image: -ms-linear-gradient(#8acaf4, #2c9fec);
-  background-image: linear-gradient(#8acaf4, #2c9fec);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8acaf4), color-stop(100%, #44aaee));
+  background-image: -webkit-linear-gradient(#8acaf4, #44aaee);
+  background-image: -moz-linear-gradient(#8acaf4, #44aaee);
+  background-image: -o-linear-gradient(#8acaf4, #44aaee);
+  background-image: -ms-linear-gradient(#8acaf4, #44aaee);
+  background-image: linear-gradient(#8acaf4, #44aaee);
 }
-/* line 471, ../scss/app.scss */
+/* line 517, ../scss/app.scss */
 #login .content .login-button:active {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #8acaf4));
-  background-image: -webkit-linear-gradient(#2c9fec, #8acaf4);
-  background-image: -moz-linear-gradient(#2c9fec, #8acaf4);
-  background-image: -o-linear-gradient(#2c9fec, #8acaf4);
-  background-image: -ms-linear-gradient(#2c9fec, #8acaf4);
-  background-image: linear-gradient(#2c9fec, #8acaf4);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #44aaee), color-stop(100%, #8acaf4));
+  background-image: -webkit-linear-gradient(#44aaee, #8acaf4);
+  background-image: -moz-linear-gradient(#44aaee, #8acaf4);
+  background-image: -o-linear-gradient(#44aaee, #8acaf4);
+  background-image: -ms-linear-gradient(#44aaee, #8acaf4);
+  background-image: linear-gradient(#44aaee, #8acaf4);
 }
 
-/* line 478, ../scss/app.scss */
+/* line 524, ../scss/app.scss */
 #back-button, #account-button {
   position: absolute;
   top: 5px;
   display: block;
 }
-/* line 482, ../scss/app.scss */
+/* line 528, ../scss/app.scss */
 #back-button .top-button, #account-button .top-button {
   display: inline-block;
   height: 18px;
   padding: 9px 5px;
 }
-/* line 486, ../scss/app.scss */
+/* line 532, ../scss/app.scss */
 #back-button .top-button a, #back-button .top-button a:link, #back-button .top-button a:active, #back-button .top-button a:visited, #account-button .top-button a, #account-button .top-button a:link, #account-button .top-button a:active, #account-button .top-button a:visited {
   color: inherit;
   text-decoration: inherit;
 }
 
-/* line 493, ../scss/app.scss */
+/* line 539, ../scss/app.scss */
 #account-button {
   height: 36px;
   right: 10px;
@@ -610,19 +684,19 @@ ul li span {
   background-image: -o-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: -ms-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0f68a3), color-stop(100%, #0f68a3));
-  background-image: -webkit-linear-gradient(#0f68a3, #0f68a3);
-  background-image: -moz-linear-gradient(#0f68a3, #0f68a3);
-  background-image: -o-linear-gradient(#0f68a3, #0f68a3);
-  background-image: -ms-linear-gradient(#0f68a3, #0f68a3);
-  background-image: linear-gradient(#0f68a3, #0f68a3);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #1177ba), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#1177ba, #1177ba);
+  background-image: -moz-linear-gradient(#1177ba, #1177ba);
+  background-image: -o-linear-gradient(#1177ba, #1177ba);
+  background-image: -ms-linear-gradient(#1177ba, #1177ba);
+  background-image: linear-gradient(#1177ba, #1177ba);
   -webkit-border-radius: 35px;
   -moz-border-radius: 35px;
   -ms-border-radius: 35px;
   -o-border-radius: 35px;
   border-radius: 35px;
 }
-/* line 495, ../scss/app.scss */
+/* line 541, ../scss/app.scss */
 #account-button .top-button {
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 6px;
@@ -630,7 +704,7 @@ ul li span {
   padding-top: 8px;
 }
 
-/* line 510, ../scss/app.scss */
+/* line 556, ../scss/app.scss */
 #back-button {
   height: 36px;
   left: 10px;
@@ -640,19 +714,19 @@ ul li span {
   background-image: -o-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: -ms-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0f68a3), color-stop(100%, #0f68a3));
-  background-image: -webkit-linear-gradient(#0f68a3, #0f68a3);
-  background-image: -moz-linear-gradient(#0f68a3, #0f68a3);
-  background-image: -o-linear-gradient(#0f68a3, #0f68a3);
-  background-image: -ms-linear-gradient(#0f68a3, #0f68a3);
-  background-image: linear-gradient(#0f68a3, #0f68a3);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #1177ba), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#1177ba, #1177ba);
+  background-image: -moz-linear-gradient(#1177ba, #1177ba);
+  background-image: -o-linear-gradient(#1177ba, #1177ba);
+  background-image: -ms-linear-gradient(#1177ba, #1177ba);
+  background-image: linear-gradient(#1177ba, #1177ba);
   -webkit-border-radius: 35px;
   -moz-border-radius: 35px;
   -ms-border-radius: 35px;
   -o-border-radius: 35px;
   border-radius: 35px;
 }
-/* line 512, ../scss/app.scss */
+/* line 558, ../scss/app.scss */
 #back-button .top-button {
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 6px;
@@ -660,7 +734,7 @@ ul li span {
   padding-top: 8px;
 }
 
-/* line 527, ../scss/app.scss */
+/* line 573, ../scss/app.scss */
 .link-button {
   display: block;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
@@ -684,12 +758,12 @@ ul li span {
   -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 }
-/* line 539, ../scss/app.scss */
+/* line 585, ../scss/app.scss */
 .link-button:link, .link-button:active, .link-button:visited {
   text-decoration: none;
   color: #c8cdcc;
 }
-/* line 543, ../scss/app.scss */
+/* line 589, ../scss/app.scss */
 .link-button:active, .link-button.fake-active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
   background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
@@ -699,33 +773,33 @@ ul li span {
   background-image: linear-gradient(#fcfcfc, #ffffff);
 }
 
-/* line 548, ../scss/app.scss */
+/* line 594, ../scss/app.scss */
 button.link-button {
   width: 100%;
 }
 
 /* leaderboard elements
 * =================================================================================================================== */
-/* line 554, ../scss/app.scss */
+/* line 600, ../scss/app.scss */
 #leaderboard {
   margin-top: 1em;
 }
-/* line 557, ../scss/app.scss */
+/* line 603, ../scss/app.scss */
 #leaderboard table {
   width: 100%;
 }
-/* line 560, ../scss/app.scss */
+/* line 606, ../scss/app.scss */
 #leaderboard table tr.header {
   border: 0;
 }
-/* line 564, ../scss/app.scss */
+/* line 610, ../scss/app.scss */
 #leaderboard table th {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #0f68a3));
-  background-image: -webkit-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -moz-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -o-linear-gradient(#2c9fec, #0f68a3);
-  background-image: -ms-linear-gradient(#2c9fec, #0f68a3);
-  background-image: linear-gradient(#2c9fec, #0f68a3);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   padding: 0.7em 1em;
   margin: 0;
   font-size: 18px;
@@ -738,7 +812,7 @@ button.link-button {
   -o-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
 }
-/* line 568, ../scss/app.scss */
+/* line 614, ../scss/app.scss */
 #leaderboard table tr {
   padding: 1em 1em;
   border: 0;
@@ -758,21 +832,21 @@ button.link-button {
   text-overflow: ellipsis;
   -moz-binding: url('/css/xml/ellipsis.xml#ellipsis');
 }
-/* line 570, ../scss/app.scss */
+/* line 616, ../scss/app.scss */
 #leaderboard table tr td {
   padding: 0.5em;
   vertical-align: middle;
 }
-/* line 573, ../scss/app.scss */
+/* line 619, ../scss/app.scss */
 #leaderboard table tr td.position {
   padding-left: 1em;
 }
-/* line 576, ../scss/app.scss */
+/* line 622, ../scss/app.scss */
 #leaderboard table tr td.name img {
   padding-right: 1em;
 }
 
-/* line 584, ../scss/app.scss */
+/* line 630, ../scss/app.scss */
 footer {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2f2f2f), color-stop(50%, #151515), color-stop(51%, #000000), color-stop(100%, #000000));
   background-image: -webkit-linear-gradient(top, #2f2f2f, #151515 50%, #000000 51%, #000000);
@@ -788,24 +862,24 @@ footer {
   left: 0;
 }
 
-/* line 594, ../scss/app.scss */
+/* line 640, ../scss/app.scss */
 .loading-indicator {
   margin: 10px;
 }
 
-/* line 598, ../scss/app.scss */
+/* line 644, ../scss/app.scss */
 .hide {
   display: none;
 }
 
-/* line 602, ../scss/app.scss */
+/* line 648, ../scss/app.scss */
 input[type=text] {
   width: 100%;
   box-sizing: border-box;
 }
 
 /* no point to have red bg on untouched text boxes */
-/* line 608, ../scss/app.scss */
+/* line 654, ../scss/app.scss */
 input[type=text]:invalid {
   background-color: white;
 }
