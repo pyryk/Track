@@ -52,9 +52,12 @@
   <!--<script src="http://86.50.142.161:8000/target/target-script-min.js#anonymous"></script>-->
 </head>
 
+<!-- BODY -->
+<!-- --------------------------------------------------------------------------------------------------------------- -->
 <body>
 
-  <!-- on the top of the screen -->
+  <!-- CONTAINER -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
   <div id="container">
     <header>
       <div id="back-button"><a href="#!/customer/"><img src="img/home-icon.png" alt=""></a></div>
@@ -71,17 +74,25 @@
     </footer>-->
   </div> <!--! end of #container -->
 
+  <!-- CUSTOMER-LIST -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
   <script id="template-customerList" type="text/x-handlebars-template">
     <div class="search-field">
       <input type="text" id="search_customer_input" placeholder="Etsi..." autocomplete="off" class="search-field_input" />
     </div>
     <ul class="primary-list" data-role="listview" data-inset="true" data-filter="true" id="customer-list">
       {{#each items}}
-        <li name="{{this.name}}" data-id="{{this.id}}"><img class="customer-list-image" src="{{this.logo}}" alt="">{{this.name}}<img class="customer-list-next" src="img/next.png" alt=""></li>
+        <li name="{{this.name}}" data-id="{{this.id}}">
+          <img class="customer-list-image" data-id="{{this.id}}" src="{{this.logo}}" alt=""/>
+          {{this.name}}
+          <img class="customer-list-arrow" data-id="{{this.id}}" src="img/next.png" alt=""/>
+        </li>
       {{/each}}}
     </ul>
   </script>
 
+  <!-- TARGET-LIST -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
   <script id="template-targetList" type="text/x-handlebars-template">
     <div class="search-field">
       <input type="text" id="search_target_input" placeholder="Etsi..." autocomplete="off" class="search-field_input" />
@@ -93,13 +104,15 @@
       {{#each items}}
         <li name="{{this.name}}" data-id="{{this.id}}">
           <span data-id="{{this.id}}">{{this.name}}</span>
-          <img data-id="{{this.id}}" class="customer-list-next" src="img/next.png" alt="">
+          <img data-id="{{this.id}}" class="customer-list-arrow" src="img/next.png" alt=""/>
         </li>
       {{/each}}
       <li class="create-new"><span class="create-new text">Create a new target</span></li>
     </ul>
   </script>
-  
+
+  <!-- TARGET DETAILS -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
   <script id="template-targetDetails" type="text/x-handlebars-template">
     {{#if error}}
       {{error}}
@@ -125,7 +138,9 @@
     {{/if}}
     </div>
   </script>
-  
+
+  <!-- TARGET RESULTS -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
   <script id="template-targetResults" type="text/x-handlebars-template">
     {{#if error}}
       {{error}}
@@ -180,7 +195,9 @@
     {{/if}}
     </div>
   </script>
-  
+
+  <!-- TARGET CREATE -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
   <script id="template-targetCreate" type="text/x-handlebars-template">
     <div id="target-create">
       <form id="create-target-form">
@@ -190,7 +207,9 @@
       </form>
     </div>
   </script>
-  
+
+  <!-- OWN RESULTS -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
   <script id="template-ownResult" type="text/x-handlebars-template">
     <div id="target-ownResult">
     {{#if error}}
@@ -213,13 +232,17 @@
     {{/if}}
     </div>
   </script>
-  
+
+  <!-- BACK-BUTTON -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
   <script id="template-backButton" type="text/x-handlebars-template">
     {{#if previous}}
       <span class="back-button"><img src="img/back-icon.png" alt=""></span>
     {{/if}}
   </script>
-  
+
+  <!-- LOGIN SCREEN -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
   <script id="template-loginScreen" type="text/x-handlebars-template">
     {{#if logged}}
     <div id="login">
@@ -244,7 +267,9 @@
       </div>
     {{/if}}
   </script>
-  
+
+  <!-- LEADERBOARD -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
   <script id="template-leaderboard" type="text/x-handlebars-template">
     {{#if error}}
       {{error}}
@@ -263,8 +288,9 @@
     </div>
   </script>
 
+  <!-- LIBRARIES -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
   <!-- JavaScript at the bottom for fast page loading -->
-  <!-- libraries -->
   <script src="js/libs/jquery-1.7.1.min.js"></script>
   <script src="js/libs/jquery.xdr.js"></script>
   <script src="js/libs/spine.js"></script>
