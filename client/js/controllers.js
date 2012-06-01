@@ -1,3 +1,5 @@
+/* Basecontroller
+ *=================================================================================================================== */
 var BaseController = Spine.Controller.sub({
   init: function() {
     this.rawTemplate = this.template;
@@ -55,10 +57,8 @@ var BaseController = Spine.Controller.sub({
   }
 });
 
-/**
- * A controller for the customer item list
- *
- */
+/* CustomersList
+ *=================================================================================================================== */
 var CustomersList = BaseController.sub({
   events: {
     "click #customer-list": "clicked_customer",
@@ -85,40 +85,36 @@ var CustomersList = BaseController.sub({
   clicked_customer: function() {
     Spine.Route.navigate("!/targets/");
   },
-
-  /* List search using jQuery */
+  /* List search using jQuery-example */
   search_customer: function() {
     var $lastElement = null;
-    var $search_text = $('#search_customer_input').val().toLowerCase();
-    $('li').each(function(i){
-      var $customerName = $(this).text().toLowerCase();
-      if($customerName.indexOf($search_text) == -1) {
-        $(this).css('display', 'none');
+    var $search_text = $('#search_customer_input').val().toLowerCase(); // to record the written text
+
+    $('li').each(function(i){ // go through every li-element
+      if($(this).text().toLowerCase().indexOf($search_text) == -1) { // if customer name doesn't match
+        $(this).css('display', 'none'); // hide customer
       }
       else {
-        $(this).css('display', '');
-
+        $(this).css('display', ''); // display customer
         $(this).css('border-top', '1px solid #ccc');
         $(this).css('border-radius', '15px 15px 15px 15px');
-        $(this).css('border-bottom', '1px solid #ccc');
-        if ($lastElement != null) {
+        $(this).css('border-bottom', '1px solid #ccc'); // modifieng borders
+        if ($lastElement != null) { // if this customer isn't the first in a list
           $(this).css('border-top', '1px solid #ccc');
           $(this).css('border-top-left-radius', '0px');
-          $(this).css('border-top-right-radius', '0px');
+          $(this).css('border-top-right-radius', '0px'); // to remove roundings from top
           $($lastElement).css('border-bottom', '1px solid #fff');
           $($lastElement).css('border-bottom-left-radius', '0px');
-          $($lastElement).css('border-bottom-right-radius', '0px')
+          $($lastElement).css('border-bottom-right-radius', '0px'); // to remove roundings from bottom
         }
-        $lastElement = this;
+        $lastElement = this; // record this customer so that next customer is able to remove roundings from bottom
       }
     });
   }
 });
 
-/**
- * A controller for the target item list
- *
- */
+/* TargetsList
+ *=================================================================================================================== */
 var TargetsList = BaseController.sub({
   elements: {
     ".targets": "targets"  
@@ -171,37 +167,36 @@ var TargetsList = BaseController.sub({
     }
   },
 
-  /* List search using jQuery */
+  /* List search using jQuery-example */
   search_target: function() {
-    var $search_target = $('#search_target_input').val().toLowerCase();
-    var $test = 1;
     var $lastTarget = null;
-    $('li').each(function(index){
-      var $targetName = $(this).text().toLowerCase();
-      $test += 1;
-      console.log($test);
-      if($targetName.indexOf($search_target) == -1) {
-        $(this).css('display', 'none');
+    var $search_target = $('#search_target_input').val().toLowerCase(); // to record the written text
+
+    $('li').each(function(index){ // go through every li-element
+      if($(this).text().toLowerCase().indexOf($search_target) == -1) { // if customer name doesn't match
+        $(this).css('display', 'none'); // hide target
       }
       else {
-        $(this).css('display', '');
+        $(this).css('display', ''); // display customer
         $(this).css('border-top', '1px solid #ccc');
         $(this).css('border-radius', '15px 15px 15px 15px');
-        $(this).css('border-bottom', '1px solid #ccc');
-        if ($lastTarget != null) {
+        $(this).css('border-bottom', '1px solid #ccc'); // modifieng borders
+        if ($lastTarget != null) { // if this target isn't the first in a list
           $(this).css('border-top', '1px solid #ccc');
           $(this).css('border-top-left-radius', '0px');
-          $(this).css('border-top-right-radius', '0px');
+          $(this).css('border-top-right-radius', '0px'); // to remove roundings from top
           $($lastTarget).css('border-bottom', '1px solid #fff');
           $($lastTarget).css('border-bottom-left-radius', '0px');
-          $($lastTarget).css('border-bottom-right-radius', '0px')
+          $($lastTarget).css('border-bottom-right-radius', '0px');
         }
-        $lastTarget = this;
+        $lastTarget = this; // record this target so that next target is able to remove roundings from bottom
       }
     });
   }
 });
 
+/* ownResult
+ *=================================================================================================================== */
 var ownResult = BaseController.sub({
   events: {
     "fastclick .view-results": "viewResults"
@@ -229,6 +224,8 @@ var ownResult = BaseController.sub({
   }
 });
 
+/* TargetDetails
+ *=================================================================================================================== */
 var TargetDetails = BaseController.sub({
   events: {
     "fastclick .active.answer.positive": "savePositiveAnswer",
@@ -304,6 +301,8 @@ var TargetDetails = BaseController.sub({
   }
 });
 
+/* TargetCreate
+ *=================================================================================================================== */
 var TargetCreate = BaseController.sub({
   events: {
     "submit #create-target-form": "saveTarget"
@@ -332,6 +331,8 @@ var TargetCreate = BaseController.sub({
   }
 });
 
+/* TargetResults
+ *=================================================================================================================== */
 var TargetResults = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
@@ -382,6 +383,8 @@ var TargetResults = BaseController.sub({
   }
 });
 
+/* Leaderboard
+ *=================================================================================================================== */
 var Leaderboard = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
@@ -415,6 +418,8 @@ var Leaderboard = BaseController.sub({
   }
 });
 
+/* BackButton
+ *=================================================================================================================== */
 var BackButton = BaseController.sub({
   events: {
     "fastclick .back-button": "clicked"
@@ -426,8 +431,7 @@ var BackButton = BaseController.sub({
   },
   getData: function() {
     //var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
-    //var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
-    var showButton = true;
+    var showButton = true; // so that we are able to go customer page !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     return {previous: showButton};
   },
   clicked: function() {
@@ -441,6 +445,8 @@ var BackButton = BaseController.sub({
   }
 });
 
+/* LoginScreen
+ *=================================================================================================================== */
 var LoginScreen = BaseController.sub({
   events: {
     "fastclick .login-button": "loginUser",
