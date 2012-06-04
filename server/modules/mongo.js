@@ -193,9 +193,16 @@ var Mongo = {
         return promise;
     },
 
-    deleteTarget: function(params) {
+    deleteTarget: function(target) {
 
-        this.findTargetById(params.id).remove();
+        var promise = Promise();
+
+        target.remove(function(error) {
+            Mongo.resolvePromise(error, promise)
+        }.bind(this));
+
+
+        return promise;
 
 
     },

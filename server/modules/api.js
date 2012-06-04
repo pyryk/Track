@@ -293,8 +293,21 @@ var API = {
     },
 
     deleteTarget: function(req, res, next) {
-        console.log("deleteTarget function of api.js test");
 
+        //Finding and passing the target object to Mongo (instead of id)
+        Mongo.findTargetById(req.params.id).then(function(data) {
+            if(data == null) {
+                return next(new restify.ResourceNotFoundError("Could not find target with ID " + req.params.id));
+            }
+
+            Mongo.deleteTarget(data).then(function success() {
+                res.send(204)
+                return next();
+            }, function error(err) {
+                //Restify error already generates 404.
+                return next(err);
+            });
+        });
     },
 
     postResult: function(req, res, next) {
