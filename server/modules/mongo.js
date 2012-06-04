@@ -207,6 +207,18 @@ var Mongo = {
 
     },
 
+    deleteTargetById: function(targetId) {
+
+        var promise = Promise();
+
+        this.Target.remove({_id: targetId}, function(error) {
+            Mongo.resolvePromise(error, promise)
+        }.bind(this));
+
+        return promise;
+
+    },
+
     addResult: function(params) {
         var promise = Promise();
 
