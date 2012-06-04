@@ -122,7 +122,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -o-border-radius: 15px 15px 15px 15px;
   border-radius: 15px 15px 15px 15px;
 }
-/* line 190, ../scss/app.scss */
+/* line 191, ../scss/app.scss */
 .primary-list li {
   padding: 1em 1em;
   border: 0;
@@ -141,7 +141,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   text-overflow: ellipsis;
   -moz-binding: url('/css/xml/ellipsis.xml#ellipsis');
 }
-/* line 198, ../scss/app.scss */
+/* line 199, ../scss/app.scss */
 .primary-list li:active, .primary-list li.fake-active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
   background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
@@ -150,7 +150,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   background-image: -ms-linear-gradient(#fcfcfc, #ffffff);
   background-image: linear-gradient(#fcfcfc, #ffffff);
 }
-/* line 203, ../scss/app.scss */
+/* line 204, ../scss/app.scss */
 .primary-list li.header {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
   background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
@@ -164,11 +164,11 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   color: white;
   text-shadow: 0 1px 1px #444444;
 }
-/* line 212, ../scss/app.scss */
+/* line 213, ../scss/app.scss */
 .primary-list li.create-new {
   padding-top: 1em;
 }
-/* line 214, ../scss/app.scss */
+/* line 215, ../scss/app.scss */
 .primary-list li.create-new .text {
   display: inline-block;
   background-image: url("../img/add-new-small.png");
@@ -177,7 +177,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   padding-left: 25px;
   height: 18px;
 }
-/* line 224, ../scss/app.scss */
+/* line 225, ../scss/app.scss */
 .primary-list li:first-child {
   border-top: 1px solid #cccccc;
   -webkit-border-radius: 15px 15px 0px 0px;
@@ -186,7 +186,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   -o-border-radius: 15px 15px 0px 0px;
   border-radius: 15px 15px 0px 0px;
 }
-/* line 229, ../scss/app.scss */
+/* line 230, ../scss/app.scss */
 .primary-list li:last-child {
   -webkit-border-radius: 0px 0px 15px 15px;
   -moz-border-radius: 0px 0px 15px 15px;
@@ -195,7 +195,7 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
   border-radius: 0px 0px 15px 15px;
 }
 
-/* line 234, ../scss/app.scss */
+/* line 235, ../scss/app.scss */
 ul li span {
   margin: 0px;
   padding: 0px;
@@ -225,7 +225,7 @@ ul li span {
 }
 
 /* line 258, ../scss/app.scss */
-.search-field_input {
+.search-field-input {
   border: 1px solid #999;
   -webkit-border-radius: 11px 11px 11px 11px;
   -moz-border-radius: 11px 11px 11px 11px;

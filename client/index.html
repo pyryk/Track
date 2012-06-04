@@ -61,7 +61,7 @@
   <div id="container">
     <header>
       <div id="back-button"><a href="#!/customer/"><img src="img/home-icon.png" alt=""></a></div>
-      <h1><a href="#"><img src="img/tracktive_logo_pieni.png" style="padding-bottom: 5px; padding-right: 10px"></a><!----><!--<a href="#">aalto</a>--></h1>
+      <h1><a href="#"><img src="img/tracktive-logo-pieni.png" style="padding-bottom: 5px; padding-right: 10px"></a><!----><!--<a href="#">aalto</a>--></h1>
       <!--<div id="account-button"><span class="top-button"><a href="#!/login/"><img src="img/account-icon.png" alt=""></a></span></div>-->
       <div id="account-button"><a href="#!/login/"><img src="img/account-icon.png" alt=""></a></div>
       <!--<div id="account-button"></div>-->
@@ -78,7 +78,7 @@
   <!-- ------------------------------------------------------------------------------------------------------------- -->
   <script id="template-customerList" type="text/x-handlebars-template">
     <div class="search-field">
-      <input type="text" id="search_customer_input" placeholder="Etsi..." autocomplete="off" class="search-field_input" />
+      <input type="text" id="search-customer-input" placeholder="Etsi..." autocomplete="off" class="search-field-input" />
     </div>
     <ul class="primary-list" data-role="listview" data-inset="true" data-filter="true" id="customer-list">
       {{#each items}}
@@ -95,7 +95,7 @@
   <!-- ------------------------------------------------------------------------------------------------------------- -->
   <script id="template-targetList" type="text/x-handlebars-template">
     <div class="search-field">
-      <input type="text" id="search_target_input" placeholder="Etsi..." autocomplete="off" class="search-field_input" />
+      <input type="text" id="search-target-input" placeholder="Etsi..." autocomplete="off" class="search-field-input" />
     </div>
     {{#if error}}
       {{error}}
@@ -107,7 +107,7 @@
           <img data-id="{{this.id}}" class="customer-list-arrow" src="img/next.png" alt=""/>
         </li>
       {{/each}}
-      <li class="create-new"><span class="create-new text">Create a new target</span></li>
+      <!--<li class="create-new"><span class="create-new text">Create a new target</span></li>-->
     </ul>
   </script>
 
@@ -132,23 +132,23 @@
           <form id="answer-form">
             <p class="target-question">{{question}}</p>
             <p class="target-answer">
-              <span class="active answer positive"><img src="img/smiley-thump-up.png" width="60" height="60" alt=":)"></span>
-              <span class="active answer negative"><img src="img/smiley-thump-down.png" width="60" height="60" alt=":("></span>
+              <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
+              <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
             </p>
             <p class="target-question">{{question}} ja toinen kysymys</p>
             <p class="target-answer">
-              <span class="active answer positive"><img src="img/smiley-thump-up.png" width="60" height="60" alt=":)"></span>
-              <span class="active answer negative"><img src="img/smiley-thump-down.png" width="60" height="60" alt=":("></span>
+              <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
+              <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
             </p>
             <p class="target-question">{{question}} ja kolmas kysymys</p>
             <p class="target-answer">
-              <span class="active answer positive"><img src="img/smiley-thump-up.png" width="60" height="60" alt=":)"></span>
-              <span class="active answer negative"><img src="img/smiley-thump-down.png" width="60" height="60" alt=":("></span>
+              <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
+              <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
             </p>
             <p class="target-question">{{question}} ja neljäs kysymys</p>
             <p class="target-answer">
-              <span class="active answer positive"><img src="img/smiley-thump-up.png" width="60" height="60" alt=":)"></span>
-              <span class="active answer negative"><img src="img/smiley-thump-down.png" width="60" height="60" alt=":("></span>
+              <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
+              <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
             </p>
           </form>
           <!--<p><span class="link-button view-results">View Results</span></p>-->

@@ -61,8 +61,8 @@ var BaseController = Spine.Controller.sub({
  *=================================================================================================================== */
 var CustomersList = BaseController.sub({
   events: {
-    "click #customer-list": "clicked_customer",
-    "keyup #search_customer_input": "search_customer"
+    "click #customer-list": "clickedCustomer",
+    "keyup #search-customer-input": "searchCustomer"
   },
   getData: function() {
     return {items: [
@@ -82,27 +82,27 @@ var CustomersList = BaseController.sub({
       Customer.create({logo: "img/templogos/mcdonalds.png", name: "Picnic"})
     ]};
   },
-  clicked_customer: function() {
+  clickedCustomer: function() {
     Spine.Route.navigate("!/targets/");
   },
   /* List search using jQuery-example */
-  search_customer: function() {
+  searchCustomer: function() {
     var $lastElement = null;
-    var $search_text = $('#search_customer_input').val().toLowerCase(); // to record the written text
+    var searchCustomerInput = $('#search-customer-input').val().toLowerCase(); // to record the written text
 
     $('li').each(function(i){ // go through every li-element
-      if($(this).text().toLowerCase().indexOf($search_text) == -1) { // if customer name doesn't match
-        $(this).css('display', 'none'); // hide customer
+      var $this = $(this);
+      if($this.text().toLowerCase().indexOf(searchCustomerInput) === -1) { // if customer name doesn't match
+        $this.hide(); // hide customer
       }
       else {
-        $(this).css('display', ''); // display customer
-        $(this).css('border-top', '1px solid #ccc');
+        $this.show(); // display customer
         $(this).css('border-radius', '15px 15px 15px 15px');
         $(this).css('border-bottom', '1px solid #ccc'); // modifieng borders
         if ($lastElement != null) { // if this customer isn't the first in a list
-          $(this).css('border-top', '1px solid #ccc');
-          $(this).css('border-top-left-radius', '0px');
-          $(this).css('border-top-right-radius', '0px'); // to remove roundings from top
+          $this.css('border-top', '1px solid #ccc');
+          $this.css('border-top-left-radius', '0px');
+          $this.css('border-top-right-radius', '0px'); // to remove roundings from top
           $($lastElement).css('border-bottom', '1px solid #fff');
           $($lastElement).css('border-bottom-left-radius', '0px');
           $($lastElement).css('border-bottom-right-radius', '0px'); // to remove roundings from bottom
@@ -123,7 +123,7 @@ var TargetsList = BaseController.sub({
     "fastclick #target-list li": "clicked",
     "fastclick #target-list li span": "clicked",
     "fastclick #target-list li img": "clicked",
-    "keyup #search_target_input": "search_target"
+    "keyup #search-target-input": "searchTarget"
   },
   getTitle: function() {
     return "List";
@@ -168,23 +168,23 @@ var TargetsList = BaseController.sub({
   },
 
   /* List search using jQuery-example */
-  search_target: function() {
+  searchTarget: function() {
     var $lastTarget = null;
-    var $search_target = $('#search_target_input').val().toLowerCase(); // to record the written text
+    var searchTargetInput = $('#search-target-input').val().toLowerCase(); // to record the written text
 
     $('li').each(function(index){ // go through every li-element
-      if($(this).text().toLowerCase().indexOf($search_target) == -1) { // if customer name doesn't match
-        $(this).css('display', 'none'); // hide target
+      var $this = $(this);
+      if($this.text().toLowerCase().indexOf(searchTargetInput) === -1) { // if customer name doesn't match
+        $this.hide(); // hide target
       }
       else {
-        $(this).css('display', ''); // display customer
-        $(this).css('border-top', '1px solid #ccc');
-        $(this).css('border-radius', '15px 15px 15px 15px');
-        $(this).css('border-bottom', '1px solid #ccc'); // modifieng borders
+        $this.show(); // display customer
+        $this.css('border-radius', '15px 15px 15px 15px');
+        $this.css('border-bottom', '1px solid #ccc'); // modifieng borders*/
         if ($lastTarget != null) { // if this target isn't the first in a list
-          $(this).css('border-top', '1px solid #ccc');
-          $(this).css('border-top-left-radius', '0px');
-          $(this).css('border-top-right-radius', '0px'); // to remove roundings from top
+          $this.css('border-top', '1px solid #ccc');
+          $this.css('border-top-left-radius', '0px');
+          $this.css('border-top-right-radius', '0px'); // to remove roundings from top
           $($lastTarget).css('border-bottom', '1px solid #fff');
           $($lastTarget).css('border-bottom-left-radius', '0px');
           $($lastTarget).css('border-bottom-right-radius', '0px');
