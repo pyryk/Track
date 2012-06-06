@@ -4,6 +4,7 @@ var Promise = p.Promise;
 var Fixtures = require('../fixtures/fixtures');
 var DateUtils = require('../modules/now.js');
 var _ = require('underscore');
+var restify = require('restify');
 
 var Mongo = {
 
@@ -201,9 +202,7 @@ var Mongo = {
             Mongo.resolvePromise(error, promise)
         }.bind(this));
 
-
         return promise;
-
 
     },
 
@@ -211,9 +210,16 @@ var Mongo = {
 
         var promise = Promise();
 
-        this.Target.remove({_id: targetId}, function(error) {
-            Mongo.resolvePromise(error, promise)
-        }.bind(this));
+        Mongo.findTargetById(targetId).then(function(data) {
+            if(data == null) {
+                Mongo.resolvePromise(new restify.ResourceNotFoundError("Could not find target with ID " + targetId)
+                    , data, promise);
+            } else {
+                Mongo.deleteTarget(data).then(function error(err) {
+                    Mongo.resolvePromise(err, data, promise);
+                })
+            }
+         });
 
         return promise;
 
