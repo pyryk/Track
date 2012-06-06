@@ -48,6 +48,7 @@ var API = {
         this.get("/target/:id", this.getTarget, false);
         this.post("/target", this.postTarget, false);
         this.post("/target/:_id/result", this.postResult, false);
+        this.del("/target/:id", this.deleteTarget, false);
         this.get("/login", this.getLogin, true);
         this.get("/leaderboard", this.getLeaderboard, false);
         this.get(/\/dashboard\/*/, this.getPublic, false);
@@ -300,20 +301,6 @@ var API = {
             return next(err);
         });
 
-        //Finding and passing the target object to Mongo (instead of id)
-        /*Mongo.findTargetById(req.params.id).then(function(data) {
-            if(data == null) {
-                return next(new restify.ResourceNotFoundError("Could not find target with ID " + req.params.id));
-            }
-
-            Mongo.deleteTarget(data).then(function success() {
-                res.send(204)
-                return next();
-            }, function error(err) {
-                //Restify error already generates 404.
-                return next(err);
-            });
-        });*/
     },
 
 
