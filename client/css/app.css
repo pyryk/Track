@@ -52,12 +52,12 @@ header {
   width: 100%;
   margin-top: 0;
   padding-top: 0;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffe065), color-stop(100%, #fecb00));
-  background-image: -webkit-linear-gradient(#ffe065, #fecb00);
-  background-image: -moz-linear-gradient(#ffe065, #fecb00);
-  background-image: -o-linear-gradient(#ffe065, #fecb00);
-  background-image: -ms-linear-gradient(#ffe065, #fecb00);
-  background-image: linear-gradient(#ffe065, #fecb00);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6ACCE1), color-stop(100%, #12A3BF));
+  background-image: -webkit-linear-gradient(#6ACCE1, #12A3BF);
+  background-image: -moz-linear-gradient(#6ACCE1, #12A3BF);
+  background-image: -o-linear-gradient(#6ACCE1, #12A3BF);
+  background-image: -ms-linear-gradient(#6ACCE1, #12A3BF);
+  background-image: linear-gradient(#6ACCE1, #12A3BF);
   color: white;
   border-bottom: 1px solid #cccccc;
   text-align: center;
