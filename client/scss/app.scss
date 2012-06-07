@@ -143,9 +143,10 @@ header {
   
   h1 {
     padding: 0.25em;
+    padding-top: 9px;
     margin: 0;
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: 500;
     
     a:link, a:visited, a:active {
       color: $text_color;
@@ -198,6 +199,13 @@ header {
 
     &:active, &.fake-active {
       @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
+    }
+
+    &.first-visible-child {
+      color: red;
+    }
+    &.last-visible-child {
+      color: green;
     }
   }
 
@@ -253,6 +261,10 @@ ul li span {
   font-weight: bold;
   @include border-radius(11px 11px 11px 11px);
   text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
+}
+
+.hide {
+  display: none;
 }
 
 .search-field-input {

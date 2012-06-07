@@ -129,6 +129,22 @@ var TargetsList = BaseController.sub({
     return "List";
   },
   getData: function() {
+    /*return {items: [
+      Customer.create({logo: "img/templogos/subway.png", name: "Herttoniemi"}),
+      Customer.create({logo: "img/templogos/rosso.png", name: "Kamppi"}),
+      Customer.create({logo: "img/templogos/mcdonalds.png", name: "Kaivopuisto"}),
+      Customer.create({logo: "img/templogos/hesburger.png", name: "Pitäjänmäki"}),
+      Customer.create({logo: "img/templogos/finnkino.png", name: "Kauniainen"}),
+      Customer.create({logo: "img/templogos/aalto_university.png", name: "Mannerheimintie"}),
+      Customer.create({logo: "img/templogos/chicos.png", name: "Kerava"}),
+      Customer.create({logo: "img/templogos/roberts_coffee.png", name: "Punavuori"}),
+      Customer.create({logo: "img/templogos/unisport.png", name: "Ruoholahti"}),
+      Customer.create({logo: "img/templogos/elisa.png", name: "Kallio"}),
+      Customer.create({logo: "img/templogos/abc.png", name: "Hämeenlinna"}),
+      Customer.create({logo: "img/templogos/HSL.png", name: "Riihimäri"}),
+      Customer.create({logo: "img/templogos/hesburger.png", name: "Olari"}),
+      Customer.create({logo: "img/templogos/mcdonalds.png", name: "Vuosaari"})
+    ]};*/
     return {items: Target.findAllByAttribute("saved", true)};
   },
   init: function() {
@@ -177,20 +193,9 @@ var TargetsList = BaseController.sub({
       if($this.text().toLowerCase().indexOf(searchTargetInput) === -1) { // if targets name doesn't match
         $this.hide(); // hide target
       }
-      else {
-        $this.show(); // display customer
-        $this.css('border-radius', '15px 15px 15px 15px');
-        $this.css('border-bottom', '1px solid #ccc'); // modifieng borders*/
-        if ($lastTarget != null) { // if this target isn't the first in a list
-          $this.css('border-top', '1px solid #ccc');
-          $this.css('border-top-left-radius', '0px');
-          $this.css('border-top-right-radius', '0px'); // to remove roundings from top
-          $($lastTarget).css('border-bottom', '1px solid #fff');
-          $($lastTarget).css('border-bottom-left-radius', '0px');
-          $($lastTarget).css('border-bottom-right-radius', '0px');
-        }
-        $lastTarget = this; // record this target so that next target is able to remove roundings from bottom
-      }
+      var visibles = $('li:visible');
+      visibles.first().addClass('first-visible-child');
+      visibles.last().addClass('last-visible-child');
     });
   }
 });
@@ -422,7 +427,8 @@ var Leaderboard = BaseController.sub({
  *=================================================================================================================== */
 var BackButton = BaseController.sub({
   events: {
-    "fastclick .back-button": "clicked"
+    "fastclick .back-button": "backClicked",
+    "fastclick .home-button": "homeClicked"
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -430,18 +436,30 @@ var BackButton = BaseController.sub({
     Spine.bind('logout', this.proxy(this.render));
   },
   getData: function() {
-    //var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
-    var showButton = true; // so that we are able to go customer page !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    return {previous: showButton};
+    var showPrev = this.app.getPreviousPage() !== undefined && this.app.loginOk();
+    //var showPrev = true; // so that we are able to go customer page !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    var showHome = !showPrev;
+    if (this.app.visiblePage === this.app.pages['customerList']) {
+      showHome = false;
+    }
+    return {previous: showPrev, home: showHome};
   },
-  clicked: function() {
+  backClicked: function() {
+    log('back button clicked');
     // app.js have put App.visiblePage as undefined and it works great
+    if (this.app.visiblePage === this.app.pages['targetList']) {
+
+    }
+    var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
     if (App.visiblePage == undefined) {
       Spine.Route.navigate('!/customer/');
     } else if (window.history.length > 0) {
       window.history.back();
     }
 
+  },
+  homeClicked: function() {
+    log('home button clicked');
   }
 });
 

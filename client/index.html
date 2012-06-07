@@ -43,12 +43,10 @@
   <!-- App Stylesheet -->
   <link href="css/app.css" rel="stylesheet" type="text/css" />
   <link href="css/jquery.tooltip.css" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" href="css/jquery.mobile-1.1.0.min.css" type="text/css">
 
   <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
   <script src="js/libs/modernizr-2.0.6.min.js"></script>
   <script src="js/config.js"></script>
-  <script src="js/libs/jquery.mobile-1.1.0.min.js"></script>
   <!--<script src="http://86.50.142.161:8000/target/target-script-min.js#anonymous"></script>-->
 </head>
 
@@ -61,7 +59,7 @@
   <div id="container">
     <header>
       <div id="back-button"><a href="#!/customer/"><img src="img/home-icon.png" alt=""></a></div>
-      <h1><a href="#"><img src="img/tracktive-logo-pieni.png" style="padding-bottom: 5px; padding-right: 10px"></a><!----><!--<a href="#">aalto</a>--></h1>
+      <h1><!--<a href="#"><img src="img/tracktive-logo-pieni.png" style="padding-bottom: 5px; padding-right: 10px"></a>--><!----><a href="#">Restaurant a</a></h1>
       <!--<div id="account-button"><span class="top-button"><a href="#!/login/"><img src="img/account-icon.png" alt=""></a></span></div>-->
       <div id="account-button"><a href="#!/login/"><img src="img/account-icon.png" alt=""></a></div>
       <!--<div id="account-button"></div>-->
@@ -121,7 +119,7 @@
     {{#if target}}
       {{#with target}}
         <div id="target-header">
-          <div class="target-name">{{name}}</div>
+          <div class="target-name">Kamppi</div>
           <div class="target-points"><span class="target-points-font">60 pts</span></div>
           <div id="target-header-clear"/>
         </div>
@@ -130,22 +128,25 @@
         {{/unless}}
         {{#if question}}
           <form id="answer-form">
+            <p class="target-question">How did you like your meal?</p>
+            {{#if question one}}
+            <p class="target-answer">
+              <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
+              <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
+            </p>
+            {{/if}}
+
+            <p class="target-question">Was it clean in the restaurant?</p>
+            <p class="target-answer">
+              <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
+              <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
+            </p>
+            <p class="target-question">How did you feel about the service?</p>
+            <p class="target-answer">
+              <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
+              <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
+            </p>
             <p class="target-question">{{question}}</p>
-            <p class="target-answer">
-              <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
-              <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
-            </p>
-            <p class="target-question">{{question}} ja toinen kysymys</p>
-            <p class="target-answer">
-              <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
-              <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
-            </p>
-            <p class="target-question">{{question}} ja kolmas kysymys</p>
-            <p class="target-answer">
-              <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
-              <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
-            </p>
-            <p class="target-question">{{question}} ja neljäs kysymys</p>
             <p class="target-answer">
               <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
               <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
@@ -257,6 +258,9 @@
   <script id="template-backButton" type="text/x-handlebars-template">
     {{#if previous}}
       <span class="back-button"><img src="img/back-icon.png" alt=""></span>
+    {{/if}}
+    {{#if home}}
+    <span class="home-button"><img src="img/home-icon.png" alt=""></span>
     {{/if}}
   </script>
 
