@@ -122,8 +122,6 @@ Response body:
 
 ### GET /leaderboard - Returns leader board
 
-**Status: DRAFT! Not yet implemented**
-
 Requires authentication: No
 
 Status: 200 Ok
