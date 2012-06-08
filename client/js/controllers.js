@@ -14,7 +14,6 @@ var BaseController = Spine.Controller.sub({
     var data = this.getData();
     if (typeof this.template === "function") {
       this.html(this.template(data));
-
       this.addFastButtons();
     }
     //this.addPseudoActiveSupport();
@@ -130,22 +129,22 @@ var TargetsList = BaseController.sub({
   },
   getData: function() {
     /*return {items: [
-      Customer.create({logo: "img/templogos/subway.png", name: "Herttoniemi"}),
-      Customer.create({logo: "img/templogos/rosso.png", name: "Kamppi"}),
-      Customer.create({logo: "img/templogos/mcdonalds.png", name: "Kaivopuisto"}),
-      Customer.create({logo: "img/templogos/hesburger.png", name: "Pitäjänmäki"}),
-      Customer.create({logo: "img/templogos/finnkino.png", name: "Kauniainen"}),
-      Customer.create({logo: "img/templogos/aalto_university.png", name: "Mannerheimintie"}),
-      Customer.create({logo: "img/templogos/chicos.png", name: "Kerava"}),
-      Customer.create({logo: "img/templogos/roberts_coffee.png", name: "Punavuori"}),
-      Customer.create({logo: "img/templogos/unisport.png", name: "Ruoholahti"}),
-      Customer.create({logo: "img/templogos/elisa.png", name: "Kallio"}),
-      Customer.create({logo: "img/templogos/abc.png", name: "Hämeenlinna"}),
-      Customer.create({logo: "img/templogos/HSL.png", name: "Riihimäri"}),
-      Customer.create({logo: "img/templogos/hesburger.png", name: "Olari"}),
-      Customer.create({logo: "img/templogos/mcdonalds.png", name: "Vuosaari"})
+      Target.create({name: "Herttoniemi", question: "Kuinka toimii?"}),
+      Target.create({name: "Kamppi", question: "Kuinka toimii?"})
+      Target.create({logo: "img/templogos/mcdonalds.png", name: "Kaivopuisto"}),
+      Target.create({logo: "img/templogos/hesburger.png", name: "Pitäjänmäki"}),
+      Target.create({logo: "img/templogos/finnkino.png", name: "Kauniainen"}),
+      Target.create({logo: "img/templogos/aalto_university.png", name: "Mannerheimintie"}),
+      Target.create({logo: "img/templogos/chicos.png", name: "Kerava"}),
+      Target.create({logo: "img/templogos/roberts_coffee.png", name: "Punavuori"}),
+      Target.create({logo: "img/templogos/unisport.png", name: "Ruoholahti"}),
+      Target.create({logo: "img/templogos/elisa.png", name: "Kallio"}),
+      Target.create({logo: "img/templogos/abc.png", name: "Hämeenlinna"}),
+      Target.create({logo: "img/templogos/HSL.png", name: "Riihimäri"}),
+      Target.create({logo: "img/templogos/hesburger.png", name: "Olari"}),
+      Target.create({logo: "img/templogos/mcdonalds.png", name: "Vuosaari"})
     ]};*/
-    return {items: Target.findAllByAttribute("saved", true)};
+    return {items: Target.findAllByAttribute("saved", true)};/**/
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -185,17 +184,31 @@ var TargetsList = BaseController.sub({
 
   /* List search using jQuery-example */
   searchTarget: function() {
-    var $lastTarget = null;
+    var $lastElement = null;
     var searchTargetInput = $('#search-target-input').val().toLowerCase(); // to record the written text
-
     $('li').each(function(index){ // go through every li-element
       var $this = $(this);
       if($this.text().toLowerCase().indexOf(searchTargetInput) === -1) { // if targets name doesn't match
         $this.hide(); // hide target
+      } else {
+        $this.show();
+        $(this).addClass('first-visible-child last-visible-child');
+        if ($lastElement != null) { // if this customer isn't the first in a list
+          $(this).removeClass('first-visible-child');
+          $($lastElement).removeClass('last-visible-child'); // to remove roundings from bottom
+        }
+        $lastElement = this; // record this customer so that next customer is able to remove roundings from bottom
       }
-      var visibles = $('li:visible');
-      visibles.first().addClass('first-visible-child');
-      visibles.last().addClass('last-visible-child');
+      /*var visible = $('li:visible');
+      console.log(visible.text());
+      visible.first().addClass('first-visible-child');
+      visible.last().addClass('last-visible-child');
+      if ($this != visible.last()) {
+        $this.removeClass('last-visible-child');
+      }
+      if ($this != visible.first()) {
+        $this.removeClass('first-visible-child');
+      }*/
     });
   }
 });
@@ -438,28 +451,31 @@ var BackButton = BaseController.sub({
   getData: function() {
     var showPrev = this.app.getPreviousPage() !== undefined && this.app.loginOk();
     //var showPrev = true; // so that we are able to go customer page !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    var showHome = !showPrev;
+    var showHome = false;
+
     if (this.app.visiblePage === this.app.pages['customerList']) {
       showHome = false;
+      showPrev = false;
+    }
+    if (this.app.visiblePage === this.app.pages['targetList']) {
+      showHome = true;
+      showPrev = false;
     }
     return {previous: showPrev, home: showHome};
   },
   backClicked: function() {
     log('back button clicked');
-    // app.js have put App.visiblePage as undefined and it works great
-    if (this.app.visiblePage === this.app.pages['targetList']) {
+    if (window.history.length > 0 && this.app.visiblePage !== this.app.pages['targetList'] && this.app.visiblePage !== this.app.pages['customerList']) {
+    //if (window.history.length > 0) {
 
-    }
-    var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
-    if (App.visiblePage == undefined) {
-      Spine.Route.navigate('!/customer/');
-    } else if (window.history.length > 0) {
       window.history.back();
     }
-
   },
   homeClicked: function() {
     log('home button clicked');
+    if (this.app.visiblePage === this.app.pages['targetList']) {
+      Spine.Route.navigate('!/customer/');
+    }
   }
 });
 

@@ -19,6 +19,7 @@ var App = Spine.Controller.sub({
         this.renderView('targetCreate', TargetCreate);
       },
       "!/targets/:id": function(params) {
+        console.log(params.id);
         this.renderView('targetDetails', TargetDetails, params.id);
       },
       "!/results/:id": function(params) {

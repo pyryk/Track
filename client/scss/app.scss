@@ -202,10 +202,12 @@ header {
     }
 
     &.first-visible-child {
-      color: red;
+      @include border-radius(15px 15px 0px 0px);
+      border-top: 1px solid ccc;
     }
     &.last-visible-child {
-      color: green;
+      @include border-radius(0px 0px 15px 15px);
+      border-bottom: 1px solid ccc;
     }
   }
 
