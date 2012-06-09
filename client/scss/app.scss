@@ -1,3 +1,5 @@
+/* imports
+*==================================================================================================================== */
 @import "compass/css3/border-radius";
 @import "compass/css3/font-face";
 @import "compass/css3/box-shadow";
@@ -5,36 +7,70 @@
 @import "compass";
 $use-mozilla-ellipsis-binding: true;
 @import "compass/typography/text/ellipsis";
-/* ==================== app specific styles ==================== */
 
-/* Aalto template **/
-$header_gradient_1: lighten(#FECB00, 20%);
-$header_gradient_2: #FECB00;
-$header_text_color: #fff;
-$footer_color: rgba(100,100,100,1);
-$header_height: 46px;
-$border_color: #ccc;
-$background_gradient_1: #FFFFFF;
-$background_gradient_2: #D9D9D9;
-$text_color: rgba(0,0,0,1);
-$list_item_gradient_1: #fdfdfd;
-$list_item_gradient_2: darken(#fdfdfd, 3%);
-
-/* Default jQuery mobile blue theme */
-/*
-$header_gradient_1: #2DBCF8;
-$header_gradient_2: #2499CB;
-$header_text_color: #fff;
-$footer_color: rgba(100,100,100,1);
-$header_height: 46px;
-$border_color: #ccc;
-$background_gradient_1: #FFFFFF;
-$background_gradient_2: #D9D9D9;
-$text_color: rgba(0,0,0,1);
-$list_item_gradient_1: #fdfdfd;
-$list_item_gradient_2: #eee;
+/**
+* Colorpalette is available in http://dribbble.com/shots/290228-Dell-Mobile-App-Ph3
 */
 
+/* app specific styles
+* =================================================================================================================== */
+/* Defining the layout-profile, basically color-palette: frontpage, aalto, rosso, subway */
+$customer: "frontpage";
+
+/* Default template **/
+$header_gradient_1: lighten(#0F68A3, 20%);
+$header_gradient_2: #0F68A3;
+$header_text_color: #fff;
+$footer_color: rgba(100,100,100,1);
+$header_height: 46px;
+$border_color: #ccc;
+$background_gradient_1: darken(#f6f6f6, 2%);
+$background_gradient_2: #f6f6f6;
+$text_color: #606967;
+$list_item_gradient_1: #ffffff;
+$list_item_gradient_2: darken(#ffffff, 1%);
+
+/* Aalto-layout */
+@if $customer == aalto {
+  $header_gradient_1: lighten(#FECB00, 20%);
+  $header_gradient_2: #FECB00;
+  $background_gradient_1: darken(#ffffff, 2%);
+  $background_gradient_2: #D9D9D9;
+  $list_item_gradient_1: #fdfdfd;
+  $list_item_gradient_2: darken(#fdfdfd, 3%);
+  $text_color: rgba(0,0,0,1);
+}
+
+/* Track frontpage-layout */
+@if $customer == frontpage {
+  $header_gradient_1: lighten(#0F68A3, 20%);
+  $header_gradient_2: lighten(#0F68A3, 5%);
+  $background_gradient_1: darken(#f6f6f6, 2%);
+  $background_gradient_2: #f6f6f6;
+  $list_item_gradient_1: #ffffff;
+  $list_item_gradient_2: darken(#ffffff, 1%);
+  $text_color: #606967;
+}
+
+/* Rosso-layout */
+@if $customer == rosso {
+  $header_gradient_1: #ffffff;
+  $header_gradient_2: #fdfdfd;
+  $background_gradient_1: #bd1627;
+  $background_gradient_2: #bd1627;
+}
+
+/* Subway-layout */
+@if $customer == subway {
+  $header_gradient_1: #009f4f;
+  $header_gradient_2: #009f4f;
+  $background_gradient_1: darken(#ffffff, 2%);
+  $background_gradient_2: #D9D9D9;
+}
+
+/* mixins elements
+* to re-use whole chunks of CSS, properties or selectors
+* =================================================================================================================== */
 @mixin header {
   @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
   padding: 0.7em 1em;
@@ -68,6 +104,8 @@ $list_item_gradient_2: #eee;
   @include border-radius(0px 0px 5px 5px);
 }
 
+/* basic html elements
+* =================================================================================================================== */
 * {
   -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
   -webkit-touch-callout: none;
@@ -84,6 +122,8 @@ body {
   @include background-image(linear-gradient($background_gradient_1, $background_gradient_2 100%));
 }
 
+/* container elements
+* =================================================================================================================== */
 #container {
   padding: 0;
 }
@@ -103,9 +143,10 @@ header {
   
   h1 {
     padding: 0.25em;
+    padding-top: 9px;
     margin: 0;
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: 500;
     
     a:link, a:visited, a:active {
       color: $text_color;
@@ -117,14 +158,36 @@ header {
 }
 
 #main {
-  padding-top: $header_height;
-  // padding-bottom: $header_height;
+  padding-top: $header_height; // if doesn't have javascript support
+}
+
+/* list elements
+* =================================================================================================================== */
+.customer-list-image {
+  padding-right: 20px;
+  margin-top: -5px;
+  width: 60px;
+  height: 20px;
+}
+
+.customer-list-arrow {
+  float: right; // for every list item
+}
+
+.page { // What is this???????????????????????
+  display: none;
 }
 
 .primary-list {
   list-style-type: none;
+  width: 90%;
   padding: 0;
-  margin: 0;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 500;
+  border-left: 1px solid #999;
+  border-right: 1px solid #999;
+  @include border-radius(15px 15px 15px 15px);
 
   li {
     padding: 1em 1em;
@@ -133,12 +196,21 @@ header {
     border-bottom: 1px solid $border_color;
     @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
     @include ellipsis;
-    
+
     &:active, &.fake-active {
       @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
     }
+
+    &.first-visible-child {
+      @include border-radius(15px 15px 0px 0px);
+      border-top: 1px solid #ccc;
+    }
+    &.last-visible-child {
+      @include border-radius(0px 0px 15px 15px);
+      border-bottom: 1px solid #ccc;
+    }
   }
-  
+
   li.header {
     @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
     padding: 0.7em 1em;
@@ -146,14 +218,10 @@ header {
     font-weight: bold;
     color: $header_text_color;
     text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
-    
   }
-  
+
   li.create-new {
-    
     padding-top: 1em;
-    
-    
     .text {
       display: inline-block;
       background-image: url("../img/add-new-small.png");
@@ -163,32 +231,147 @@ header {
       height: 18px;
     }
   }
-  
+
   li:first-child {
     border-top: 1px solid $border_color;
-    @include border-radius(5px 5px 0px 0px);
+    @include border-radius(15px 15px 0px 0px);
   }
 
   li:last-child {
-    @include border-radius(0px 0px 5px 5px);
+    @include border-radius(0px 0px 15px 15px);
   }
+}
+
+ul li span {
+  margin: 0px;
+  padding: 0px;
+  float: left;
+  width: 86%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* list search elements
+* =================================================================================================================== */
+.search-field {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  @include border-radius(11px 11px 11px 11px);
+  text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
+}
+
+.hide {
+  display: none;
+}
+
+.search-field-input {
+  border: 1px solid #999;
+  @include border-radius(11px 11px 11px 11px);
+  background-image: url(../img/search-icon.png);
+  background-repeat: no-repeat;
+  background-position: 6px 50%;
+  color: $text_color;
+  padding: 0.5em;
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
+  padding-left: 2.2em;
+  outline: none;
+}
+
+/* target-details elements
+* =================================================================================================================== */
+#target-header {
+  margin-top: 15px;
+  margin-left: 7px;
+  margin-right: 7px;
 }
 
 .target-name {
-    margin: 10px 10px;
+  float: left;
+  font-style: italic;
+  font-size: 140%;
+  font-weight: 350;
+  width: 69%;
+  text-wrap: unrestricted;
 }
 
+.target-points {
+  float: right;
+  max-width: 65px;
+  margin-top: 3px;
+}
+
+#target-header-clear {
+  clear: both;
+}
+
+.target-points-font {
+  font-size: 130%;
+  font-weight: 600;
+  padding: 5px;
+  @include background-image(linear-gradient(lighten(#5d9e47, 5%), #5d9e47));
+  @include border-radius(4px);
+  @include box-flex(1);
+  @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
+  text-align: center;
+  color: #f9f9f9;
+}
+
+/* list search elements
+* =================================================================================================================== */
+.search-field {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  @include border-radius(11px 11px 11px 11px);
+  text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
+}
+
+.search-field_input {
+  border: 1px solid #999;
+  @include border-radius(11px 11px 11px 11px);
+  background-image: url(../img/search-icon.png);
+  background-repeat: no-repeat;
+  background-position: 6px 50%;
+  color: $text_color;
+  padding: 0.5em;
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
+  padding-left: 2.2em;
+  outline: none;
+}
+
+/* target-details elements
+* =================================================================================================================== */
 #target-details {
   .target-question {
-    padding: 0em 10px;
-    font-size: 140%;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    margin-top: 20px;
+    font-size: 110%;
+    //border: 1px solid #0d0e0d;
+    padding: 7px 10px;
+    @include border-radius(10px 10px 10px 10px);
+    @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+    @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
   }
+
   .target-answer {
     @include display-box;
     @include box-orient(horizontal);
     @include box-align(stretch);
-    margin: 40px 10px;
-    
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    margin-top: -7px;
+
     .answer {
       border-right: none;
       padding: 1em;
@@ -216,8 +399,14 @@ header {
     left: 0.8em;
     right: 0.8em;
   }
+
+  .answer-form-hide {
+    overflow: hidden;
+  }
 }
 
+/* target results elements
+* =================================================================================================================== */
 #target-results {
   .target-question {
     padding: 0em 10px;
@@ -262,7 +451,7 @@ header {
   }
   
   .result-graph {
-      color: #fff;
+    color: #fff;
     @include display-box;
     @include box-orient(horizontal);
     @include box-align(stretch);
@@ -341,6 +530,8 @@ header {
   }
 }
 
+/* button elements
+* =================================================================================================================== */
 #login {
   h2 {
     @include header;
@@ -380,9 +571,7 @@ header {
   .top-button {
     display: inline-block;
     height: 18px;
-    
     padding: 9px 5px;
-    
     a, a:link, a:active, a:visited {
       color: inherit;
       text-decoration: inherit;
@@ -391,40 +580,66 @@ header {
 }
 
 #account-button {
-  height: 35px;
-  
+  height: 36px;
   .top-button {
+    border: 1px solid rgba(0,0,0,0.3);
     border-radius: 6px;
     height: 15px;
     padding-top: 8px;
   }
+  right: 10px;
+  @include background-image(linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.1)));
+  @include background-image(linear-gradient($header_gradient_2, $header_gradient_2));
+  @include border-radius(35px);
+  &:active, &.fake-active {
+    //@include background-image(linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.05)));
+  }
 }
 
 #back-button {
-  left: 5px;
-  height: 38px;
-  .top-button {
-    background-image: url("../img/back-icon.png?123");
-    background-repeat: no-repeat;
-    width: 60px;
-    &:active, &.fake-active {
-      background-position: 0 -36px;
-    }
-  }
-}
-
-#account-button {
-  right: 5px;
-  @include background-image(linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.1)));
-  @include border-radius(5px);
-  &:active, &.fake-active {
-    @include background-image(linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.05)));
-  }
+  height: 36px;
   .top-button {
     border: 1px solid rgba(0,0,0,0.3);
+    border-radius: 6px;
+    height: 15px;
+    padding-top: 8px;
+  }
+  left: 10px;
+  @include background-image(linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.1)));
+  @include background-image(linear-gradient($header_gradient_2, $header_gradient_2));
+  @include border-radius(35px);
+  &:active, &.fake-active {
+    //background-position: 0 -36px;
   }
 }
 
+.link-button {
+  display: block;
+  @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+  @include border-radius(25px);
+  border: 1px solid $border_color;
+  padding: 0.5em;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: lighten($text_color, 40%);
+  @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
+
+  &:link, &:active, &:visited {
+    text-decoration: none;
+    color: lighten($text_color, 40%);
+  }
+  &:active, &.fake-active {
+    @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
+  }
+}
+
+button.link-button {
+  width: 100%;
+}
+
+/* leaderboard elements
+* =================================================================================================================== */
 #leaderboard {
   margin-top: 1em;
   
@@ -471,31 +686,6 @@ footer {
 
 .hide {
   display: none;
-}
-
-.link-button {
-  display: block;
-  @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
-  @include border-radius(25px);
-  border: 1px solid $border_color;
-  padding: 0.5em;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-  color: lighten($text_color, 40%);
-  @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
-  
-  &:link, &:active, &:visited {
-    text-decoration: none;
-    color: lighten($text_color, 40%);
-  }
-  &:active, &.fake-active {
-    @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
-  }
-}
-
-button.link-button {
-  width: 100%;
 }
 
 input[type=text] {

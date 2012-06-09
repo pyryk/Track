@@ -77,7 +77,7 @@ Target.include({
     },
     saved: false,
     detailsLoaded: false,
-    results: {},
+    results: {}
 });
 
 /**
@@ -350,3 +350,6 @@ LeaderboardEntry.load = function() {
     }
   });
 }
+
+var Customer = Spine.Model.sub();
+Customer.configure("Customer", "logo", "name");

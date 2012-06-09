@@ -9,6 +9,9 @@ var App = Spine.Controller.sub({
       "!/login/": function(params) {
         this.renderView('loginScreen', LoginScreen);
       },
+      "!/customer/": function(params) {
+        this.renderView('customerList', CustomersList);
+      },
       "!/targets/": function(params) {
         this.renderView('targetList', TargetsList);
       },
@@ -16,6 +19,7 @@ var App = Spine.Controller.sub({
         this.renderView('targetCreate', TargetCreate);
       },
       "!/targets/:id": function(params) {
+        console.log(params.id);
         this.renderView('targetDetails', TargetDetails, params.id);
       },
       "!/results/:id": function(params) {
@@ -35,13 +39,12 @@ var App = Spine.Controller.sub({
     });
     
     Spine.Route.setup();
-    
-    
+
     // enable back button
     new BackButton({
       el: $('#back-button'),
       template: $('#template-backButton'),
-      app: this,
+      app: this
     }).render();
     
     // enable logins
@@ -55,6 +58,9 @@ var App = Spine.Controller.sub({
     
   },
   renderView: function(name, className, id) {
+    //view.className{name, className, id};
+
+    //name, className, id
     if (name !== "loginScreen" && !this.loginOk()) {
       this.redirect = Spine.Route.getFragment();
       Spine.Route.navigate("!/login/");
@@ -73,7 +79,7 @@ var App = Spine.Controller.sub({
       this.pages[name].id = id; // set id if needed
       this.pages[name].show();
       this.visiblePage = this.pages[name];
-    
+
       // add page to the page stack:
       // page should not be added, if
       // a) it is the current page (lenght-1)
@@ -228,6 +234,8 @@ var App = Spine.Controller.sub({
         return this.pages['targetList'];
       case this.pages['leaderboard']:
         return this.pages['loginScreen'];
+      case this.pages['targetList']: // to go from target list to customer-list (did not work) !!!!!!!!!!!!!!!!!!!!
+        return this.pages['customerList'];
       default: 
         return undefined;
     }
