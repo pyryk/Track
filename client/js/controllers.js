@@ -43,15 +43,15 @@ var BaseController = Spine.Controller.sub({
   addPseudoActiveSupport: function() {
     if (navigator.userAgent.toLowerCase().indexOf("android 2") > -1) {
       $(".active-button")
-      .bind("touchstart", function () {
-         $(this).addClass("fake-active");
-      })
-      .bind("touchend", function() {
-         $(this).removeClass("fake-active");
-      })
-      .bind("touchcancel", function() {
-        $(this).removeClass("fake-active");
-      });
+        .bind("touchstart", function () {
+          $(this).addClass("fake-active");
+        })
+        .bind("touchend", function() {
+          $(this).removeClass("fake-active");
+        })
+        .bind("touchcancel", function() {
+          $(this).removeClass("fake-active");
+        });
     }
   }
 });
@@ -129,21 +129,21 @@ var TargetsList = BaseController.sub({
   },
   getData: function() {
     /*return {items: [
-      Target.create({name: "Herttoniemi", question: "Kuinka toimii?"}),
-      Target.create({name: "Kamppi", question: "Kuinka toimii?"})
-      Target.create({logo: "img/templogos/mcdonalds.png", name: "Kaivopuisto"}),
-      Target.create({logo: "img/templogos/hesburger.png", name: "Pitäjänmäki"}),
-      Target.create({logo: "img/templogos/finnkino.png", name: "Kauniainen"}),
-      Target.create({logo: "img/templogos/aalto_university.png", name: "Mannerheimintie"}),
-      Target.create({logo: "img/templogos/chicos.png", name: "Kerava"}),
-      Target.create({logo: "img/templogos/roberts_coffee.png", name: "Punavuori"}),
-      Target.create({logo: "img/templogos/unisport.png", name: "Ruoholahti"}),
-      Target.create({logo: "img/templogos/elisa.png", name: "Kallio"}),
-      Target.create({logo: "img/templogos/abc.png", name: "Hämeenlinna"}),
-      Target.create({logo: "img/templogos/HSL.png", name: "Riihimäri"}),
-      Target.create({logo: "img/templogos/hesburger.png", name: "Olari"}),
-      Target.create({logo: "img/templogos/mcdonalds.png", name: "Vuosaari"})
-    ]};*/
+     Target.create({name: "Herttoniemi", question: "Kuinka toimii?"}),
+     Target.create({name: "Kamppi", question: "Kuinka toimii?"})
+     Target.create({logo: "img/templogos/mcdonalds.png", name: "Kaivopuisto"}),
+     Target.create({logo: "img/templogos/hesburger.png", name: "Pitäjänmäki"}),
+     Target.create({logo: "img/templogos/finnkino.png", name: "Kauniainen"}),
+     Target.create({logo: "img/templogos/aalto_university.png", name: "Mannerheimintie"}),
+     Target.create({logo: "img/templogos/chicos.png", name: "Kerava"}),
+     Target.create({logo: "img/templogos/roberts_coffee.png", name: "Punavuori"}),
+     Target.create({logo: "img/templogos/unisport.png", name: "Ruoholahti"}),
+     Target.create({logo: "img/templogos/elisa.png", name: "Kallio"}),
+     Target.create({logo: "img/templogos/abc.png", name: "Hämeenlinna"}),
+     Target.create({logo: "img/templogos/HSL.png", name: "Riihimäri"}),
+     Target.create({logo: "img/templogos/hesburger.png", name: "Olari"}),
+     Target.create({logo: "img/templogos/mcdonalds.png", name: "Vuosaari"})
+     ]};*/
     return {items: Target.findAllByAttribute("saved", true)};/**/
   },
   init: function() {
@@ -200,15 +200,15 @@ var TargetsList = BaseController.sub({
         $lastElement = this; // record this customer so that next customer is able to remove roundings from bottom
       }
       /*var visible = $('li:visible');
-      console.log(visible.text());
-      visible.first().addClass('first-visible-child');
-      visible.last().addClass('last-visible-child');
-      if ($this != visible.last()) {
-        $this.removeClass('last-visible-child');
-      }
-      if ($this != visible.first()) {
-        $this.removeClass('first-visible-child');
-      }*/
+       console.log(visible.text());
+       visible.first().addClass('first-visible-child');
+       visible.last().addClass('last-visible-child');
+       if ($this != visible.last()) {
+       $this.removeClass('last-visible-child');
+       }
+       if ($this != visible.first()) {
+       $this.removeClass('first-visible-child');
+       }*/
     });
   }
 });
@@ -466,7 +466,7 @@ var BackButton = BaseController.sub({
   backClicked: function() {
     log('back button clicked');
     if (window.history.length > 0 && this.app.visiblePage !== this.app.pages['targetList'] && this.app.visiblePage !== this.app.pages['customerList']) {
-    //if (window.history.length > 0) {
+      //if (window.history.length > 0) {
 
       window.history.back();
     }
