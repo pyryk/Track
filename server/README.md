@@ -94,9 +94,7 @@ Response body:
 
 Requires authentication: No
 
-Request body:
-
-	{_id: "12345678901234567890abcd"}
+E.g. DELETE/target/4af45353454232f
 
 Status: 204 No Content or 404 Not Found
 
