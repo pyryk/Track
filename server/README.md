@@ -76,11 +76,11 @@ Requires authentication: No
 Request body:
 
 	{
-		name: “Track target name”
-		question: "Kauanko/paljonko/jne plaa plaa plaa otsikkoa tarkentava kysymys",
-		location: {
-		  lat: 12.345,
-		  lon: 67.890
+		"name": “Track target name”,
+		"question": "Kauanko/paljonko/jne plaa plaa plaa otsikkoa tarkentava kysymys",
+		"location": {
+		  "lat": 12.345,
+		  "lon": 67.890
 		}
 	}
 
@@ -88,7 +88,7 @@ Status: 201 Created
 
 Response body:
 
-	{_id: "12345678901234567890abcd"}
+	{"_id": "12345678901234567890abcd"}
 
 ### DELETE /target/:_id - Delete the specified target
 
