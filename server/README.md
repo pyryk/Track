@@ -76,11 +76,11 @@ Requires authentication: No
 Request body:
 
 	{
-		name: “Track target name”
-		question: "Kauanko/paljonko/jne plaa plaa plaa otsikkoa tarkentava kysymys",
-		location: {
-		  lat: 12.345,
-		  lon: 67.890
+		"name": “Track target name”,
+		"question": "Kauanko/paljonko/jne plaa plaa plaa otsikkoa tarkentava kysymys",
+		"location": {
+		  "lat": 12.345,
+		  "lon": 67.890
 		}
 	}
 
@@ -88,7 +88,7 @@ Status: 201 Created
 
 Response body:
 
-	{_id: "12345678901234567890abcd"}
+	{"_id": "12345678901234567890abcd"}
 
 ### DELETE /target/:_id - Delete the specified target
 
@@ -122,8 +122,6 @@ Response body:
 
 ### GET /leaderboard - Returns leader board
 
-**Status: DRAFT! Not yet implemented**
-
 Requires authentication: No
 
 Status: 200 Ok
@@ -139,3 +137,21 @@ Response body:
 			{fbUserId: "5662685410", name: "Heikki Korhonen", picture: "https://graph.facebook.com/<fb_id>/picture", points: 9},
 		]
 	}
+
+## To be implemented (customer-target-question-result)
+
+### GET /customers - returns customers
+
+Requires authentication: No
+
+GET params: lat, lon, i.e. GET /customers?lat=60.16981200000001&lon=24.93824
+
+Status: 200 OK
+
+Response body:
+
+    {
+        "customers": [
+			{"_id": “12faggf”, "name": “Rosso”, "uriName": "rosso"},
+			{"_id": “13faggf”, "name": “McDonald's”, "uriName": "mcdonalds"}
+    }

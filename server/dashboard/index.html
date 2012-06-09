@@ -77,23 +77,8 @@
 	<div class="row">
 		<div class="span2">
 			<div class="well sidebar-nav">
-				<ul class="nav nav-list">
+				<ul id="targets" class="nav nav-list">
 					<li class="nav-header">Sidebar</li>
-					<li class="active"><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>
-					<li class="nav-header">Sidebar</li>
-					<li><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>
-					<li class="nav-header">Sidebar</li>
-					<li><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>
 				</ul>
 			</div><!--/.well -->
 		</div><!--/span-->
@@ -166,17 +151,31 @@
 
 </div><!--/.fluid-container-->
 
+<!-- Le templates
+	================================================== -->
+<script id="targetitem-tmpl" type="text/x-handlebars-template">
+	<a class="target-item" href="#">{{name}}</a>
+</script>
+
 <!-- Le javascript
 	================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="js/lib/jquery.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.15/jquery-ui.min.js"></script>
-<script src="js/bootstrap/bootstrap.js"></script>
+<script src="js/spine/spine.js"></script>
+<script src="js/spine/ajax.js"></script>
+
+<script src="js/lib/handlebars-1.0.0.beta.6.js"></script>
 
 <script src="js/lib/d3.min.js"></script>
 <script src="js/lib/d3.layout.min.js"></script>
-
 <script src="js/lib/rickshaw.js"></script>
+
+<script src="js/dashboard/namespace.js"></script>
+
+<script src="js/dashboard/models.js"></script>
+<script src="js/dashboard/controllers.js"></script>
+
 <!--
 	<script src="js/bootstrap-transition.js"></script>
 	<script src="js/bootstrap-alert.js"></script>
@@ -194,6 +193,8 @@
 
 <!-- Test rickshaw -->
 <script>
+
+new Dashboard.App();
 
 // Chart 1 ---------------------------------------------------------------------------------------------------------
 
