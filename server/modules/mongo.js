@@ -202,7 +202,6 @@ var Mongo = {
             Mongo.resolvePromise(error, promise)
         }.bind(this));
 
-
         return promise;
 
     },
