@@ -137,3 +137,21 @@ Response body:
 			{fbUserId: "5662685410", name: "Heikki Korhonen", picture: "https://graph.facebook.com/<fb_id>/picture", points: 9},
 		]
 	}
+
+## To be implemented (customer-target-question-result)
+
+### GET /customers - returns customers
+
+Requires authentication: No
+
+GET params: lat, lon, i.e. GET /customers?lat=60.16981200000001&lon=24.93824
+
+Status: 200 OK
+
+Response body:
+
+    {
+        "customers": [
+			{"_id": “12faggf”, "name": “Rosso”, "uriName": "rosso"},
+			{"_id": “13faggf”, "name": “McDonald's”, "uriName": "mcdonalds"}
+    }
