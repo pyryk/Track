@@ -58,6 +58,24 @@ describe('Mongo', function() {
         });
     });
 
+    describe('deleteTarget', function() {
+        it('should remove the given target object', function() {
+            testDB(Mongo.findTargetById('12345678901234567890ABCD'), function(target) {
+                testDB(Mongo.deleteTarget(target), function(dbResult) {
+                    expect(dbResult).toEqual("What to expect here?");
+                });
+            });
+        });
+    });
+
+    describe('deleteTargetById', function() {
+        it('should remove a target specified by the id', function() {
+            testDB(Mongo.deleteTargetById('12345678901234567890ABCD'), function(dbResult) {
+                expect(dbResult).toEqual("What to expect here?");
+            });
+        });
+    });
+
     describe('addResult', function() {
         it('should add a new result entry to the tracking target', function() {
             testDB(Mongo.addResult({
