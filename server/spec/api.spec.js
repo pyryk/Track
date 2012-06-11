@@ -235,19 +235,34 @@ describe('API', function() {
                 });
             });
 
-
-            /*
             describe('deleteTarget', function() {
-                it('should delete a target', function() {
-                    spyOnPromise(Mongo, 'deleteTargetById').andCallSuccess(
-                        {}
-                    )
 
+                it('should delete a target', function() {
+                    spyOnPromise(Mongo, 'findTargetById').andCallSuccess(
+                        {name: "T-Talon ruokajono", _id: "accab1234", question: 'Kauanko jonotit?'}
+                    );
+                    req.params.id = 'accab1234';
+
+                    API.deleteTarget(req, res, next);
+
+                   expectStatus(res).toEqual(204);
                 });
-                expectStatus(res).toEqual(204);
+
+                it('should return 404 if no results for ID found', function() {
+                    spyOnPromise(Mongo, 'deleteTargetById').andCallSuccess(null);
+                    req.params.id = 'accab1234';
+
+                    API.getTarget(req, res, next);
+
+                    expect(next).toHaveBeenCalledWithError({
+                        status: 404,
+                        code: "ResourceNotFound",
+                        message: "Could not find target with ID accab1234"
+                    });
+                });
 
             });
-            */
+
 
             describe('postTarget', function() {
 
