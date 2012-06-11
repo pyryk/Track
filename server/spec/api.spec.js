@@ -252,7 +252,7 @@ describe('API', function() {
                     spyOnPromise(Mongo, 'deleteTargetById').andCallSuccess(null);
                     req.params.id = 'accab1234';
 
-                    API.getTarget(req, res, next);
+                    API.deleteTarget(req, res, next);
 
                     expect(next).toHaveBeenCalledWithError({
                         status: 404,
