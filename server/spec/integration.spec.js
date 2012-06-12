@@ -185,7 +185,7 @@ describe('Integration test', function() {
                 expect(result.statusCode).toEqual(404);
                 expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find target with ID 12345678901234567890FFFF'})
             });
-        )};
+        });
 
 
         it('POST /target', function() {
