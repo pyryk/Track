@@ -15,7 +15,7 @@ $use-mozilla-ellipsis-binding: true;
 /* app specific styles
 * =================================================================================================================== */
 /* Defining the layout-profile, basically color-palette: frontpage, aalto, rosso, subway */
-$customer: "frontpage";
+$customer: "NG";
 
 /* Default template **/
 $header_gradient_1: lighten(#0F68A3, 20%);
@@ -67,6 +67,17 @@ $list_item_gradient_2: darken(#ffffff, 1%);
   $background_gradient_1: darken(#ffffff, 2%);
   $background_gradient_2: #D9D9D9;
 }
+
+/* NG-layout */
+  @if $customer == NG {
+    $header_gradient_1: #323232;
+    $header_gradient_2: #040404;
+    $background_gradient_1: darken(#fefefe, 7%);
+    $background_gradient_2: #fefefe;
+    $list_item_gradient_1: #ffffff;
+    $list_item_gradient_2: darken(#ffffff, 1%);
+    $text_color: #606967;
+  }
 
 /* mixins elements
 * to re-use whole chunks of CSS, properties or selectors
@@ -163,7 +174,8 @@ header {
 /* list elements
 * =================================================================================================================== */
 .customer-list-image {
-  padding-right: 20px;
+  float: left;
+  padding-right: 10px;
   margin-top: -5px;
   width: 60px;
   height: 20px;
@@ -247,6 +259,18 @@ ul li span {
   padding: 0px;
   float: left;
   width: 86%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.customer-list-span {
+  margin-left: 5px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  margin-top: -3px;
+  padding: 0px;
+  width: 50%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

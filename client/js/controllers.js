@@ -61,10 +61,12 @@ var BaseController = Spine.Controller.sub({
 var CustomersList = BaseController.sub({
   events: {
     "click #customer-list": "clickedCustomer",
+    "fastclick #customer-list li span": "clickedCustomer",
     "keyup #search-customer-input": "searchCustomer"
   },
   getData: function() {
     return {items: [
+      Customer.create({logo: "img/templogos/night_people_group.png", name: "Night people group Finland"}),
       Customer.create({logo: "img/templogos/subway.png", name: "Subway"}),
       Customer.create({logo: "img/templogos/rosso.png", name: "Rosso"}),
       Customer.create({logo: "img/templogos/mcdonalds.png", name: "McDonald's"}),
@@ -128,25 +130,26 @@ var TargetsList = BaseController.sub({
     return "List";
   },
   getData: function() {
-    /*return {items: [
-     Target.create({name: "Herttoniemi", question: "Kuinka toimii?"}),
-     Target.create({name: "Kamppi", question: "Kuinka toimii?"})
-     Target.create({logo: "img/templogos/mcdonalds.png", name: "Kaivopuisto"}),
-     Target.create({logo: "img/templogos/hesburger.png", name: "Pitäjänmäki"}),
-     Target.create({logo: "img/templogos/finnkino.png", name: "Kauniainen"}),
-     Target.create({logo: "img/templogos/aalto_university.png", name: "Mannerheimintie"}),
-     Target.create({logo: "img/templogos/chicos.png", name: "Kerava"}),
-     Target.create({logo: "img/templogos/roberts_coffee.png", name: "Punavuori"}),
-     Target.create({logo: "img/templogos/unisport.png", name: "Ruoholahti"}),
-     Target.create({logo: "img/templogos/elisa.png", name: "Kallio"}),
-     Target.create({logo: "img/templogos/abc.png", name: "Hämeenlinna"}),
-     Target.create({logo: "img/templogos/HSL.png", name: "Riihimäri"}),
-     Target.create({logo: "img/templogos/hesburger.png", name: "Olari"}),
-     Target.create({logo: "img/templogos/mcdonalds.png", name: "Vuosaari"})
-     ]};*/
-    return {items: Target.findAllByAttribute("saved", true)};/**/
+    return {items: [
+     Target.create({logo: "img/templogos/apollocafe.png", question: "Mitä pidit musiikista?", name: "Apollo cafe"}),
+     Target.create({logo: "img/templogos/apolloliveclub.png", question: "Mitä pidit artistista?", name: "Apollo live club"}),
+     Target.create({logo: "img/templogos/armas.png", question: "Miten järjestelyt toimivat?", name: "Armas"}),
+     Target.create({logo: "img/templogos/baarikarpanen.png", question: "Millainen tunnelma?", name: "Baarikärpänen"}),
+     Target.create({logo: "img/templogos/cabaret.png", question: "Miten järjestelyt toimivat?", name: "Cabaret"}),
+     Target.create({logo: "img/templogos/colorado.png", question: "Miten järjestelyt toimivat?", name: "Colorado"}),
+     Target.create({logo: "img/templogos/gigglingmarlin.png", question: "Miten järjestelyt toimivat?", name: "Giggling Marlin"}),
+     Target.create({logo: "img/templogos/kaivohuone.png", question: "Miten järjestelyt toimivat?", name: "Kaivohuone"}),
+     Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "Komia"}),
+     Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "Koski ravintolat"}),
+     Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "Kuuba"}),
+     Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "Onnela"}),
+     Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "The Tiger"}),
+     Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "Tivoli"}),
+     Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "Yöjalka"})
+     ]};
+    //return {items: Target.findAllByAttribute("saved", true)};
   },
-  init: function() {
+  /*init: function() {
     BaseController.prototype.init.call(this);
     Target.bind("create", this.proxy(this.addOne));
     Spine.bind('location:changed', this.proxy(this.locationChanged));
@@ -162,7 +165,7 @@ var TargetsList = BaseController.sub({
     if (window.track.visiblePage == this) {
       this.render();
     }
-  },
+  },*/
   locationChanged: function(location) {
     // TODO update list also when list is not visible
     if (window.track.visiblePage == this) {
