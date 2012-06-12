@@ -141,7 +141,7 @@ var TargetsList = BaseController.sub({
 
 var ownResult = BaseController.sub({
   events: {
-    "fastclick .view-results": "viewResults",
+    "fastclick .view-results": "viewResults"
   },
   init: function() {
     BaseController.prototype.init.call(this);

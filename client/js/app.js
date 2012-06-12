@@ -44,7 +44,7 @@ var App = Spine.Controller.sub({
     new BackButton({
       el: $('#back-button'),
       template: $('#template-backButton'),
-      app: this,
+      app: this
     }).render();
     
     // enable logins
