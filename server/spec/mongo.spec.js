@@ -60,9 +60,11 @@ describe('Mongo', function() {
 
     describe('deleteTarget', function() {
         it('should remove the given target object', function() {
-            testDB(Mongo.findTargetById('12345678901234567890ABCD'), function(target) {
-                testDB(Mongo.deleteTarget(target), function(dbResult) {
-                    expect(dbResult).toEqual("What to expect here?");
+            testDB(Mongo.findTargetById('12345678901234567890abcd'), function(target) {
+                testDB(Mongo.deleteTarget(target), function() {
+                    testDB(Mongo.findTargetById('12345678901234567890abcd'), function(findResult) {
+                        expect(findResult).toEqual(null);
+                    });
                 });
             });
         });
@@ -70,8 +72,8 @@ describe('Mongo', function() {
 
     describe('deleteTargetById', function() {
         it('should remove a target specified by the id', function() {
-            testDB(Mongo.deleteTargetById('12345678901234567890ABCD'), function(dbResult) {
-                expect(dbResult).toEqual("What to expect here?");
+            testDB(Mongo.deleteTargetById('12345678901234567890hhhh'), function(dbResult) {
+                expect(dbResult).toEqual("Could not find target with ID 12345678901234567890ABCD");
             });
         });
     });
