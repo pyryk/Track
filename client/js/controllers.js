@@ -130,7 +130,7 @@ var TargetsList = BaseController.sub({
     return "List";
   },
   getData: function() {
-    return {items: [
+    /*return {items: [
      Target.create({logo: "img/templogos/apollocafe.png", question: "Mitä pidit musiikista?", name: "Apollo cafe"}),
      Target.create({logo: "img/templogos/apolloliveclub.png", question: "Mitä pidit artistista?", name: "Apollo live club"}),
      Target.create({logo: "img/templogos/armas.png", question: "Miten järjestelyt toimivat?", name: "Armas"}),
@@ -146,10 +146,10 @@ var TargetsList = BaseController.sub({
      Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "The Tiger"}),
      Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "Tivoli"}),
      Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "Yöjalka"})
-     ]};
-    //return {items: Target.findAllByAttribute("saved", true)};
+     ]};*/
+    return {items: Target.findAllByAttribute("saved", true)};
   },
-  /*init: function() {
+  init: function() {
     BaseController.prototype.init.call(this);
     Target.bind("create", this.proxy(this.addOne));
     Spine.bind('location:changed', this.proxy(this.locationChanged));
@@ -165,7 +165,7 @@ var TargetsList = BaseController.sub({
     if (window.track.visiblePage == this) {
       this.render();
     }
-  },*/
+  },
   locationChanged: function(location) {
     // TODO update list also when list is not visible
     if (window.track.visiblePage == this) {

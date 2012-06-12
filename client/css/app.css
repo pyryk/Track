@@ -25,7 +25,7 @@
 
 /* line 125, ../scss/app.scss */
 html {
-  background-color: #fefefe;
+  background-color: #f6f6f6;
 }
 
 /* line 129, ../scss/app.scss */
@@ -33,12 +33,12 @@ body {
   color: #606967;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 14px;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ececec), color-stop(100%, #fefefe));
-  background-image: -webkit-linear-gradient(#ececec, #fefefe 100%);
-  background-image: -moz-linear-gradient(#ececec, #fefefe 100%);
-  background-image: -o-linear-gradient(#ececec, #fefefe 100%);
-  background-image: -ms-linear-gradient(#ececec, #fefefe 100%);
-  background-image: linear-gradient(#ececec, #fefefe 100%);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f1f1f1), color-stop(100%, #f6f6f6));
+  background-image: -webkit-linear-gradient(#f1f1f1, #f6f6f6 100%);
+  background-image: -moz-linear-gradient(#f1f1f1, #f6f6f6 100%);
+  background-image: -o-linear-gradient(#f1f1f1, #f6f6f6 100%);
+  background-image: -ms-linear-gradient(#f1f1f1, #f6f6f6 100%);
+  background-image: linear-gradient(#f1f1f1, #f6f6f6 100%);
 }
 
 /* container elements
@@ -57,12 +57,12 @@ header {
   width: 100%;
   margin-top: 0;
   padding-top: 0;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #323232), color-stop(100%, #040404));
-  background-image: -webkit-linear-gradient(#323232, #040404);
-  background-image: -moz-linear-gradient(#323232, #040404);
-  background-image: -o-linear-gradient(#323232, #040404);
-  background-image: -ms-linear-gradient(#323232, #040404);
-  background-image: linear-gradient(#323232, #040404);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   color: white;
   border-bottom: 1px solid #cccccc;
   text-align: center;
@@ -173,12 +173,12 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
 }
 /* line 226, ../scss/app.scss */
 .primary-list li.header {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #323232), color-stop(100%, #040404));
-  background-image: -webkit-linear-gradient(#323232, #040404);
-  background-image: -moz-linear-gradient(#323232, #040404);
-  background-image: -o-linear-gradient(#323232, #040404);
-  background-image: -ms-linear-gradient(#323232, #040404);
-  background-image: linear-gradient(#323232, #040404);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   padding: 0.7em 1em;
   font-size: 18px;
   font-weight: bold;
@@ -569,12 +569,12 @@ ul li span {
 
 /* line 508, ../scss/app.scss */
 #target-ownResult h3 {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #323232), color-stop(100%, #040404));
-  background-image: -webkit-linear-gradient(#323232, #040404);
-  background-image: -moz-linear-gradient(#323232, #040404);
-  background-image: -o-linear-gradient(#323232, #040404);
-  background-image: -ms-linear-gradient(#323232, #040404);
-  background-image: linear-gradient(#323232, #040404);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   padding: 0.7em 1em;
   margin: 0;
   font-size: 18px;
@@ -623,12 +623,12 @@ ul li span {
 * =================================================================================================================== */
 /* line 531, ../scss/app.scss */
 #login h2 {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #323232), color-stop(100%, #040404));
-  background-image: -webkit-linear-gradient(#323232, #040404);
-  background-image: -moz-linear-gradient(#323232, #040404);
-  background-image: -o-linear-gradient(#323232, #040404);
-  background-image: -ms-linear-gradient(#323232, #040404);
-  background-image: linear-gradient(#323232, #040404);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   padding: 0.7em 1em;
   margin: 0;
   font-size: 18px;
@@ -678,21 +678,21 @@ ul li span {
 /* line 552, ../scss/app.scss */
 #login .content .login-button {
   width: 100%;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #656565), color-stop(100%, #373737));
-  background-image: -webkit-linear-gradient(#656565, #373737);
-  background-image: -moz-linear-gradient(#656565, #373737);
-  background-image: -o-linear-gradient(#656565, #373737);
-  background-image: -ms-linear-gradient(#656565, #373737);
-  background-image: linear-gradient(#656565, #373737);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8acaf4), color-stop(100%, #44aaee));
+  background-image: -webkit-linear-gradient(#8acaf4, #44aaee);
+  background-image: -moz-linear-gradient(#8acaf4, #44aaee);
+  background-image: -o-linear-gradient(#8acaf4, #44aaee);
+  background-image: -ms-linear-gradient(#8acaf4, #44aaee);
+  background-image: linear-gradient(#8acaf4, #44aaee);
 }
 /* line 555, ../scss/app.scss */
 #login .content .login-button:active {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #373737), color-stop(100%, #656565));
-  background-image: -webkit-linear-gradient(#373737, #656565);
-  background-image: -moz-linear-gradient(#373737, #656565);
-  background-image: -o-linear-gradient(#373737, #656565);
-  background-image: -ms-linear-gradient(#373737, #656565);
-  background-image: linear-gradient(#373737, #656565);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #44aaee), color-stop(100%, #8acaf4));
+  background-image: -webkit-linear-gradient(#44aaee, #8acaf4);
+  background-image: -moz-linear-gradient(#44aaee, #8acaf4);
+  background-image: -o-linear-gradient(#44aaee, #8acaf4);
+  background-image: -ms-linear-gradient(#44aaee, #8acaf4);
+  background-image: linear-gradient(#44aaee, #8acaf4);
 }
 
 /* line 562, ../scss/app.scss */
@@ -723,12 +723,12 @@ ul li span {
   background-image: -o-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: -ms-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #040404), color-stop(100%, #040404));
-  background-image: -webkit-linear-gradient(#040404, #040404);
-  background-image: -moz-linear-gradient(#040404, #040404);
-  background-image: -o-linear-gradient(#040404, #040404);
-  background-image: -ms-linear-gradient(#040404, #040404);
-  background-image: linear-gradient(#040404, #040404);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #1177ba), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#1177ba, #1177ba);
+  background-image: -moz-linear-gradient(#1177ba, #1177ba);
+  background-image: -o-linear-gradient(#1177ba, #1177ba);
+  background-image: -ms-linear-gradient(#1177ba, #1177ba);
+  background-image: linear-gradient(#1177ba, #1177ba);
   -webkit-border-radius: 35px;
   -moz-border-radius: 35px;
   -ms-border-radius: 35px;
@@ -753,12 +753,12 @@ ul li span {
   background-image: -o-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: -ms-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #040404), color-stop(100%, #040404));
-  background-image: -webkit-linear-gradient(#040404, #040404);
-  background-image: -moz-linear-gradient(#040404, #040404);
-  background-image: -o-linear-gradient(#040404, #040404);
-  background-image: -ms-linear-gradient(#040404, #040404);
-  background-image: linear-gradient(#040404, #040404);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #1177ba), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#1177ba, #1177ba);
+  background-image: -moz-linear-gradient(#1177ba, #1177ba);
+  background-image: -o-linear-gradient(#1177ba, #1177ba);
+  background-image: -ms-linear-gradient(#1177ba, #1177ba);
+  background-image: linear-gradient(#1177ba, #1177ba);
   -webkit-border-radius: 35px;
   -moz-border-radius: 35px;
   -ms-border-radius: 35px;
@@ -833,12 +833,12 @@ button.link-button {
 }
 /* line 648, ../scss/app.scss */
 #leaderboard table th {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #323232), color-stop(100%, #040404));
-  background-image: -webkit-linear-gradient(#323232, #040404);
-  background-image: -moz-linear-gradient(#323232, #040404);
-  background-image: -o-linear-gradient(#323232, #040404);
-  background-image: -ms-linear-gradient(#323232, #040404);
-  background-image: linear-gradient(#323232, #040404);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   padding: 0.7em 1em;
   margin: 0;
   font-size: 18px;
