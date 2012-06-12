@@ -73,7 +73,7 @@ describe('Mongo', function() {
     describe('deleteTargetById', function() {
         it('should remove a target specified by the id', function() {
             testDB(Mongo.deleteTargetById('12345678901234567890hhhh'), function(dbResult) {
-                expect(dbResult).toEqual("Could not find target with ID 12345678901234567890ABCD");
+                expect(dbResult).toEqual("Could not find target with ID 12345678901234567890hhhh");
             });
         });
     });
