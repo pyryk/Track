@@ -405,9 +405,12 @@ var Leaderboard = BaseController.sub({
   }
 });
 
+/* BackButton
+ *=================================================================================================================== */
 var BackButton = BaseController.sub({
   events: {
-    "fastclick .back-button": "clicked"
+    "fastclick .back-button": "backClicked",
+    "fastclick .home-button": "homeClicked"
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -415,14 +418,32 @@ var BackButton = BaseController.sub({
     Spine.bind('logout', this.proxy(this.render));
   },
   getData: function() {
-    //var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
-    var showButton = this.app.getPreviousPage() !== undefined && this.app.loginOk();
-    return {previous: showButton};
+    var showPrev = this.app.getPreviousPage() !== undefined && this.app.loginOk();
+    //var showPrev = true; // so that we are able to go customer page !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    var showHome = false;
+
+    if (this.app.visiblePage === this.app.pages['customerList']) {
+      showHome = false;
+      showPrev = false;
+    }
+    if (this.app.visiblePage === this.app.pages['targetList']) {
+      showHome = true;
+      showPrev = false;
+    }
+    return {previous: showPrev, home: showHome};
   },
-  clicked: function() {
-    //this.app.goToPreviousPage();
-    if (window.history.length > 0) {
+  backClicked: function() {
+    log('back button clicked');
+    if (window.history.length > 0 && this.app.visiblePage !== this.app.pages['targetList'] && this.app.visiblePage !== this.app.pages['customerList']) {
+      //if (window.history.length > 0) {
+
       window.history.back();
+    }
+  },
+  homeClicked: function() {
+    log('home button clicked');
+    if (this.app.visiblePage === this.app.pages['targetList']) {
+      Spine.Route.navigate('!/customer/');
     }
   }
 });

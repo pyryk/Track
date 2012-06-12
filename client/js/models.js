@@ -7,77 +7,77 @@ var Target = Spine.Model.sub();
 Target.configure("Target", "name", "question", "location", "results", "detailsLoaded", "saved");
 
 Target.include({
-    setDefaults: function() {
-      this.results = this.results || {};
-      
-      this.results.now = this.results.now || {};
-      this.results.now.pos = this.results.now.pos || 0;
-      this.results.now.neg = this.results.now.neg || 0;
-      this.results.now.trend = this.results.now.trend || 0;
-      this.results.now.period = this.results.now.period || 0;
-      
-      this.results.alltime = this.results.alltime || {};
-      this.results.alltime.pos = this.results.alltime.pos || 0;
-      this.results.alltime.neg = this.results.alltime.neg || 0;
-      
-    },
-    getType: function() {
-      return "target"
-    },
-    getResourceName: function() {
-      return "targets"
-    },
-    loadDetails: function(listener) {
-      Target.loadDetails(this.id, listener);
-    },
-    saveToServer: function() {
-      var url = App.serverURL;
-      
-      if (url.substring(url.length-1) !== "/") {
-        url += "/";
-      }
-      url += "target";
-      
-      var user = User.getUser();
-      var headers = {
-          'FB-UserId': user.name,
-          'FB-AccessToken': user.token
-        };
-      
-      // append the create location to the post
-      var location = window.track.location;
-      
-      var toSend = {
-        name: this.name,
-        question: this.question,
-        location: this.location
-      }
-      var data = JSON.stringify(toSend);
-      
-      $.ajax({
-        url: url,
-        type: "POST",
-        contentType: "application/json",
-        dataType: "json",
-        data: data,
-        headers: user.logged ? headers : {},
-        success: this.proxy(function(data) {
-          this.id = data._id;
-          this.saved = true;
-          this.detailsLoaded = true;
-          
-          this.save();
-          this.trigger("saveToServer", true);
-        }), 
-        error: this.proxy(function(jqxhr, status, err) {
-          this.trigger("saveToServer", false);
-          alert(status + ': ' + err);
-        })
-      });
-    },
-    saved: false,
-    detailsLoaded: false,
-    results: {}
+  setDefaults: function() {
+    this.results = this.results || {};
+
+    this.results.now = this.results.now || {};
+    this.results.now.pos = this.results.now.pos || 0;
+    this.results.now.neg = this.results.now.neg || 0;
+    this.results.now.trend = this.results.now.trend || 0;
+    this.results.now.period = this.results.now.period || 0;
+
+    this.results.alltime = this.results.alltime || {};
+    this.results.alltime.pos = this.results.alltime.pos || 0;
+    this.results.alltime.neg = this.results.alltime.neg || 0;
+
+  },
+  getType: function() {
+    return "target"
+  },
+  getResourceName: function() {
+    return "targets"
+  },
+  loadDetails: function(listener) {
+    Target.loadDetails(this.id, listener);
+  },
+  saveToServer: function() {
+    var url = App.serverURL;
+
+    if (url.substring(url.length-1) !== "/") {
+      url += "/";
+    }
+    url += "target";
+
+    var user = User.getUser();
+    var headers = {
+      'FB-UserId': user.name,
+      'FB-AccessToken': user.token
+    };
+
+    // append the create location to the post
+    var location = window.track.location;
+
+    var toSend = {
+      name: this.name,
+      question: this.question,
+      location: this.location
+    }
+    var data = JSON.stringify(toSend);
+
+    $.ajax({
+      url: url,
+      type: "POST",
+      contentType: "application/json",
+      dataType: "json",
+      data: data,
+      headers: user.logged ? headers : {},
+      success: this.proxy(function(data) {
+        this.id = data._id;
+        this.saved = true;
+        this.detailsLoaded = true;
+
+        this.save();
+        this.trigger("saveToServer", true);
+      }),
+      error: this.proxy(function(jqxhr, status, err) {
+        this.trigger("saveToServer", false);
+        alert(status + ': ' + err);
+      })
+    });
+  },
+  saved: false,
+  detailsLoaded: false,
+  results: {}
 });
 
 /**
@@ -90,44 +90,44 @@ Target.loadList = function(additionalData) {
     url += "/";
   }
   url += "targets";
-  
+
   //var data = window.track.getAdditionalData();
-  
+
   var user = User.getUser();
   var headers = {
-      'FB-UserId': user.name,
-      'FB-AccessToken': user.token
-    };
-  
+    'FB-UserId': user.name,
+    'FB-AccessToken': user.token
+  };
+
   var requestComplete = false;
   try {
-  $.ajax({
-    url: url,
-    data: additionalData,
-    dataType: 'json',
-    timeout: 5000,
-    cache: false,
-    headers: user.logged ? headers : {},
-    success: function(data, status, jqXHR) {
-      requestComplete = true;
-      for (var i in data.targets) {
-        var target = data.targets[i];
-        target["id"] = target["_id"]; // map mongo id
-        target["detailsLoaded"] = false; // target details are only loaded individually
-        target["saved"] = true; // saved i.e. got from backend
-        
-        Target.create(target);
+    $.ajax({
+      url: url,
+      data: additionalData,
+      dataType: 'json',
+      timeout: 5000,
+      cache: false,
+      headers: user.logged ? headers : {},
+      success: function(data, status, jqXHR) {
+        requestComplete = true;
+        for (var i in data.targets) {
+          var target = data.targets[i];
+          target["id"] = target["_id"]; // map mongo id
+          target["detailsLoaded"] = false; // target details are only loaded individually
+          target["saved"] = true; // saved i.e. got from backend
+
+          Target.create(target);
+        }
+      },
+      error: function(jqxhr, textStatus, error) {
+
+        log('error: ' + textStatus + ', ' + error);
       }
-    }, 
-    error: function(jqxhr, textStatus, error) {
-      
-      log('error: ' + textStatus + ', ' + error);
-    }
-  });
+    });
   } catch(e) {
     log(e);
   }
-  
+
   // workaround for android 2.3 bug: requests remain pending when loading the page from cache
   var xmlHttpTimeout=setTimeout(ajaxTimeout,5000);
   function ajaxTimeout(){
@@ -147,13 +147,13 @@ Target.loadDetails = function(id, listener) {
     url += "/";
   }
   url += "target/" + id;
-  
+
   var user = User.getUser();
   var headers = {
-      'FB-UserId': user.name,
-      'FB-AccessToken': user.token
-    };
-  
+    'FB-UserId': user.name,
+    'FB-AccessToken': user.token
+  };
+
   $.ajax({
     url: url,
     dataType: 'json',
@@ -165,7 +165,7 @@ Target.loadDetails = function(id, listener) {
       var target;
       try {
         var target = Target.find(id);
-        
+
         // upate all attributes, just in case
         for (var i in targetData) {
           target[i] = targetData[i];
@@ -173,16 +173,16 @@ Target.loadDetails = function(id, listener) {
       } catch (e) { // target not found locally
         target = Target.create(targetData);
       }
-      
+
       // mark details loaded (i.e. no need for loading spinner)
       target.detailsLoaded = true
-      
+
       // TODO remove this hack when there is metric support in backend
       /*target.metric = {
-        unit: "min",
-        question: "Tämä on placeholder-metriikka"
-      };*/
-      
+       unit: "min",
+       question: "Tämä on placeholder-metriikka"
+       };*/
+
       target.save();
     },
     statusCode: {
@@ -227,7 +227,7 @@ Target.fromForm = function(form) {
   var target = Target.create(data);
   target.setDefaults();
   return target;
-} 
+}
 
 /* -------------------------------------- */
 /* result (answer of the target question) */
@@ -247,29 +247,29 @@ Result.include({
       log("a result without target!", this);
       return;
     }
-    
+
     var url = App.serverURL;
-    
-    
+
+
     var headers
-  
+
     if (url.substring(url.length-1) !== "/") {
       url += "/";
     }
     url += "target/" + this.target.id + "/" + "result";
-    
+
     var user = User.getUser();
     var headers = {
-        'FB-UserId': user.name,
-        'FB-AccessToken': user.token
-      };
-  
+      'FB-UserId': user.name,
+      'FB-AccessToken': user.token
+    };
+
     var toSend = {
       value: this.value,
       location: this.location
     }
     var data = JSON.stringify(toSend);
-    
+
     $.ajax({
       url: url,
       type: "POST",
@@ -280,10 +280,10 @@ Result.include({
       success: this.proxy(function(data) {
         this.saved = true;
         this.save();
-        
+
         this.target.loadDetails();
         this.trigger("resultSent", true);
-      }), 
+      }),
       error: this.proxy(function(jqxhr, status, err) {
         this.trigger("resultSent", false);
         alert(status + ': ' + err);
@@ -302,18 +302,18 @@ User.include({
     var user = User.getUser();
     user.name = $.cookie('fb_user');
     user.token = $.cookie('fb_token');
-    
+
     if (user.name && user.token) {
       user.logged = true;
       user.provider = "facebook";
     }
-    
+
     user.save();
   },
   /**
-  * Saves user id and access token to a cookie for quicker return to app
-  * @param expires, access token expiry, in days after today
-  */
+   * Saves user id and access token to a cookie for quicker return to app
+   * @param expires, access token expiry, in days after today
+   */
   saveCookies: function(expires) {
     $.cookie('fb_user', this.name, {expires: expires});
     $.cookie('fb_token', this.token, {expires: expires});
@@ -337,7 +337,7 @@ LeaderboardEntry.load = function() {
     url += "/";
   }
   url += "leaderboard/";
-  
+
   $.ajax({
     url: url,
     dataType: 'json',

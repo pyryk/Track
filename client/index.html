@@ -50,20 +50,24 @@
   <!--<script src="http://86.50.142.161:8000/target/target-script-min.js#anonymous"></script>-->
 </head>
 
+<!-- BODY -->
+<!-- --------------------------------------------------------------------------------------------------------------- -->
 <body>
 
+  <!-- CONTAINER -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
   <div id="container">
     <header>
-      <div id="back-button"></div>
-      <h1><!-- <img src="img/aalto.jpg" style="height: 26px; padding-bottom: 5px; padding-right: 10px"></img> --><a href="#">track</a></h1>
-      <div id="account-button"><span class="top-button"><a href="#!/login/">Account</a></span></div>
+      <div id="back-button"><!--<a href="#!/customer/"><img src="img/home-icon.png" alt=""></a>--></div>
+      <h1><!--<a href="#"><img src="img/tracktive-logo-pieni.png" style="padding-bottom: 5px; padding-right: 10px"></a>--><!----><a href="#">Restaurant a</a></h1>
+      <div id="account-button"><a href="#!/login/"><img src="img/account-icon.png" alt=""></a></div>
     </header>
     <div id="main" role="main">
       <noscript>This application requires JavaScript support. Currently it is tested only on iPhone and Android devices.</noscript>
     </div>
-    <!--<footer>
-      footer will be here
-    </footer>-->
+  <!--<footer>
+    footer will be here
+  </footer>-->
   </div> <!--! end of #container -->
 
   <!-- CUSTOMER-LIST -->
@@ -216,10 +220,15 @@
     {{/if}}
     </div>
   </script>
-  
+
+  <!-- BACK-BUTTON -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
   <script id="template-backButton" type="text/x-handlebars-template">
     {{#if previous}}
-      <span class="back-button top-button">Back</span>
+    <span class="back-button"><img src="img/back-icon.png" alt=""></span>
+    {{/if}}
+    {{#if home}}
+    <span class="home-button"><img src="img/home-icon.png" alt=""></span>
     {{/if}}
   </script>
   
