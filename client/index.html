@@ -65,7 +65,21 @@
       footer will be here
     </footer>-->
   </div> <!--! end of #container -->
-  
+
+  <!-- CUSTOMER-LIST -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
+  <script id="template-customerList" type="text/x-handlebars-template">
+    <ul class="primary-list" data-role="listview" data-inset="true" data-filter="true" id="customer-list">
+      {{#each items}}
+      <li name="{{this.name}}" data-id="{{this.id}}">
+        <img class="customer-list-image" data-id="{{this.id}}" src="{{this.logo}}" alt=""/>
+        {{this.name}}
+        <img class="customer-list-arrow" data-id="{{this.id}}" src="img/next.png" alt=""/>
+      </li>
+      {{/each}}}
+    </ul>
+  </script>
+
   <script id="template-targetList" type="text/x-handlebars-template">
     {{#if error}}
       {{error}}

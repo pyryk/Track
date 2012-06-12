@@ -56,6 +56,35 @@ var BaseController = Spine.Controller.sub({
   }
 });
 
+/* CustomersList
+ *=================================================================================================================== */
+var CustomersList = BaseController.sub({
+  events: {
+    "click #customer-list": "clickedCustomer"
+  },
+  getData: function() {
+    return {items: [
+      Customer.create({logo: "img/templogos/subway.png", name: "Subway"}),
+      Customer.create({logo: "img/templogos/rosso.png", name: "Rosso"}),
+      Customer.create({logo: "img/templogos/mcdonalds.png", name: "McDonald's"}),
+      Customer.create({logo: "img/templogos/hesburger.png", name: "Hesburger"}),
+      Customer.create({logo: "img/templogos/finnkino.png", name: "Finnkino"}),
+      Customer.create({logo: "img/templogos/aalto_university.png", name: "Aalto university"}),
+      Customer.create({logo: "img/templogos/chicos.png", name: "Chico's"}),
+      Customer.create({logo: "img/templogos/roberts_coffee.png", name: "Robert's Coffee"}),
+      Customer.create({logo: "img/templogos/unisport.png", name: "Unisport"}),
+      Customer.create({logo: "img/templogos/elisa.png", name: "Elisa"}),
+      Customer.create({logo: "img/templogos/abc.png", name: "ABC"}),
+      Customer.create({logo: "img/templogos/HSL.png", name: "HSL"}),
+      Customer.create({logo: "img/templogos/hesburger.png", name: "VR"}),
+      Customer.create({logo: "img/templogos/mcdonalds.png", name: "Picnic"})
+    ]};
+  },
+  clickedCustomer: function() {
+    Spine.Route.navigate("!/targets/");
+  }
+});
+
 /**
  * A controller for the target item list
  *
