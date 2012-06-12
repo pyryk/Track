@@ -60,7 +60,8 @@ var BaseController = Spine.Controller.sub({
  *=================================================================================================================== */
 var CustomersList = BaseController.sub({
   events: {
-    "click #customer-list": "clickedCustomer"
+    "click #customer-list": "clickedCustomer",
+    "keyup #search-customer-input": "searchCustomer"
   },
   getData: function() {
     return {items: [
@@ -82,6 +83,25 @@ var CustomersList = BaseController.sub({
   },
   clickedCustomer: function() {
     Spine.Route.navigate("!/targets/");
+  },
+  /* List search using jQuery-example */
+  searchCustomer: function() {
+    var $lastElement = null;
+    var searchCustomerInput = $('#search-customer-input').val().toLowerCase(); // to record the written text
+    $('li').each(function(index){ // go through every li-element
+      var $this = $(this);
+      if($this.text().toLowerCase().indexOf(searchCustomerInput) === -1) { // if customer name doesn't match
+        $this.hide(); // hide customer
+      } else {
+        $this.show();
+        $(this).addClass('first-visible-child last-visible-child');
+        if ($lastElement != null) { // if this customer isn't the first in a list
+          $(this).removeClass('first-visible-child');
+          $($lastElement).removeClass('last-visible-child'); // to remove roundings from bottom
+        }
+        $lastElement = this; // record this customer so that next customer is able to remove roundings from bottom
+      }
+    });
   }
 });
 
@@ -94,7 +114,10 @@ var TargetsList = BaseController.sub({
     ".targets": "targets"  
   },
   events: {
-    "fastclick #target-list li": "clicked"
+    "fastclick #target-list li": "clicked",
+    "fastclick #target-list li span": "clicked",
+    "fastclick #target-list li img": "clicked",
+    "keyup #search-target-input": "searchTarget"
   },
   getTitle: function() {
     return "List";
@@ -136,6 +159,36 @@ var TargetsList = BaseController.sub({
     } else if (el.hasClass("create-new")) {
       Spine.Route.navigate(App.getRoute("create_target"));
     }
+  },
+
+  /* List search using jQuery-example */
+  searchTarget: function() {
+    var $lastElement = null;
+    var searchTargetInput = $('#search-target-input').val().toLowerCase(); // to record the written text
+    $('li').each(function(index){ // go through every li-element
+      var $this = $(this);
+      if($this.text().toLowerCase().indexOf(searchTargetInput) === -1) { // if targets name doesn't match
+        $this.hide(); // hide target
+      } else {
+        $this.show();
+        $(this).addClass('first-visible-child last-visible-child');
+        if ($lastElement != null) { // if this customer isn't the first in a list
+          $(this).removeClass('first-visible-child');
+          $($lastElement).removeClass('last-visible-child'); // to remove roundings from bottom
+        }
+        $lastElement = this; // record this customer so that next customer is able to remove roundings from bottom
+      }
+      /*var visible = $('li:visible');
+       console.log(visible.text());
+       visible.first().addClass('first-visible-child');
+       visible.last().addClass('last-visible-child');
+       if ($this != visible.last()) {
+       $this.removeClass('last-visible-child');
+       }
+       if ($this != visible.first()) {
+       $this.removeClass('first-visible-child');
+       }*/
+    });
   }
 });
 

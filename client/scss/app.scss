@@ -200,6 +200,15 @@ header {
     &:active, &.fake-active {
       @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
     }
+
+    &.first-visible-child {
+      @include border-radius(15px 15px 0px 0px);
+      border-top: 1px solid ccc;
+    }
+    &.last-visible-child {
+      @include border-radius(0px 0px 15px 15px);
+      border-bottom: 1px solid ccc;
+    }
   }
 
   li.header {
@@ -241,6 +250,37 @@ ul li span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* list search elements
+* =================================================================================================================== */
+.search-field {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  @include border-radius(11px 11px 11px 11px);
+  text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
+}
+
+.hide {
+  display: none;
+}
+
+.search-field-input {
+  border: 1px solid #999;
+  @include border-radius(11px 11px 11px 11px);
+  background-image: url(../img/search-icon.png);
+  background-repeat: no-repeat;
+  background-position: 6px 50%;
+  color: $text_color;
+  padding: 0.5em;
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
+  padding-left: 2.2em;
+  outline: none;
 }
 
 /* target-details elements

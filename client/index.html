@@ -69,6 +69,9 @@
   <!-- CUSTOMER-LIST -->
   <!-- ------------------------------------------------------------------------------------------------------------- -->
   <script id="template-customerList" type="text/x-handlebars-template">
+    <div class="search-field">
+      <input type="text" id="search-customer-input" placeholder="Etsi..." autocomplete="off" class="search-field-input" />
+    </div>
     <ul class="primary-list" data-role="listview" data-inset="true" data-filter="true" id="customer-list">
       {{#each items}}
       <li name="{{this.name}}" data-id="{{this.id}}">
@@ -80,18 +83,26 @@
     </ul>
   </script>
 
+  <!-- TARGET-LIST -->
+  <!-- ------------------------------------------------------------------------------------------------------------- -->
   <script id="template-targetList" type="text/x-handlebars-template">
+    <div class="search-field">
+      <input type="text" id="search-target-input" placeholder="Etsi..." autocomplete="off" class="search-field-input" />
+    </div>
     {{#if error}}
-      {{error}}
+    {{error}}
     {{/if}}
     <ul class="primary-list" id="target-list">
       {{#each items}}
-        <li data-id="{{this.id}}">{{this.name}}</li>
+      <li name="{{this.name}}" data-id="{{this.id}}">
+        <span data-id="{{this.id}}">{{this.name}}</span>
+        <img data-id="{{this.id}}" class="customer-list-arrow" src="img/next.png" alt=""/>
+      </li>
       {{/each}}
-      <li class="create-new"><span class="create-new text">Create a new target</span></li>
+      <!--<li class="create-new"><span class="create-new text">Create a new target</span></li>-->
     </ul>
   </script>
-  
+
   <script id="template-targetDetails" type="text/x-handlebars-template">
     {{#if error}}
       {{error}}
