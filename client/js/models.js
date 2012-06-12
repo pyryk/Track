@@ -4,7 +4,7 @@
  */
 var Target = Spine.Model.sub();
 
-Target.configure("Target", "name", "question", "location", "results", "detailsLoaded", "saved");
+Target.configure("Target", "logo", "name", "question", "location", "results", "detailsLoaded", "saved");
 
 Target.include({
     setDefaults: function() {

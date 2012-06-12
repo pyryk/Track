@@ -99,8 +99,8 @@
   <ul class="primary-list" id="target-list">
     {{#each items}}
     <li name="{{this.name}}" data-id="{{this.id}}">
-      <!--<img class="customer-list-image" data-id="{{this.id}}" src="{{this.logo}}" alt=""/>-->
-      <span data-id="{{this.id}}">{{this.name}}</span>
+      <img class="customer-list-image" data-id="{{this.id}}" src="{{this.logo}}" alt=""/>
+      <span data-id="{{this.id}}" class="customer-list-span">{{this.name}}</span>
       <img class="customer-list-arrow" data-id="{{this.id}}" src="img/next.png" alt=""/>
     </li>
     {{/each}}
