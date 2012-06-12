@@ -186,11 +186,11 @@ var TargetsList = BaseController.sub({
       } else {
         $this.show();
         $(this).addClass('first-visible-child last-visible-child');
-        if ($lastElement != null) { // if this customer isn't the first in a list
+        if ($lastElement != null) { // if this target isn't the first in a list
           $(this).removeClass('first-visible-child');
           $($lastElement).removeClass('last-visible-child'); // to remove roundings from bottom
         }
-        $lastElement = this; // record this customer so that next customer is able to remove roundings from bottom
+        $lastElement = this; // record this target so that next target is able to remove roundings from bottom
       }
       /*var visible = $('li:visible');
        console.log(visible.text());

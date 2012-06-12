@@ -202,12 +202,12 @@ header {
     }
 
     &.first-visible-child {
-      @include border-radius(15px 15px 0px 0px);
-      border-top: 1px solid ccc;
+      @include border-top-radius(15px);
+      border-top: 1px solid $border_color;
     }
     &.last-visible-child {
-      @include border-radius(0px 0px 15px 15px);
-      border-bottom: 1px solid ccc;
+      @include border-bottom-radius(15px);
+      border-bottom: 1px solid $border_color;
     }
   }
 

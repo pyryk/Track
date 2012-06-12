@@ -153,21 +153,31 @@ header h1 a:link, header h1 a:visited, header h1 a:active {
 }
 /* line 204, ../scss/app.scss */
 .primary-list li.first-visible-child {
-  -webkit-border-radius: 15px 15px 0px 0px;
-  -moz-border-radius: 15px 15px 0px 0px;
-  -ms-border-radius: 15px 15px 0px 0px;
-  -o-border-radius: 15px 15px 0px 0px;
-  border-radius: 15px 15px 0px 0px;
-  border-top: 1px solid ccc;
+  -moz-border-radius-topleft: 15px;
+  -webkit-border-top-left-radius: 15px;
+  -ms-border-top-left-radius: 15px;
+  -o-border-top-left-radius: 15px;
+  border-top-left-radius: 15px;
+  -moz-border-radius-topright: 15px;
+  -webkit-border-top-right-radius: 15px;
+  -ms-border-top-right-radius: 15px;
+  -o-border-top-right-radius: 15px;
+  border-top-right-radius: 15px;
+  border-top: 1px solid #cccccc;
 }
 /* line 208, ../scss/app.scss */
 .primary-list li.last-visible-child {
-  -webkit-border-radius: 0px 0px 15px 15px;
-  -moz-border-radius: 0px 0px 15px 15px;
-  -ms-border-radius: 0px 0px 15px 15px;
-  -o-border-radius: 0px 0px 15px 15px;
-  border-radius: 0px 0px 15px 15px;
-  border-bottom: 1px solid ccc;
+  -moz-border-radius-bottomleft: 15px;
+  -webkit-border-bottom-left-radius: 15px;
+  -ms-border-bottom-left-radius: 15px;
+  -o-border-bottom-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  -moz-border-radius-bottomright: 15px;
+  -webkit-border-bottom-right-radius: 15px;
+  -ms-border-bottom-right-radius: 15px;
+  -o-border-bottom-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-bottom: 1px solid #cccccc;
 }
 /* line 214, ../scss/app.scss */
 .primary-list li.header {
