@@ -1,10 +1,11 @@
+/* Basecontroller
+ *=================================================================================================================== */
 var BaseController = Spine.Controller.sub({
   init: function() {
     this.rawTemplate = this.template;
     if (this.rawTemplate && this.rawTemplate.length > 0) {
       this.template = Handlebars.compile(this.rawTemplate.html());
     }
-    
   },
   show: function() {
     this.render();
@@ -13,7 +14,6 @@ var BaseController = Spine.Controller.sub({
     var data = this.getData();
     if (typeof this.template === "function") {
       this.html(this.template(data));
-
       this.addFastButtons();
     }
     //this.addPseudoActiveSupport();
@@ -42,16 +42,16 @@ var BaseController = Spine.Controller.sub({
   // TODO remove if not needed
   addPseudoActiveSupport: function() {
     if (navigator.userAgent.toLowerCase().indexOf("android 2") > -1) {
-     $(".active-button")
-     .bind("touchstart", function () {
-         $(this).addClass("fake-active");
-     })
-     .bind("touchend", function() {
-         $(this).removeClass("fake-active");
-     })
-     .bind("touchcancel", function() {
-       $(this).removeClass("fake-active");
-      });
+      $(".active-button")
+        .bind("touchstart", function () {
+          $(this).addClass("fake-active");
+        })
+        .bind("touchend", function() {
+          $(this).removeClass("fake-active");
+        })
+        .bind("touchcancel", function() {
+          $(this).removeClass("fake-active");
+        });
     }
   }
 });
@@ -105,13 +105,11 @@ var CustomersList = BaseController.sub({
   }
 });
 
-/**
- * A controller for the target item list
- *
- */
+/* TargetsList
+ *=================================================================================================================== */
 var TargetsList = BaseController.sub({
   elements: {
-    ".targets": "targets"  
+    ".targets": "targets"
   },
   events: {
     "fastclick #target-list li": "clicked",
@@ -123,13 +121,29 @@ var TargetsList = BaseController.sub({
     return "List";
   },
   getData: function() {
-    return {items: Target.findAllByAttribute("saved", true)};
+    /*return {items: [
+     Target.create({name: "Herttoniemi", question: "Kuinka toimii?"}),
+     Target.create({name: "Kamppi", question: "Kuinka toimii?"})
+     Target.create({logo: "img/templogos/mcdonalds.png", name: "Kaivopuisto"}),
+     Target.create({logo: "img/templogos/hesburger.png", name: "Pitäjänmäki"}),
+     Target.create({logo: "img/templogos/finnkino.png", name: "Kauniainen"}),
+     Target.create({logo: "img/templogos/aalto_university.png", name: "Mannerheimintie"}),
+     Target.create({logo: "img/templogos/chicos.png", name: "Kerava"}),
+     Target.create({logo: "img/templogos/roberts_coffee.png", name: "Punavuori"}),
+     Target.create({logo: "img/templogos/unisport.png", name: "Ruoholahti"}),
+     Target.create({logo: "img/templogos/elisa.png", name: "Kallio"}),
+     Target.create({logo: "img/templogos/abc.png", name: "Hämeenlinna"}),
+     Target.create({logo: "img/templogos/HSL.png", name: "Riihimäri"}),
+     Target.create({logo: "img/templogos/hesburger.png", name: "Olari"}),
+     Target.create({logo: "img/templogos/mcdonalds.png", name: "Vuosaari"})
+     ]};*/
+    return {items: Target.findAllByAttribute("saved", true)};/**/
   },
   init: function() {
     BaseController.prototype.init.call(this);
     Target.bind("create", this.proxy(this.addOne));
     Spine.bind('location:changed', this.proxy(this.locationChanged));
-    
+
     // load list (without location data) even when no location gotten
     Spine.bind('location:error', this.proxy(this.locationChanged));
     this.loadList();
@@ -192,6 +206,8 @@ var TargetsList = BaseController.sub({
   }
 });
 
+/* ownResult
+ *=================================================================================================================== */
 var ownResult = BaseController.sub({
   events: {
     "fastclick .view-results": "viewResults"
@@ -219,6 +235,8 @@ var ownResult = BaseController.sub({
   }
 });
 
+/* TargetDetails
+ *====================================================================================================================*/
 var TargetDetails = BaseController.sub({
   events: {
     "fastclick .active.answer.positive": "savePositiveAnswer",
@@ -227,7 +245,7 @@ var TargetDetails = BaseController.sub({
   },
   init: function() {
     BaseController.prototype.init.call(this);
-    
+
     // this is binded to all events to avoid the unbind-old/bind-new
     // hassle when viewing another target
     Target.bind("create update", this.proxy(this.targetUpdated));
@@ -274,8 +292,8 @@ var TargetDetails = BaseController.sub({
     log("Saving answer", value);
     var target = Target.find(this.id);
     var result = Result.create({
-      target: target, 
-      value: value, 
+      target: target,
+      value: value,
       location: window.track.location
     });
     result.bind('resultSent', this.proxy(this.answerSaved));
@@ -294,6 +312,8 @@ var TargetDetails = BaseController.sub({
   }
 });
 
+/* TargetCreate
+ *=================================================================================================================== */
 var TargetCreate = BaseController.sub({
   events: {
     "submit #create-target-form": "saveTarget"
@@ -307,7 +327,7 @@ var TargetCreate = BaseController.sub({
   targetSavedToServer: function(target, success) {
     log(target.name + (success ? '' : ' _NOT_') + ' saved to server');
     if (success) {
-      Spine.Route.navigate(App.getRoute(target)); 
+      Spine.Route.navigate(App.getRoute(target));
     } else {
       alert('For some reason, target was not saved to server. Please try again later.');
       // signal failure to the user
@@ -322,10 +342,12 @@ var TargetCreate = BaseController.sub({
   }
 });
 
+/* TargetResults
+ *=================================================================================================================== */
 var TargetResults = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
-    
+
     // this is binded to all events to avoid the unbind-old/bind-new
     // hassle when viewing another target
     Target.bind("create update", this.proxy(this.targetUpdated));
@@ -342,25 +364,25 @@ var TargetResults = BaseController.sub({
     var data = {};
     try {
       data.target = Target.find(this.id).toJSON();
-      
+
       // preprocess alltime results
       var alltime = data.target.results.alltime;
       if (alltime.pos == 0 && alltime.neg == 0) {
         alltime.zerozero = true;
       }
-      
+
       // preprocess "now" results
       var now = data.target.results.now
-      
+
       //now.pos = 4; now.neg = 7;
       //now.trend = -2;
-      
+
       if (now.pos == 0 && now.neg == 0) {
         now.zerozero = true;
       }
       now.trendPos = Math.abs(Math.max(0, now.trend));
       now.trendNeg = Math.abs(Math.min(0, now.trend));
-      
+
     } catch (e) {
       Target.loadDetails(this.id, this);
       data.error = e;
@@ -372,12 +394,14 @@ var TargetResults = BaseController.sub({
   }
 });
 
+/* Leaderboard
+ *=================================================================================================================== */
 var Leaderboard = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
-    
+
     LeaderboardEntry.bind('create update', this.proxy(this.entryAdded));
-    
+
     // update the list
     //LeaderboardEntry.load();
   },
@@ -388,7 +412,7 @@ var Leaderboard = BaseController.sub({
   },
   entryAdded: function() {
     log('leaderboard entry added');
-    
+
     if (window.track.visiblePage == this) {
       this.render();
     }
@@ -448,11 +472,13 @@ var BackButton = BaseController.sub({
   }
 });
 
+/* LoginScreen
+ *=================================================================================================================== */
 var LoginScreen = BaseController.sub({
   events: {
     "fastclick .login-button": "loginUser",
     "fastclick .no-login": "setNoLogin",
-    "fastclick #view-leaderboard": "viewLeaderboard" 
+    "fastclick #view-leaderboard": "viewLeaderboard"
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -475,24 +501,24 @@ var LoginScreen = BaseController.sub({
     if (this.useRedirectURI()) {
       opts.redirect_uri = document.location.href;
     }
-    FB.login(function(response) { }, opts);     
+    FB.login(function(response) { }, opts);
   },
   useRedirectURI: function() {
     var ua = navigator.userAgent;
-    
+
     // no iphone, ipod or ipad => no redirect URI
     if (ua.indexOf('iPhone') == -1 && ua.indexOf('iPad') == -1 && ua.indexOf('iPod') == -1) {
       return false;
     }
-    
+
     // ua contains safari => not homescreen app => no redirect URI
     if (ua.indexOf('Safari') > -1) {
       return false;
     }
-    
+
     // ios but not safari => add redirect URI
     return true;
-    
+
   },
   setNoLogin: function() {
     window.track.noLogin = true;
