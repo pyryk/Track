@@ -86,30 +86,34 @@ var CustomersList = BaseController.sub({
   clickedCustomer: function() {
     Spine.Route.navigate("!/targets/");
   },
+
   /* List search using jQuery-example */
   searchCustomer: function() {
     var $lastElement = null;
     var searchCustomerInput = $('#search-customer-input').val().toLowerCase(); // to record the written text
-
-    $('li').each(function(i){ // go through every li-element
+    $('li').each(function(index){ // go through every li-element
       var $this = $(this);
-      if($this.text().toLowerCase().indexOf(searchCustomerInput) === -1) { // if customer name doesn't match
-        $this.hide(); // hide customer
-      }
-      else {
-        $this.show(); // display customer
-        $(this).css('border-radius', '15px 15px 15px 15px');
-        $(this).css('border-bottom', '1px solid #ccc'); // modifieng borders
+      if($this.text().toLowerCase().indexOf(searchCustomerInput) === -1) { // if customers name doesn't match
+        $this.hide(); // hide target
+      } else {
+        $this.show();
+        $(this).addClass('first-visible-child last-visible-child');
         if ($lastElement != null) { // if this customer isn't the first in a list
-          $this.css('border-top', '1px solid #ccc');
-          $this.css('border-top-left-radius', '0px');
-          $this.css('border-top-right-radius', '0px'); // to remove roundings from top
-          $($lastElement).css('border-bottom', '1px solid #fff');
-          $($lastElement).css('border-bottom-left-radius', '0px');
-          $($lastElement).css('border-bottom-right-radius', '0px'); // to remove roundings from bottom
+          $(this).removeClass('first-visible-child');
+          $($lastElement).removeClass('last-visible-child'); // to remove roundings from bottom
         }
         $lastElement = this; // record this customer so that next customer is able to remove roundings from bottom
       }
+      /*var visible = $('li:visible');
+       console.log(visible.text());
+       visible.first().addClass('first-visible-child');
+       visible.last().addClass('last-visible-child');
+       if ($this != visible.last()) {
+       $this.removeClass('last-visible-child');
+       }
+       if ($this != visible.first()) {
+       $this.removeClass('first-visible-child');
+       }*/
     });
   }
 });
@@ -130,22 +134,23 @@ var TargetsList = BaseController.sub({
     return "List";
   },
   getData: function() {
+    var target_questions = ["Miten meillä menee?", "Toimiiko tämä hyvin?", "Lisää testausta?"];
     return {items: [
-     Target.create({logo: "img/templogos/apollocafe.png", question: "Mitä pidit musiikista?", name: "Apollo cafe"}),
-     Target.create({logo: "img/templogos/apolloliveclub.png", question: "Mitä pidit artistista?", name: "Apollo live club"}),
-     Target.create({logo: "img/templogos/armas.png", question: "Miten järjestelyt toimivat?", name: "Armas"}),
-     Target.create({logo: "img/templogos/baarikarpanen.png", question: "Millainen tunnelma?", name: "Baarikärpänen"}),
-     Target.create({logo: "img/templogos/cabaret.png", question: "Miten järjestelyt toimivat?", name: "Cabaret"}),
-     Target.create({logo: "img/templogos/colorado.png", question: "Miten järjestelyt toimivat?", name: "Colorado"}),
-     Target.create({logo: "img/templogos/gigglingmarlin.png", question: "Miten järjestelyt toimivat?", name: "Giggling Marlin"}),
-     Target.create({logo: "img/templogos/kaivohuone.png", question: "Miten järjestelyt toimivat?", name: "Kaivohuone"}),
-     Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "Komia"}),
-     Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "Koski ravintolat"}),
-     Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "Kuuba"}),
-     Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "Onnela"}),
-     Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "The Tiger"}),
-     Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "Tivoli"}),
-     Target.create({logo: "img/templogos/night_people_group.png", question: "Miten järjestelyt toimivat?", name: "Yöjalka"})
+     Target.create({logo: "img/templogos/apollocafe.png", questions: target_questions, name: "Apollo cafe"}),
+     Target.create({logo: "img/templogos/apolloliveclub.png", questions: target_questions, name: "Apollo live club"}),
+     Target.create({logo: "img/templogos/armas.png", questions: target_questions, name: "Armas"}),
+     Target.create({logo: "img/templogos/baarikarpanen.png", questions: target_questions, name: "Baarikärpänen"}),
+     Target.create({logo: "img/templogos/cabaret.png", questions: target_questions, name: "Cabaret"}),
+     Target.create({logo: "img/templogos/colorado.png", questions: target_questions, name: "Colorado"}),
+     Target.create({logo: "img/templogos/gigglingmarlin.png", questions: target_questions, name: "Giggling Marlin"}),
+     Target.create({logo: "img/templogos/kaivohuone.png", questions: target_questions, name: "Kaivohuone"}),
+     Target.create({logo: "img/templogos/night_people_group.png", questions: target_questions, name: "Komia"}),
+     Target.create({logo: "img/templogos/night_people_group.png", questions: target_questions, name: "Koski ravintolat"}),
+     Target.create({logo: "img/templogos/night_people_group.png", questions: target_questions, name: "Kuuba"}),
+     Target.create({logo: "img/templogos/night_people_group.png", questions: target_questions, name: "Onnela"}),
+     Target.create({logo: "img/templogos/night_people_group.png", questions: target_questions, name: "The Tiger"}),
+     Target.create({logo: "img/templogos/night_people_group.png", questions: target_questions, name: "Tivoli"}),
+     Target.create({logo: "img/templogos/night_people_group.png", questions: target_questions, name: "Yöjalka"})
      ]};
     //return {items: Target.findAllByAttribute("saved", true)};
   },/*
