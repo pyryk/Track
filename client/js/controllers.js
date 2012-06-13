@@ -134,26 +134,8 @@ var TargetsList = BaseController.sub({
     return "List";
   },
   getData: function() {
-    var target_questions = ["Miten meillä menee?", "Toimiiko tämä hyvin?", "Lisää testausta?"];
-    return {items: [
-     Target.create({logo: "img/templogos/apollocafe.png", questions: target_questions, name: "Apollo cafe"}),
-     Target.create({logo: "img/templogos/apolloliveclub.png", questions: target_questions, name: "Apollo live club"}),
-     Target.create({logo: "img/templogos/armas.png", questions: target_questions, name: "Armas"}),
-     Target.create({logo: "img/templogos/baarikarpanen.png", questions: target_questions, name: "Baarikärpänen"}),
-     Target.create({logo: "img/templogos/cabaret.png", questions: target_questions, name: "Cabaret"}),
-     Target.create({logo: "img/templogos/colorado.png", questions: target_questions, name: "Colorado"}),
-     Target.create({logo: "img/templogos/gigglingmarlin.png", questions: target_questions, name: "Giggling Marlin"}),
-     Target.create({logo: "img/templogos/kaivohuone.png", questions: target_questions, name: "Kaivohuone"}),
-     Target.create({logo: "img/templogos/night_people_group.png", questions: target_questions, name: "Komia"}),
-     Target.create({logo: "img/templogos/night_people_group.png", questions: target_questions, name: "Koski ravintolat"}),
-     Target.create({logo: "img/templogos/night_people_group.png", questions: target_questions, name: "Kuuba"}),
-     Target.create({logo: "img/templogos/night_people_group.png", questions: target_questions, name: "Onnela"}),
-     Target.create({logo: "img/templogos/night_people_group.png", questions: target_questions, name: "The Tiger"}),
-     Target.create({logo: "img/templogos/night_people_group.png", questions: target_questions, name: "Tivoli"}),
-     Target.create({logo: "img/templogos/night_people_group.png", questions: target_questions, name: "Yöjalka"})
-     ]};
-    //return {items: Target.findAllByAttribute("saved", true)};
-  },/*
+    return {items: Target.findAllByAttribute("saved", true)};
+  },
   init: function() {
     BaseController.prototype.init.call(this);
     Target.bind("create", this.proxy(this.addOne));
@@ -177,7 +159,7 @@ var TargetsList = BaseController.sub({
       log('location changed - reloading target list');
       this.loadList({lat: location.lat, lon: location.lon});
     }
-  },*/
+  },
   clicked: function(e) {
     var el = $(e.target);
     var id = el.attr('data-id');
