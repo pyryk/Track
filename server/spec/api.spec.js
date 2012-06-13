@@ -237,28 +237,20 @@ describe('API', function() {
 
             describe('deleteTarget', function() {
 
+
+
                 it('should delete a target', function() {
-                    spyOnPromise(Mongo, 'findTargetById').andCallSuccess(
-                        {name: "T-Talon ruokajono", _id: "accab1234", question: 'Kauanko jonotit?'}
-                    );
-                    req.params.id = 'accab1234';
+                    spyOnPromise(Mongo, 'deleteTarget').andCallSuccess();
+                    spyOnPromise(Mongo, 'findTargetById').andCallSuccess('12345678901234567890abcd');
+                    spyOnPromise(Mongo, 'deleteTargetById').andCallSuccess('12345678901234567890abcd');
+
+                    req.params.id = '12345678901234567890abcd';
 
                     API.deleteTarget(req, res, next);
+                    expect(Mongo.deleteTargetById).toHaveBeenCalledWith('12345678901234567890abcd');
 
-                   expectStatus(res).toEqual(204);
-                });
-
-                it('should return 404 if no results for ID found', function() {
-                    spyOnPromise(Mongo, 'deleteTargetById').andCallSuccess(null);
-                    req.params.id = 'accab1234';
-
-                    API.deleteTarget(req, res, next);
-
-                    expect(next).toHaveBeenCalledWithError({
-                        status: 404,
-                        code: "ResourceNotFound",
-                        message: "Could not find target with ID accab1234"
-                    });
+                    //waitsForPromise(findTargetByIdPromise);
+                    //waitsForPromise(deleteTargetPromise);
                 });
 
             });
