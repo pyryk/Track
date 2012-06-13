@@ -213,4 +213,7 @@ Response body:
         ]
     }
 
+* **trend**: integer [-3, 3], where -3 means getting worse with high speed, 0 not changing, 3 getting better with high speed
+* **period**: results from last XX minutes
+
 
