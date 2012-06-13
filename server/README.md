@@ -66,6 +66,21 @@ Reponse body:
 		}
 	}
 
+**New design of response body:** (results are in a separate response)
+
+	{
+		target: {
+			_id: “12faggf”,
+			name: “T-Talon ruokajono”,
+			questions: [
+			    {_id: "4afdfadfdafeaf", name: "Viihdyitkö?"},
+			    {_id: "4afdfadfdafeag", name: "Maistuiko"}
+            ]
+		}
+	}
+
+
+
 * **trend**: integer [-3, 3], where -3 means getting worse with high speed, 0 not changing, 3 getting better with high speed
 * **period**: results from last XX minutes
 
