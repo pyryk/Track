@@ -140,22 +140,22 @@ Response body:
 
 Requires authentication: No
 
-GET params: lat, lon, i.e. GET /customers?lat=60.16981200000001&lon=24.93824
-
 Status: 200 OK
 
 Response body:
 
     {
         "customers": [
-            {"_id": “12faggf”, "name": “Rosso”, "uriName": "rosso"},
-            {"_id": “13faggf”, "name": “McDonald's”, "uriName": "mcdonalds"}
+            {"_id": “12faggf”, "name": “Rosso”},
+            {"_id": “13faggf”, "name": “McDonald's”}
         ]
     }
 
-### GET /targets/uriName - returns targets of the specified customer
+### GET /targets/:_customerId - returns targets of the specified customer
 
-E.g. tracktive.net/targets/mcdonalds brings the targets of McDonald's
+E.g. tracktive.net/targets/44215tadfaf434343 brings the targets of McDonald's
+
+GET params: lat, lon, i.e. GET /targets?lat=60.16981200000001&lon=24.93824
 
 Requires authentication: No
 
@@ -165,29 +165,12 @@ Response body:
 
     {
         "targets": [
-            {"_id": “12faggf”, "name": “Kaisaniemi”, "lat": 60.43242, "lon": 50.23425, "uriName": "kaisaniemi"},
-            {"_id": “13faggf”, "name": “Kamppi”, "lat": 60.43242, "lon": 50.23425, "uriName": "kamppi"}
+            {"_id": “12faggf”, "name": “Kaisaniemi”, "relevancy": 9.1251},
+            {"_id": “13faggf”, "name": “Kamppi”, "relevancy": 9.1251}
         ]
     }
 
-### GET /targets/customersURIName/targetsURIName - questions of the specified target
-
-Requires authentication: No
-
-Status: 200 OK
-
-Response body:
-
-    {
-        "questions": [
-            {"_id: "12gdfaga", "name": "Viihdyitkö?"},
-            {"_id: "12gdfagb", "name": "Maistuiko?"},
-            {"_id: "12gdfagc", "name": "Oliko palvelu ystävällistä?"}
-
-        ]
-    }
-
-### GET /targets/customersURIName/targetsURIName/results - results of the specified target
+### GET /target/:_id/results - results of the specified target
 
 Requires authentication: No
 
