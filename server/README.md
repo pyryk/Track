@@ -99,6 +99,21 @@ Request body:
 		}
 	}
 
+**New design of request body:** (results are in a separate response)
+
+    {
+        "name": "Track target name",
+        "questions": [
+            {"name": "Viihtyitkö?"},
+            {"name": "Maistuiko?"},
+            {"name": "Oliko kivaa?"}
+        ]
+        "location": {
+            "lat": 12.345,
+            "lon": 67.890
+        }
+    }
+
 Status: 201 Created
 
 Response body:
