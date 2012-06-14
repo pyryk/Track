@@ -99,7 +99,7 @@ Request body:
 		}
 	}
 
-**New design of request body:** (results are in a separate response)
+**New design of request body:**
 
     {
         "name": "Track target name",
@@ -139,6 +139,9 @@ Request body:
     		  lon: 67.890
     		}
     }
+
+**New design of request body:**
+
 
 Status: 204 No content
 
