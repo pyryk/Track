@@ -134,8 +134,18 @@ var TargetsList = BaseController.sub({
     return "List";
   },
   getData: function() {
-    return {items: Target.findAllByAttribute("saved", true)};
-  },
+    return {items: [
+      Target.create({name: "Salatut elämät", question: "Miten pidät sarjasta?"}),
+      Target.create({name: "Kauniit ja rohkeat", question: "Miten pidät sarjasta?"}),
+      Target.create({name: "Hockey Night", question: "Miten pidät sarjasta?"}),
+      Target.create({name: "Suurin pudottaja", question: "Miten pidät sarjasta?"}),
+      Target.create({name: "Karavaanarit", question: "Miten pidät sarjasta?"}),
+      Target.create({name: "Itämeri", question: "Miten pidät sarjasta?"}),
+      Target.create({name: "Maajussille morsian", question: "Miten pidät sarjasta?"}),
+      Target.create({name: "Jamie Oliver", question: "Miten pidät sarjasta?"}),
+      Target.create({name: "Formula 1", question: "Miten pidät sarjasta"})
+    ]};
+  },/*
   init: function() {
     BaseController.prototype.init.call(this);
     Target.bind("create", this.proxy(this.addOne));
@@ -159,7 +169,7 @@ var TargetsList = BaseController.sub({
       log('location changed - reloading target list');
       this.loadList({lat: location.lat, lon: location.lon});
     }
-  },
+  },*/
   clicked: function(e) {
     var el = $(e.target);
     var id = el.attr('data-id');

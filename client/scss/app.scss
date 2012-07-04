@@ -15,7 +15,7 @@ $use-mozilla-ellipsis-binding: true;
 /* app specific styles
 * =================================================================================================================== */
 /* Defining the layout-profile, basically color-palette: frontpage, aalto, rosso, subway */
-$customer: "frontpage";
+$customer: "mtv3";
 
 /* Default template **/
 $header_gradient_1: lighten(#0F68A3, 20%);
@@ -69,15 +69,26 @@ $list_item_gradient_2: darken(#ffffff, 1%);
 }
 
 /* NG-layout */
-  @if $customer == NG {
-    $header_gradient_1: #323232;
-    $header_gradient_2: #040404;
-    $background_gradient_1: darken(#fefefe, 7%);
-    $background_gradient_2: #fefefe;
-    $list_item_gradient_1: #ffffff;
-    $list_item_gradient_2: darken(#ffffff, 1%);
-    $text_color: #606967;
-  }
+@if $customer == NG {
+  $header_gradient_1: #323232;
+  $header_gradient_2: #040404;
+  $background_gradient_1: darken(#fefefe, 7%);
+  $background_gradient_2: #fefefe;
+  $list_item_gradient_1: #ffffff;
+  $list_item_gradient_2: darken(#ffffff, 1%);
+  $text_color: #606967;
+}
+
+/* MTV3-layout */
+@if $customer == mtv3 {
+  $header_gradient_1: #323232;
+  $header_gradient_2: #040404;
+  $background_gradient_1: darken(#fefefe, 7%);
+  $background_gradient_2: #fefefe;
+  $list_item_gradient_1: #ffffff;
+  $list_item_gradient_2: darken(#ffffff, 1%);
+  $text_color: #606967;
+}
 
 /* mixins elements
 * to re-use whole chunks of CSS, properties or selectors
@@ -149,7 +160,7 @@ header {
   padding-top: 0;
   @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
   color: $header_text_color;
-  border-bottom: 1px solid $border_color;
+  //border-bottom: 1px solid $border_color;
   text-align: center;
   
   h1 {
