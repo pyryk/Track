@@ -111,12 +111,7 @@
 <!-- TARGET DETAILS -->
 <!-- ------------------------------------------------------------------------------------------------------------- -->
 <script id="template-targetDetails" type="text/x-handlebars-template">
-  {{#if error}}
-  {{error}}
-  {{/if}}
   <div id="target-details">
-    {{#if target}}
-    {{#with target}}
     <div id="target-header">
       <div class="target-name">{{name}}</div>
       <div class="target-points"><span class="target-points-font">60 pts</span></div>
@@ -125,37 +120,29 @@
     <!--{{#unless detailsLoaded}}
       <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
     {{/unless}}-->
-    {{#if question}}
+    {{#each items}}
     <form id="answer-form">
       <p class="target-question">{{question}}</p>
+      {{#if smilestwo}}
+      <p class="target-answer">
+        <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
+        <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
+      </p>
+      {{else}}
+        {{#if smilesfour}}
 
-      <p class="target-answer">
-        <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
-        <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
-      </p>
+        {{else}}
+        <textarea data-id="{{this.id}}" placeholder="Kirjoita kommentti..." class="comment"/>
+        <ul class="buttons">
+          <li><a>lähetä</a></li>
+          <li><a>tulokset</a></li>
+        </ul>
+        {{/if}}
 
-
-      <p class="target-question">Toimiko katsomo hyvin?</p>
-      <p class="target-answer">
-        <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
-        <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
-      </p>
-      <p class="target-question">Sopivatko mainokset sinulle?</p>
-      <p class="target-answer">
-        <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
-        <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
-      </p>
-      <p class="target-question">Oliko tekstitys toimiva?</p>
-      <p class="target-answer">
-        <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
-        <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
-      </p>
+      {{/if}}
     </form>
-
     <!--<p><span class="link-button view-results">View Results</span></p>-->
-    {{/if}}
-    {{/with}}
-    {{/if}}
+    {{/each}}
   </div>
 </script>
 

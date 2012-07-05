@@ -409,6 +409,17 @@ ul li span {
   .answer-form-hide {
     overflow: hidden;
   }
+
+  .comment {
+    padding: 1em;
+    border: 1px solid $border_color;
+    display: block;
+    @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+    @include box-flex(1);
+    @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
+    @include border-radius(20px 20px 20px 20px);
+    outline: none;
+  }
 }
 
 /* target results elements

@@ -7,77 +7,83 @@ var Target = Spine.Model.sub();
 Target.configure("Target", "logo", "name", "question", "location", "results", "detailsLoaded", "saved");
 
 Target.include({
-    setDefaults: function() {
-      this.results = this.results || {};
-      
-      this.results.now = this.results.now || {};
-      this.results.now.pos = this.results.now.pos || 0;
-      this.results.now.neg = this.results.now.neg || 0;
-      this.results.now.trend = this.results.now.trend || 0;
-      this.results.now.period = this.results.now.period || 0;
-      
-      this.results.alltime = this.results.alltime || {};
-      this.results.alltime.pos = this.results.alltime.pos || 0;
-      this.results.alltime.neg = this.results.alltime.neg || 0;
-      
-    },
-    getType: function() {
-      return "target"
-    },
-    getResourceName: function() {
-      return "targets"
-    },
-    loadDetails: function(listener) {
-      Target.loadDetails(this.id, listener);
-    },
-    saveToServer: function() {
-      var url = App.serverURL;
-      
-      if (url.substring(url.length-1) !== "/") {
-        url += "/";
-      }
-      url += "target";
-      
-      var user = User.getUser();
-      var headers = {
-          'FB-UserId': user.name,
-          'FB-AccessToken': user.token
-        };
-      
-      // append the create location to the post
-      var location = window.track.location;
-      
-      var toSend = {
-        name: this.name,
-        question: this.question,
-        location: this.location
-      }
-      var data = JSON.stringify(toSend);
-      
-      $.ajax({
-        url: url,
-        type: "POST",
-        contentType: "application/json",
-        dataType: "json",
-        data: data,
-        headers: user.logged ? headers : {},
-        success: this.proxy(function(data) {
-          this.id = data._id;
-          this.saved = true;
-          this.detailsLoaded = true;
-          
-          this.save();
-          this.trigger("saveToServer", true);
-        }), 
-        error: this.proxy(function(jqxhr, status, err) {
-          this.trigger("saveToServer", false);
-          alert(status + ': ' + err);
-        })
-      });
-    },
-    saved: false,
-    detailsLoaded: false,
-    results: {}
+  setDefaults: function() {
+    this.results = this.results || {};
+
+    this.results.now = this.results.now || {};
+    this.results.now.pos = this.results.now.pos || 0;
+    this.results.now.neg = this.results.now.neg || 0;
+    this.results.now.trend = this.results.now.trend || 0;
+    this.results.now.period = this.results.now.period || 0;
+
+    this.results.alltime = this.results.alltime || {};
+    this.results.alltime.pos = this.results.alltime.pos || 0;
+    this.results.alltime.neg = this.results.alltime.neg || 0;
+
+  },
+  getType: function() {
+    return "target";
+  },
+  getResourceName: function() {
+    return "targets";
+  },
+  getQuestion: function() {
+    return this.question;
+  },
+  getName: function() {
+    return this.name;
+  },
+  loadDetails: function(listener) {
+    Target.loadDetails(this.id, listener);
+  },
+  saveToServer: function() {
+    var url = App.serverURL;
+
+    if (url.substring(url.length-1) !== "/") {
+      url += "/";
+    }
+    url += "target";
+
+    var user = User.getUser();
+    var headers = {
+      'FB-UserId': user.name,
+      'FB-AccessToken': user.token
+    };
+
+    // append the create location to the post
+    var location = window.track.location;
+
+    var toSend = {
+      name: this.name,
+      question: this.question,
+      location: this.location
+    }
+    var data = JSON.stringify(toSend);
+
+    $.ajax({
+      url: url,
+      type: "POST",
+      contentType: "application/json",
+      dataType: "json",
+      data: data,
+      headers: user.logged ? headers : {},
+      success: this.proxy(function(data) {
+        this.id = data._id;
+        this.saved = true;
+        this.detailsLoaded = true;
+
+        this.save();
+        this.trigger("saveToServer", true);
+      }),
+      error: this.proxy(function(jqxhr, status, err) {
+        this.trigger("saveToServer", false);
+        alert(status + ': ' + err);
+      })
+    });
+  },
+  saved: false,
+  detailsLoaded: false,
+  results: {}
 });
 
 /**
@@ -353,3 +359,6 @@ LeaderboardEntry.load = function() {
 
 var Customer = Spine.Model.sub();
 Customer.configure("Customer", "logo", "name");
+
+var QuestionItem = Spine.Model.sub();
+QuestionItem.configure("QuestionItem", "question", "smilestwo", "smilesfour", "comment");

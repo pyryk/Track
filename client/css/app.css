@@ -437,45 +437,70 @@ ul li span {
 #target-details .answer-form-hide {
   overflow: hidden;
 }
+/* line 413, ../scss/app.scss */
+#target-details .comment {
+  padding: 1em;
+  border: 1px solid #cccccc;
+  display: block;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
+  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -moz-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -o-linear-gradient(#ffffff, #fcfcfc);
+  background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
+  background-image: linear-gradient(#ffffff, #fcfcfc);
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-box-flex: 1;
+  box-flex: 1;
+  -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: 20px 20px 20px 20px;
+  -moz-border-radius: 20px 20px 20px 20px;
+  -ms-border-radius: 20px 20px 20px 20px;
+  -o-border-radius: 20px 20px 20px 20px;
+  border-radius: 20px 20px 20px 20px;
+  outline: none;
+}
 
 /* target results elements
 * =================================================================================================================== */
-/* line 417, ../scss/app.scss */
+/* line 428, ../scss/app.scss */
 #target-results .target-question {
   padding: 0em 10px;
   font-size: 140%;
 }
-/* line 421, ../scss/app.scss */
+/* line 432, ../scss/app.scss */
 #target-results .result-heading {
   font-size: 0.5em;
   margin: 5px 10px;
   padding-bottom: 0px;
   font-weight: bold;
 }
-/* line 428, ../scss/app.scss */
+/* line 439, ../scss/app.scss */
 #target-results table {
   width: 100%;
 }
-/* line 434, ../scss/app.scss */
+/* line 445, ../scss/app.scss */
 #target-results .target-answers th {
   font-size: 2em;
   font-weight: bold;
   text-align: left;
 }
-/* line 443, ../scss/app.scss */
+/* line 454, ../scss/app.scss */
 #target-results .target-answers td {
   font-size: 3em;
   border-width: 0px;
 }
-/* line 449, ../scss/app.scss */
+/* line 460, ../scss/app.scss */
 #target-results .result-number, #target-results .answer {
   padding: 20px 1em;
 }
-/* line 452, ../scss/app.scss */
+/* line 463, ../scss/app.scss */
 #target-results .result-number {
   text-align: right;
 }
-/* line 455, ../scss/app.scss */
+/* line 466, ../scss/app.scss */
 #target-results .target-answers:last-child {
   border-bottom: 1px solid #cccccc;
   -webkit-border-radius: 0px 0px 5px 5px;
@@ -484,7 +509,7 @@ ul li span {
   -o-border-radius: 0px 0px 5px 5px;
   border-radius: 0px 0px 5px 5px;
 }
-/* line 459, ../scss/app.scss */
+/* line 470, ../scss/app.scss */
 #target-results .result-graph {
   color: #fff;
   display: -webkit-box;
@@ -501,12 +526,12 @@ ul li span {
   box-align: stretch;
   margin: 10px 10px;
 }
-/* line 469, ../scss/app.scss */
+/* line 480, ../scss/app.scss */
 #target-results .result-graph .pos, #target-results .result-graph .neg {
   padding: 5px;
   text-align: center;
 }
-/* line 473, ../scss/app.scss */
+/* line 484, ../scss/app.scss */
 #target-results .result-graph .pos .trend, #target-results .result-graph .neg .trend {
   border-top: 20px solid transparent;
   border-bottom: 20px solid transparent;
@@ -514,7 +539,7 @@ ul li span {
   width: 0;
   height: 0;
 }
-/* line 482, ../scss/app.scss */
+/* line 493, ../scss/app.scss */
 #target-results .result-graph .pos {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #00b509), color-stop(100%, #00e80c));
   background-image: -webkit-linear-gradient(#00b509, #00e80c);
@@ -528,12 +553,12 @@ ul li span {
   -o-border-radius: 0px 10px 10px 0px;
   border-radius: 0px 10px 10px 0px;
 }
-/* line 487, ../scss/app.scss */
+/* line 498, ../scss/app.scss */
 #target-results .result-graph .pos .trend {
   border-right: 20px solid #00b509;
   float: left;
 }
-/* line 492, ../scss/app.scss */
+/* line 503, ../scss/app.scss */
 #target-results .result-graph .neg {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff0000), color-stop(100%, #ff4d4d));
   background-image: -webkit-linear-gradient(#ff0000, #ff4d4d);
@@ -548,26 +573,26 @@ ul li span {
   border-radius: 10px 0px 0px 10px;
   border-right: 1px solid #e3e5e5;
 }
-/* line 498, ../scss/app.scss */
+/* line 509, ../scss/app.scss */
 #target-results .result-graph .neg .trend {
   border-left: 20px solid #ce1e1e;
   float: right;
 }
-/* line 505, ../scss/app.scss */
+/* line 516, ../scss/app.scss */
 #target-results .graph {
   height: 300px;
   width: 100%;
 }
-/* line 509, ../scss/app.scss */
+/* line 520, ../scss/app.scss */
 #target-results .graph .yAxis .tickLabel {
   font-size: 12px;
 }
-/* line 512, ../scss/app.scss */
+/* line 523, ../scss/app.scss */
 #target-results .graph .xAxis .tickLabel {
   font-size: 10px;
 }
 
-/* line 519, ../scss/app.scss */
+/* line 530, ../scss/app.scss */
 #target-ownResult h3 {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #323232), color-stop(100%, #040404));
   background-image: -webkit-linear-gradient(#323232, #040404);
@@ -587,7 +612,7 @@ ul li span {
   -o-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
 }
-/* line 522, ../scss/app.scss */
+/* line 533, ../scss/app.scss */
 #target-ownResult .result-info-body {
   margin: 0;
   border: 1px solid #cccccc;
@@ -601,11 +626,11 @@ ul li span {
   padding-left: 1em;
   color: #c8cdcc;
 }
-/* line 527, ../scss/app.scss */
+/* line 538, ../scss/app.scss */
 #target-ownResult .result-info-body .question, #target-ownResult .result-info-body .answer {
   display: none;
 }
-/* line 531, ../scss/app.scss */
+/* line 542, ../scss/app.scss */
 #target-ownResult .result-info-body:last-child {
   border-bottom: 1px solid #cccccc;
   -webkit-border-radius: 0px 0px 5px 5px;
@@ -614,14 +639,14 @@ ul li span {
   -o-border-radius: 0px 0px 5px 5px;
   border-radius: 0px 0px 5px 5px;
 }
-/* line 534, ../scss/app.scss */
+/* line 545, ../scss/app.scss */
 #target-ownResult .link-button {
   margin-top: 2em;
 }
 
 /* button elements
 * =================================================================================================================== */
-/* line 542, ../scss/app.scss */
+/* line 553, ../scss/app.scss */
 #login h2 {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #323232), color-stop(100%, #040404));
   background-image: -webkit-linear-gradient(#323232, #040404);
@@ -642,7 +667,7 @@ ul li span {
   border-radius: 5px 5px 0px 0px;
   margin-top: 20px;
 }
-/* line 547, ../scss/app.scss */
+/* line 558, ../scss/app.scss */
 #login .content {
   margin: 0;
   padding: 1em 1em;
@@ -657,7 +682,7 @@ ul li span {
   background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
   background-image: linear-gradient(#ffffff, #fcfcfc);
 }
-/* line 556, ../scss/app.scss */
+/* line 567, ../scss/app.scss */
 #login .content .no-login {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
   background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
@@ -666,7 +691,7 @@ ul li span {
   background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
   background-image: linear-gradient(#ffffff, #fcfcfc);
 }
-/* line 558, ../scss/app.scss */
+/* line 569, ../scss/app.scss */
 #login .content .no-login:active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
   background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
@@ -675,7 +700,7 @@ ul li span {
   background-image: -ms-linear-gradient(#fcfcfc, #ffffff);
   background-image: linear-gradient(#fcfcfc, #ffffff);
 }
-/* line 563, ../scss/app.scss */
+/* line 574, ../scss/app.scss */
 #login .content .login-button {
   width: 100%;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #656565), color-stop(100%, #373737));
@@ -685,7 +710,7 @@ ul li span {
   background-image: -ms-linear-gradient(#656565, #373737);
   background-image: linear-gradient(#656565, #373737);
 }
-/* line 566, ../scss/app.scss */
+/* line 577, ../scss/app.scss */
 #login .content .login-button:active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #373737), color-stop(100%, #656565));
   background-image: -webkit-linear-gradient(#373737, #656565);
@@ -695,25 +720,25 @@ ul li span {
   background-image: linear-gradient(#373737, #656565);
 }
 
-/* line 573, ../scss/app.scss */
+/* line 584, ../scss/app.scss */
 #back-button, #account-button {
   position: absolute;
   top: 5px;
   display: block;
 }
-/* line 577, ../scss/app.scss */
+/* line 588, ../scss/app.scss */
 #back-button .top-button, #account-button .top-button {
   display: inline-block;
   height: 18px;
   padding: 9px 5px;
 }
-/* line 581, ../scss/app.scss */
+/* line 592, ../scss/app.scss */
 #back-button .top-button a, #back-button .top-button a:link, #back-button .top-button a:active, #back-button .top-button a:visited, #account-button .top-button a, #account-button .top-button a:link, #account-button .top-button a:active, #account-button .top-button a:visited {
   color: inherit;
   text-decoration: inherit;
 }
 
-/* line 588, ../scss/app.scss */
+/* line 599, ../scss/app.scss */
 #account-button {
   height: 36px;
   right: 10px;
@@ -735,7 +760,7 @@ ul li span {
   -o-border-radius: 35px;
   border-radius: 35px;
 }
-/* line 590, ../scss/app.scss */
+/* line 601, ../scss/app.scss */
 #account-button .top-button {
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 6px;
@@ -743,7 +768,7 @@ ul li span {
   padding-top: 8px;
 }
 
-/* line 605, ../scss/app.scss */
+/* line 616, ../scss/app.scss */
 #back-button {
   height: 36px;
   left: 10px;
@@ -765,7 +790,7 @@ ul li span {
   -o-border-radius: 35px;
   border-radius: 35px;
 }
-/* line 607, ../scss/app.scss */
+/* line 618, ../scss/app.scss */
 #back-button .top-button {
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 6px;
@@ -773,7 +798,7 @@ ul li span {
   padding-top: 8px;
 }
 
-/* line 622, ../scss/app.scss */
+/* line 633, ../scss/app.scss */
 .link-button {
   display: block;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
@@ -797,12 +822,12 @@ ul li span {
   -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 }
-/* line 634, ../scss/app.scss */
+/* line 645, ../scss/app.scss */
 .link-button:link, .link-button:active, .link-button:visited {
   text-decoration: none;
   color: #c8cdcc;
 }
-/* line 638, ../scss/app.scss */
+/* line 649, ../scss/app.scss */
 .link-button:active, .link-button.fake-active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
   background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
@@ -812,26 +837,26 @@ ul li span {
   background-image: linear-gradient(#fcfcfc, #ffffff);
 }
 
-/* line 643, ../scss/app.scss */
+/* line 654, ../scss/app.scss */
 button.link-button {
   width: 100%;
 }
 
 /* leaderboard elements
 * =================================================================================================================== */
-/* line 649, ../scss/app.scss */
+/* line 660, ../scss/app.scss */
 #leaderboard {
   margin-top: 1em;
 }
-/* line 652, ../scss/app.scss */
+/* line 663, ../scss/app.scss */
 #leaderboard table {
   width: 100%;
 }
-/* line 655, ../scss/app.scss */
+/* line 666, ../scss/app.scss */
 #leaderboard table tr.header {
   border: 0;
 }
-/* line 659, ../scss/app.scss */
+/* line 670, ../scss/app.scss */
 #leaderboard table th {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #323232), color-stop(100%, #040404));
   background-image: -webkit-linear-gradient(#323232, #040404);
@@ -851,7 +876,7 @@ button.link-button {
   -o-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
 }
-/* line 663, ../scss/app.scss */
+/* line 674, ../scss/app.scss */
 #leaderboard table tr {
   padding: 1em 1em;
   border: 0;
@@ -871,21 +896,21 @@ button.link-button {
   text-overflow: ellipsis;
   -moz-binding: url('/css/xml/ellipsis.xml#ellipsis');
 }
-/* line 665, ../scss/app.scss */
+/* line 676, ../scss/app.scss */
 #leaderboard table tr td {
   padding: 0.5em;
   vertical-align: middle;
 }
-/* line 668, ../scss/app.scss */
+/* line 679, ../scss/app.scss */
 #leaderboard table tr td.position {
   padding-left: 1em;
 }
-/* line 671, ../scss/app.scss */
+/* line 682, ../scss/app.scss */
 #leaderboard table tr td.name img {
   padding-right: 1em;
 }
 
-/* line 679, ../scss/app.scss */
+/* line 690, ../scss/app.scss */
 footer {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2f2f2f), color-stop(50%, #151515), color-stop(51%, #000000), color-stop(100%, #000000));
   background-image: -webkit-linear-gradient(top, #2f2f2f, #151515 50%, #000000 51%, #000000);
@@ -901,24 +926,24 @@ footer {
   left: 0;
 }
 
-/* line 689, ../scss/app.scss */
+/* line 700, ../scss/app.scss */
 .loading-indicator {
   margin: 10px;
 }
 
-/* line 693, ../scss/app.scss */
+/* line 704, ../scss/app.scss */
 .hide {
   display: none;
 }
 
-/* line 697, ../scss/app.scss */
+/* line 708, ../scss/app.scss */
 input[type=text] {
   width: 100%;
   box-sizing: border-box;
 }
 
 /* no point to have red bg on untouched text boxes */
-/* line 703, ../scss/app.scss */
+/* line 714, ../scss/app.scss */
 input[type=text]:invalid {
   background-color: white;
 }

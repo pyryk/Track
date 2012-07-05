@@ -9,6 +9,7 @@ var BaseController = Spine.Controller.sub({
   },
   show: function() {
     this.render();
+
   },
   render: function() {
     var data = this.getData();
@@ -29,11 +30,9 @@ var BaseController = Spine.Controller.sub({
         // fast clicks are not supported on every browser
         if (App.fastClicksEnabled()) {
           buttons.each(this.proxy(function(no, btn) {
-            log("Adding a fast button listener");
             new MBP.fastButton(btn, this.proxy(this[this.events[i]]));
           }));
         } else {
-          log("Adding a traditional click listener");
           buttons.bind("click", this.proxy(this[this.events[i]]));
         }
       }
@@ -104,16 +103,6 @@ var CustomersList = BaseController.sub({
         }
         $lastElement = this; // record this customer so that next customer is able to remove roundings from bottom
       }
-      /*var visible = $('li:visible');
-       console.log(visible.text());
-       visible.first().addClass('first-visible-child');
-       visible.last().addClass('last-visible-child');
-       if ($this != visible.last()) {
-       $this.removeClass('last-visible-child');
-       }
-       if ($this != visible.first()) {
-       $this.removeClass('first-visible-child');
-       }*/
     });
   }
 });
@@ -134,16 +123,16 @@ var TargetsList = BaseController.sub({
     return "List";
   },
   getData: function() {
+    //var questionList = QuestionItems.create({name: "Kuinka menee?", smiles-two: true});
+    var questionList = new Array();
+    questionList.push(QuestionItem.create({question: "Testi", comment: true, smilestwo: true}));
+    questionList.push(QuestionItem.create({question: "Testi2", comment: true}));
+    console.log(questionList);
+
     return {items: [
-      Target.create({name: "Salatut elämät", question: "Miten pidät sarjasta?"}),
-      Target.create({name: "Kauniit ja rohkeat", question: "Miten pidät sarjasta?"}),
-      Target.create({name: "Hockey Night", question: "Miten pidät sarjasta?"}),
-      Target.create({name: "Suurin pudottaja", question: "Miten pidät sarjasta?"}),
-      Target.create({name: "Karavaanarit", question: "Miten pidät sarjasta?"}),
-      Target.create({name: "Itämeri", question: "Miten pidät sarjasta?"}),
-      Target.create({name: "Maajussille morsian", question: "Miten pidät sarjasta?"}),
-      Target.create({name: "Jamie Oliver", question: "Miten pidät sarjasta?"}),
-      Target.create({name: "Formula 1", question: "Miten pidät sarjasta"})
+      Target.create({name: "Salatut elämät", question: questionList}),
+      Target.create({name: "Kauniit ja rohkeat", question: questionList}),
+      Target.create({name: "Hockey Night", question: questionList})
     ]};
   },/*
   init: function() {
@@ -175,7 +164,7 @@ var TargetsList = BaseController.sub({
     var id = el.attr('data-id');
     if (id) {
       var target = Target.find(id);
-      target.loadDetails();
+      //target.loadDetails();
       Spine.Route.navigate(App.getRoute(target));
     } else if (el.hasClass("create-new")) {
       Spine.Route.navigate(App.getRoute("create_target"));
@@ -199,16 +188,6 @@ var TargetsList = BaseController.sub({
         }
         $lastElement = this; // record this customer so that next customer is able to remove roundings from bottom
       }
-      /*var visible = $('li:visible');
-       console.log(visible.text());
-       visible.first().addClass('first-visible-child');
-       visible.last().addClass('last-visible-child');
-       if ($this != visible.last()) {
-       $this.removeClass('last-visible-child');
-       }
-       if ($this != visible.first()) {
-       $this.removeClass('first-visible-child');
-       }*/
     });
   }
 });
@@ -255,13 +234,13 @@ var TargetDetails = BaseController.sub({
 
     // this is binded to all events to avoid the unbind-old/bind-new
     // hassle when viewing another target
-    Target.bind("create update", this.proxy(this.targetUpdated));
+    //Target.bind("create update", this.proxy(this.targetUpdated));
   },
   getTitle: function() {
     return "Target";
   },
   getData: function() {
-    var target, error;
+    /*var target, error;
     try {
       target = Target.find(this.id);
     } catch (e) { // unknown record
@@ -269,13 +248,17 @@ var TargetDetails = BaseController.sub({
       Target.loadDetails(this.id, this);
       error = e;
       log(e);
-    }
-    return {target: target, error: error};
-  },
+    }*/
+    var name = Target.find(this.id).getName();
+    console.log(name);
+    var question = Target.find(this.id).getQuestion();
+    console.log(question);
+    return {name: name, items: question};
+  },/*
   render: function() {
     BaseController.prototype.render.call(this);
   },
-  error: function(reason) {
+   error: function(reason) {
     if (reason == "notfound") {
       alert('not found');
     }
@@ -306,17 +289,19 @@ var TargetDetails = BaseController.sub({
     result.bind('resultSent', this.proxy(this.answerSaved));
     var user = User.getUser();
     result.post();
-  },
+  },*/
   savePositiveAnswer: function() {
-    this.saveAnswer(1);
+    //this.saveAnswer(1);
+    console.log("tallennettu positiivinen")
   },
   saveNegativeAnswer: function() {
-    this.saveAnswer(0);
-  },
+    //this.saveAnswer(0);
+    console.log("Tallennettu negatiivinen");
+  }/*,
   viewResults: function(e) {
     var route = App.getRoute(Target.find(this.id)) + "/results";
     Spine.Route.navigate(route);
-  }
+  }*/
 });
 
 /* TargetCreate
