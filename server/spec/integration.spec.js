@@ -172,6 +172,22 @@ describe('Integration test', function() {
             });
         });
 
+        it('DELETE /target/:_id existing id', function() {
+            request = {method: 'DELETE', path: '/target/12345678901234567890abce', headers: authHeaders};
+            testRequest(request, function(result) {
+                expect(result.statusCode).toEqual(204);
+            });
+        });
+
+        it('DELETE /target/:_id non-existing id', function() {
+            request = {method: 'DELETE', path: '/target/12345678901234567890FFFF', headers: authHeaders};
+            testRequest(request, function(result) {
+                expect(result.statusCode).toEqual(404);
+                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find target with ID 12345678901234567890FFFF'})
+            });
+        });
+
+
         it('POST /target', function() {
             var id;
 

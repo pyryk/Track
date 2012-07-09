@@ -235,19 +235,38 @@ describe('API', function() {
                 });
             });
 
-
-            /*
             describe('deleteTarget', function() {
-                it('should delete a target', function() {
-                    spyOnPromise(Mongo, 'deleteTargetById').andCallSuccess(
-                        {}
-                    )
 
+                it('should delete a target', function() {
+
+                    // Fake that deleteTargetById succeeds
+                    spyOnPromise(Mongo, 'deleteTargetById').andCallSuccess();
+
+                    req.params.id = '12345678901234567890abcd';
+
+                    API.deleteTarget(req, res, next);
+
+                    // expectStatus expects 200 in any case, because the length of res.send.mostRecentCall.args is 1 (only status code).
+                    // deleteTarget returns 204 though.
+                    expectStatus(res).toEqual(204);
                 });
-                expectStatus(res).toEqual(204);
+
+                it('should return 404 if no results for ID found', function() {
+                    spyOnPromise(Mongo, 'findTargetById').andCallSuccess(null);
+
+                    req.params.id = 'accab1234';
+                    API.deleteTarget(req, res, next);
+
+                    expect(next).toHaveBeenCalledWithError({
+                        status: 404,
+                        code: "ResourceNotFound",
+                        message: "Could not find target with ID accab1234"
+                    });
+                });
+
 
             });
-            */
+
 
             describe('postTarget', function() {
 

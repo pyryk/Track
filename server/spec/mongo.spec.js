@@ -1,6 +1,7 @@
 var Mongo = require('../modules/mongo');
 var MongoHelpers = require('./helpers').Mongo;
 var Query = require('mongoose').Query;
+var restify = require('restify');
 
 // Helper methods for Mongo testing
 var testDB = MongoHelpers.testDB;
@@ -53,6 +54,28 @@ describe('Mongo', function() {
                     expect(dbResult.question).toEqual('Millanen fiilis Virgin Oilissa on?');
                     expect(dbResult.createdLocation.lat).toEqual(12.3456);
                     expect(dbResult.creatorFbUserId).toEqual('123456');
+                });
+            });
+        });
+    });
+
+    describe('deleteTarget', function() {
+        it('should remove the given target object', function() {
+            testDB(Mongo.findTargetById('12345678901234567890abcd'), function(target) {
+                testDB(Mongo.deleteTarget(target), function() {
+                    testDB(Mongo.findTargetById('12345678901234567890abcd'), function(findResult) {
+                        expect(findResult).toBe(null);
+                    });
+                });
+            });
+        });
+    });
+
+    describe('deleteTargetById', function() {
+        it('should remove a target specified by the id', function() {
+            testDB(Mongo.deleteTargetById('12345678901234567890abcd'), function() {
+                testDB(Mongo.findTargetById('12345678901234567890abcd'), function(findResult) {
+                   expect(findResult).toBe(null);
                 });
             });
         });
