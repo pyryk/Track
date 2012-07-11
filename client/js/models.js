@@ -369,8 +369,3 @@ Customer.configure("Customer", "logo", "name");
 var QuestionItem = Spine.Model.sub();
 QuestionItem.configure("QuestionItem", "question", "changeToComment", "done", "results");
 
-QuestionItem.include({
-  getQuestion: function() {
-    return this.question;
-  }
-});

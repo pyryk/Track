@@ -144,32 +144,33 @@ body {
   @include background-image(linear-gradient($background_gradient_1, $background_gradient_2 100%));
 }
 
+.row, .col { overflow: hidden; position: absolute; }
+.row { left: 0; right: 0; }
+.col { top: 0; bottom: 0; }
+.scroll-x { overflow-x: auto; }
+.scroll-y { overflow-y: auto; }
+
 /* container elements
 * =================================================================================================================== */
 #container {
   padding: 0;
+  margin: 0;
 }
 
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
+.header.row {
   height: $header_height;
-  width: 100%;
-  margin-top: 0;
-  padding-top: 0;
+  top: 0px;
   @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
   color: $header_text_color;
-  //border-bottom: 1px solid $border_color;
   text-align: center;
-  
+
   h1 {
     padding: 0.25em;
     padding-top: 9px;
     margin: 0;
     font-size: 20px;
     font-weight: 500;
-    
+
     a:link, a:visited, a:active {
       color: $text_color;
       text-decoration: none;
@@ -178,8 +179,10 @@ header {
     }
   }
 }
-#main {
-  padding-top: $header_height; // if doesn't have javascript support
+
+.main.row {
+  top: $header_height;
+  bottom: 0px;
 }
 
 /* list elements
@@ -402,6 +405,7 @@ ul li span {
       @include box-flex(1);
       text-align: center;
       @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
+      @include border-radius(20px 20px 20px 20px);
       
       &:active, &.fake-active {
         @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
@@ -410,7 +414,7 @@ ul li span {
 
     .answer-four {
       border-right: none;
-      padding: 0.3em;
+      padding: 0.25em;
       padding-top: 1em;
       padding-bottom: 1em;
       margin-left: 4px;
@@ -418,42 +422,15 @@ ul li span {
       @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
       @include box-flex(1);
       text-align: center;
+      @include border-radius(20px 20px 20px 20px);
       @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
 
       &:active, &.fake-active {
         @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
       }
     }
-    .answer:first-child {
-      //@include border-radius(20px 0px 0px 20px);
-      @include border-radius(20px 20px 20px 20px);
-      margin-left: 0px;
-
-    }
-    .answer:last-child {
-      border-right: 1px solid $border_color;
-      //@include border-radius(0px 20px 20px 0px);
-      @include border-radius(20px 20px 20px 20px);
-
-    }
-    .answer-four:not(:first-child) {
-      @include border-radius(20px 20px 20px 20px);
-
-
-    }
-
     .answer-four:first-child {
-      //@include border-radius(20px 0px 0px 20px);
-      @include border-radius(20px 20px 20px 20px);
       margin-left: 0px;
-
-
-    }
-    .answer-four:last-child {
-      border-right: 1px solid $border_color;
-      //@include border-radius(0px 20px 20px 0px);
-      @include border-radius(20px 20px 20px 20px);
-
     }
   }
   .link-button {

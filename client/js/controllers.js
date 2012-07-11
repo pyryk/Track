@@ -9,7 +9,6 @@ var BaseController = Spine.Controller.sub({
   },
   show: function() {
     this.render();
-
   },
   render: function() {
     var data = this.getData();
@@ -17,7 +16,6 @@ var BaseController = Spine.Controller.sub({
       this.html(this.template(data));
       this.addFastButtons();
     }
-    //this.addPseudoActiveSupport();
   },
   getData: function() {
     return {};
@@ -37,21 +35,6 @@ var BaseController = Spine.Controller.sub({
         }
       }
     }
-  },
-  // TODO remove if not needed
-  addPseudoActiveSupport: function() {
-    if (navigator.userAgent.toLowerCase().indexOf("android 2") > -1) {
-      $(".active-button")
-        .bind("touchstart", function () {
-          $(this).addClass("fake-active");
-        })
-        .bind("touchend", function() {
-          $(this).removeClass("fake-active");
-        })
-        .bind("touchcancel", function() {
-          $(this).removeClass("fake-active");
-        });
-    }
   }
 });
 
@@ -68,18 +51,7 @@ var CustomersList = BaseController.sub({
       Customer.create({logo: "img/templogos/night_people_group.png", name: "Night people group Finland"}),
       Customer.create({logo: "img/templogos/subway.png", name: "Subway"}),
       Customer.create({logo: "img/templogos/rosso.png", name: "Rosso"}),
-      Customer.create({logo: "img/templogos/mcdonalds.png", name: "McDonald's"}),
-      Customer.create({logo: "img/templogos/hesburger.png", name: "Hesburger"}),
-      Customer.create({logo: "img/templogos/finnkino.png", name: "Finnkino"}),
-      Customer.create({logo: "img/templogos/aalto_university.png", name: "Aalto university"}),
-      Customer.create({logo: "img/templogos/chicos.png", name: "Chico's"}),
-      Customer.create({logo: "img/templogos/roberts_coffee.png", name: "Robert's Coffee"}),
-      Customer.create({logo: "img/templogos/unisport.png", name: "Unisport"}),
-      Customer.create({logo: "img/templogos/elisa.png", name: "Elisa"}),
-      Customer.create({logo: "img/templogos/abc.png", name: "ABC"}),
-      Customer.create({logo: "img/templogos/HSL.png", name: "HSL"}),
-      Customer.create({logo: "img/templogos/hesburger.png", name: "VR"}),
-      Customer.create({logo: "img/templogos/mcdonalds.png", name: "Picnic"})
+      Customer.create({logo: "img/templogos/mcdonalds.png", name: "McDonald's"})
     ]};
   },
   clickedCustomer: function() {
@@ -129,10 +101,16 @@ var TargetsList = BaseController.sub({
     questionList.push(QuestionItem.create({question: "Testi2"}));
     questionList.push(QuestionItem.create({question: "Testi3"}));
     questionList.push(QuestionItem.create({question: "Testi4"}));
-
     return {items: [
       Target.create({name: "Salatut elämät", question: questionList, questionType: "twoSmiles", showQuestionComment: false}),
       Target.create({name: "Kauniit ja rohkeat", question: questionList, questionType: "fourSmiles", showQuestionComment: false}),
+      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
+      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
+      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
+      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
+      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
+      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
+      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
       Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
       Target.create({name: "Hockey Night 2", question: questionList, questionType: "twoSmiles", showQuestionComment: true})
     ]};
@@ -172,7 +150,6 @@ var TargetsList = BaseController.sub({
       Spine.Route.navigate(App.getRoute("create_target"));
     }
   },
-
   /* List search using jQuery-example */
   searchTarget: function() {
     var $lastElement = null;
@@ -235,10 +212,6 @@ var TargetDetails = BaseController.sub({
   },
   init: function() {
     BaseController.prototype.init.call(this);
-
-    // this is binded to all events to avoid the unbind-old/bind-new
-    // hassle when viewing another target
-    //Target.bind("create update", this.proxy(this.targetUpdated));
   },
   getTitle: function() {
     return "Target";
@@ -305,7 +278,6 @@ var TargetDetails = BaseController.sub({
       this.html(this.template(this.getData()));
       this.addFastButtons();
     }
-
     if (!Target.find(this.id).getShowQuestionComment() && !QuestionItem.find(id).done) {
       var questionItem = QuestionItem.find(id);
       questionItem.done = true;
@@ -315,7 +287,6 @@ var TargetDetails = BaseController.sub({
     }
     //this.saveAnswer(1);*/
     console.log("tallennettu positiivinen");
-
   },
   saveNegativeAnswer: function() {
     var id = $(e.target).attr('data-id');
@@ -326,7 +297,6 @@ var TargetDetails = BaseController.sub({
       this.html(this.template(this.getData()));
       this.addFastButtons();
     }
-
     if (!Target.find(this.id).getShowQuestionComment() && !QuestionItem.find(id).done) {
       var questionItem = QuestionItem.find(id);
       questionItem.done = true;
