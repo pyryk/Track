@@ -67,14 +67,12 @@ var App = Spine.Controller.sub({
       // create controller if it doesnt already exist
       if (!this.pages[name]) {
         var tmpl = $('#template-' + name);
-        log("creating view " + name, "with template", tmpl);
         this.pages[name] = new className({
           el: $("#main"),
           template: tmpl
         });
       }
     
-      log("rendering view " + name);
       this.pages[name].id = id; // set id if needed
       this.pages[name].show();
       this.visiblePage = this.pages[name];

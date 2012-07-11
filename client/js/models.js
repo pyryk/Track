@@ -4,7 +4,7 @@
  */
 var Target = Spine.Model.sub();
 
-Target.configure("Target", "logo", "name", "question", "location", "results", "detailsLoaded", "saved");
+Target.configure("Target", "logo", "name", "question", "questionType", "showQuestionComment", "location", "results", "detailsLoaded", "saved");
 
 Target.include({
   setDefaults: function() {
@@ -32,6 +32,12 @@ Target.include({
   },
   getName: function() {
     return this.name;
+  },
+  getQuestionType: function() {
+    return this.questionType;
+  },
+  getShowQuestionComment: function() {
+    return this.showQuestionComment;
   },
   loadDetails: function(listener) {
     Target.loadDetails(this.id, listener);
@@ -361,4 +367,10 @@ var Customer = Spine.Model.sub();
 Customer.configure("Customer", "logo", "name");
 
 var QuestionItem = Spine.Model.sub();
-QuestionItem.configure("QuestionItem", "question", "smilestwo", "smilesfour", "comment");
+QuestionItem.configure("QuestionItem", "question", "changeToComment", "done", "results");
+
+QuestionItem.include({
+  getQuestion: function() {
+    return this.question;
+  }
+});

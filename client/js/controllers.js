@@ -125,14 +125,16 @@ var TargetsList = BaseController.sub({
   getData: function() {
     //var questionList = QuestionItems.create({name: "Kuinka menee?", smiles-two: true});
     var questionList = new Array();
-    questionList.push(QuestionItem.create({question: "Testi", comment: true, smilestwo: true}));
-    questionList.push(QuestionItem.create({question: "Testi2", comment: true}));
-    console.log(questionList);
+    questionList.push(QuestionItem.create({question: "Testi1"}));
+    questionList.push(QuestionItem.create({question: "Testi2"}));
+    questionList.push(QuestionItem.create({question: "Testi3"}));
+    questionList.push(QuestionItem.create({question: "Testi4"}));
 
     return {items: [
-      Target.create({name: "Salatut elämät", question: questionList}),
-      Target.create({name: "Kauniit ja rohkeat", question: questionList}),
-      Target.create({name: "Hockey Night", question: questionList})
+      Target.create({name: "Salatut elämät", question: questionList, questionType: "twoSmiles", showQuestionComment: false}),
+      Target.create({name: "Kauniit ja rohkeat", question: questionList, questionType: "fourSmiles", showQuestionComment: false}),
+      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
+      Target.create({name: "Hockey Night 2", question: questionList, questionType: "twoSmiles", showQuestionComment: true})
     ]};
   },/*
   init: function() {
@@ -226,8 +228,10 @@ var ownResult = BaseController.sub({
 var TargetDetails = BaseController.sub({
   events: {
     "fastclick .active.answer.positive": "savePositiveAnswer",
-    "fastclick .active.answer.negative": "saveNegativeAnswer",
-    "fastclick .view-results": "viewResults"
+    "fastclick .active.answer-four.positive": "savePositiveAnswer",
+    "fastclick .active.answer.negative": "savePositiveAnswer",
+    "fastclick .active.answer-four.negative": "saveNegativeAnswer",
+    "fastclick .goToResults": "goToResults"
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -250,14 +254,11 @@ var TargetDetails = BaseController.sub({
       log(e);
     }*/
     var name = Target.find(this.id).getName();
-    console.log(name);
-    var question = Target.find(this.id).getQuestion();
-    console.log(question);
-    return {name: name, items: question};
-  },/*
-  render: function() {
-    BaseController.prototype.render.call(this);
+    var type = Target.find(this.id).getQuestionType();
+    var items = Target.find(this.id).getQuestion();
+    return {name: name, type: type, items: items};
   },
+  /*
    error: function(reason) {
     if (reason == "notfound") {
       alert('not found');
@@ -290,11 +291,49 @@ var TargetDetails = BaseController.sub({
     var user = User.getUser();
     result.post();
   },*/
-  savePositiveAnswer: function() {
-    //this.saveAnswer(1);
-    console.log("tallennettu positiivinen")
+  goToResults: function() {
+    console.log("siiryttäisiin tuloksiin");
+    //Spine.Route.navigate(App.getRoute(Target.find(this.id)) + "/results");
+  },
+
+  savePositiveAnswer: function(e) {
+    var id = $(e.target).attr('data-id');
+    if (Target.find(this.id).getShowQuestionComment()) {
+      var questionItem = QuestionItem.find(id);
+      questionItem.changeToComment = true;
+      questionItem.save();
+      this.html(this.template(this.getData()));
+      this.addFastButtons();
+    }
+
+    if (!Target.find(this.id).getShowQuestionComment() && !QuestionItem.find(id).done) {
+      var questionItem = QuestionItem.find(id);
+      questionItem.done = true;
+      questionItem.save();
+      this.html(this.template(this.getData()));
+      this.addFastButtons();
+    }
+    //this.saveAnswer(1);*/
+    console.log("tallennettu positiivinen");
+
   },
   saveNegativeAnswer: function() {
+    var id = $(e.target).attr('data-id');
+    if (Target.find(this.id).getShowQuestionComment()) {
+      var questionItem = QuestionItem.find(id);
+      questionItem.changeToComment = true;
+      questionItem.save();
+      this.html(this.template(this.getData()));
+      this.addFastButtons();
+    }
+
+    if (!Target.find(this.id).getShowQuestionComment() && !QuestionItem.find(id).done) {
+      var questionItem = QuestionItem.find(id);
+      questionItem.done = true;
+      questionItem.save();
+      this.html(this.template(this.getData()));
+      this.addFastButtons();
+    }
     //this.saveAnswer(0);
     console.log("Tallennettu negatiivinen");
   }/*,

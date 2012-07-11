@@ -2,7 +2,7 @@
 <!-- Conditional comment for mobile ie7 blogs.msdn.com/b/iemobile/ -->
 <!--[if IEMobile 7 ]>    <html class="no-js iem7" lang="en"> <![endif]-->
 <!--[if (gt IEMobile 7)|!(IEMobile)]><!-->
-<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/html"> <!--<![endif]-->
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"> <!--<![endif]-->
 
 <head>
   <meta charset="utf-8">
@@ -120,29 +120,74 @@
     <!--{{#unless detailsLoaded}}
       <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
     {{/unless}}-->
-    {{#each items}}
-    <form id="answer-form">
-      <p class="target-question">{{question}}</p>
-      {{#if smilestwo}}
-      <p class="target-answer">
-        <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
-        <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
-      </p>
-      {{else}}
-        {{#if smilesfour}}
 
+    {{#equal type "twoSmiles"}}
+    {{#each items}}
+    <form data-id={{this.id}}>
+      <p class="target-question">{{question}}</p>
+      {{#unless this.done}}
+      <p class="target-answer">
+        {{#unless this.changeToComment}}
+        <span data-id={{this.id}} class="active answer positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="45" height="45" alt=":)"/></span>
+        <span data-id={{this.id}} class="active answer negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="45" height="45" alt=":("/></span>
         {{else}}
         <textarea data-id="{{this.id}}" placeholder="Kirjoita kommentti..." class="comment"/>
         <ul class="buttons">
           <li><a>lähetä</a></li>
           <li><a>tulokset</a></li>
         </ul>
-        {{/if}}
-
-      {{/if}}
+        {{/unless}}
+      </p>
+      {{else}}
+      <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a>
+      </p>
+      {{/unless}}
     </form>
-    <!--<p><span class="link-button view-results">View Results</span></p>-->
     {{/each}}
+    {{/equal}}
+
+    {{#equal type "fourSmiles"}}
+    {{#each items}}
+    <form data-id={{this.id}}>
+      <p class="target-question">{{question}}</p>
+      {{#unless this.done}}
+      <p class="target-answer">
+        {{#unless this.changeToComment}}
+        <span data-id={{this.id}} class="active answer-four positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="45" height="45" alt=":)"></span>
+        <span data-id={{this.id}} class="active answer-four positive"><img data-id={{this.id}} src="img/thumbs-up-little-smiley.png" width="45" height="45" alt=":)"></span>
+        <span data-id={{this.id}} class="active answer-four negative"><img data-id={{this.id}} src="img/thumbs-down-little-smiley.png" width="45" height="45" alt=":)"></span>
+        <span data-id={{this.id}} class="active answer-four negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="45" height="45" alt=":("></span>
+        {{else}}
+        <textarea data-id="{{this.id}}" placeholder="Kirjoita kommentti..." class="comment"/>
+        <ul class="buttons">
+          <li><a>lähetä</a></li>
+          <li><a>tulokset</a></li>
+        </ul>
+        {{/unless}}
+      </p>
+      {{else}}
+      <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a>
+      </p>
+      {{/unless}}
+    </form>
+    {{/each}}
+    {{/equal}}
+
+    {{#equal type "comment"}}
+    {{#each items}}
+    <form data-id={{this.id}}>
+      <p class="target-question">{{question}}</p>
+      <p class="target-answer">
+        <textarea data-id="{{this.id}}" placeholder="Kirjoita kommentti..." class="comment"/>
+      <ul class="buttons">
+        <li><a>lähetä</a></li>
+        <li><a>tulokset</a></li>
+      </ul>
+      </p>
+    </form>
+    {{/each}}
+    {{/equal}}
+
   </div>
 </script>
 

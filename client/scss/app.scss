@@ -370,6 +370,19 @@ ul li span {
     @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
   }
 
+  .target-done {
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    margin-top: -10px;
+    font-size: 110%;
+    color: red;
+    //border: 1px solid #0d0e0d;
+    padding: 7px 10px;
+    @include border-radius(10px 10px 10px 10px);
+    @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+    @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
+  }
+
   .target-answer {
     @include display-box;
     @include box-orient(horizontal);
@@ -380,8 +393,11 @@ ul li span {
 
     .answer {
       border-right: none;
+      border-left: none;
+      background-color: black;
       padding: 1em;
       display: block;
+      margin-left: 4px;
       @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
       @include box-flex(1);
       text-align: center;
@@ -391,12 +407,53 @@ ul li span {
         @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
       }
     }
+
+    .answer-four {
+      border-right: none;
+      padding: 0.3em;
+      padding-top: 1em;
+      padding-bottom: 1em;
+      margin-left: 4px;
+      display: block;
+      @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+      @include box-flex(1);
+      text-align: center;
+      @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
+
+      &:active, &.fake-active {
+        @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
+      }
+    }
     .answer:first-child {
-      @include border-radius(20px 0px 0px 20px);
+      //@include border-radius(20px 0px 0px 20px);
+      @include border-radius(20px 20px 20px 20px);
+      margin-left: 0px;
+
     }
     .answer:last-child {
       border-right: 1px solid $border_color;
-      @include border-radius(0px 20px 20px 0px);
+      //@include border-radius(0px 20px 20px 0px);
+      @include border-radius(20px 20px 20px 20px);
+
+    }
+    .answer-four:not(:first-child) {
+      @include border-radius(20px 20px 20px 20px);
+
+
+    }
+
+    .answer-four:first-child {
+      //@include border-radius(20px 0px 0px 20px);
+      @include border-radius(20px 20px 20px 20px);
+      margin-left: 0px;
+
+
+    }
+    .answer-four:last-child {
+      border-right: 1px solid $border_color;
+      //@include border-radius(0px 20px 20px 0px);
+      @include border-radius(20px 20px 20px 20px);
+
     }
   }
   .link-button {
@@ -417,8 +474,27 @@ ul li span {
     @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
     @include box-flex(1);
     @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
-    @include border-radius(20px 20px 20px 20px);
+    @include border-radius(10px 10px 10px 10px);
     outline: none;
+  }
+  .buttons {
+    list-style: none;
+    margin-top: -6px;
+
+    li {
+      display: inline;
+      padding: 0.2em 0.6em;
+      border: 1px solid $border_color;
+      @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+      @include box-flex(1);
+      @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
+      @include border-radius(5px 5px 5px 5px);
+      list-style: none;
+
+      a {
+        color: $text_color;
+      }
+    }
   }
 }
 
