@@ -4,7 +4,7 @@
  */
 var Target = Spine.Model.sub();
 
-Target.configure("Target", "logo", "name", "question", "questionType", "showQuestionComment", "location", "results", "detailsLoaded", "saved");
+Target.configure("Target", "logo", "name", "questions", "questionType", "showQuestionComment", "location", "results", "detailsLoaded", "saved");
 
 Target.include({
   setDefaults: function() {
@@ -27,8 +27,8 @@ Target.include({
   getResourceName: function() {
     return "targets";
   },
-  getQuestion: function() {
-    return this.question;
+  getQuestions: function() {
+    return this.questions;
   },
   getName: function() {
     return this.name;
@@ -129,6 +129,8 @@ Target.loadList = function(additionalData) {
         target["saved"] = true; // saved i.e. got from backend
         
         Target.create(target);
+        console.log("loadTargetList");
+        console.log(target);
       }
     }, 
     error: function(jqxhr, textStatus, error) {
@@ -196,6 +198,8 @@ Target.loadDetails = function(id, listener) {
       };*/
       
       target.save();
+      console.log("loadDetails");
+      console.log(target);
     },
     statusCode: {
       404: function() {

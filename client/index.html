@@ -124,24 +124,28 @@
     {{#equal type "twoSmiles"}}
     {{#each items}}
     <form data-id={{this.id}}>
-      <p class="target-question">{{question}}</p>
-      {{#unless this.done}}
-      <p class="target-answer">
+      <div class="questionItem">
+        <p class="question">{{question}}</p>
+        {{#unless this.done}}
         {{#unless this.changeToComment}}
-        <span data-id={{this.id}} class="active answer positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="45" height="45" alt=":)"/></span>
-        <span data-id={{this.id}} class="active answer negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="45" height="45" alt=":("/></span>
+
+        <div class="answer-two">
+          <span data-id={{this.id}} class="active balance item positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="55" height="55" alt=":)"/></span>
+          <span data-id={{this.id}} class="active item negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="55" height="55" alt=":("/></span>
+        </div>
+
         {{else}}
-        <textarea data-id="{{this.id}}" placeholder="Kirjoita kommentti..." class="comment"/>
-        <ul class="buttons">
-          <li><a>lähetä</a></li>
-          <li><a>tulokset</a></li>
-        </ul>
-        {{/unless}}
-      </p>
+          <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
+          <!--<ul class="buttons">
+            <li><a>lähetä</a></li>
+            <li><a>tulokset</a></li>
+          </ul>-->
+          {{/unless}}
       {{else}}
       <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a>
       </p>
       {{/unless}}
+      </div>
     </form>
     {{/each}}
     {{/equal}}
@@ -149,26 +153,29 @@
     {{#equal type "fourSmiles"}}
     {{#each items}}
     <form data-id={{this.id}}>
-      <p class="target-question">{{question}}</p>
-      {{#unless this.done}}
-      <p class="target-answer">
+      <div class="questionItem">
+        <p class="question">{{question}}</p>
+        {{#unless this.done}}
         {{#unless this.changeToComment}}
-        <span data-id={{this.id}} class="active answer-four positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="45" height="45" alt=":)"></span>
-        <span data-id={{this.id}} class="active answer-four positive"><img data-id={{this.id}} src="img/thumbs-up-little-smiley.png" width="45" height="45" alt=":)"></span>
-        <span data-id={{this.id}} class="active answer-four negative"><img data-id={{this.id}} src="img/thumbs-down-little-smiley.png" width="45" height="45" alt=":)"></span>
-        <span data-id={{this.id}} class="active answer-four negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="45" height="45" alt=":("></span>
+        <div class="answer-four">
+          <span data-id={{this.id}} class="active balance item positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="55" height="55" alt=":)"></span>
+          <span data-id={{this.id}} class="active balance item positive"><img data-id={{this.id}} src="img/thumbs-up-little-smiley.png" width="55" height="55" alt=":)"></span>
+          <span data-id={{this.id}} class="active item negative"><img data-id={{this.id}} src="img/thumbs-down-little-smiley.png" width="55" height="55" alt=":)"></span>
+          <span data-id={{this.id}} class="active item negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="55" height="55" alt=":("></span>
+        </div>
+          {{else}}
+          <textarea data-id="{{this.id}}"  class="styled" placeholder="Kirjoita kommentti..."/>
+          <!--<ul class="buttons">
+            <li><a>lähetä</a></li>
+            <li><a>tulokset</a></li>
+          </ul>-->
+          {{/unless}}
+
         {{else}}
-        <textarea data-id="{{this.id}}" placeholder="Kirjoita kommentti..." class="comment"/>
-        <ul class="buttons">
-          <li><a>lähetä</a></li>
-          <li><a>tulokset</a></li>
-        </ul>
+        <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a>
+        </p>
         {{/unless}}
-      </p>
-      {{else}}
-      <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a>
-      </p>
-      {{/unless}}
+      </div>
     </form>
     {{/each}}
     {{/equal}}
@@ -176,14 +183,19 @@
     {{#equal type "comment"}}
     {{#each items}}
     <form data-id={{this.id}}>
-      <p class="target-question">{{question}}</p>
-      <p class="target-answer">
-        <textarea data-id="{{this.id}}" placeholder="Kirjoita kommentti..." class="comment"/>
-      <ul class="buttons">
-        <li><a>lähetä</a></li>
-        <li><a>tulokset</a></li>
-      </ul>
-      </p>
+      <div class="questionItem">
+        <p class="question">{{question}}</p>
+        {{#unless this.done}}
+        <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
+        <!--<ul class="buttons">
+          <li><a>lähetä</a></li>
+          <li><a>tulokset</a></li>
+        </ul>-->
+        {{else}}
+        <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a>
+        </p>
+        {{/unless}}
+      </div>
     </form>
     {{/each}}
     {{/equal}}

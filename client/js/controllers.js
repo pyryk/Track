@@ -95,26 +95,23 @@ var TargetsList = BaseController.sub({
     return "List";
   },
   getData: function() {
-    //var questionList = QuestionItems.create({name: "Kuinka menee?", smiles-two: true});
+    /*var questionList = QuestionItems.create({name: "Kuinka menee?", smiles-two: true});
     var questionList = new Array();
-    questionList.push(QuestionItem.create({question: "Testi1"}));
-    questionList.push(QuestionItem.create({question: "Testi2"}));
-    questionList.push(QuestionItem.create({question: "Testi3"}));
-    questionList.push(QuestionItem.create({question: "Testi4"}));
+    questionList.push(QuestionItem.create({question: "Kuinka hyvin ruokala toimi?"}));
+    questionList.push(QuestionItem.create({question: "Miltä ruoka maistui?"}));
+    questionList.push(QuestionItem.create({question: "Olivatko tarjoilijat ystävällisiä, tai minkälainen fiilis heistä välittyi?"}));
+    questionList.push(QuestionItem.create({question: "Voisitko keksiä vielä jotain parannettavaa? Jos voit niin mitä?"}));
     return {items: [
       Target.create({name: "Salatut elämät", question: questionList, questionType: "twoSmiles", showQuestionComment: false}),
       Target.create({name: "Kauniit ja rohkeat", question: questionList, questionType: "fourSmiles", showQuestionComment: false}),
       Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
-      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
-      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
-      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
-      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
-      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
-      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
-      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
-      Target.create({name: "Hockey Night 2", question: questionList, questionType: "twoSmiles", showQuestionComment: true})
-    ]};
-  },/*
+      Target.create({name: "Hockey Night 2", question: questionList, questionType: "twoSmiles", showQuestionComment: true}),
+      Target.create({name: "Uusi tyyli", question: questionList, questionType: "new", showQuestionComment: true})
+    ]};*/
+
+    console.log(Target.findAllByAttribute("saved", true));
+    return {items: Target.findAllByAttribute("saved", true)};
+  },
   init: function() {
     BaseController.prototype.init.call(this);
     Target.bind("create", this.proxy(this.addOne));
@@ -138,13 +135,13 @@ var TargetsList = BaseController.sub({
       log('location changed - reloading target list');
       this.loadList({lat: location.lat, lon: location.lon});
     }
-  },*/
+  },
   clicked: function(e) {
     var el = $(e.target);
     var id = el.attr('data-id');
     if (id) {
       var target = Target.find(id);
-      //target.loadDetails();
+      target.loadDetails();
       Spine.Route.navigate(App.getRoute(target));
     } else if (el.hasClass("create-new")) {
       Spine.Route.navigate(App.getRoute("create_target"));
@@ -204,10 +201,9 @@ var ownResult = BaseController.sub({
  *====================================================================================================================*/
 var TargetDetails = BaseController.sub({
   events: {
-    "fastclick .active.answer.positive": "savePositiveAnswer",
-    "fastclick .active.answer-four.positive": "savePositiveAnswer",
-    "fastclick .active.answer.negative": "savePositiveAnswer",
-    "fastclick .active.answer-four.negative": "saveNegativeAnswer",
+    "fastclick .active.balance.item.positive": "savePositiveAnswer",
+    "fastclick .active.item.negative": "saveNegativeAnswer",
+    "fastclick .styled": "focus",
     "fastclick .goToResults": "goToResults"
   },
   init: function() {
@@ -217,7 +213,7 @@ var TargetDetails = BaseController.sub({
     return "Target";
   },
   getData: function() {
-    /*var target, error;
+    var target, error;
     try {
       target = Target.find(this.id);
     } catch (e) { // unknown record
@@ -225,14 +221,13 @@ var TargetDetails = BaseController.sub({
       Target.loadDetails(this.id, this);
       error = e;
       log(e);
-    }*/
+    }
     var name = Target.find(this.id).getName();
     var type = Target.find(this.id).getQuestionType();
-    var items = Target.find(this.id).getQuestion();
-    return {name: name, type: type, items: items};
+    var items = Target.find(this.id).getQuestions();
+    return {name: name, type: type, items: items, target: target, error: error};
   },
-  /*
-   error: function(reason) {
+  error: function(reason) {
     if (reason == "notfound") {
       alert('not found');
     }
@@ -242,7 +237,7 @@ var TargetDetails = BaseController.sub({
       this.render();
     }
   },
-  answerSaved: function(answer, success) {
+  /*answerSaved: function(answer, success) {
     if (success) {
       //this.viewResults();
       Spine.Route.navigate(App.getRoute(Target.find(this.id)) + "/results");
@@ -268,7 +263,10 @@ var TargetDetails = BaseController.sub({
     console.log("siiryttäisiin tuloksiin");
     //Spine.Route.navigate(App.getRoute(Target.find(this.id)) + "/results");
   },
-
+  focus: function(e) {
+    console.log(e);
+    console.log($(e.target).attr("placeholder"));
+  },
   savePositiveAnswer: function(e) {
     var id = $(e.target).attr('data-id');
     if (Target.find(this.id).getShowQuestionComment()) {
@@ -288,7 +286,7 @@ var TargetDetails = BaseController.sub({
     //this.saveAnswer(1);*/
     console.log("tallennettu positiivinen");
   },
-  saveNegativeAnswer: function() {
+  saveNegativeAnswer: function(e) {
     var id = $(e.target).attr('data-id');
     if (Target.find(this.id).getShowQuestionComment()) {
       var questionItem = QuestionItem.find(id);

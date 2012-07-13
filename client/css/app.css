@@ -26,7 +26,7 @@
 
 /* line 136, ../scss/app.scss */
 html {
-  background-color: #fefefe;
+  background-color: #f6f6f6;
 }
 
 /* line 140, ../scss/app.scss */
@@ -34,12 +34,12 @@ body {
   color: #606967;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 14px;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ececec), color-stop(100%, #fefefe));
-  background-image: -webkit-linear-gradient(#ececec, #fefefe 100%);
-  background-image: -moz-linear-gradient(#ececec, #fefefe 100%);
-  background-image: -o-linear-gradient(#ececec, #fefefe 100%);
-  background-image: -ms-linear-gradient(#ececec, #fefefe 100%);
-  background-image: linear-gradient(#ececec, #fefefe 100%);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f1f1f1), color-stop(100%, #f6f6f6));
+  background-image: -webkit-linear-gradient(#f1f1f1, #f6f6f6 100%);
+  background-image: -moz-linear-gradient(#f1f1f1, #f6f6f6 100%);
+  background-image: -o-linear-gradient(#f1f1f1, #f6f6f6 100%);
+  background-image: -ms-linear-gradient(#f1f1f1, #f6f6f6 100%);
+  background-image: linear-gradient(#f1f1f1, #f6f6f6 100%);
 }
 
 /* line 147, ../scss/app.scss */
@@ -82,12 +82,12 @@ body {
 .header.row {
   height: 46px;
   top: 0px;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #323232), color-stop(100%, #040404));
-  background-image: -webkit-linear-gradient(#323232, #040404);
-  background-image: -moz-linear-gradient(#323232, #040404);
-  background-image: -o-linear-gradient(#323232, #040404);
-  background-image: -ms-linear-gradient(#323232, #040404);
-  background-image: linear-gradient(#323232, #040404);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   color: white;
   text-align: center;
 }
@@ -180,30 +180,40 @@ body {
 }
 /* line 230, ../scss/app.scss */
 .primary-list li.first-visible-child {
-  -webkit-border-radius: 15px 15px 0px 0px;
-  -moz-border-radius: 15px 15px 0px 0px;
-  -ms-border-radius: 15px 15px 0px 0px;
-  -o-border-radius: 15px 15px 0px 0px;
-  border-radius: 15px 15px 0px 0px;
-  border-top: 1px solid ccc;
+  -moz-border-radius-topleft: 15px;
+  -webkit-border-top-left-radius: 15px;
+  -ms-border-top-left-radius: 15px;
+  -o-border-top-left-radius: 15px;
+  border-top-left-radius: 15px;
+  -moz-border-radius-topright: 15px;
+  -webkit-border-top-right-radius: 15px;
+  -ms-border-top-right-radius: 15px;
+  -o-border-top-right-radius: 15px;
+  border-top-right-radius: 15px;
+  border-top: 1px solid #cccccc;
 }
 /* line 234, ../scss/app.scss */
 .primary-list li.last-visible-child {
-  -webkit-border-radius: 0px 0px 15px 15px;
-  -moz-border-radius: 0px 0px 15px 15px;
-  -ms-border-radius: 0px 0px 15px 15px;
-  -o-border-radius: 0px 0px 15px 15px;
-  border-radius: 0px 0px 15px 15px;
-  border-bottom: 1px solid ccc;
+  -moz-border-radius-bottomleft: 15px;
+  -webkit-border-bottom-left-radius: 15px;
+  -ms-border-bottom-left-radius: 15px;
+  -o-border-bottom-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  -moz-border-radius-bottomright: 15px;
+  -webkit-border-bottom-right-radius: 15px;
+  -ms-border-bottom-right-radius: 15px;
+  -o-border-bottom-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-bottom: 1px solid #cccccc;
 }
 /* line 240, ../scss/app.scss */
 .primary-list li.header {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #323232), color-stop(100%, #040404));
-  background-image: -webkit-linear-gradient(#323232, #040404);
-  background-image: -moz-linear-gradient(#323232, #040404);
-  background-image: -o-linear-gradient(#323232, #040404);
-  background-image: -ms-linear-gradient(#323232, #040404);
-  background-image: linear-gradient(#323232, #040404);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   padding: 0.7em 1em;
   font-size: 18px;
   font-weight: bold;
@@ -226,22 +236,33 @@ body {
 /* line 261, ../scss/app.scss */
 .primary-list li:first-child {
   border-top: 1px solid #cccccc;
-  -webkit-border-radius: 15px 15px 0px 0px;
-  -moz-border-radius: 15px 15px 0px 0px;
-  -ms-border-radius: 15px 15px 0px 0px;
-  -o-border-radius: 15px 15px 0px 0px;
-  border-radius: 15px 15px 0px 0px;
+  -moz-border-radius-topleft: 15px;
+  -webkit-border-top-left-radius: 15px;
+  -ms-border-top-left-radius: 15px;
+  -o-border-top-left-radius: 15px;
+  border-top-left-radius: 15px;
+  -moz-border-radius-topright: 15px;
+  -webkit-border-top-right-radius: 15px;
+  -ms-border-top-right-radius: 15px;
+  -o-border-top-right-radius: 15px;
+  border-top-right-radius: 15px;
 }
 /* line 266, ../scss/app.scss */
 .primary-list li:last-child {
-  -webkit-border-radius: 0px 0px 15px 15px;
-  -moz-border-radius: 0px 0px 15px 15px;
-  -ms-border-radius: 0px 0px 15px 15px;
-  -o-border-radius: 0px 0px 15px 15px;
-  border-radius: 0px 0px 15px 15px;
+  border-bottom: 1px solid #cccccc;
+  -moz-border-radius-bottomleft: 15px;
+  -webkit-border-bottom-left-radius: 15px;
+  -ms-border-bottom-left-radius: 15px;
+  -o-border-bottom-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  -moz-border-radius-bottomright: 15px;
+  -webkit-border-bottom-right-radius: 15px;
+  -ms-border-bottom-right-radius: 15px;
+  -o-border-bottom-right-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 
-/* line 271, ../scss/app.scss */
+/* line 272, ../scss/app.scss */
 ul li span {
   margin: 0px;
   padding: 0px;
@@ -252,7 +273,7 @@ ul li span {
   white-space: nowrap;
 }
 
-/* line 281, ../scss/app.scss */
+/* line 282, ../scss/app.scss */
 .customer-list-span {
   margin-left: 5px;
   margin-bottom: 0px;
@@ -267,7 +288,7 @@ ul li span {
 
 /* list search elements
 * =================================================================================================================== */
-/* line 295, ../scss/app.scss */
+/* line 296, ../scss/app.scss */
 .search-field {
   width: 90%;
   margin-left: auto;
@@ -283,12 +304,12 @@ ul li span {
   text-shadow: 0 1px 1px #444444;
 }
 
-/* line 306, ../scss/app.scss */
+/* line 307, ../scss/app.scss */
 .hide {
   display: none;
 }
 
-/* line 310, ../scss/app.scss */
+/* line 311, ../scss/app.scss */
 .search-field-input {
   border: 1px solid #999;
   -webkit-border-radius: 11px 11px 11px 11px;
@@ -309,14 +330,14 @@ ul li span {
 
 /* target-details elements
 * =================================================================================================================== */
-/* line 326, ../scss/app.scss */
+/* line 327, ../scss/app.scss */
 #target-header {
   margin-top: 15px;
   margin-left: 7px;
   margin-right: 7px;
 }
 
-/* line 332, ../scss/app.scss */
+/* line 333, ../scss/app.scss */
 .target-name {
   float: left;
   font-style: italic;
@@ -326,19 +347,19 @@ ul li span {
   text-wrap: unrestricted;
 }
 
-/* line 341, ../scss/app.scss */
+/* line 342, ../scss/app.scss */
 .target-points {
   float: right;
   max-width: 65px;
   margin-top: 3px;
 }
 
-/* line 347, ../scss/app.scss */
+/* line 348, ../scss/app.scss */
 #target-header-clear {
   clear: both;
 }
 
-/* line 351, ../scss/app.scss */
+/* line 352, ../scss/app.scss */
 .target-points-font {
   font-size: 130%;
   font-weight: 600;
@@ -365,53 +386,30 @@ ul li span {
   color: #f9f9f9;
 }
 
-/* line 364, ../scss/app.scss */
-#target-details .target-question {
+/* line 365, ../scss/app.scss */
+#target-details .questionItem {
   margin-left: 1.5em;
   margin-right: 1.5em;
   margin-top: 20px;
-  font-size: 110%;
-  padding: 7px 10px;
+  font-size: 100%;
   -webkit-border-radius: 10px 10px 10px 10px;
   -moz-border-radius: 10px 10px 10px 10px;
   -ms-border-radius: 10px 10px 10px 10px;
   -o-border-radius: 10px 10px 10px 10px;
   border-radius: 10px 10px 10px 10px;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
-  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -moz-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -o-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
-  background-image: linear-gradient(#ffffff, #fcfcfc);
   -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 }
-/* line 376, ../scss/app.scss */
-#target-details .target-done {
+/* line 373, ../scss/app.scss */
+#target-details .questionItem .question {
+  color: #606967;
   margin-left: 1.5em;
   margin-right: 1.5em;
-  margin-top: -10px;
-  font-size: 110%;
-  color: red;
-  padding: 7px 10px;
-  -webkit-border-radius: 10px 10px 10px 10px;
-  -moz-border-radius: 10px 10px 10px 10px;
-  -ms-border-radius: 10px 10px 10px 10px;
-  -o-border-radius: 10px 10px 10px 10px;
-  border-radius: 10px 10px 10px 10px;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
-  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -moz-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -o-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
-  background-image: linear-gradient(#ffffff, #fcfcfc);
-  -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  padding-top: 10px;
 }
-/* line 389, ../scss/app.scss */
-#target-details .target-answer {
+/* line 379, ../scss/app.scss */
+#target-details .questionItem .answer-two {
   display: -webkit-box;
   display: -moz-box;
   display: -ms-box;
@@ -424,130 +422,103 @@ ul li span {
   -moz-box-align: stretch;
   -ms-box-align: stretch;
   box-align: stretch;
-  margin-left: 1.5em;
-  margin-right: 1.5em;
+  margin-left: 2.0em;
+  margin-right: 2.0em;
   margin-top: -7px;
 }
-/* line 397, ../scss/app.scss */
-#target-details .target-answer .answer {
+/* line 387, ../scss/app.scss */
+#target-details .questionItem .answer-two .item {
   border-right: none;
   border-left: none;
-  background-color: black;
-  padding: 1em;
+  padding: 0.6em;
   display: block;
-  margin-left: 4px;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
-  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -moz-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -o-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
-  background-image: linear-gradient(#ffffff, #fcfcfc);
   -webkit-box-flex: 1;
   -moz-box-flex: 1;
   -ms-box-flex: 1;
   box-flex: 1;
   text-align: center;
-  -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
-  -webkit-border-radius: 20px 20px 20px 20px;
-  -moz-border-radius: 20px 20px 20px 20px;
-  -ms-border-radius: 20px 20px 20px 20px;
-  -o-border-radius: 20px 20px 20px 20px;
-  border-radius: 20px 20px 20px 20px;
 }
-/* line 410, ../scss/app.scss */
-#target-details .target-answer .answer:active, #target-details .target-answer .answer.fake-active {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
-  background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
-  background-image: -moz-linear-gradient(#fcfcfc, #ffffff);
-  background-image: -o-linear-gradient(#fcfcfc, #ffffff);
-  background-image: -ms-linear-gradient(#fcfcfc, #ffffff);
-  background-image: linear-gradient(#fcfcfc, #ffffff);
+/* line 395, ../scss/app.scss */
+#target-details .questionItem .answer-two .balance {
+  margin-top: -3px;
+}
+/* line 399, ../scss/app.scss */
+#target-details .questionItem .answer-four {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-box;
+  display: box;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -ms-box-orient: horizontal;
+  box-orient: horizontal;
+  -webkit-box-align: stretch;
+  -moz-box-align: stretch;
+  -ms-box-align: stretch;
+  box-align: stretch;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  margin-top: -7px;
+}
+/* line 407, ../scss/app.scss */
+#target-details .questionItem .answer-four .item {
+  border-right: none;
+  border-left: none;
+  padding: 0.6em;
+  display: block;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-box-flex: 1;
+  box-flex: 1;
+  text-align: center;
 }
 /* line 415, ../scss/app.scss */
-#target-details .target-answer .answer-four {
-  border-right: none;
-  padding: 0.25em;
-  padding-top: 1em;
-  padding-bottom: 1em;
-  margin-left: 4px;
-  display: block;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
-  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -moz-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -o-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
-  background-image: linear-gradient(#ffffff, #fcfcfc);
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -ms-box-flex: 1;
-  box-flex: 1;
-  text-align: center;
-  -webkit-border-radius: 20px 20px 20px 20px;
-  -moz-border-radius: 20px 20px 20px 20px;
-  -ms-border-radius: 20px 20px 20px 20px;
-  -o-border-radius: 20px 20px 20px 20px;
-  border-radius: 20px 20px 20px 20px;
-  -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+#target-details .questionItem .answer-four .balance {
+  margin-top: -3px;
 }
-/* line 428, ../scss/app.scss */
-#target-details .target-answer .answer-four:active, #target-details .target-answer .answer-four.fake-active {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
-  background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
-  background-image: -moz-linear-gradient(#fcfcfc, #ffffff);
-  background-image: -o-linear-gradient(#fcfcfc, #ffffff);
-  background-image: -ms-linear-gradient(#fcfcfc, #ffffff);
-  background-image: linear-gradient(#fcfcfc, #ffffff);
+/* line 421, ../scss/app.scss */
+#target-details .target-done {
+  margin-left: 1.5em;
+  margin-right: 1.5em;
+  margin-top: -10px;
+  font-size: 100%;
+  color: red;
+  padding-bottom: 5px;
 }
-/* line 432, ../scss/app.scss */
-#target-details .target-answer .answer-four:first-child {
-  margin-left: 0px;
-}
-/* line 436, ../scss/app.scss */
+/* line 430, ../scss/app.scss */
 #target-details .link-button {
   position: absolute;
   bottom: 1em;
   left: 0.8em;
   right: 0.8em;
 }
-/* line 443, ../scss/app.scss */
+/* line 437, ../scss/app.scss */
 #target-details .answer-form-hide {
   overflow: hidden;
 }
-/* line 447, ../scss/app.scss */
-#target-details .comment {
-  padding: 1em;
+/* line 441, ../scss/app.scss */
+#target-details textarea.styled {
   border: 1px solid #cccccc;
-  display: block;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
-  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -moz-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -o-linear-gradient(#ffffff, #fcfcfc);
-  background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
-  background-image: linear-gradient(#ffffff, #fcfcfc);
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -ms-box-flex: 1;
-  box-flex: 1;
-  -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
-  -webkit-border-radius: 10px 10px 10px 10px;
-  -moz-border-radius: 10px 10px 10px 10px;
-  -ms-border-radius: 10px 10px 10px 10px;
-  -o-border-radius: 10px 10px 10px 10px;
-  border-radius: 10px 10px 10px 10px;
+  margin-left: 2.0em;
+  margin-right: 2.0em;
+  padding: 0;
+  width: 15.5em;
+  margin-bottom: 10px;
   outline: none;
+  color: #606967;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  -moz-border-radius: 5px 5px 5px 5px;
+  -ms-border-radius: 5px 5px 5px 5px;
+  -o-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+  resize: none;
 }
-/* line 457, ../scss/app.scss */
+/* line 455, ../scss/app.scss */
 #target-details .buttons {
   list-style: none;
   margin-top: -6px;
 }
-/* line 461, ../scss/app.scss */
+/* line 459, ../scss/app.scss */
 #target-details .buttons li {
   display: inline;
   padding: 0.2em 0.6em;
@@ -572,7 +543,7 @@ ul li span {
   border-radius: 5px 5px 5px 5px;
   list-style: none;
 }
-/* line 471, ../scss/app.scss */
+/* line 469, ../scss/app.scss */
 #target-details .buttons li a {
   color: #606967;
 }
@@ -708,12 +679,12 @@ ul li span {
 
 /* line 583, ../scss/app.scss */
 #target-ownResult h3 {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #323232), color-stop(100%, #040404));
-  background-image: -webkit-linear-gradient(#323232, #040404);
-  background-image: -moz-linear-gradient(#323232, #040404);
-  background-image: -o-linear-gradient(#323232, #040404);
-  background-image: -ms-linear-gradient(#323232, #040404);
-  background-image: linear-gradient(#323232, #040404);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   padding: 0.7em 1em;
   margin: 0;
   font-size: 18px;
@@ -762,12 +733,12 @@ ul li span {
 * =================================================================================================================== */
 /* line 606, ../scss/app.scss */
 #login h2 {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #323232), color-stop(100%, #040404));
-  background-image: -webkit-linear-gradient(#323232, #040404);
-  background-image: -moz-linear-gradient(#323232, #040404);
-  background-image: -o-linear-gradient(#323232, #040404);
-  background-image: -ms-linear-gradient(#323232, #040404);
-  background-image: linear-gradient(#323232, #040404);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   padding: 0.7em 1em;
   margin: 0;
   font-size: 18px;
@@ -817,21 +788,21 @@ ul li span {
 /* line 627, ../scss/app.scss */
 #login .content .login-button {
   width: 100%;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #656565), color-stop(100%, #373737));
-  background-image: -webkit-linear-gradient(#656565, #373737);
-  background-image: -moz-linear-gradient(#656565, #373737);
-  background-image: -o-linear-gradient(#656565, #373737);
-  background-image: -ms-linear-gradient(#656565, #373737);
-  background-image: linear-gradient(#656565, #373737);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8acaf4), color-stop(100%, #44aaee));
+  background-image: -webkit-linear-gradient(#8acaf4, #44aaee);
+  background-image: -moz-linear-gradient(#8acaf4, #44aaee);
+  background-image: -o-linear-gradient(#8acaf4, #44aaee);
+  background-image: -ms-linear-gradient(#8acaf4, #44aaee);
+  background-image: linear-gradient(#8acaf4, #44aaee);
 }
 /* line 630, ../scss/app.scss */
 #login .content .login-button:active {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #373737), color-stop(100%, #656565));
-  background-image: -webkit-linear-gradient(#373737, #656565);
-  background-image: -moz-linear-gradient(#373737, #656565);
-  background-image: -o-linear-gradient(#373737, #656565);
-  background-image: -ms-linear-gradient(#373737, #656565);
-  background-image: linear-gradient(#373737, #656565);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #44aaee), color-stop(100%, #8acaf4));
+  background-image: -webkit-linear-gradient(#44aaee, #8acaf4);
+  background-image: -moz-linear-gradient(#44aaee, #8acaf4);
+  background-image: -o-linear-gradient(#44aaee, #8acaf4);
+  background-image: -ms-linear-gradient(#44aaee, #8acaf4);
+  background-image: linear-gradient(#44aaee, #8acaf4);
 }
 
 /* line 637, ../scss/app.scss */
@@ -862,12 +833,12 @@ ul li span {
   background-image: -o-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: -ms-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #040404), color-stop(100%, #040404));
-  background-image: -webkit-linear-gradient(#040404, #040404);
-  background-image: -moz-linear-gradient(#040404, #040404);
-  background-image: -o-linear-gradient(#040404, #040404);
-  background-image: -ms-linear-gradient(#040404, #040404);
-  background-image: linear-gradient(#040404, #040404);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #1177ba), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#1177ba, #1177ba);
+  background-image: -moz-linear-gradient(#1177ba, #1177ba);
+  background-image: -o-linear-gradient(#1177ba, #1177ba);
+  background-image: -ms-linear-gradient(#1177ba, #1177ba);
+  background-image: linear-gradient(#1177ba, #1177ba);
   -webkit-border-radius: 35px;
   -moz-border-radius: 35px;
   -ms-border-radius: 35px;
@@ -892,12 +863,12 @@ ul li span {
   background-image: -o-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: -ms-linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
   background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #040404), color-stop(100%, #040404));
-  background-image: -webkit-linear-gradient(#040404, #040404);
-  background-image: -moz-linear-gradient(#040404, #040404);
-  background-image: -o-linear-gradient(#040404, #040404);
-  background-image: -ms-linear-gradient(#040404, #040404);
-  background-image: linear-gradient(#040404, #040404);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #1177ba), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#1177ba, #1177ba);
+  background-image: -moz-linear-gradient(#1177ba, #1177ba);
+  background-image: -o-linear-gradient(#1177ba, #1177ba);
+  background-image: -ms-linear-gradient(#1177ba, #1177ba);
+  background-image: linear-gradient(#1177ba, #1177ba);
   -webkit-border-radius: 35px;
   -moz-border-radius: 35px;
   -ms-border-radius: 35px;
@@ -972,12 +943,12 @@ button.link-button {
 }
 /* line 723, ../scss/app.scss */
 #leaderboard table th {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #323232), color-stop(100%, #040404));
-  background-image: -webkit-linear-gradient(#323232, #040404);
-  background-image: -moz-linear-gradient(#323232, #040404);
-  background-image: -o-linear-gradient(#323232, #040404);
-  background-image: -ms-linear-gradient(#323232, #040404);
-  background-image: linear-gradient(#323232, #040404);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2c9fec), color-stop(100%, #1177ba));
+  background-image: -webkit-linear-gradient(#2c9fec, #1177ba);
+  background-image: -moz-linear-gradient(#2c9fec, #1177ba);
+  background-image: -o-linear-gradient(#2c9fec, #1177ba);
+  background-image: -ms-linear-gradient(#2c9fec, #1177ba);
+  background-image: linear-gradient(#2c9fec, #1177ba);
   padding: 0.7em 1em;
   margin: 0;
   font-size: 18px;

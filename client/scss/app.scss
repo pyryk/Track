@@ -15,7 +15,7 @@ $use-mozilla-ellipsis-binding: true;
 /* app specific styles
 * =================================================================================================================== */
 /* Defining the layout-profile, basically color-palette: frontpage, aalto, rosso, subway */
-$customer: "mtv3";
+$customer: "frontpage";
 
 /* Default template **/
 $header_gradient_1: lighten(#0F68A3, 20%);
@@ -228,12 +228,12 @@ body {
     }
 
     &.first-visible-child {
-      @include border-radius(15px 15px 0px 0px);
-      border-top: 1px solid ccc;
+      @include border-top-radius(15px);
+      border-top: 1px solid $border_color;
     }
     &.last-visible-child {
-      @include border-radius(0px 0px 15px 15px);
-      border-bottom: 1px solid ccc;
+      @include border-bottom-radius(15px);
+      border-bottom: 1px solid $border_color;
     }
   }
 
@@ -260,11 +260,12 @@ body {
 
   li:first-child {
     border-top: 1px solid $border_color;
-    @include border-radius(15px 15px 0px 0px);
+    @include border-top-radius(15px);
   }
 
   li:last-child {
-    @include border-radius(0px 0px 15px 15px);
+    border-bottom: 1px solid $border_color;
+    @include border-bottom-radius(15px);
   }
 }
 
@@ -361,77 +362,70 @@ ul li span {
 }
 
 #target-details {
-  .target-question {
+  .questionItem {
     margin-left: 1.5em;
     margin-right: 1.5em;
     margin-top: 20px;
-    font-size: 110%;
-    //border: 1px solid #0d0e0d;
-    padding: 7px 10px;
+    font-size: 100%;
     @include border-radius(10px 10px 10px 10px);
-    @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
     @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
+
+    .question {
+      color: $text_color;
+      margin-left: 1.5em;
+      margin-right: 1.5em;
+      padding-top: 10px;
+    }
+    .answer-two {
+      @include display-box;
+      @include box-orient(horizontal);
+      @include box-align(stretch);
+      margin-left: 2.0em;
+      margin-right: 2.0em;
+      margin-top: -7px;
+
+      .item {
+        border-right: none;
+        border-left: none;
+        padding: 0.6em;
+        display: block;
+        @include box-flex(1);
+        text-align: center;
+      }
+      .balance {
+        margin-top: -3px;
+      }
+    }
+    .answer-four {
+      @include display-box;
+      @include box-orient(horizontal);
+      @include box-align(stretch);
+      margin-left: 0.5em;
+      margin-right: 0.5em;
+      margin-top: -7px;
+
+      .item {
+        border-right: none;
+        border-left: none;
+        padding: 0.6em;
+        display: block;
+        @include box-flex(1);
+        text-align: center;
+      }
+      .balance {
+        margin-top: -3px;
+      }
+    }
   }
 
   .target-done {
     margin-left: 1.5em;
     margin-right: 1.5em;
     margin-top: -10px;
-    font-size: 110%;
+    font-size: 100%;
     color: red;
+    padding-bottom: 5px;
     //border: 1px solid #0d0e0d;
-    padding: 7px 10px;
-    @include border-radius(10px 10px 10px 10px);
-    @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
-    @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
-  }
-
-  .target-answer {
-    @include display-box;
-    @include box-orient(horizontal);
-    @include box-align(stretch);
-    margin-left: 1.5em;
-    margin-right: 1.5em;
-    margin-top: -7px;
-
-    .answer {
-      border-right: none;
-      border-left: none;
-      background-color: black;
-      padding: 1em;
-      display: block;
-      margin-left: 4px;
-      @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
-      @include box-flex(1);
-      text-align: center;
-      @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
-      @include border-radius(20px 20px 20px 20px);
-      
-      &:active, &.fake-active {
-        @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
-      }
-    }
-
-    .answer-four {
-      border-right: none;
-      padding: 0.25em;
-      padding-top: 1em;
-      padding-bottom: 1em;
-      margin-left: 4px;
-      display: block;
-      @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
-      @include box-flex(1);
-      text-align: center;
-      @include border-radius(20px 20px 20px 20px);
-      @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
-
-      &:active, &.fake-active {
-        @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
-      }
-    }
-    .answer-four:first-child {
-      margin-left: 0px;
-    }
   }
   .link-button {
     position: absolute;
@@ -444,15 +438,19 @@ ul li span {
     overflow: hidden;
   }
 
-  .comment {
-    padding: 1em;
+  textarea.styled {
     border: 1px solid $border_color;
-    display: block;
-    @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
-    @include box-flex(1);
-    @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
-    @include border-radius(10px 10px 10px 10px);
+    margin-left: 2.0em;
+    margin-right: 2.0em;
+    padding: 0;
+    width: 15.5em;
+    margin-bottom: 10px;
     outline: none;
+    color: $text_color;
+    @include border-radius(5px 5px 5px 5px);
+    resize: none;
+    //display: block;
+
   }
   .buttons {
     list-style: none;
@@ -474,6 +472,8 @@ ul li span {
     }
   }
 }
+
+
 
 /* target results elements
 * =================================================================================================================== */
