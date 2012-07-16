@@ -47,7 +47,7 @@ Requires authentication: No
 
 Status: 200 Ok
 
-Reponse body:
+Response body:
 
 	{
 		target: {
@@ -73,8 +73,9 @@ Reponse body:
 			_id: “12faggf”,
 			name: “T-Talon ruokajono”,
 			questions: [
-			    {_id: "4afdfadfdafeaf", name: "Viihdyitkö?"},
-			    {_id: "4afdfadfdafeag", name: "Maistuiko"}
+			    {_id: "4afdfadfdafeaf", name: "Viihdyitkö?", type: "fourSmiles"},
+			    {_id: "4afdfadfdafeag", name: "Maistuiko?", type: "twoSmiles"}
+			    {_id: "4afdfadfdafeah", name: "Muuta sanottavaa?", type: "comment"}
             ]
 		}
 	}
@@ -104,9 +105,9 @@ Request body:
     {
         "name": "Track target name",
         "questions": [
-            {"name": "Viihtyitkö?"},
-            {"name": "Maistuiko?"},
-            {"name": "Oliko kivaa?"}
+            {"name": "Viihtyitkö?", type: "fourSmiles"},
+            {"name": "Maistuiko?", type: "twoSmiles"},
+            {"name": "Oliko kivaa?", type: "comment"}
         ]
         "location": {
             "lat": 12.345,
@@ -141,6 +142,15 @@ Request body:
     }
 
 **New design of request body:**
+
+    {
+        value: -2 / -1 / 1 / 2,
+        comment: "Food was fresh but too salty.",
+        location: {
+    		  lat: 12.345,
+    		  lon: 67.890
+    		}
+    }
 
 
 Status: 204 No content

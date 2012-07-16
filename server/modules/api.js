@@ -126,7 +126,7 @@ var API = {
             rel.calculate(targets, fbUserId);
 
             // Filter
-            var selectedFields = ['name', '_id', 'question', 'relevance'];
+            var selectedFields = ['name', '_id', 'questions', 'relevance'];
 
             if(debugging) {
                 selectedFields.push('relevanceFrom');
@@ -242,7 +242,7 @@ var API = {
             }
 
             // Filter
-            var target = API.selectFields(data, ['name', '_id', 'question']);
+            var target = API.selectFields(data, ['name', '_id', 'questions', 'questionType', 'showQuestionComment']);
 
             // Aggregate
             var aggregatedResults = API.aggregateResults(data.results);
@@ -265,6 +265,7 @@ var API = {
 
     postTarget: function(req, res, next) {
         var target = req.params;
+        console.log(req.params);
         var promises = [];
         var fbUserId = req.authorization ? req.authorization.fbUserId : null;
         var isAuthorized = !!fbUserId;
@@ -283,6 +284,7 @@ var API = {
 
         // All ready
         p.all(promises).then(function success(createTargetResult) {
+            console.log(createTargetResult);
             var id = createTargetResult[0]
             res.send(201, {_id: id});
             return next();
