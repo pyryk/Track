@@ -171,7 +171,7 @@ var Mongo = {
     countTargetsUserTracked: function(fbUserId) {
         var promise = Promise();
 
-        this.Target.find({'results.fbUserId': fbUserId}, function(error, data) {
+        this.Result.find({'fbUserId': fbUserId}, function(error, data) {
             var length = 0;
             if(_.isArray(data)) {
                 length = data.length;
