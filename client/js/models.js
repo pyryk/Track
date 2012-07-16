@@ -5,6 +5,7 @@
 var Target = Spine.Model.sub();
 
 Target.configure("Target", "logo", "name", "questions", "questionType", "showQuestionComment", "location", "results", "detailsLoaded", "saved");
+// Target.configure("Target", "name", "questions", "detailsLoaded", "saved");
 
 Target.include({
   setDefaults: function() {
@@ -61,7 +62,7 @@ Target.include({
 
     var toSend = {
       name: this.name,
-      question: this.question,
+      questions: this.questions,
       location: this.location
     }
     var data = JSON.stringify(toSend);
@@ -127,14 +128,10 @@ Target.loadList = function(additionalData) {
         target["id"] = target["_id"]; // map mongo id
         target["detailsLoaded"] = false; // target details are only loaded individually
         target["saved"] = true; // saved i.e. got from backend
-        
         Target.create(target);
-        console.log("loadTargetList");
-        console.log(target);
       }
     }, 
     error: function(jqxhr, textStatus, error) {
-      
       log('error: ' + textStatus + ', ' + error);
     }
   });
@@ -173,33 +170,37 @@ Target.loadDetails = function(id, listener) {
     dataType: 'json',
     headers: user.logged ? headers : {},
     success: function(data, status, jqXHR) {
+      console.log("data.target " + data.target);
       var targetData = data.target;
       targetData["id"] = targetData["_id"]; // map mongo id
       targetData["saved"] = true; // saved i.e. got from backend
-      var target;
+      console.log("====================================================")
       try {
         var target = Target.find(id);
-        
-        // upate all attributes, just in case
+       // upate all attributes, just in case
         for (var i in targetData) {
           target[i] = targetData[i];
         }
+        for (var j in target.questions) {
+          var questionItem = QuestionItem.create({name: target.questions[j].name});
+          questionItem.save();
+          target.questions[j] = questionItem;
+          target.save();
+        }
+        console.log(target);
       } catch (e) { // target not found locally
         target = Target.create(targetData);
+        console.log("exeption");
       }
-      
       // mark details loaded (i.e. no need for loading spinner)
-      target.detailsLoaded = true
+      target.detailsLoaded = true;
       
       // TODO remove this hack when there is metric support in backend
       /*target.metric = {
         unit: "min",
         question: "Tämä on placeholder-metriikka"
       };*/
-      
       target.save();
-      console.log("loadDetails");
-      console.log(target);
     },
     statusCode: {
       404: function() {
@@ -267,23 +268,23 @@ Result.include({
     var url = App.serverURL;
     
     
-    var headers
+    var headers;
   
     if (url.substring(url.length-1) !== "/") {
       url += "/";
-    }
+    };
     url += "target/" + this.target.id + "/" + "result";
     
     var user = User.getUser();
     var headers = {
-        'FB-UserId': user.name,
-        'FB-AccessToken': user.token
-      };
+      'FB-UserId': user.name,
+      'FB-AccessToken': user.token
+    };
   
     var toSend = {
       value: this.value,
       location: this.location
-    }
+    };
     var data = JSON.stringify(toSend);
     
     $.ajax({
@@ -371,5 +372,6 @@ var Customer = Spine.Model.sub();
 Customer.configure("Customer", "logo", "name");
 
 var QuestionItem = Spine.Model.sub();
-QuestionItem.configure("QuestionItem", "question", "changeToComment", "done", "results");
+QuestionItem.configure("QuestionItem", "name", "done", "changeToComment");
+
 

@@ -113,7 +113,7 @@
 <script id="template-targetDetails" type="text/x-handlebars-template">
   <div id="target-details">
     <div id="target-header">
-      <div class="target-name">{{name}}</div>
+      <div class="target-name">{{this.name}}</div>
       <div class="target-points"><span class="target-points-font">60 pts</span></div>
       <div id="target-header-clear"/>
     </div>
@@ -125,7 +125,7 @@
     {{#each items}}
     <form data-id={{this.id}}>
       <div class="questionItem">
-        <p class="question">{{question}}</p>
+        <p class="question">{{this.name}}</p>
         {{#unless this.done}}
         {{#unless this.changeToComment}}
 
@@ -135,15 +135,14 @@
         </div>
 
         {{else}}
-          <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
+        <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
           <!--<ul class="buttons">
             <li><a>lähetä</a></li>
             <li><a>tulokset</a></li>
           </ul>-->
-          {{/unless}}
+        {{/unless}}
       {{else}}
-      <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a>
-      </p>
+      <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a></p>
       {{/unless}}
       </div>
     </form>
@@ -154,7 +153,7 @@
     {{#each items}}
     <form data-id={{this.id}}>
       <div class="questionItem">
-        <p class="question">{{question}}</p>
+        <p class="question">{{this.name}}</p>
         {{#unless this.done}}
         {{#unless this.changeToComment}}
         <div class="answer-four">
@@ -199,6 +198,7 @@
     </form>
     {{/each}}
     {{/equal}}
+
 
   </div>
 </script>

@@ -367,6 +367,7 @@ ul li span {
     margin-right: 1.5em;
     margin-top: 20px;
     font-size: 100%;
+    @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
     @include border-radius(10px 10px 10px 10px);
     @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
 
@@ -397,6 +398,7 @@ ul li span {
       }
     }
     .answer-four {
+
       @include display-box;
       @include box-orient(horizontal);
       @include box-align(stretch);

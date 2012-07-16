@@ -87,29 +87,12 @@ var TargetsList = BaseController.sub({
   },
   events: {
     "fastclick #target-list li": "clicked",
-    "fastclick #target-list li span": "clicked",
-    "fastclick #target-list li img": "clicked",
     "keyup #search-target-input": "searchTarget"
   },
   getTitle: function() {
     return "List";
   },
   getData: function() {
-    /*var questionList = QuestionItems.create({name: "Kuinka menee?", smiles-two: true});
-    var questionList = new Array();
-    questionList.push(QuestionItem.create({question: "Kuinka hyvin ruokala toimi?"}));
-    questionList.push(QuestionItem.create({question: "Miltä ruoka maistui?"}));
-    questionList.push(QuestionItem.create({question: "Olivatko tarjoilijat ystävällisiä, tai minkälainen fiilis heistä välittyi?"}));
-    questionList.push(QuestionItem.create({question: "Voisitko keksiä vielä jotain parannettavaa? Jos voit niin mitä?"}));
-    return {items: [
-      Target.create({name: "Salatut elämät", question: questionList, questionType: "twoSmiles", showQuestionComment: false}),
-      Target.create({name: "Kauniit ja rohkeat", question: questionList, questionType: "fourSmiles", showQuestionComment: false}),
-      Target.create({name: "Hockey Night", question: questionList, questionType: "comment", showQuestionComment: false}),
-      Target.create({name: "Hockey Night 2", question: questionList, questionType: "twoSmiles", showQuestionComment: true}),
-      Target.create({name: "Uusi tyyli", question: questionList, questionType: "new", showQuestionComment: true})
-    ]};*/
-
-    console.log(Target.findAllByAttribute("saved", true));
     return {items: Target.findAllByAttribute("saved", true)};
   },
   init: function() {
@@ -222,10 +205,17 @@ var TargetDetails = BaseController.sub({
       error = e;
       log(e);
     }
+    console.log(target);
+
+    var type = "fourSmiles";
+    var items = [];
+    for (var j in Target.find(this.id).questions) {
+      items.push(Target.find(this.id).questions[j]);
+      console.log(Target.find(this.id).questions[j]);
+    }
+
     var name = Target.find(this.id).getName();
-    var type = Target.find(this.id).getQuestionType();
-    var items = Target.find(this.id).getQuestions();
-    return {name: name, type: type, items: items, target: target, error: error};
+    return {name: name, type: type, items: items, target: Target.find(this.id), error: error};
   },
   error: function(reason) {
     if (reason == "notfound") {
@@ -269,17 +259,23 @@ var TargetDetails = BaseController.sub({
   },
   savePositiveAnswer: function(e) {
     var id = $(e.target).attr('data-id');
-    if (Target.find(this.id).getShowQuestionComment()) {
+    if (!Target.find(this.id).getShowQuestionComment()) {
+      console.log("wafnlafoönaöon");
       var questionItem = QuestionItem.find(id);
       questionItem.changeToComment = true;
       questionItem.save();
       this.html(this.template(this.getData()));
       this.addFastButtons();
     }
-    if (!Target.find(this.id).getShowQuestionComment() && !QuestionItem.find(id).done) {
+    console.log(Target.find(this.id).getShowQuestionComment());
+    console.log(QuestionItem.find(id).done);
+
+    if (Target.find(this.id).getShowQuestionComment() && !QuestionItem.find(id).done) {
+      console.log("muutetaan 2");
       var questionItem = QuestionItem.find(id);
       questionItem.done = true;
       questionItem.save();
+      console.log(questionItem);
       this.html(this.template(this.getData()));
       this.addFastButtons();
     }
