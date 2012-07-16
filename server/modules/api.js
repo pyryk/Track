@@ -244,8 +244,10 @@ var API = {
             // Filter
             var target = API.selectFields(data, ['name', '_id', 'questions', 'questionType', 'showQuestionComment']);
 
-            // Aggregate
+            /*
+            // Aggregate - needs reimplementation since results are a collection of their own.
             var aggregatedResults = API.aggregateResults(data.results);
+
 
             if(aggregatedResults) {
                 target.results = aggregatedResults;
@@ -254,7 +256,8 @@ var API = {
             if(debugging) {
                 target.results.all = data.results;
             }
-
+            */
+            
             res.send(200, {target: target});
 
             return next();
