@@ -5,6 +5,7 @@ var Fixtures = require('../fixtures/fixtures');
 var DateUtils = require('../modules/now.js');
 var _ = require('underscore');
 var restify = require('restify');
+//var helpers = require('./helpers.js');
 
 var Mongo = {
 
@@ -18,24 +19,21 @@ var Mongo = {
 
         mongoose.connect(profile.db);
 
+        var Question = new mongoose.Schema({
+            name: String
+        });
+
         var Target = new mongoose.Schema({
             name: String,
-            question: String,
-            creatorFbUserId: String,
+            questions: [Question],
+            questionType: String,
+            showQuestionComment: Boolean,
 
-            createdLocation: {
+            location: {
                 lat: Number
                 , lon: Number
-            },
-            results: [{
-                timestamp: Date
-                , value: Number
-                , fbUserId: String
-                , location: {
-                    lat: Number
-                    , lon: Number
-                }
-            }]
+            }
+
         });
 
         mongoose.model('Target', Target);
@@ -51,6 +49,20 @@ var Mongo = {
 
         mongoose.model('User', User);
         this.User = mongoose.model('User');
+
+        var Result = new mongoose.Schema({
+            timestamp: Date
+            , value: Number
+            , textComment: String
+            , fbUserId: String
+            , location: {
+                lat: Number
+                , lon: Number
+            }
+         });
+
+        mongoose.model('Result', Result);
+        this.Result = mongoose.model('Result');
     },
 
     loadFixtures: function() {
@@ -171,19 +183,23 @@ var Mongo = {
     },
 
     createTarget: function(params) {
+        console.log(params.questions);
         var promise = Promise();
 
         var target = new this.Target();
-        target.name = params.name;
-        target.question = params.question;
 
-        if(params.fbUserId) {
-            target.creatorFbUserId = params.fbUserId;
+        target.name = params.name;
+        target.questionType = params.questionType;
+        target.showQuestionComment = params.showQuestionComment;
+
+        for (questionItem in params.questions) {
+            target.questions.push(params.questions[questionItem]);
         }
+        //console.log(params.questions);
 
         var loc = params.location;
         if(loc) {
-            target.createdLocation = {lat: loc.lat, lon: loc.lon};
+            target.location = {lat: loc.lat, lon: loc.lon};
         }
 
         target.save(function(error) {
