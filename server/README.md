@@ -76,7 +76,9 @@ Response body:
 			    {_id: "4afdfadfdafeaf", name: "Viihdyitkö?", type: "fourSmiles"},
 			    {_id: "4afdfadfdafeag", name: "Maistuiko?", type: "twoSmiles"}
 			    {_id: "4afdfadfdafeah", name: "Muuta sanottavaa?", type: "comment"}
-            ]
+            ],
+            questionType: fourSmiles,
+            showQuestionComment: true
 		}
 	}
 
@@ -108,7 +110,9 @@ Request body:
             {"name": "Viihtyitkö?", type: "fourSmiles"},
             {"name": "Maistuiko?", type: "twoSmiles"},
             {"name": "Oliko kivaa?", type: "comment"}
-        ]
+        ],
+        "questionType": "fourSmiles",
+        "showQuestionComment": true,
         "location": {
             "lat": 12.345,
             "lon": 67.890
@@ -141,15 +145,23 @@ Request body:
     		}
     }
 
-**New design of request body:**
+**New design:**
+
+POST /result/:_id - send tracking result with the specified questionId.
+
+Requires authentication: No.
+
+In case of two smiles values include 1 and -1.
+In case of four smiles values include -2, -1, 1 and 2.
 
     {
         value: -2 / -1 / 1 / 2,
-        comment: "Food was fresh but too salty.",
+        textComment: "Food was fresh but too salty.",
         location: {
     		  lat: 12.345,
     		  lon: 67.890
-    		}
+        },
+        
     }
 
 
