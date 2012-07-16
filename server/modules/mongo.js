@@ -267,6 +267,16 @@ var Mongo = {
         return promise;
     },
 
+    findResultsByQuestionId: function(id) {
+        var promise = Promise();
+
+        this.Result.find({questionId: id}, function(error, data) {
+            this.resolvePromise(error, data, promise)
+        }.bind(this));
+
+        return promise;
+    },
+
     updateUsersFacebookInformation: function(fbUserId, fbInformation) {
         var promise = Promise();
 

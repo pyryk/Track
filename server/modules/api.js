@@ -46,6 +46,7 @@ var API = {
 
         this.get("/targets", this.getTargets, false);
         this.get("/target/:id", this.getTarget, false);
+        this.get("/results/:id", this.getResults, false);
         this.post("/target", this.postTarget, false);
         this.post("/result/:_id", this.postResult, false);
         this.del("/target/:id", this.deleteTarget, false);
@@ -257,7 +258,7 @@ var API = {
                 target.results.all = data.results;
             }
             */
-            
+
             res.send(200, {target: target});
 
             return next();
@@ -338,6 +339,18 @@ var API = {
         }, function error(error) {
             return next(error);
         });
+    },
+
+    getResults: function(req, res, next) {
+        Mongo.findResultsByQuestionId(req.params.id).then(function success(data) {
+            var results = data;
+
+            res.send(200, {results: results});
+            return next();
+        }, function(error) {
+            return next(error);
+        });
+
     },
 
     getLogin: function(req, res, next) {
