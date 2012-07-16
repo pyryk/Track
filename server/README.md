@@ -161,7 +161,7 @@ In case of four smiles values include -2, -1, 1 and 2.
     		  lat: 12.345,
     		  lon: 67.890
         },
-        
+
     }
 
 
