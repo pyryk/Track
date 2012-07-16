@@ -5,7 +5,6 @@ var Fixtures = require('../fixtures/fixtures');
 var DateUtils = require('../modules/now.js');
 var _ = require('underscore');
 var restify = require('restify');
-//var helpers = require('./helpers.js');
 
 var Mongo = {
 
@@ -50,7 +49,10 @@ var Mongo = {
         mongoose.model('User', User);
         this.User = mongoose.model('User');
 
+        var ObjectId = mongoose.Schema.ObjectId;
+
         var Result = new mongoose.Schema({
+            questionId: ObjectId,
             timestamp: Date
             , value: Number
             , textComment: String
@@ -183,9 +185,8 @@ var Mongo = {
     },
 
     createTarget: function(params) {
-        console.log(params.questions);
-        var promise = Promise();
 
+        var promise = Promise();
         var target = new this.Target();
 
         target.name = params.name;
@@ -195,7 +196,6 @@ var Mongo = {
         for (questionItem in params.questions) {
             target.questions.push(params.questions[questionItem]);
         }
-        //console.log(params.questions);
 
         var loc = params.location;
         if(loc) {
@@ -238,37 +238,31 @@ var Mongo = {
          });
 
         return promise;
-
     },
 
 
     addResult: function(params) {
         var promise = Promise();
+        var result = new this.Result();
 
-        this.findTargetById(params._id).then(function(target) {
-            if(!target.results) {
-                target.results = [];
-            }
+        result.questionId = params._id;
+        result.timestamp = DateUtils.now();
+        result.value = params.value;
+        result.textComment = params.textComment;
 
-            var result = {timestamp: DateUtils.now(), value: params.value};
-            if(params.fbUserId) {
-                result.fbUserId = params.fbUserId;
-            }
+        if(params.fbUserId) {
+            result.fbUserId = params.fbUserId;
+        }
 
-            var loc = params.location;
-            if(loc) {
-                result.location = {lat: loc.lat, lon: loc.lon};
-            }
+        var loc = params.location;
+        if(loc) {
+            result.location = {lat: loc.lat, lon: loc.lon};
+        }
 
-            target.results.push(result);
-
-            target.save(function(error) {
-                Mongo.resolvePromise(error, promise);
-            }.bind(this));
-
-        }, function(error) {
-            this.resolvePromise(error, promise);
-        })
+        result.save(function(error) {
+            var id = result.questionId;
+            this.resolvePromise(error, id, promise)
+        }.bind(this));
 
         return promise;
     },

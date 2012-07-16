@@ -47,7 +47,7 @@ var API = {
         this.get("/targets", this.getTargets, false);
         this.get("/target/:id", this.getTarget, false);
         this.post("/target", this.postTarget, false);
-        this.post("/target/:_id/result", this.postResult, false);
+        this.post("/result/:_id", this.postResult, false);
         this.del("/target/:id", this.deleteTarget, false);
         this.get("/login", this.getLogin, true);
         this.get("/leaderboard", this.getLeaderboard, false);
@@ -265,7 +265,6 @@ var API = {
 
     postTarget: function(req, res, next) {
         var target = req.params;
-        console.log(req.params);
         var promises = [];
         var fbUserId = req.authorization ? req.authorization.fbUserId : null;
         var isAuthorized = !!fbUserId;
@@ -307,7 +306,7 @@ var API = {
 
 
     postResult: function(req, res, next) {
-        var result = {_id: req.params._id, value: req.params.value};
+        var result = {_id: req.params._id, value: req.params.value, textComment: req.params.textComment};
         var fbUserId = req.authorization ? req.authorization.fbUserId : null;
         var isAuthorized = !!fbUserId;
         var promises = [];
