@@ -103,9 +103,7 @@ Target.loadList = function(additionalData) {
     url += "/";
   }
   url += "targets";
-  
   //var data = window.track.getAdditionalData();
-  
   var user = User.getUser();
   var headers = {
       'FB-UserId': user.name,
@@ -125,11 +123,22 @@ Target.loadList = function(additionalData) {
       requestComplete = true;
       for (var i in data.targets) {
         var target = data.targets[i];
+        console.log(data.targets[i]);
         target["id"] = target["_id"]; // map mongo id
         target["detailsLoaded"] = false; // target details are only loaded individually
         target["saved"] = true; // saved i.e. got from backend
-        Target.create(target);
+
+
+        var targetObject = Target.create(target);
+        for (var j in data.targets[i].questions) {
+          var questionItem = QuestionItem.create({name: data.targets[i].questions[j].name});
+          questionItem.save();
+          targetObject.questions[j] = questionItem;
+          targetObject.save();
+        }
+        targetObject.save();
       }
+
     }, 
     error: function(jqxhr, textStatus, error) {
       log('error: ' + textStatus + ', ' + error);
@@ -170,24 +179,23 @@ Target.loadDetails = function(id, listener) {
     dataType: 'json',
     headers: user.logged ? headers : {},
     success: function(data, status, jqXHR) {
-      console.log("data.target " + data.target);
       var targetData = data.target;
-      targetData["id"] = targetData["_id"]; // map mongo id
-      targetData["saved"] = true; // saved i.e. got from backend
-      console.log("====================================================")
+      //targetData["id"] = targetData["_id"]; // map mongo id
+      //targetData["saved"] = true; // saved i.e. got from backend
+
       try {
         var target = Target.find(id);
+        target.questionType = targetData.questionType;
        // upate all attributes, just in case
-        for (var i in targetData) {
+       /* for (var i in targetData) {
           target[i] = targetData[i];
-        }
-        for (var j in target.questions) {
-          var questionItem = QuestionItem.create({name: target.questions[j].name});
+        }*/
+        for (var j in targetData.questions) {
+          var questionItem = QuestionItem.create({name: targetData.questions[j].name});
           questionItem.save();
           target.questions[j] = questionItem;
           target.save();
         }
-        console.log(target);
       } catch (e) { // target not found locally
         target = Target.create(targetData);
         console.log("exeption");
@@ -372,6 +380,6 @@ var Customer = Spine.Model.sub();
 Customer.configure("Customer", "logo", "name");
 
 var QuestionItem = Spine.Model.sub();
-QuestionItem.configure("QuestionItem", "name", "done", "changeToComment");
+QuestionItem.configure("QuestionItem", "name", "done", "noComment");
 
 

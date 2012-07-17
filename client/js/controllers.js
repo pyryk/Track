@@ -116,7 +116,7 @@ var TargetsList = BaseController.sub({
     // TODO update list also when list is not visible
     if (window.track.visiblePage == this) {
       log('location changed - reloading target list');
-      this.loadList({lat: location.lat, lon: location.lon});
+      //this.loadList({lat: location.lat, lon: location.lon});
     }
   },
   clicked: function(e) {
@@ -205,17 +205,16 @@ var TargetDetails = BaseController.sub({
       error = e;
       log(e);
     }
-    console.log(target);
+    var name = target.getName();
+    var type = target.getQuestionType();
+    var showQuestionComment = target.getShowQuestionComment();
 
-    var type = "fourSmiles";
     var items = [];
     for (var j in Target.find(this.id).questions) {
       items.push(Target.find(this.id).questions[j]);
-      console.log(Target.find(this.id).questions[j]);
     }
-
-    var name = Target.find(this.id).getName();
-    return {name: name, type: type, items: items, target: Target.find(this.id), error: error};
+    console.log(target);
+    return {name: name, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error};
   },
   error: function(reason) {
     if (reason == "notfound") {
@@ -259,19 +258,22 @@ var TargetDetails = BaseController.sub({
   },
   savePositiveAnswer: function(e) {
     var id = $(e.target).attr('data-id');
-    if (!Target.find(this.id).getShowQuestionComment()) {
-      console.log("wafnlafoönaöon");
+    if (Target.find(this.id).getShowQuestionComment()) {
       var questionItem = QuestionItem.find(id);
-      questionItem.changeToComment = true;
+      console.log(questionItem);
+      questionItem.done = true;
       questionItem.save();
       this.html(this.template(this.getData()));
       this.addFastButtons();
+//      questionItem.noComment = true;
+      questionItem.save();
+      console.log("tulostetaan vielä jälkeenpäin lisätty questionItem noComment osio");
+      console.log(questionItem);
     }
     console.log(Target.find(this.id).getShowQuestionComment());
     console.log(QuestionItem.find(id).done);
 
-    if (Target.find(this.id).getShowQuestionComment() && !QuestionItem.find(id).done) {
-      console.log("muutetaan 2");
+    if (!Target.find(this.id).getShowQuestionComment() && !QuestionItem.find(id).done) {
       var questionItem = QuestionItem.find(id);
       questionItem.done = true;
       questionItem.save();
@@ -286,7 +288,7 @@ var TargetDetails = BaseController.sub({
     var id = $(e.target).attr('data-id');
     if (Target.find(this.id).getShowQuestionComment()) {
       var questionItem = QuestionItem.find(id);
-      questionItem.changeToComment = true;
+      questionItem.noComment = true;
       questionItem.save();
       this.html(this.template(this.getData()));
       this.addFastButtons();

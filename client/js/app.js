@@ -274,7 +274,8 @@ var App = Spine.Controller.sub({
 if (window.trackConfig && window.trackConfig.serverURL) {
   App.serverURL = window.trackConfig.serverURL
 } else{
- App.serverURL = "http://mkos.futupeople.com/track/"; 
+  App.serverURL = "http://86.50.143.113";
+ //App.serverURL = "http://mkos.futupeople.com/track/";
 }
  
 //App.serverURL = "http://localhost:9999/";

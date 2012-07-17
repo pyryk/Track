@@ -1,5 +1,6 @@
 /* local config file */
 window.trackConfig = {
   enableAuth: true,
-  serverURL: "http://mkos.futupeople.com/track/",
+  serverURL: "http://86.50.143.113",
+  //serverURL: "http://mkos.futupeople.com/track/",
 };
