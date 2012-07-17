@@ -116,7 +116,7 @@ var TargetsList = BaseController.sub({
     // TODO update list also when list is not visible
     if (window.track.visiblePage == this) {
       log('location changed - reloading target list');
-      //this.loadList({lat: location.lat, lon: location.lon});
+      this.loadList({lat: location.lat, lon: location.lon});
     }
   },
   clicked: function(e) {
@@ -185,9 +185,12 @@ var ownResult = BaseController.sub({
 var TargetDetails = BaseController.sub({
   events: {
     "fastclick .active.balance.item.positive": "savePositiveAnswer",
+    "fastclick .active.balance.middle.item.positive": "saveSemiPositiveAnswer",
+    "fastclick .active.item.middle.negative": "saveSemiNegativeAnswer",
     "fastclick .active.item.negative": "saveNegativeAnswer",
+    "fastclick .send": "sendMessage",
     "fastclick .styled": "focus",
-    "fastclick .goToResults": "goToResults"
+    "fastclick .goToResults": "viewResults"
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -207,13 +210,8 @@ var TargetDetails = BaseController.sub({
     }
     var name = target.getName();
     var type = target.getQuestionType();
+    var items = target.getQuestions();
     var showQuestionComment = target.getShowQuestionComment();
-
-    var items = [];
-    for (var j in Target.find(this.id).questions) {
-      items.push(Target.find(this.id).questions[j]);
-    }
-    console.log(target);
     return {name: name, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error};
   },
   error: function(reason) {
@@ -226,87 +224,91 @@ var TargetDetails = BaseController.sub({
       this.render();
     }
   },
-  /*answerSaved: function(answer, success) {
+  answerSaved: function(answer, success) {
     if (success) {
       //this.viewResults();
-      Spine.Route.navigate(App.getRoute(Target.find(this.id)) + "/results");
+      //Spine.Route.navigate(App.getRoute(Target.find(this.id)) + "/results");
       // uncomment to show thanks view
       // Spine.Route.navigate(App.getRoute(answer));
     } else {
       log("Answer not saved!");
     }
   },
-  saveAnswer: function(value) {
-    log("Saving answer", value);
-    var target = Target.find(this.id);
+  saveAnswer: function(value, id) {
+    var questionItem = QuestionItem.find(id);
     var result = Result.create({
-      target: target,
+      questionItem: questionItem,
       value: value,
       location: window.track.location
     });
     result.bind('resultSent', this.proxy(this.answerSaved));
     var user = User.getUser();
     result.post();
-  },*/
-  goToResults: function() {
-    console.log("siiryttäisiin tuloksiin");
-    //Spine.Route.navigate(App.getRoute(Target.find(this.id)) + "/results");
   },
   focus: function(e) {
     console.log(e);
     console.log($(e.target).attr("placeholder"));
   },
-  savePositiveAnswer: function(e) {
+  saveSomeAnswer: function(e, value) {
     var id = $(e.target).attr('data-id');
-    if (Target.find(this.id).getShowQuestionComment()) {
-      var questionItem = QuestionItem.find(id);
-      console.log(questionItem);
-      questionItem.done = true;
-      questionItem.save();
+    var questionItem = QuestionItem.find(id);
+    questionItem.done = true;
+    questionItem.save();
+    if (Target.find(this.id).getShowQuestionComment() && questionItem.showComment) {
       this.html(this.template(this.getData()));
       this.addFastButtons();
-//      questionItem.noComment = true;
-      questionItem.save();
-      console.log("tulostetaan vielä jälkeenpäin lisätty questionItem noComment osio");
-      console.log(questionItem);
-    }
-    console.log(Target.find(this.id).getShowQuestionComment());
-    console.log(QuestionItem.find(id).done);
-
-    if (!Target.find(this.id).getShowQuestionComment() && !QuestionItem.find(id).done) {
-      var questionItem = QuestionItem.find(id);
-      questionItem.done = true;
-      questionItem.save();
-      console.log(questionItem);
+      questionItem.showComment = false;
+    } else {
       this.html(this.template(this.getData()));
       this.addFastButtons();
     }
-    //this.saveAnswer(1);*/
-    console.log("tallennettu positiivinen");
+    this.saveAnswer(value, questionItem.id);
+    console.log("Tallennettu " + value);
+  },
+  savePositiveAnswer: function(e) {
+    this.saveSomeAnswer(e, 2);
+  },
+  saveSemiPositiveAnswer: function(e) {
+    this.saveSomeAnswer(e, 1);
+  },
+  saveSemiNegativeAnswer: function(e) {
+    this.saveSomeAnswer(e, -1);
   },
   saveNegativeAnswer: function(e) {
-    var id = $(e.target).attr('data-id');
-    if (Target.find(this.id).getShowQuestionComment()) {
-      var questionItem = QuestionItem.find(id);
-      questionItem.noComment = true;
-      questionItem.save();
-      this.html(this.template(this.getData()));
-      this.addFastButtons();
+    this.saveSomeAnswer(e, -2);
+  },
+  sendMessage: function(e) {
+    var el = $(e.target);
+    var id = el.attr('data-id');
+    var textAreaElements = document.getElementsByClassName("styled");
+    for (var i = 0; i < textAreaElements.length; i++) {
+      if (id == textAreaElements[i].getAttribute('data-id')) {
+        var text = textAreaElements[i].value;
+        var questionItem = QuestionItem.find(id);
+        var result = Result.create({
+          questionItem: questionItem,
+          textComment: text,
+          location: window.track.location
+        });
+        result.bind('resultSent', this.proxy(this.answerSaved));
+        var user = User.getUser();
+        result.post();
+        questionItem.done = true;
+        questionItem.showComment = false;
+        questionItem.save();
+        this.html(this.template(this.getData()));
+        this.addFastButtons();
+      }
     }
-    if (!Target.find(this.id).getShowQuestionComment() && !QuestionItem.find(id).done) {
-      var questionItem = QuestionItem.find(id);
-      questionItem.done = true;
-      questionItem.save();
-      this.html(this.template(this.getData()));
-      this.addFastButtons();
-    }
-    //this.saveAnswer(0);
-    console.log("Tallennettu negatiivinen");
-  }/*,
+  },
   viewResults: function(e) {
-    var route = App.getRoute(Target.find(this.id)) + "/results";
-    Spine.Route.navigate(route);
-  }*/
+    var el = $(e.target);
+    var id = el.attr('data-id');
+    //var route = App.getRoute("result/" + QuestionItem.find(id).id_);
+    var route = "result/" + QuestionItem.find(id).id_;
+    console.log(route);
+    //Spine.Route.navigate(route);
+  }
 });
 
 /* TargetCreate
@@ -408,8 +410,6 @@ var Leaderboard = BaseController.sub({
     BaseController.prototype.show.call(this);
   },
   entryAdded: function() {
-    log('leaderboard entry added');
-
     if (window.track.visiblePage == this) {
       this.render();
     }
@@ -454,7 +454,6 @@ var BackButton = BaseController.sub({
     return {previous: showPrev, home: showHome};
   },
   backClicked: function() {
-    log('back button clicked');
     if (window.history.length > 0 && this.app.visiblePage !== this.app.pages['targetList'] && this.app.visiblePage !== this.app.pages['customerList']) {
       //if (window.history.length > 0) {
 
@@ -462,7 +461,6 @@ var BackButton = BaseController.sub({
     }
   },
   homeClicked: function() {
-    log('home button clicked');
     if (this.app.visiblePage === this.app.pages['targetList']) {
       Spine.Route.navigate('!/customer/');
     }

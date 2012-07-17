@@ -123,7 +123,6 @@ Target.loadList = function(additionalData) {
       requestComplete = true;
       for (var i in data.targets) {
         var target = data.targets[i];
-        console.log(data.targets[i]);
         target["id"] = target["_id"]; // map mongo id
         target["detailsLoaded"] = false; // target details are only loaded individually
         target["saved"] = true; // saved i.e. got from backend
@@ -131,7 +130,12 @@ Target.loadList = function(additionalData) {
 
         var targetObject = Target.create(target);
         for (var j in data.targets[i].questions) {
-          var questionItem = QuestionItem.create({name: data.targets[i].questions[j].name});
+          var questionItem;
+          if (data.targets[i].showQuestionComment) {
+            questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, showComment: true, id_: data.targets[i].questions[j]._id});
+          } else {
+            questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, id_: data.targets[i].questions[j]._id});
+          }
           questionItem.save();
           targetObject.questions[j] = questionItem;
           targetObject.save();
@@ -191,7 +195,12 @@ Target.loadDetails = function(id, listener) {
           target[i] = targetData[i];
         }*/
         for (var j in targetData.questions) {
-          var questionItem = QuestionItem.create({name: targetData.questions[j].name});
+          var questionItem;
+          if (targetData.showQuestionComment) {
+            questionItem = QuestionItem.create({name: targetData.questions[j].name, showComment: true, id_: data.targets[i].questions[j]._id});
+          } else {
+            questionItem = QuestionItem.create({name: targetData.questions[j].name, id_: data.targets[i].questions[j]._id});
+          }
           questionItem.save();
           target.questions[j] = questionItem;
           target.save();
@@ -258,7 +267,7 @@ Target.fromForm = function(form) {
 /* result (answer of the target question) */
 var Result = Spine.Model.sub();
 
-Result.configure("Result", "value", "timestamp", "location", "target", "saved");
+Result.configure("Result", "value", "timestamp", "location", "textComment","questionItem", "saved");
 
 Result.include({
   getType: function() {
@@ -268,21 +277,17 @@ Result.include({
     return "results"
   },
   post: function() {
-    if (!this.target) {
+    if (!this.questionItem) {
       log("a result without target!", this);
       return;
     }
-    
     var url = App.serverURL;
-    
-    
     var headers;
-  
     if (url.substring(url.length-1) !== "/") {
       url += "/";
     };
-    url += "target/" + this.target.id + "/" + "result";
-    
+    url += "result/" + this.questionItem.id_;
+
     var user = User.getUser();
     var headers = {
       'FB-UserId': user.name,
@@ -291,10 +296,10 @@ Result.include({
   
     var toSend = {
       value: this.value,
+      textComment: this.textComment,
       location: this.location
     };
     var data = JSON.stringify(toSend);
-    
     $.ajax({
       url: url,
       type: "POST",
@@ -306,7 +311,7 @@ Result.include({
         this.saved = true;
         this.save();
         
-        this.target.loadDetails();
+        //this.target.loadDetails();
         this.trigger("resultSent", true);
       }), 
       error: this.proxy(function(jqxhr, status, err) {
@@ -380,6 +385,6 @@ var Customer = Spine.Model.sub();
 Customer.configure("Customer", "logo", "name");
 
 var QuestionItem = Spine.Model.sub();
-QuestionItem.configure("QuestionItem", "name", "done", "noComment");
+QuestionItem.configure("QuestionItem", "name", "done", "showComment", "id_");
 
 

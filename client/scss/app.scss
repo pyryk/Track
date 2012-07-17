@@ -452,11 +452,13 @@ ul li span {
     @include border-radius(5px 5px 5px 5px);
     resize: none;
     //display: block;
-
   }
   .buttons {
     list-style: none;
+    margin-left: auto;
+    margin-right: auto;
     margin-top: -6px;
+    padding-bottom: 8px;
 
     li {
       display: inline;
@@ -471,6 +473,9 @@ ul li span {
       a {
         color: $text_color;
       }
+    }
+    li:last-child {
+      margin-left: 20%;
     }
   }
 }

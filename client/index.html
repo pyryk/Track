@@ -132,16 +132,12 @@
           <span data-id={{this.id}} class="active item negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="55" height="55" alt=":("/></span>
         </div>
         {{else}}
-          {{#if showQuestionComment}}
-            {{#unless this.noComment}}
-            <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
-            <!--<ul class="buttons">
-              <li><a>lähetä</a></li>
-              <li><a>tulokset</a></li>
-            </ul>-->
-            {{else}}
-            <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a></p>
-            {{/unless}}
+          {{#if this.showComment}}
+          <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
+          <ul class="buttons">
+            <li data-id={{this.id}} class="send">lähetä</li>
+            <li data-id={{this.id}} class="goToResults">tulokset</li>
+          </ul>
           {{else}}
           <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a></p>
           {{/if}}
@@ -159,23 +155,19 @@
         {{#unless this.done}}
         <div class="answer-four">
           <span data-id={{this.id}} class="active balance item positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="55" height="55" alt=":)"></span>
-          <span data-id={{this.id}} class="active balance item positive"><img data-id={{this.id}} src="img/thumbs-up-little-smiley.png" width="55" height="55" alt=":)"></span>
-          <span data-id={{this.id}} class="active item negative"><img data-id={{this.id}} src="img/thumbs-down-little-smiley.png" width="55" height="55" alt=":)"></span>
+          <span data-id={{this.id}} class="active balance middle item positive"><img data-id={{this.id}} src="img/thumbs-up-little-smiley.png" width="55" height="55" alt=":)"></span>
+          <span data-id={{this.id}} class="active item middle negative"><img data-id={{this.id}} src="img/thumbs-down-little-smiley.png" width="55" height="55" alt=":)"></span>
           <span data-id={{this.id}} class="active item negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="55" height="55" alt=":("></span>
         </div>
         {{else}}
-        {{#if showQuestionComment}}
-        {{#unless this.noComment}}
+        {{#if this.showComment}}
         <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
-        <!--<ul class="buttons">
-          <li><a>lähetä</a></li>
-          <li><a>tulokset</a></li>
-        </ul>-->
+        <ul class="buttons">
+          <li data-id={{this.id}} class="send">lähetä</li>
+          <li data-id={{this.id}} class="goToResults">tulokset</li>
+        </ul>
         {{else}}
-        <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a></p>
-        {{/unless}}
-        {{else}}
-        <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a></p>
+        <p class="target-done">Kiitos vastauksesta! <a data-id={{this.id}} class="goToResults">katso tulokset</a></p>
         {{/if}}
         {{/unless}}
       </div>
@@ -187,15 +179,15 @@
     {{#each items}}
     <form data-id={{this.id}}>
       <div class="questionItem">
-        <p class="question">{{question}}</p>
+        <p class="question">{{this.name}}</p>
         {{#unless this.done}}
         <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
-        <!--<ul class="buttons">
-          <li><a>lähetä</a></li>
-          <li><a>tulokset</a></li>
-        </ul>-->
+        <ul class="buttons">
+          <li data-id={{this.id}} class="send">lähetä</li>
+          <li data-id={{this.id}} class="goToResults">tulokset</li>
+        </ul>
         {{else}}
-        <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a>
+        <p class="target-done">Kiitos vastauksesta! <a data-id={{this.id}} class="goToResults">katso tulokset</a>
         </p>
         {{/unless}}
       </div>
