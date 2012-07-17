@@ -127,7 +127,7 @@ var API = {
             rel.calculate(targets, fbUserId);
 
             // Filter
-            var selectedFields = ['name', '_id', 'questions', 'relevance'];
+            var selectedFields = ['name', '_id', 'questions', 'relevance', 'questionType', 'showQuestionComment'];
 
             if(debugging) {
                 selectedFields.push('relevanceFrom');

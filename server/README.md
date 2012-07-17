@@ -40,6 +40,37 @@ Response body:
 		]
 	}
 
+**New design of response body**
+*Target details are passed to in order to tackle front end issues. Should be changed.*
+
+{
+    "targets":[
+        {
+            "name":"McDonalds Herttoniemi",
+            "_id":"5003bd7e5e76f78e31000002",
+            "questions":[
+                {"name":"Viihdyitkö?", "_id":"5003bd7e5e76f78e31000003"},
+                {"name":"Maistuiko?", "_id":"5003bd7e5e76f78e31000004"},
+                {"name":"Oliko kivaa?","_id":"5003bd7e5e76f78e31000005"}
+            ],
+            "relevance":0,
+            "questionType":"twoSmiles",
+            "showQuestionComment":true
+        },
+        {
+            "name":"McDonalds Kaisaniemi",
+            "_id":"5003c012ca06eaa231000006",
+            "questions":[
+                {"name":"Viihdyitkö?","_id":"5003c012ca06eaa231000007"},
+                {"name":"Maistuiko?","_id":"5003c012ca06eaa231000008"},
+                {"name":"Oliko kivaa?","_id":"5003c012ca06eaa231000009"}],
+            "relevance":0,
+            "questionType":"fourSmiles",
+            "showQuestionComment":true
+        }
+    ]
+}
+
 
 ### GET /target/:_id - Returns specific target with detailed info
 
