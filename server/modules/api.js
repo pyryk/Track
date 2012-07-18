@@ -48,7 +48,7 @@ var API = {
         this.get("/target/:id", this.getTarget, false);
         this.get("/results/:id", this.getResults, false);
         this.post("/target", this.postTarget, false);
-        this.post("/result/:_id", this.postResult, false);
+        this.post("/result/:questionId", this.postResult, false);
         this.del("/target/:id", this.deleteTarget, false);
         this.get("/login", this.getLogin, true);
         this.get("/leaderboard", this.getLeaderboard, false);
@@ -310,7 +310,12 @@ var API = {
 
 
     postResult: function(req, res, next) {
-        var result = {_id: req.params._id, value: req.params.value, textComment: req.params.textComment};
+        var result = {
+            questionId: req.params.questionId,
+            value: req.params.value,
+            textComment: req.params.textComment,
+            resultId: req.params.resultId
+        };
         var fbUserId = req.authorization ? req.authorization.fbUserId : null;
         var isAuthorized = !!fbUserId;
         var promises = [];
@@ -325,7 +330,11 @@ var API = {
         }
 
         // Add result
-        promises.push(Mongo.addResult(result));
+        if (!req.params.resultId) {
+            promises.push(Mongo.addResult(result));
+        } else {
+            promises.push(Mongo.updateResult(result));
+        }
 
         // Add points
         if(isAuthorized) {

@@ -245,7 +245,7 @@ var Mongo = {
         var promise = Promise();
         var result = new this.Result();
 
-        result.questionId = params._id;
+        result.questionId = params.questionId;
         result.timestamp = DateUtils.now();
         result.value = params.value;
         result.textComment = params.textComment;
@@ -265,6 +265,33 @@ var Mongo = {
         }.bind(this));
 
         return promise;
+    },
+
+    updateResult: function(params) {
+      var promise = Promise();
+
+      this.findResultById(params.resultId).then(function success(foundResult) {
+          foundResult.textComment = params.textComment;
+          console.log(foundResult);
+          foundResult.save(function(error) {
+              var id = foundResult._id;
+              Mongo.resolvePromise(error, id, promise);
+          }.bind(this));
+      })
+
+        return promise;
+    },
+
+    findResultById: function(resultId) {
+        var promise = Promise();
+        console.log(resultId);
+
+        this.Result.findOne({_id: resultId}, function(error, data) {
+            Mongo.resolvePromise(error, data, promise)
+        });
+
+        return promise;
+
     },
 
     findResultsByQuestionId: function(id) {
