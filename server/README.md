@@ -196,11 +196,13 @@ In case of four smiles values include -2, -1, 1 and 2.
     }
 
 
-Status: 204 No content
+Status: 201 No content
 
 Response body:
 
-    { }
+Id of the added result
+
+	{"_id": "12345678901234567890abcd"}
 
 ### GET /leaderboard - Returns leader board
 

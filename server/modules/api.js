@@ -333,8 +333,10 @@ var API = {
         }
 
         // All ready
-        p.all(promises).then(function success() {
-            res.send(204, null);
+        p.all(promises).then(function success(addResultData) {
+            console.log(addResultData);
+            var id = addResultData[0]
+            res.send(201, {_id: id});
             return next();
         }, function error(error) {
             return next(error);
