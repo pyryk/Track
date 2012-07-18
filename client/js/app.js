@@ -19,7 +19,6 @@ var App = Spine.Controller.sub({
         this.renderView('targetCreate', TargetCreate);
       },
       "!/targets/:id": function(params) {
-        console.log(params.id);
         this.renderView('targetDetails', TargetDetails, params.id);
       },
       "!/results/:id": function(params) {
@@ -68,14 +67,12 @@ var App = Spine.Controller.sub({
       // create controller if it doesnt already exist
       if (!this.pages[name]) {
         var tmpl = $('#template-' + name);
-        log("creating view " + name, "with template", tmpl);
         this.pages[name] = new className({
           el: $("#main"),
           template: tmpl
         });
       }
 
-      log("rendering view " + name);
       this.pages[name].id = id; // set id if needed
       this.pages[name].show();
       this.visiblePage = this.pages[name];
@@ -277,7 +274,8 @@ var App = Spine.Controller.sub({
 if (window.trackConfig && window.trackConfig.serverURL) {
   App.serverURL = window.trackConfig.serverURL
 } else{
-  App.serverURL = "http://mkos.futupeople.com/track/";
+  App.serverURL = "http://86.50.143.113";
+  //App.serverURL = "http://mkos.futupeople.com/track/";
 }
 
 //App.serverURL = "http://localhost:9999/";

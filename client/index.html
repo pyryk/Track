@@ -2,7 +2,7 @@
 <!-- Conditional comment for mobile ie7 blogs.msdn.com/b/iemobile/ -->
 <!--[if IEMobile 7 ]>    <html class="no-js iem7" lang="en"> <![endif]-->
 <!--[if (gt IEMobile 7)|!(IEMobile)]><!-->
-<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/html"> <!--<![endif]-->
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"> <!--<![endif]-->
 
 <head>
   <meta charset="utf-8">
@@ -57,12 +57,12 @@
 <!-- CONTAINER -->
 <!-- ------------------------------------------------------------------------------------------------------------- -->
 <div id="container">
-  <header>
+  <div class="header row">
     <div id="back-button"><!--<a href="#!/customer/"><img src="img/home-icon.png" alt=""></a>--></div>
-    <h1><!--<a href="#"><img src="img/tracktive-logo-pieni.png" style="padding-bottom: 5px; padding-right: 10px"></a>--><!----><a href="#">Restaurant a</a></h1>
+    <h1><!--<a href="#"><img src="img/mtv3-logo.png" style="padding-bottom: 5px; padding-right: 0px"></a>--><!----><a href="#">MTV3</a></h1>
     <div id="account-button"><a href="#!/login/"><img src="img/account-icon.png" alt=""></a></div>
-  </header>
-  <div id="main" role="main">
+  </div>
+  <div id="main" class="main row scroll-y" role="main">
     <noscript>This application requires JavaScript support. Currently it is tested only on iPhone and Android devices.</noscript>
   </div>
   <!--<footer>
@@ -80,7 +80,7 @@
     {{#each items}}
     <li name="{{this.name}}" data-id="{{this.id}}">
       <img class="customer-list-image" data-id="{{this.id}}" src="{{this.logo}}" alt=""/>
-      {{this.name}}
+      <span data-id="{{this.id}}" class="customer-list-span">{{this.name}}</span>
       <img class="customer-list-arrow" data-id="{{this.id}}" src="img/next.png" alt=""/>
     </li>
     {{/each}}}
@@ -99,8 +99,9 @@
   <ul class="primary-list" id="target-list">
     {{#each items}}
     <li name="{{this.name}}" data-id="{{this.id}}">
-      <span data-id="{{this.id}}">{{this.name}}</span>
-      <img data-id="{{this.id}}" class="customer-list-arrow" src="img/next.png" alt=""/>
+      <!--<img class="customer-list-image" data-id="{{this.id}}" src="{{this.logo}}" alt=""/>-->
+      <span data-id="{{this.id}}" class="customer-list-span">{{this.name}}</span>
+      <img class="customer-list-arrow" data-id="{{this.id}}" src="img/next.png" alt=""/>
     </li>
     {{/each}}
     <!--<li class="create-new"><span class="create-new text">Create a new target</span></li>-->
@@ -110,51 +111,91 @@
 <!-- TARGET DETAILS -->
 <!-- ------------------------------------------------------------------------------------------------------------- -->
 <script id="template-targetDetails" type="text/x-handlebars-template">
-  {{#if error}}
-  {{error}}
-  {{/if}}
   <div id="target-details">
-    {{#if target}}
-    {{#with target}}
     <div id="target-header">
-      <div class="target-name">Kamppi</div>
+      <div class="target-name">{{this.name}}</div>
       <div class="target-points"><span class="target-points-font">60 pts</span></div>
       <div id="target-header-clear"/>
     </div>
-    {{#unless detailsLoaded}}
-    <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
-    {{/unless}}
-    {{#if question}}
-    <form id="answer-form">
-      <p class="target-question">How did you like your meal?</p>
+    <!--{{#unless detailsLoaded}}
+      <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
+    {{/unless}}-->
 
-      <p class="target-answer">
-        <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
-        <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
-      </p>
-
-
-      <p class="target-question">Was it clean in the restaurant?</p>
-      <p class="target-answer">
-        <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
-        <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
-      </p>
-      <p class="target-question">How did you feel about the service?</p>
-      <p class="target-answer">
-        <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
-        <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
-      </p>
-      <p class="target-question">{{question}}</p>
-      <p class="target-answer">
-        <span class="active answer positive"><img src="img/smiley-thumb-up.png" width="60" height="60" alt=":)"></span>
-        <span class="active answer negative"><img src="img/smiley-thumb-down.png" width="60" height="60" alt=":("></span>
-      </p>
+    {{#equal type "twoSmiles"}}
+    {{#each items}}
+    <form data-id={{this.id}}>
+      <div class="questionItem">
+        <p class="question">{{this.name}}</p>
+        {{#unless this.done}}
+        <div class="answer-two">
+          <span data-id={{this.id}} class="active balance item positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="55" height="55" alt=":)"/></span>
+          <span data-id={{this.id}} class="active item negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="55" height="55" alt=":("/></span>
+        </div>
+        {{else}}
+        {{#if this.showComment}}
+        <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
+        <ul class="buttons">
+          <li data-id={{this.id}} class="send">lähetä</li>
+          <li data-id={{this.id}} class="goToResults">tulokset</li>
+        </ul>
+        {{else}}
+        <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a></p>
+        {{/if}}
+        {{/unless}}
+      </div>
     </form>
+    {{/each}}
+    {{/equal}}
 
-    <!--<p><span class="link-button view-results">View Results</span></p>-->
-    {{/if}}
-    {{/with}}
-    {{/if}}
+    {{#equal type "fourSmiles"}}
+    {{#each items}}
+    <form data-id={{this.id}}>
+      <div class="questionItem">
+        <p class="question">{{this.name}}</p>
+        {{#unless this.done}}
+        <div class="answer-four">
+          <span data-id={{this.id}} class="active balance item positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="55" height="55" alt=":)"></span>
+          <span data-id={{this.id}} class="active balance middle item positive"><img data-id={{this.id}} src="img/thumbs-up-little-smiley.png" width="55" height="55" alt=":)"></span>
+          <span data-id={{this.id}} class="active item middle negative"><img data-id={{this.id}} src="img/thumbs-down-little-smiley.png" width="55" height="55" alt=":)"></span>
+          <span data-id={{this.id}} class="active item negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="55" height="55" alt=":("></span>
+        </div>
+        {{else}}
+        {{#if this.showComment}}
+        <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
+        <ul class="buttons">
+          <li data-id={{this.id}} class="send">lähetä</li>
+          <li data-id={{this.id}} class="goToResults">tulokset</li>
+        </ul>
+        {{else}}
+        <p class="target-done">Kiitos vastauksesta! <a data-id={{this.id}} class="goToResults">katso tulokset</a></p>
+        {{/if}}
+        {{/unless}}
+      </div>
+    </form>
+    {{/each}}
+    {{/equal}}
+
+    {{#equal type "comment"}}
+    {{#each items}}
+    <form data-id={{this.id}}>
+      <div class="questionItem">
+        <p class="question">{{this.name}}</p>
+        {{#unless this.done}}
+        <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
+        <ul class="buttons">
+          <li data-id={{this.id}} class="send">lähetä</li>
+          <li data-id={{this.id}} class="goToResults">tulokset</li>
+        </ul>
+        {{else}}
+        <p class="target-done">Kiitos vastauksesta! <a data-id={{this.id}} class="goToResults">katso tulokset</a>
+        </p>
+        {{/unless}}
+      </div>
+    </form>
+    {{/each}}
+    {{/equal}}
+
+
   </div>
 </script>
 
@@ -276,7 +317,7 @@
   </div>
   {{else}}
   <div id="login">
-    <h2>Welcome to Aalto Track!</h2>
+    <h2>Welcome to Tracktive!</h2>
     <div class="content">
       <p>
         Track can be used without logging in. However, the social aspect of
