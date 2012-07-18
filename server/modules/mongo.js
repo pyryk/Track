@@ -260,7 +260,7 @@ var Mongo = {
         }
 
         result.save(function(error) {
-            var id = result.questionId;
+            var id = result._id;
             this.resolvePromise(error, id, promise)
         }.bind(this));
 
