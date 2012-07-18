@@ -139,7 +139,8 @@
           <li data-id={{this.id}} class="goToResults">tulokset</li>
         </ul>
         {{else}}
-        <p class="target-done">Kiitos vastauksesta! <a class="goToResults">katso tulokset</a></p>
+        <p class="right">{{this.resultAllTime}} % <img src="img/smiley-thumb-down.png" width="25" height="25" alt=":("/></p>
+        <p class="target-done">Kiitos vastauksesta!<!-- <a class="goToResults">katso tulokset</a>--></p>
         {{/if}}
         {{/unless}}
       </div>
@@ -167,7 +168,8 @@
           <li data-id={{this.id}} class="goToResults">tulokset</li>
         </ul>
         {{else}}
-        <p class="target-done">Kiitos vastauksesta! <a data-id={{this.id}} class="goToResults">katso tulokset</a></p>
+        <p class="right">{{this.resultAllTime}} % <img src="img/smiley-thumb-down.png" width="25" height="25" alt=":("/></p>
+        <p class="target-done">Kiitos vastauksesta!<!-- <a data-id={{this.id}} class="goToResults">katso tulokset</a>--></p>
         {{/if}}
         {{/unless}}
       </div>
@@ -187,7 +189,8 @@
           <li data-id={{this.id}} class="goToResults">tulokset</li>
         </ul>
         {{else}}
-        <p class="target-done">Kiitos vastauksesta! <a data-id={{this.id}} class="goToResults">katso tulokset</a>
+        <!--<p class="right">{{this.resultAllTime}} % <img src="img/smiley-thumb-down.png" width="25" height="25" alt=":("/></p>-->
+        <p class="target-done">Kiitos vastauksesta!<!-- <a data-id={{this.id}} class="goToResults">katso tulokset</a>-->
         </p>
         {{/unless}}
       </div>

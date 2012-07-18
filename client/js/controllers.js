@@ -124,7 +124,7 @@ var TargetsList = BaseController.sub({
     var id = el.attr('data-id');
     if (id) {
       var target = Target.find(id);
-      target.loadDetails();
+      //target.loadDetails();
       Spine.Route.navigate(App.getRoute(target));
     } else if (el.hasClass("create-new")) {
       Spine.Route.navigate(App.getRoute("create_target"));
@@ -211,6 +211,7 @@ var TargetDetails = BaseController.sub({
     var name = target.getName();
     var type = target.getQuestionType();
     var items = target.getQuestions();
+
     var showQuestionComment = target.getShowQuestionComment();
     return {name: name, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error};
   },
@@ -254,6 +255,8 @@ var TargetDetails = BaseController.sub({
     var questionItem = QuestionItem.find(id);
     questionItem.done = true;
     questionItem.save();
+    console.log("====================================");
+    console.log(questionItem);
     if (Target.find(this.id).getShowQuestionComment() && questionItem.showComment) {
       this.html(this.template(this.getData()));
       this.addFastButtons();
@@ -285,14 +288,10 @@ var TargetDetails = BaseController.sub({
       if (id == textAreaElements[i].getAttribute('data-id')) {
         var text = textAreaElements[i].value;
         var questionItem = QuestionItem.find(id);
-        var result = Result.create({
-          questionItem: questionItem,
-          textComment: text,
-          location: window.track.location
-        });
-        result.bind('resultSent', this.proxy(this.answerSaved));
+        var resultItem = Result.create({questionItem: questionItem, textComment: text, location: window.track.location});
+//        resultItem.bind('resultSent', this.proxy(this.answerSaved));
         var user = User.getUser();
-        result.post();
+        resultItem.post();
         questionItem.done = true;
         questionItem.showComment = false;
         questionItem.save();
@@ -305,7 +304,7 @@ var TargetDetails = BaseController.sub({
     var el = $(e.target);
     var id = el.attr('data-id');
     //var route = App.getRoute("result/" + QuestionItem.find(id).id_);
-    var route = "result/" + QuestionItem.find(id).id_;
+    var route = "result/" + QuestionItem.find(id).questionId;
     console.log(route);
     //Spine.Route.navigate(route);
   }
@@ -357,7 +356,7 @@ var TargetResults = BaseController.sub({
     }
   },
   getTitle: function() {
-    return "Target Results";
+    return "Question Results";
   },
   getData: function() {
     var data = {};

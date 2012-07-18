@@ -126,16 +126,15 @@ Target.loadList = function(additionalData) {
           target["id"] = target["_id"]; // map mongo id
           target["detailsLoaded"] = false; // target details are only loaded individually
           target["saved"] = true; // saved i.e. got from backend
-
-
           var targetObject = Target.create(target);
           for (var j in data.targets[i].questions) {
             var questionItem;
             if (data.targets[i].showQuestionComment) {
-              questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, showComment: true, id_: data.targets[i].questions[j]._id});
+              questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, showComment: true, questionId: data.targets[i].questions[j]._id});
             } else {
-              questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, id_: data.targets[i].questions[j]._id});
+              questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, questionId: data.targets[i].questions[j]._id});
             }
+            console.log(questionItem);
             questionItem.save();
             targetObject.questions[j] = questionItem;
             targetObject.save();
@@ -164,7 +163,7 @@ Target.loadList = function(additionalData) {
     }
   }
 }
-
+/*
 Target.loadDetails = function(id, listener) {
   var url = App.serverURL;
   if (url.substring(url.length-1) !== "/") {
@@ -190,16 +189,14 @@ Target.loadDetails = function(id, listener) {
       try {
         var target = Target.find(id);
         target.questionType = targetData.questionType;
-        // upate all attributes, just in case
-        /* for (var i in targetData) {
-         target[i] = targetData[i];
-         }*/
+
+
         for (var j in targetData.questions) {
           var questionItem;
           if (targetData.showQuestionComment) {
-            questionItem = QuestionItem.create({name: targetData.questions[j].name, showComment: true, id_: data.targets[i].questions[j]._id});
+            questionItem = QuestionItem.create({name: targetData.questions[j].name, showComment: true, questionId: data.targets[i].questions[j]._id});
           } else {
-            questionItem = QuestionItem.create({name: targetData.questions[j].name, id_: data.targets[i].questions[j]._id});
+            questionItem = QuestionItem.create({name: targetData.questions[j].name, questionId: data.targets[i].questions[j]._id});
           }
           questionItem.save();
           target.questions[j] = questionItem;
@@ -211,12 +208,6 @@ Target.loadDetails = function(id, listener) {
       }
       // mark details loaded (i.e. no need for loading spinner)
       target.detailsLoaded = true;
-
-      // TODO remove this hack when there is metric support in backend
-      /*target.metric = {
-       unit: "min",
-       question: "Tämä on placeholder-metriikka"
-       };*/
       target.save();
     },
     statusCode: {
@@ -228,7 +219,7 @@ Target.loadDetails = function(id, listener) {
     }
   });
 }
-
+*/
 /**
  * Creates a new Target from the create target form fields
  *
@@ -286,7 +277,7 @@ Result.include({
     if (url.substring(url.length-1) !== "/") {
       url += "/";
     };
-    url += "result/" + this.questionItem.id_;
+    url += "result/" + this.questionItem.questionId;
 
     var user = User.getUser();
     var headers = {
@@ -297,6 +288,7 @@ Result.include({
     var toSend = {
       value: this.value,
       textComment: this.textComment,
+      resultId: this.questionItem.resultId,
       location: this.location
     };
     var data = JSON.stringify(toSend);
@@ -313,6 +305,9 @@ Result.include({
 
         //this.target.loadDetails();
         this.trigger("resultSent", true);
+        this.questionItem.resultId = data._id;
+        this.questionItem.save();
+        console.log(this.questionItem);
       }),
       error: this.proxy(function(jqxhr, status, err) {
         this.trigger("resultSent", false);
@@ -385,6 +380,69 @@ var Customer = Spine.Model.sub();
 Customer.configure("Customer", "logo", "name");
 
 var QuestionItem = Spine.Model.sub();
-QuestionItem.configure("QuestionItem", "name", "done", "showComment", "id_");
+QuestionItem.configure("QuestionItem", "name", "done", "showComment", "questionId", "resultId", "results", "resultAllTime");
 
+QuestionItem.include({
+  /*setDefaults: function() {
+    this.results = this.results || {};
 
+    this.results.now = this.results.now || {};
+    this.results.now.pos = this.results.now.pos || 0;
+    this.results.now.neg = this.results.now.neg || 0;
+    this.results.now.trend = this.results.now.trend || 0;
+    this.results.now.period = this.results.now.period || 0;
+
+    this.results.alltime = this.results.alltime || {};
+    this.results.alltime.pos = this.results.alltime.pos || 0;
+    this.results.alltime.neg = this.results.alltime.neg || 0;
+  },*/
+  loadResults: function() {
+    var url = App.serverURL;
+    if (url.substring(url.length-1) !== "/") {
+      url += "/";
+    }
+    url += "results/";
+    url += this.questionId;
+
+    var requestComplete = false;
+    try {
+      $.ajax({
+        url: url,
+  //      data: additionalData,
+        dataType: 'json',
+        timeout: 5000,
+        cache: false,
+        headers: {},
+        success: function(data, status, jqXHR) {
+          requestComplete = true;
+          this.results  = data.results;
+          if (this.results.alltime.neg + this.results.alltime.pos == 0) {
+            this.results.alltime.neg = 1;
+            this.results.alltime.pos = 1;
+          }
+          this.resultAllTime = (this.results.alltime.pos/(this.results.alltime.neg + this.results.alltime.pos))*100;
+          console.log("==================================================");
+          console.log(this.results);
+          console.log(this.resultAllTime);
+        },
+        error: function(jqxhr, textStatus, error) {
+          log('error: ' + textStatus + ', ' + error);
+        }
+      });
+    } catch(e) {
+      log(e);
+    }
+
+    // workaround for android 2.3 bug: requests remain pending when loading the page from cache
+    var xmlHttpTimeout=setTimeout(ajaxTimeout,5000);
+    function ajaxTimeout(){
+      // if request not complete and no sinon (xhr mock lib) present
+      if (!requestComplete && !window.sinon) {
+        log("Request timed out - reloading the whole page");
+        //window.location.reload()
+      } else {
+        log("Request was completed");
+      }
+    }
+  }
+})
