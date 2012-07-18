@@ -134,7 +134,6 @@ Target.loadList = function(additionalData) {
             } else {
               questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, questionId: data.targets[i].questions[j]._id});
             }
-            console.log(questionItem);
             questionItem.save();
             targetObject.questions[j] = questionItem;
             targetObject.save();
@@ -421,6 +420,8 @@ QuestionItem.include({
             this.results.alltime.pos = 1;
           }
           this.resultAllTime = (this.results.alltime.pos/(this.results.alltime.neg + this.results.alltime.pos))*100;
+
+          //saveResultAllTime(resultAllTime);
           console.log("==================================================");
           console.log(this.results);
           console.log(this.resultAllTime);
@@ -446,3 +447,7 @@ QuestionItem.include({
     }
   }
 })
+
+QuestionItem.saveResultAllTime = function(value) {
+  this.resultAllTime = value;
+};

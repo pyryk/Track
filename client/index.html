@@ -59,7 +59,7 @@
 <div id="container">
   <div class="header row">
     <div id="back-button"><!--<a href="#!/customer/"><img src="img/home-icon.png" alt=""></a>--></div>
-    <h1><!--<a href="#"><img src="img/mtv3-logo.png" style="padding-bottom: 5px; padding-right: 0px"></a>--><!----><a href="#">MTV3</a></h1>
+    <h1><!--<a href="#"><img src="img/mtv3-logo.png" style="padding-bottom: 5px; padding-right: 0px"></a>--><!----><a href="#">Aalto-yliopisto</a></h1>
     <div id="account-button"><a href="#!/login/"><img src="img/account-icon.png" alt=""></a></div>
   </div>
   <div id="main" class="main row scroll-y" role="main">
@@ -99,7 +99,7 @@
   <ul class="primary-list" id="target-list">
     {{#each items}}
     <li name="{{this.name}}" data-id="{{this.id}}">
-      <!--<img class="customer-list-image" data-id="{{this.id}}" src="{{this.logo}}" alt=""/>-->
+      <img class="customer-list-image" data-id="{{this.id}}" src="img/templogos/aalto_university.png" alt=""/>
       <span data-id="{{this.id}}" class="customer-list-span">{{this.name}}</span>
       <img class="customer-list-arrow" data-id="{{this.id}}" src="img/next.png" alt=""/>
     </li>
@@ -135,8 +135,8 @@
         {{#if this.showComment}}
         <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
         <ul class="buttons">
-          <li data-id={{this.id}} class="send">lähetä</li>
-          <li data-id={{this.id}} class="goToResults">tulokset</li>
+          <li data-id={{this.id}} class="send">Lähetä</li>
+          <li data-id={{this.id}} class="goToResults">Tulokset</li>
         </ul>
         {{else}}
         <p class="right">{{this.resultAllTime}} % <img src="img/smiley-thumb-down.png" width="25" height="25" alt=":("/></p>
@@ -164,8 +164,8 @@
         {{#if this.showComment}}
         <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
         <ul class="buttons">
-          <li data-id={{this.id}} class="send">lähetä</li>
-          <li data-id={{this.id}} class="goToResults">tulokset</li>
+          <li data-id={{this.id}} class="send">Lähetä</li>
+          <li data-id={{this.id}} class="goToResults">Tulokset</li>
         </ul>
         {{else}}
         <p class="right">{{this.resultAllTime}} % <img src="img/smiley-thumb-down.png" width="25" height="25" alt=":("/></p>
@@ -185,8 +185,8 @@
         {{#unless this.done}}
         <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
         <ul class="buttons">
-          <li data-id={{this.id}} class="send">lähetä</li>
-          <li data-id={{this.id}} class="goToResults">tulokset</li>
+          <li data-id={{this.id}} class="send">Lähetä</li>
+          <li data-id={{this.id}} class="goToResults">Tulokset</li>
         </ul>
         {{else}}
         <!--<p class="right">{{this.resultAllTime}} % <img src="img/smiley-thumb-down.png" width="25" height="25" alt=":("/></p>-->

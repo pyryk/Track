@@ -194,6 +194,7 @@ var TargetDetails = BaseController.sub({
   },
   init: function() {
     BaseController.prototype.init.call(this);
+    Target.bind("create update", this.proxy(this.targetUpdated));
   },
   getTitle: function() {
     return "Target";
@@ -211,8 +212,17 @@ var TargetDetails = BaseController.sub({
     var name = target.getName();
     var type = target.getQuestionType();
     var items = target.getQuestions();
-
     var showQuestionComment = target.getShowQuestionComment();
+
+    for (var i in items) {
+      var questionItem = items[i];
+      questionItem.loadResults();
+      console.log(questionItem);
+    }
+    console.log("items: ");
+    console.log(items);
+    console.log("============================= RETURN =====================");
+
     return {name: name, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error};
   },
   error: function(reason) {
@@ -255,8 +265,7 @@ var TargetDetails = BaseController.sub({
     var questionItem = QuestionItem.find(id);
     questionItem.done = true;
     questionItem.save();
-    console.log("====================================");
-    console.log(questionItem);
+
     if (Target.find(this.id).getShowQuestionComment() && questionItem.showComment) {
       this.html(this.template(this.getData()));
       this.addFastButtons();
