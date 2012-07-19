@@ -123,7 +123,7 @@
 
     {{#equal type "twoSmiles"}}
     {{#each items}}
-    <form data-id={{this.id}}>
+    <form id="item-{{this.id}}" data-id={{this.id}}>
       <div class="questionItem">
         <p class="question">{{this.name}}</p>
         {{#unless this.done}}
@@ -139,7 +139,11 @@
           <li data-id={{this.id}} class="goToResults">Tulokset</li>
         </ul>
         {{else}}
+        {{#if this.resultSmilePositive}}
+        <p class="right">{{this.resultAllTime}} % <img src="img/smiley-thumb-up.png" width="25" height="25" alt=":("/></p>
+        {{else}}
         <p class="right">{{this.resultAllTime}} % <img src="img/smiley-thumb-down.png" width="25" height="25" alt=":("/></p>
+        {{/if}}
         <p class="target-done">Kiitos vastauksesta!<!-- <a class="goToResults">katso tulokset</a>--></p>
         {{/if}}
         {{/unless}}

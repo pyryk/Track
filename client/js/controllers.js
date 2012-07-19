@@ -213,16 +213,6 @@ var TargetDetails = BaseController.sub({
     var type = target.getQuestionType();
     var items = target.getQuestions();
     var showQuestionComment = target.getShowQuestionComment();
-
-    for (var i in items) {
-      var questionItem = items[i];
-      questionItem.loadResults();
-      console.log(questionItem);
-    }
-    console.log("items: ");
-    console.log(items);
-    console.log("============================= RETURN =====================");
-
     return {name: name, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error};
   },
   error: function(reason) {
@@ -260,13 +250,17 @@ var TargetDetails = BaseController.sub({
     console.log(e);
     console.log($(e.target).attr("placeholder"));
   },
-  saveSomeAnswer: function(e, value) {
+  loadAnswer: function(e, value) {
     var id = $(e.target).attr('data-id');
     var questionItem = QuestionItem.find(id);
     questionItem.done = true;
+
+    questionItem.loadResults(questionItem.id);
     questionItem.save();
+    console.log(questionItem);
 
     if (Target.find(this.id).getShowQuestionComment() && questionItem.showComment) {
+      //$("#item-" + questionItem.id + " .right").html(this.resultAllTime + temp);
       this.html(this.template(this.getData()));
       this.addFastButtons();
       questionItem.showComment = false;
@@ -278,16 +272,16 @@ var TargetDetails = BaseController.sub({
     console.log("Tallennettu " + value);
   },
   savePositiveAnswer: function(e) {
-    this.saveSomeAnswer(e, 2);
+    this.loadAnswer(e, 2);
   },
   saveSemiPositiveAnswer: function(e) {
-    this.saveSomeAnswer(e, 1);
+    this.loadAnswer(e, 1);
   },
   saveSemiNegativeAnswer: function(e) {
-    this.saveSomeAnswer(e, -1);
+    this.loadAnswer(e, -1);
   },
   saveNegativeAnswer: function(e) {
-    this.saveSomeAnswer(e, -2);
+    this.loadAnswer(e, -2);
   },
   sendMessage: function(e) {
     var el = $(e.target);

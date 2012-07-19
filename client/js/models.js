@@ -379,7 +379,7 @@ var Customer = Spine.Model.sub();
 Customer.configure("Customer", "logo", "name");
 
 var QuestionItem = Spine.Model.sub();
-QuestionItem.configure("QuestionItem", "name", "done", "showComment", "questionId", "resultId", "results", "resultAllTime");
+QuestionItem.configure("QuestionItem", "name", "done", "showComment", "questionId", "resultId", "results", "resultAllTime", "resultSmilePositive");
 
 QuestionItem.include({
   /*setDefaults: function() {
@@ -395,36 +395,38 @@ QuestionItem.include({
     this.results.alltime.pos = this.results.alltime.pos || 0;
     this.results.alltime.neg = this.results.alltime.neg || 0;
   },*/
-  loadResults: function() {
+  loadResults: function(id) {
+    var thisHolder = this;
     var url = App.serverURL;
     if (url.substring(url.length-1) !== "/") {
       url += "/";
     }
     url += "results/";
     url += this.questionId;
-
     var requestComplete = false;
     try {
       $.ajax({
         url: url,
-  //      data: additionalData,
         dataType: 'json',
         timeout: 5000,
         cache: false,
         headers: {},
         success: function(data, status, jqXHR) {
           requestComplete = true;
-          this.results  = data.results;
-          if (this.results.alltime.neg + this.results.alltime.pos == 0) {
-            this.results.alltime.neg = 1;
-            this.results.alltime.pos = 1;
+          thisHolder.results  = data.results;
+          if (thisHolder.results.alltime.neg + thisHolder.results.alltime.pos == 0) {
+            thisHolder.results.alltime.neg = 1;
+            thisHolder.results.alltime.pos = 1;
           }
-          this.resultAllTime = (this.results.alltime.pos/(this.results.alltime.neg + this.results.alltime.pos))*100;
-
-          //saveResultAllTime(resultAllTime);
-          console.log("==================================================");
-          console.log(this.results);
-          console.log(this.resultAllTime);
+          thisHolder.resultAllTime = Math.round((thisHolder.results.alltime.pos/(thisHolder.results.alltime.neg + thisHolder.results.alltime.pos))*100);
+          if (thisHolder.resultAllTime < 50) {
+            thisHolder.resultSmilePositive = false;
+          } else {
+            thisHolder.resultSmilePositive = true;
+          }
+          var temp = $("#item-" + id + " .right").html();
+          $("#item-" + id + " .right").html(thisHolder.resultAllTime + temp);
+          thisHolder.save();
         },
         error: function(jqxhr, textStatus, error) {
           log('error: ' + textStatus + ', ' + error);
