@@ -195,11 +195,11 @@ var API = {
                 }
             }
 
-            // Alltime
-            if(val) {
-                alltimeResults.pos++;
+            // Alltime. Quick hack for four smiles. This should be redesigned.
+            if(val > 0) {
+                alltimeResults.pos += val;
             } else {
-                alltimeResults.neg++;
+                alltimeResults.neg -= val;
             }
         });
 
@@ -235,8 +235,6 @@ var API = {
     },
 
     getTarget: function(req, res, next) {
-        var debugging = req.headers['debug'] === 'true';
-
         Mongo.findTargetById(req.params.id).then(function(data) {
             if(data == null) {
                 return next(new restify.ResourceNotFoundError("Could not find target with ID " + req.params.id));
@@ -244,20 +242,6 @@ var API = {
 
             // Filter
             var target = API.selectFields(data, ['name', '_id', 'questions', 'questionType', 'showQuestionComment']);
-
-            /*
-            // Aggregate - needs reimplementation since results are a collection of their own.
-            var aggregatedResults = API.aggregateResults(data.results);
-
-
-            if(aggregatedResults) {
-                target.results = aggregatedResults;
-            }
-
-            if(debugging) {
-                target.results.all = data.results;
-            }
-            */
 
             res.send(200, {target: target});
 
@@ -353,8 +337,23 @@ var API = {
     },
 
     getResults: function(req, res, next) {
+        var debugging = req.headers['debug'] === 'true';
+
         Mongo.findResultsByQuestionId(req.params.id).then(function success(data) {
             var results = data;
+
+            // Aggregate
+            var aggregatedResults = API.aggregateResults(results);
+
+
+            if(aggregatedResults) {
+                results = aggregatedResults;
+            }
+
+            if(debugging) {
+                results.all = results;
+            }
+
 
             res.send(200, {results: results});
             return next();
