@@ -212,8 +212,22 @@ var TargetDetails = BaseController.sub({
     var name = target.getName();
     var type = target.getQuestionType();
     var items = target.getQuestions();
+    for (var i in items) {
+      items[i].loadResultsFirst(items[i].id);
+    }
+    var point;
+    var points = 0;
+    var list = Points.findAllByAttribute("targetName", name);
+    if (list.length == 0) {
+      point = Points.create({userPoints: 0, targetName: name});
+      points = point.getUserPoints();
+    } else  {
+      points = list[0].getUserPoints();
+    }
+    console.log("POINTS to render: " + points);
+
     var showQuestionComment = target.getShowQuestionComment();
-    return {name: name, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error};
+    return {name: name, points: points, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error};
   },
   error: function(reason) {
     if (reason == "notfound") {
@@ -251,16 +265,19 @@ var TargetDetails = BaseController.sub({
     console.log($(e.target).attr("placeholder"));
   },
   loadAnswer: function(e, value) {
+    var points = Points.findAllByAttribute("targetName", Target.find(this.id).getName());
+    if (points[0]) {
+      points[0].userPoints += 10;
+      points[0].save();
+    }
     var id = $(e.target).attr('data-id');
     var questionItem = QuestionItem.find(id);
     questionItem.done = true;
 
     questionItem.loadResults(questionItem.id);
     questionItem.save();
-    console.log(questionItem);
 
     if (Target.find(this.id).getShowQuestionComment() && questionItem.showComment) {
-      //$("#item-" + questionItem.id + " .right").html(this.resultAllTime + temp);
       this.html(this.template(this.getData()));
       this.addFastButtons();
       questionItem.showComment = false;
@@ -269,7 +286,6 @@ var TargetDetails = BaseController.sub({
       this.addFastButtons();
     }
     this.saveAnswer(value, questionItem.id);
-    console.log("Tallennettu " + value);
   },
   savePositiveAnswer: function(e) {
     this.loadAnswer(e, 2);
@@ -284,6 +300,11 @@ var TargetDetails = BaseController.sub({
     this.loadAnswer(e, -2);
   },
   sendMessage: function(e) {
+    var points = Points.findAllByAttribute("targetName", Target.find(this.id).getName());
+    if (points[0]) {
+      points[0].userPoints += 30;
+      points[0].save();
+    }
     var el = $(e.target);
     var id = el.attr('data-id');
     var textAreaElements = document.getElementsByClassName("styled");

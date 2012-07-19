@@ -134,7 +134,6 @@ Target.loadList = function(additionalData) {
             } else {
               questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, questionId: data.targets[i].questions[j]._id});
             }
-            questionItem.save();
             targetObject.questions[j] = questionItem;
             targetObject.save();
           }
@@ -306,7 +305,6 @@ Result.include({
         this.trigger("resultSent", true);
         this.questionItem.resultId = data._id;
         this.questionItem.save();
-        console.log(this.questionItem);
       }),
       error: this.proxy(function(jqxhr, status, err) {
         this.trigger("resultSent", false);
@@ -378,8 +376,17 @@ LeaderboardEntry.load = function() {
 var Customer = Spine.Model.sub();
 Customer.configure("Customer", "logo", "name");
 
+var Points = Spine.Model.sub();
+Points.configure("Points", "userPoints", "pointsId", "targetName", "saved");
+
+Points.include({
+  getUserPoints: function() {
+    return this.userPoints;
+  }
+})
+
 var QuestionItem = Spine.Model.sub();
-QuestionItem.configure("QuestionItem", "name", "done", "showComment", "questionId", "resultId", "results", "resultAllTime", "resultSmilePositive");
+QuestionItem.configure("QuestionItem", "name", "done", "showComment", "questionId", "resultId", "results", "resultAllTime", "resultImage");
 
 QuestionItem.include({
   /*setDefaults: function() {
@@ -419,14 +426,70 @@ QuestionItem.include({
             thisHolder.results.alltime.pos = 1;
           }
           thisHolder.resultAllTime = Math.round((thisHolder.results.alltime.pos/(thisHolder.results.alltime.neg + thisHolder.results.alltime.pos))*100);
-          if (thisHolder.resultAllTime < 50) {
-            thisHolder.resultSmilePositive = false;
-          } else {
-            thisHolder.resultSmilePositive = true;
-          }
           var temp = $("#item-" + id + " .right").html();
-          $("#item-" + id + " .right").html(thisHolder.resultAllTime + temp);
+          if (temp != null) {
+            temp = temp.slice(3);
+          }
+          if (thisHolder.resultAllTime < 50) {
+            thisHolder.resultImage = "img/smiley-thumb-down.png";
+          } else {
+            thisHolder.resultImage = "img/smiley-thumb-up.png";
+          }
           thisHolder.save();
+          $("#item-" + id + " .right").html(thisHolder.resultAllTime + temp);
+        },
+        error: function(jqxhr, textStatus, error) {
+          log('error: ' + textStatus + ', ' + error);
+        }
+      });
+    } catch(e) {
+      log(e);
+    }
+
+    // workaround for android 2.3 bug: requests remain pending when loading the page from cache
+    var xmlHttpTimeout=setTimeout(ajaxTimeout,5000);
+    function ajaxTimeout(){
+      // if request not complete and no sinon (xhr mock lib) present
+      if (!requestComplete && !window.sinon) {
+        log("Request timed out - reloading the whole page");
+        //window.location.reload()
+      } else {
+        log("Request was completed");
+      }
+    }
+  },
+  loadResultsFirst: function(id) {
+    var thisHolder = this;
+    var url = App.serverURL;
+    if (url.substring(url.length-1) !== "/") {
+      url += "/";
+    }
+    url += "results/";
+    url += this.questionId;
+    var requestComplete = false;
+    try {
+      $.ajax({
+        url: url,
+        dataType: 'json',
+        timeout: 5000,
+        cache: false,
+        headers: {},
+        success: function(data, status, jqXHR) {
+          if (thisHolder.resultImage == null) {
+            requestComplete = true;
+            thisHolder.results  = data.results;
+            if (thisHolder.results.alltime.neg + thisHolder.results.alltime.pos == 0) {
+              thisHolder.results.alltime.neg = 1;
+              thisHolder.results.alltime.pos = 1;
+            }
+            thisHolder.resultAllTime = Math.round((thisHolder.results.alltime.pos/(thisHolder.results.alltime.neg + thisHolder.results.alltime.pos))*100);
+            if (thisHolder.resultAllTime < 50) {
+              thisHolder.resultImage = "img/smiley-thumb-down.png";
+            } else {
+              thisHolder.resultImage = "img/smiley-thumb-up.png";
+            }
+            thisHolder.save();
+          }
         },
         error: function(jqxhr, textStatus, error) {
           log('error: ' + textStatus + ', ' + error);

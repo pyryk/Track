@@ -114,7 +114,7 @@
   <div id="target-details">
     <div id="target-header">
       <div class="target-name">{{this.name}}</div>
-      <div class="target-points"><span class="target-points-font">60 pts</span></div>
+      <div class="target-points"><span class="target-points-font">{{points}}</span></div>
       <div id="target-header-clear"/>
     </div>
     <!--{{#unless detailsLoaded}}
@@ -139,11 +139,7 @@
           <li data-id={{this.id}} class="goToResults">Tulokset</li>
         </ul>
         {{else}}
-        {{#if this.resultSmilePositive}}
-        <p class="right">{{this.resultAllTime}} % <img src="img/smiley-thumb-up.png" width="25" height="25" alt=":("/></p>
-        {{else}}
-        <p class="right">{{this.resultAllTime}} % <img src="img/smiley-thumb-down.png" width="25" height="25" alt=":("/></p>
-        {{/if}}
+        <p class="right">{{this.resultAllTime}} % <img src="{{this.resultImage}}" width="25" height="25" alt=":("/></p>
         <p class="target-done">Kiitos vastauksesta!<!-- <a class="goToResults">katso tulokset</a>--></p>
         {{/if}}
         {{/unless}}
@@ -154,7 +150,7 @@
 
     {{#equal type "fourSmiles"}}
     {{#each items}}
-    <form data-id={{this.id}}>
+    <form id="item-{{this.id}}" data-id={{this.id}}>
       <div class="questionItem">
         <p class="question">{{this.name}}</p>
         {{#unless this.done}}
@@ -172,7 +168,7 @@
           <li data-id={{this.id}} class="goToResults">Tulokset</li>
         </ul>
         {{else}}
-        <p class="right">{{this.resultAllTime}} % <img src="img/smiley-thumb-down.png" width="25" height="25" alt=":("/></p>
+        <p class="right">{{this.resultAllTime}} % <img src="{{this.resultImage}}" width="25" height="25" alt=":("/></p>
         <p class="target-done">Kiitos vastauksesta!<!-- <a data-id={{this.id}} class="goToResults">katso tulokset</a>--></p>
         {{/if}}
         {{/unless}}
@@ -183,7 +179,7 @@
 
     {{#equal type "comment"}}
     {{#each items}}
-    <form data-id={{this.id}}>
+    <form id="item-{{this.id}}" data-id={{this.id}}>
       <div class="questionItem">
         <p class="question">{{this.name}}</p>
         {{#unless this.done}}
