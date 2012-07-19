@@ -267,12 +267,13 @@ var Mongo = {
         return promise;
     },
 
+
+    // Fixed for textComment. Should be reimplemented.
     updateResult: function(params) {
       var promise = Promise();
 
       this.findResultById(params.resultId).then(function success(foundResult) {
           foundResult.textComment = params.textComment;
-          console.log(foundResult);
           foundResult.save(function(error) {
               var id = foundResult._id;
               Mongo.resolvePromise(error, id, promise);
