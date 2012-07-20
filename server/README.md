@@ -104,9 +104,9 @@ Response body:
 			_id: “12faggf”,
 			name: “T-Talon ruokajono”,
 			questions: [
-			    {_id: "4afdfadfdafeaf", name: "Viihdyitkö?", type: "fourSmiles"},
-			    {_id: "4afdfadfdafeag", name: "Maistuiko?", type: "twoSmiles"}
-			    {_id: "4afdfadfdafeah", name: "Muuta sanottavaa?", type: "comment"}
+			    {_id: "4afdfadfdafeaf", name: "Viihdyitkö?"},
+			    {_id: "4afdfadfdafeag", name: "Maistuiko?"}
+			    {_id: "4afdfadfdafeah", name: "Muuta sanottavaa?"}
             ],
             questionType: fourSmiles,
             showQuestionComment: true
@@ -182,6 +182,8 @@ POST /result/:_id - send tracking result with the specified questionId.
 
 Requires authentication: No.
 
+Currently, if the resultId present only textComment is updated to the existing result.
+
 In case of two smiles values include 1 and -1.
 In case of four smiles values include -2, -1, 1 and 2.
 
@@ -192,17 +194,15 @@ In case of four smiles values include -2, -1, 1 and 2.
     		  lat: 12.345,
     		  lon: 67.890
         },
+        resultId
 
     }
 
-
-Status: 201 No content
-
 Response body:
 
-Id of the added result
+Id of the added result. Should probably be conditional between addResult and updateResult.
 
-	{"_id": "12345678901234567890abcd"}
+201 Created	{"_id": "12345678901234567890abcd"}
 
 ### GET /leaderboard - Returns leader board
 
