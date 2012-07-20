@@ -136,11 +136,11 @@
         <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
         <ul class="buttons">
           <li data-id={{this.id}} class="send">Lähetä</li>
-          <li data-id={{this.id}} class="goToResults">Tulokset</li>
+          {{#if this.showResults}}<li data-id={{this.id}} class="goToResults">Tulokset</li>{{/if}}
         </ul>
         {{else}}
         <p class="right">{{this.resultAllTime}} % <img src="{{this.resultImage}}" width="25" height="25" alt=":("/></p>
-        <p class="target-done">Kiitos vastauksesta!<!-- <a class="goToResults">katso tulokset</a>--></p>
+        <p class="target-done">Kiitos vastauksesta! {{#if this.showResults}} <a class="goToResults"> tulokset</a>{{/if}}</p>
         {{/if}}
         {{/unless}}
       </div>
@@ -165,11 +165,11 @@
         <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
         <ul class="buttons">
           <li data-id={{this.id}} class="send">Lähetä</li>
-          <li data-id={{this.id}} class="goToResults">Tulokset</li>
+          {{#if this.showResults}}<li data-id={{this.id}} class="goToResults">Tulokset</li>{{/if}}
         </ul>
         {{else}}
         <p class="right">{{this.resultAllTime}} % <img src="{{this.resultImage}}" width="25" height="25" alt=":("/></p>
-        <p class="target-done">Kiitos vastauksesta!<!-- <a data-id={{this.id}} class="goToResults">katso tulokset</a>--></p>
+        <p class="target-done">Kiitos vastauksesta! {{#if this.showResults}} <a class="goToResults"> Tulokset</a>{{/if}}</p>
         {{/if}}
         {{/unless}}
       </div>
@@ -186,11 +186,11 @@
         <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
         <ul class="buttons">
           <li data-id={{this.id}} class="send">Lähetä</li>
-          <li data-id={{this.id}} class="goToResults">Tulokset</li>
+          {{#if this.showResults}}<li data-id={{this.id}} class="goToResults">Tulokset</li>{{/if}}
         </ul>
         {{else}}
         <!--<p class="right">{{this.resultAllTime}} % <img src="img/smiley-thumb-down.png" width="25" height="25" alt=":("/></p>-->
-        <p class="target-done">Kiitos vastauksesta!<!-- <a data-id={{this.id}} class="goToResults">katso tulokset</a>-->
+        <p class="target-done">Kiitos vastauksesta! {{#if this.showResults}} <a class="goToResults"> tulokset</a>{{/if}}
         </p>
         {{/unless}}
       </div>

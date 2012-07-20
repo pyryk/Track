@@ -212,9 +212,6 @@ var TargetDetails = BaseController.sub({
     var name = target.getName();
     var type = target.getQuestionType();
     var items = target.getQuestions();
-    for (var i in items) {
-      items[i].loadResultsFirst(items[i].id);
-    }
     var point;
     var points = 0;
     var list = Points.findAllByAttribute("targetName", name);
