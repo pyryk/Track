@@ -71,6 +71,15 @@ Response body:
     ]
 }
 
+### GET /targets/:customerId - Lists all targets of the specified customer
+
+Requires authentication: No
+
+GET params: lat, lon, i.e. GET /targets/500cf0afda8f3be960000097?lat=60.16981200000001&lon=24.93824
+
+Status: 200 Ok
+
+Same response body as in GET /targets.
 
 ### GET /target/:_id - Returns specific target with detailed info
 
@@ -103,6 +112,7 @@ Response body:
 		target: {
 			_id: “12faggf”,
 			name: “T-Talon ruokajono”,
+			customerId: "500cf0afda8f3be960000097",
 			questions: [
 			    {_id: "4afdfadfdafeaf", name: "Viihdyitkö?"},
 			    {_id: "4afdfadfdafeag", name: "Maistuiko?"}
@@ -137,8 +147,9 @@ Request body:
 
     {
         "name": "Track target name",
+        "customerId": "500cf0afda8f3be960000097",
         "questions": [
-            {"name": "Viihtyitkö?", type: "fourSmiles"},
+            {"name": "Viihdyitkö?", type: "fourSmiles"},
             {"name": "Maistuiko?", type: "twoSmiles"},
             {"name": "Oliko kivaa?", type: "comment"}
         ],

@@ -44,11 +44,14 @@ var API = {
             }
         }.bind(this));
 
+        this.get("/targets/:customerId", this.getTargets, false);
         this.get("/targets", this.getTargets, false);
         this.get("/target/:id", this.getTarget, false);
         this.get("/results/:id", this.getResults, false);
+        this.get("/customers", this.getCustomers, false);
         this.post("/target", this.postTarget, false);
         this.post("/result/:questionId", this.postResult, false);
+        this.post("/customer", this.postCustomer, false);
         this.del("/target/:id", this.deleteTarget, false);
         this.get("/login", this.getLogin, true);
         this.get("/leaderboard", this.getLeaderboard, false);
@@ -120,14 +123,15 @@ var API = {
         var rel = API.rel;
         var debugging = req.headers['debug'] === 'true';
         var fbUserId = req.authorization ? req.authorization.fbUserId : null;
+        var customerId = req.params.customerId;
 
-        Mongo.findAllTargets().then(function(data) {
+        Mongo.findTargets(customerId).then(function(data) {
             var targets = data;
 
             rel.calculate(targets, fbUserId);
 
             // Filter
-            var selectedFields = ['name', '_id', 'questions', 'relevance', 'questionType', 'showQuestionComment'];
+            var selectedFields = ['name', '_id', 'customerId', 'questions', 'relevance', 'questionType', 'showQuestionComment'];
 
             if(debugging) {
                 selectedFields.push('relevanceFrom');
@@ -253,26 +257,9 @@ var API = {
 
     postTarget: function(req, res, next) {
         var target = req.params;
-        var promises = [];
-        var fbUserId = req.authorization ? req.authorization.fbUserId : null;
-        var isAuthorized = !!fbUserId;
-
-        if(isAuthorized) {
-            target.fbUserId = fbUserId;
-        }
-
         // Create the new target
-        promises.push(Mongo.createTarget(target))
-
-        // Add points
-        if(isAuthorized) {
-            promises.push(Mongo.addPoints(fbUserId, 5));
-        }
-
-        // All ready
-        p.all(promises).then(function success(createTargetResult) {
-            console.log(createTargetResult);
-            var id = createTargetResult[0]
+        Mongo.createTarget(target).then(function success(createTargetResult) {
+            var id = createTargetResult;
             res.send(201, {_id: id});
             return next();
         }, function error(err) {
@@ -361,6 +348,35 @@ var API = {
             return next(error);
         });
 
+    },
+
+    getCustomers: function(req, res, next) {
+        Mongo.findAllCustomers().then(function(data) {
+            // Filter
+            var selectedFields = ['name', '_id'];
+            var customers = data.map(function(customer) {
+                return API.selectFields(customer, selectedFields);
+            });
+
+            res.send(200, {customers: customers});
+            return next();
+        }, function(error) {
+            return next(error);
+        });
+
+    },
+
+    postCustomer: function(req, res, next) {
+        var customer = req.params;
+        console.log(customer);
+        Mongo.createCustomer(customer).then(function success(createCustomerResult) {
+            var id = createCustomerResult[0];
+            console.log(createCustomerResult);
+            res.send(201, {_id: id});
+            return next();
+        }, function error(err) {
+            return next(err);
+        });
     },
 
     getLogin: function(req, res, next) {
