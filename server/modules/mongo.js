@@ -18,6 +18,8 @@ var Mongo = {
 
         mongoose.connect(profile.db);
 
+        var ObjectId = mongoose.Schema.ObjectId;
+
         var Question = new mongoose.Schema({
             name: String
         });
@@ -31,7 +33,8 @@ var Mongo = {
             location: {
                 lat: Number
                 , lon: Number
-            }
+            },
+            customerId: ObjectId
 
         });
 
@@ -49,7 +52,7 @@ var Mongo = {
         mongoose.model('User', User);
         this.User = mongoose.model('User');
 
-        var ObjectId = mongoose.Schema.ObjectId;
+
 
         var Result = new mongoose.Schema({
             questionId: ObjectId,
@@ -65,6 +68,14 @@ var Mongo = {
 
         mongoose.model('Result', Result);
         this.Result = mongoose.model('Result');
+
+        var Customer = new mongoose.Schema({
+            name: String
+        });
+
+        mongoose.model('Customer', Customer);
+        this.Customer = mongoose.model('Customer');
+
     },
 
     loadFixtures: function() {
@@ -148,10 +159,10 @@ var Mongo = {
 
     },
 
-    findAllTargets: function() {
+    findTargets: function(customerId) {
         var promise = Promise();
 
-        this.Target.find({}, function(error, data) {
+        this.Target.find((!!customerId ? {customerId: customerId} : {}), function(error, data) {
             this.resolvePromise(error, data, promise)
         }.bind(this));
 
@@ -190,6 +201,7 @@ var Mongo = {
         var target = new this.Target();
 
         target.name = params.name;
+        target.customerId = params.customerId;
         target.questionType = params.questionType;
         target.showQuestionComment = params.showQuestionComment;
 
@@ -375,6 +387,31 @@ var Mongo = {
 
         this.User.find({points: { $gt: 0}}, null, {skip:0, limit:10, sort: {points: -1}}, function(error, data) {
             return this.resolvePromise(error, data, promise);
+        }.bind(this));
+
+        return promise;
+    },
+
+    findAllCustomers: function() {
+        var promise = Promise();
+
+        this.Customer.find({}, function(error, data) {
+            this.resolvePromise(error, data, promise)
+        }.bind(this));
+
+        return promise;
+    },
+
+    createCustomer: function(params) {
+        var promise = Promise();
+        var customer = new this.Customer();
+        console.log(params);
+
+        customer.name = params.name;
+
+        customer.save(function(error) {
+            var id = customer._id;
+            this.resolvePromise(error, id, promise)
         }.bind(this));
 
         return promise;
