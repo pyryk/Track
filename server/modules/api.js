@@ -368,10 +368,8 @@ var API = {
 
     postCustomer: function(req, res, next) {
         var customer = req.params;
-        console.log(customer);
         Mongo.createCustomer(customer).then(function success(createCustomerResult) {
-            var id = createCustomerResult[0];
-            console.log(createCustomerResult);
+            var id = createCustomerResult;
             res.send(201, {_id: id});
             return next();
         }, function error(err) {
