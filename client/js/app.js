@@ -24,8 +24,10 @@ var App = Spine.Controller.sub({
       "!/results/:id": function(params) {
         this.renderView('ownResult', ownResult, params.id);
       },
-      "!/targets/:id/results": function(params) {
-        this.renderView('targetResults', TargetResults, params.id);
+      "!/questions/:id/results": function(params) {
+        console.log("Koitetaan renderöidä sivua questionResults: " + QuestionResults);
+        console.log(params);
+        this.renderView('questionResults', QuestionResults, params.id);
       },
       "!/leaderboard": function(params) {
         this.renderView('leaderboard', Leaderboard);
@@ -50,16 +52,13 @@ var App = Spine.Controller.sub({
     if (window.trackConfig && window.trackConfig.enableAuth) {
       this.addLogin();
     }
-
+    this.addLogin();
     // update location data once a minute...
     this.updateLocation(); // ... and at once
     window.setInterval(this.proxy(this.updateLocation), 60000);
 
   },
   renderView: function(name, className, id) {
-    //view.className{name, className, id};
-
-    //name, className, id
     if (name !== "loginScreen" && !this.loginOk()) {
       this.redirect = Spine.Route.getFragment();
       Spine.Route.navigate("!/login/");
@@ -96,7 +95,6 @@ var App = Spine.Controller.sub({
     var fb = $('<div id="fb-root"></div>');
     $('body').append(fb);
     Spine.bind('logout', this.proxy(this.loggedOut));
-
     window.fbAsyncInit = function() {
       FB.init({
         appId      : '167103313410896', // App ID
@@ -124,7 +122,8 @@ var App = Spine.Controller.sub({
       var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
       if (d.getElementById(id)) {return;}
       js = d.createElement('script'); js.id = id; js.async = true;
-      js.src = "//connect.facebook.net/en_US/all.js";
+      js.src = "http://connect.facebook.net/en_US/all.js";
+      //js.src = "js/facebook.js";
       ref.parentNode.insertBefore(js, ref);
     }(document));
 
@@ -185,7 +184,6 @@ var App = Spine.Controller.sub({
         }
       }
       else {
-        console.log('destroy user');
         var user = User.getUser();
         user.destroyCookies();
         user.destroy();
@@ -202,7 +200,6 @@ var App = Spine.Controller.sub({
       // update list after location change
       Spine.trigger('location:changed', this.location);
     }), this.proxy(function(error) {
-      log("Could not get user location");
 
       // if location is undefined, trigger error, otherwise stay silent
       if (!this.location.lat && !this.location.long) {
@@ -225,7 +222,7 @@ var App = Spine.Controller.sub({
       case this.pages['targetDetails']:
         return this.pages['targetList'];
       case this.pages['ownResult']:
-      case this.pages['targetResults']:
+      case this.pages['questionResults']:
         return this.pages['targetDetails'];
       case this.pages['loginScreen']:
         return this.pages['targetList'];
@@ -289,8 +286,8 @@ App.getRoute = function(obj) {
   if (obj === "create_target") {
     return "!/targets/create";
   }
-
-  return "!/" + obj.getResourceName() + "/" + obj.id
+  console.log("App.getRoute:   " + "!/" + obj.getResourceName() + "/" + obj.id);
+  return "!/" + obj.getResourceName() + "/" + obj.id;
 }
 
 //TODO url resolver?

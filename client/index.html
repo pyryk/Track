@@ -165,7 +165,7 @@
         <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
         <ul class="buttons">
           <li data-id={{this.id}} class="send">Lähetä</li>
-          {{#if this.showResults}}<li data-id={{this.id}} class="goToResults">Tulokset</li>{{/if}}
+          {{#unless this.showResults}}<li data-id={{this.id}} class="goToResults">Tulokset</li>{{/unless}}
         </ul>
         {{else}}
         <p class="right">{{this.resultAllTime}} % <img src="{{this.resultImage}}" width="25" height="25" alt=":("/></p>
@@ -204,25 +204,27 @@
 
 <!-- TARGET RESULTS -->
 <!-- ------------------------------------------------------------------------------------------------------------- -->
-<script id="template-targetResults" type="text/x-handlebars-template">
+<script id="template-questionResults" type="text/x-handlebars-template">
   {{#if error}}
   {{error}}
   {{/if}}
-  <div id="target-results">
-    {{#if target}}
-    {{#with target}}
-    <h2 class="target-name">{{name}}</h2>
-    {{#unless detailsLoaded}}
-    <img class="loading-indicator" src="img/ajax-loader.gif" alt="loading..." />
-    {{/unless}}
+  <div id="question-results">
+
+    <div id="target-header">
+      <div class="target-name">{{this.name}}</div>
+      <div class="target-points"><span class="target-points-font">{{points}}60</span></div>
+      <div id="target-header-clear"/>
+    </div>
+
     {{#if question}}
-    <p class="target-question">{{question}}</p>
+    <div class="result">
+    <p class="question">{{this.question}}</p>
     <div class="results">
       <table>
-        {{#if results.alltime}}
-        {{#with results.alltime}}
+        {{#if alltime}}
+        {{#with alltime}}
         <tr class="target-answers"><td>
-          <h2 class="result-heading">Overall</h2>
+          <p class="result-heading">Yhteensä</p>
           <div class="result-graph">
             {{#if zerozero}}
             <div class="neg" style="-webkit-box-flex:1;">0</div>
@@ -235,10 +237,10 @@
         </td></tr>
         {{/with}}
         {{/if}}
-        {{#if results.now}}
-        {{#with results.now}}
+        {{#if now}}
+        {{#with now}}
         <tr class="target-answers"><td>
-          <h2 class="result-heading">Now</h2>
+          <p class="result-heading">Viimeiset 15 minuuttia</p>
           <div class="result-graph">
             {{#if zerozero}}
             <div class="neg" style="-webkit-box-flex:1;">0</div>
@@ -253,8 +255,7 @@
           {{/if}}
       </table>
     </div>
-    {{/if}}
-    {{/with}}
+    </div>
     {{/if}}
   </div>
 </script>

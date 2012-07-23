@@ -488,17 +488,25 @@ ul li span {
 
 /* target results elements
 * =================================================================================================================== */
-#target-results {
-  .target-question {
-    padding: 0em 10px;
-    font-size: 140%;
+#question-results {
+  .question {
+    color: $text_color;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    padding-top: 10px;
   }
+  .results {
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    margin-top: 20px;
+    font-size: 100%;
+    font-weight: bold;
+  }
+
   .result-heading {
-    font-size: 0.5em;
     // color: lighten($text_color, 40%);
     margin: 5px 10px;
     padding-bottom: 0px;
-    font-weight: bold;
   }
   table {
     width: 100%;
@@ -507,8 +515,8 @@ ul li span {
     // @include body-box;
 
     th {
-      font-size: 2em;
-      font-weight: bold;
+      //font-size: 2em;
+      //font-weight: bold;
       // color: lighten($text_color, 20%);
       text-align: left;
       // @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
@@ -517,7 +525,7 @@ ul li span {
 
     td {
       // color: lighten($text_color, 50%);
-      font-size: 3em;
+      //font-size: 3em;
       border-width: 0px
     }
   }

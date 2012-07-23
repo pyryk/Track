@@ -212,19 +212,13 @@ var TargetDetails = BaseController.sub({
     var name = target.getName();
     var type = target.getQuestionType();
     var items = target.getQuestions();
-    var point;
-    var points = 0;
-    var list = Points.findAllByAttribute("targetName", name);
-    if (list.length == 0) {
-      point = Points.create({userPoints: 0, targetName: name});
-      points = point.getUserPoints();
-    } else  {
-      points = list[0].getUserPoints();
+    var user = User.getUser();
+    if (user.getPoints() == null) {
+      user.points = 0;
+      user.save();
     }
-    console.log("POINTS to render: " + points);
-
     var showQuestionComment = target.getShowQuestionComment();
-    return {name: name, points: points, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error};
+    return {name: name, points: user.getPoints(), type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error};
   },
   error: function(reason) {
     if (reason == "notfound") {
@@ -247,9 +241,8 @@ var TargetDetails = BaseController.sub({
     }
   },
   saveAnswer: function(value, id) {
-    var questionItem = QuestionItem.find(id);
     var result = Result.create({
-      questionItem: questionItem,
+      questionItem: QuestionItem.find(id),
       value: value,
       location: window.track.location
     });
@@ -262,15 +255,12 @@ var TargetDetails = BaseController.sub({
     console.log($(e.target).attr("placeholder"));
   },
   loadAnswer: function(e, value) {
-    var points = Points.findAllByAttribute("targetName", Target.find(this.id).getName());
-    if (points[0]) {
-      points[0].userPoints += 10;
-      points[0].save();
-    }
+    var user = User.getUser();
+    user.points += 1;
+    user.save();
     var id = $(e.target).attr('data-id');
     var questionItem = QuestionItem.find(id);
     questionItem.done = true;
-
     questionItem.loadResults(questionItem.id);
     questionItem.save();
 
@@ -297,11 +287,9 @@ var TargetDetails = BaseController.sub({
     this.loadAnswer(e, -2);
   },
   sendMessage: function(e) {
-    var points = Points.findAllByAttribute("targetName", Target.find(this.id).getName());
-    if (points[0]) {
-      points[0].userPoints += 30;
-      points[0].save();
-    }
+    var user = User.getUser();
+    user.points += 3;
+    user.save();
     var el = $(e.target);
     var id = el.attr('data-id');
     var textAreaElements = document.getElementsByClassName("styled");
@@ -324,9 +312,23 @@ var TargetDetails = BaseController.sub({
   viewResults: function(e) {
     var el = $(e.target);
     var id = el.attr('data-id');
-    //var route = App.getRoute("result/" + QuestionItem.find(id).id_);
-    var route = "result/" + QuestionItem.find(id).questionId;
-    console.log(route);
+    var questionItem = QuestionItem.find(id);
+    console.log("!/questions/" + questionItem.questionId + "/results");
+    var route = "!/questions/" + questionItem.questionId + "/results";
+    console.log("==================routing=======================");
+    Spine.Route.navigate(route);
+
+    if (questionItem.showResults) {
+      console.log(questionItem.questionId + "/results");
+      var route = App.getRoute(questionItem) + "/results";
+      Spine.Route.navigate(route);
+    } else {
+      questionItem.showResults = true;
+      questionItem.save();
+      console.log("nyt toimii linkki");
+    }
+    //var route = "result/" + QuestionItem.find(id).questionId;
+    //console.log(route);
     //Spine.Route.navigate(route);
   }
 });
@@ -361,18 +363,20 @@ var TargetCreate = BaseController.sub({
   }
 });
 
-/* TargetResults
+/* QuestionResults
  *=================================================================================================================== */
-var TargetResults = BaseController.sub({
+var QuestionResults = BaseController.sub({
   init: function() {
+    console.log("this:");
+    console.log(this);
     BaseController.prototype.init.call(this);
 
     // this is binded to all events to avoid the unbind-old/bind-new
     // hassle when viewing another target
-    Target.bind("create update", this.proxy(this.targetUpdated));
+    QuestionItem.bind("create update", this.proxy(this.questionUpdated));
   },
-  targetUpdated: function(target) {
-    if (target.id === this.id && window.track.visiblePage == this) {
+  questionUpdated: function(question) {
+    if (question.id === this.id && window.track.visiblePage == this) {
       this.render();
     }
   },
@@ -381,31 +385,44 @@ var TargetResults = BaseController.sub({
   },
   getData: function() {
     var data = {};
+    var questionItemList = QuestionItem.findAllByAttribute('questionId', this.id);
+    var questionItem;
+    for (var i in questionItemList) {
+      if (questionItemList[i].results != null) {
+        questionItem = questionItemList[i];
+      }
+    }
+    var targetList = Target.findAllByAttribute("saved",true);
+    for (var i in targetList) {
+      for (var j in targetList[i].questions) {
+        if (targetList[i].questions[j].questionId == questionItem.questionId) {
+          data.name = targetList[i].name;
+          continue;
+        }
+      }
+    }
+
+    data.question = questionItem.name;
     try {
-      data.target = Target.find(this.id).toJSON();
-
+      //data.target = Target.find(this.id).toJSON();
+      data.alltime = questionItem.results.alltime;
       // preprocess alltime results
-      var alltime = data.target.results.alltime;
-      if (alltime.pos == 0 && alltime.neg == 0) {
-        alltime.zerozero = true;
+      //var questionItem.alltime = data.question.results.alltime;
+      if (data.alltime.pos == 0 && data.alltime.neg == 0) {
+        data.alltime.zerozero = true;
       }
-
-      // preprocess "now" results
-      var now = data.target.results.now
-
-      //now.pos = 4; now.neg = 7;
-      //now.trend = -2;
-
-      if (now.pos == 0 && now.neg == 0) {
-        now.zerozero = true;
+      data.now = questionItem.results.now;
+      if (data.now.pos == 0 && data.now.neg == 0) {
+        data.now.zerozero = true;
       }
-      now.trendPos = Math.abs(Math.max(0, now.trend));
-      now.trendNeg = Math.abs(Math.min(0, now.trend));
-
+      data.now.trendPos = Math.abs(Math.max(0, data.now.trend));
+      data.now.trendNeg = Math.abs(Math.min(0, data.now.trend));
     } catch (e) {
-      Target.loadDetails(this.id, this);
+      console.log("===============ERROR=====================");
+      //Target.loadDetails(this.id, this);
       data.error = e;
     }
+    console.log(data);
     return data;
   },
   render: function() {

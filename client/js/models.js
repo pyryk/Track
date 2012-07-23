@@ -317,7 +317,7 @@ Result.include({
 /* -------------------------------------- */
 /* user (logged in via facebook or other) */
 var User = Spine.Model.sub();
-User.configure("User", "name", "logged", "token", "expires", "provider");
+User.configure("User", "name", "logged", "token", "expires", "provider", "points");
 
 User.include({
   loadFromCookies: function() {
@@ -343,6 +343,9 @@ User.include({
   destroyCookies: function() {
     $.cookie('fb_user', null);
     $.cookie('fb_token', null);
+  },
+  getPoints: function() {
+    return this.points;
   }
 });
 
@@ -376,14 +379,14 @@ LeaderboardEntry.load = function() {
 var Customer = Spine.Model.sub();
 Customer.configure("Customer", "logo", "name");
 
-var Points = Spine.Model.sub();
-Points.configure("Points", "userPoints", "pointsId", "targetName", "saved");
+/*var Points = Spine.Model.sub();
+Points.configure("Points", "userPoints", "targetName");
 
 Points.include({
   getUserPoints: function() {
     return this.userPoints;
   }
-})
+})*/
 
 var QuestionItem = Spine.Model.sub();
 QuestionItem.configure("QuestionItem", "name", "done", "showComment", "questionId", "resultId", "results", "resultAllTime", "resultImage", "showResults");
@@ -402,6 +405,9 @@ QuestionItem.include({
     this.results.alltime.pos = this.results.alltime.pos || 0;
     this.results.alltime.neg = this.results.alltime.neg || 0;
   },*/
+  getResourceName: function() {
+    return "questions"
+  },
   loadResults: function(id) {
     var thisHolder = this;
     var url = App.serverURL;
