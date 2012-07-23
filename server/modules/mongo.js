@@ -405,7 +405,6 @@ var Mongo = {
     createCustomer: function(params) {
         var promise = Promise();
         var customer = new this.Customer();
-        console.log(params);
 
         customer.name = params.name;
 
