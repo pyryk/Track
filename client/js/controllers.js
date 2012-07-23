@@ -46,18 +46,42 @@ var CustomersList = BaseController.sub({
     "fastclick #customer-list li span": "clickedCustomer",
     "keyup #search-customer-input": "searchCustomer"
   },
-  getData: function() {
-    return {items: [
-      Customer.create({logo: "img/templogos/night_people_group.png", name: "Night people group Finland"}),
-      Customer.create({logo: "img/templogos/subway.png", name: "Subway"}),
-      Customer.create({logo: "img/templogos/rosso.png", name: "Rosso"}),
-      Customer.create({logo: "img/templogos/mcdonalds.png", name: "McDonald's"})
-    ]};
-  },
-  clickedCustomer: function() {
-    Spine.Route.navigate("!/targets/");
-  },
+  init: function() {
+    BaseController.prototype.init.call(this);
+    Customer.bind("create", this.proxy(this.addOne));
+    Spine.bind('location:changed', this.proxy(this.locationChanged));
 
+    // load list (without location data) even when no location gotten
+    this.loadList();
+  },
+  loadList: function() {
+    Customer.loadList();
+  },
+  locationChanged: function(location) {
+    // TODO update list also when list is not visible
+    if (window.track.visiblePage == this) {
+      log('location changed - reloading target list');
+      this.loadList({lat: location.lat, lon: location.lon});
+    }
+  },
+  addOne: function(task){
+    if (window.track.visiblePage == this) {
+      this.render();
+    }
+  },
+  getData: function() {
+    return {items: Customer.findAllByAttribute("saved", true)};
+  },
+  clickedCustomer: function(e) {
+    var el = $(e.target);
+    var id = el.attr('data-id');
+    if (id) {
+      var customer = Customer.find(id);
+      //console.log(customer);
+      //Target.loadList(customer.customerId);
+      Spine.Route.navigate(App.getRoute(customer));
+    }
+  },
   /* List search using jQuery-example */
   searchCustomer: function() {
     var $lastElement = null;
@@ -93,19 +117,22 @@ var TargetsList = BaseController.sub({
     return "List";
   },
   getData: function() {
-    return {items: Target.findAllByAttribute("saved", true)};
+    var items = Target.findAllByAttribute("customerId", this.id);
+    console.log(items);
+    return {items: items};
   },
   init: function() {
+    console.log(this);
     BaseController.prototype.init.call(this);
     Target.bind("create", this.proxy(this.addOne));
-    Spine.bind('location:changed', this.proxy(this.locationChanged));
+    //Spine.bind('location:changed', this.proxy(this.locationChanged));
 
     // load list (without location data) even when no location gotten
     Spine.bind('location:error', this.proxy(this.locationChanged));
-    this.loadList();
+    this.loadList(this.id);
   },
-  loadList: function(additionalData) {
-    Target.loadList(additionalData);
+  loadList: function() {
+    Target.loadList();
   },
   addOne: function(task){
     if (window.track.visiblePage == this) {
@@ -116,6 +143,7 @@ var TargetsList = BaseController.sub({
     // TODO update list also when list is not visible
     if (window.track.visiblePage == this) {
       log('location changed - reloading target list');
+
       this.loadList({lat: location.lat, lon: location.lon});
     }
   },
@@ -202,10 +230,11 @@ var TargetDetails = BaseController.sub({
   getData: function() {
     var target, error;
     try {
-      target = Target.find(this.id);
+      var list = Target.findAllByAttribute("targetId",this.id);
+      target = list[0];
     } catch (e) { // unknown record
       // try to load record
-      Target.loadDetails(this.id, this);
+      Target.loadList(this.id);
       error = e;
       log(e);
     }
@@ -313,23 +342,16 @@ var TargetDetails = BaseController.sub({
     var el = $(e.target);
     var id = el.attr('data-id');
     var questionItem = QuestionItem.find(id);
-    console.log("!/questions/" + questionItem.questionId + "/results");
     var route = "!/questions/" + questionItem.questionId + "/results";
-    console.log("==================routing=======================");
     Spine.Route.navigate(route);
 
     if (questionItem.showResults) {
-      console.log(questionItem.questionId + "/results");
       var route = App.getRoute(questionItem) + "/results";
       Spine.Route.navigate(route);
     } else {
       questionItem.showResults = true;
       questionItem.save();
-      console.log("nyt toimii linkki");
     }
-    //var route = "result/" + QuestionItem.find(id).questionId;
-    //console.log(route);
-    //Spine.Route.navigate(route);
   }
 });
 
@@ -367,8 +389,6 @@ var TargetCreate = BaseController.sub({
  *=================================================================================================================== */
 var QuestionResults = BaseController.sub({
   init: function() {
-    console.log("this:");
-    console.log(this);
     BaseController.prototype.init.call(this);
 
     // this is binded to all events to avoid the unbind-old/bind-new
@@ -418,11 +438,9 @@ var QuestionResults = BaseController.sub({
       data.now.trendPos = Math.abs(Math.max(0, data.now.trend));
       data.now.trendNeg = Math.abs(Math.min(0, data.now.trend));
     } catch (e) {
-      console.log("===============ERROR=====================");
       //Target.loadDetails(this.id, this);
       data.error = e;
     }
-    console.log(data);
     return data;
   },
   render: function() {

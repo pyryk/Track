@@ -1,10 +1,82 @@
+/** =========================================== CUSTOMER ===================================================== */
+var Customer = Spine.Model.sub();
+Customer.configure("Customer", "logo", "name", "customerId", "saved");
+
+Customer.include({
+  getResourceName: function() {
+    return "customers";
+  },
+  getId: function() {
+    return this.customerId;
+  }
+});
+
+Customer.loadList = function(additionalData) {
+  var url = App.serverURL;
+  if (url.substring(url.length-1) !== "/") {
+    url += "/";
+  }
+  url += "customers";
+  //var data = window.track.getAdditionalData();
+  var user = User.getUser();
+  var headers = {
+    'FB-UserId': user.name,
+    'FB-AccessToken': user.token
+  };
+  var requestComplete = false;
+
+  try {
+    $.ajax({
+      url: url,
+      data: additionalData,
+      dataType: 'json',
+      timeout: 5000,
+      cache: false,
+      headers: user.logged ? headers : {},
+      success: function(data, status, jqXHR) {
+        requestComplete = true;
+        for (var i in data.customers) {
+          var customer = data.customers[i];
+          var logo = customer.name.toLowerCase().replace(' ', '-');
+          logo = logo.replace('ä', 'a');
+          logo = logo.replace('ö', 'o');
+          logo = logo.replace('\'', '');
+          logo = "img/templogos/" + logo + ".png";
+          customer["logo"] = logo;
+          customer["customerId"] = customer["_id"]; // map mongo id
+          customer["saved"] = true; // saved i.e. got from backend
+          var targetObject = Customer.create(customer);
+          targetObject.save();
+        }
+      },
+      error: function(jqxhr, textStatus, error) {
+        log('error: ' + textStatus + ', ' + error);
+      }
+    });
+  } catch(e) {
+    log(e);
+  }
+
+  // workaround for android 2.3 bug: requests remain pending when loading the page from cache
+  var xmlHttpTimeout=setTimeout(ajaxTimeout,5000);
+  function ajaxTimeout(){
+    // if request not complete and no sinon (xhr mock lib) present
+    if (!requestComplete && !window.sinon) {
+      log("Request timed out - reloading the whole page");
+      //window.location.reload()
+    } else {
+      log("Request was completed");
+    }
+  }
+}
+
+/** =========================================== TARGET ======================================================= */
 /**
  * The track target, such as "Virgin Oil queue"
- *
  */
 var Target = Spine.Model.sub();
 
-Target.configure("Target", "logo", "name", "questions", "questionType", "showQuestionComment", "location", "results", "detailsLoaded", "saved");
+Target.configure("Target", "customerId", "targetId", "logo", "name", "questions", "questionType", "showQuestionComment", "location", "results", "detailsLoaded", "saved");
 // Target.configure("Target", "name", "questions", "detailsLoaded", "saved");
 
 Target.include({
@@ -42,6 +114,9 @@ Target.include({
   },
   loadDetails: function(listener) {
     Target.loadDetails(this.id, listener);
+  },
+  getId: function() {
+    return this.targetId;
   },
   saveToServer: function() {
     var url = App.serverURL;
@@ -97,7 +172,7 @@ Target.include({
  * Loads a brief list of the track targets, containing only name and id
  * TODO: add more fields here, category/icon etc
  */
-Target.loadList = function(additionalData) {
+Target.loadList = function(customerId) {
   var url = App.serverURL;
   if (url.substring(url.length-1) !== "/") {
     url += "/";
@@ -114,7 +189,6 @@ Target.loadList = function(additionalData) {
   try {
     $.ajax({
       url: url,
-      data: additionalData,
       dataType: 'json',
       timeout: 5000,
       cache: false,
@@ -123,9 +197,20 @@ Target.loadList = function(additionalData) {
         requestComplete = true;
         for (var i in data.targets) {
           var target = data.targets[i];
-          target["id"] = target["_id"]; // map mongo id
+          target["targetId"] = target["_id"]; // map mongo id
           target["detailsLoaded"] = false; // target details are only loaded individually
           target["saved"] = true; // saved i.e. got from backend
+          target["customerId"] = target.customerId;
+          var list = Customer.findAllByAttribute("customerId", target.customerId);
+          var logo;
+          if (list != null) {
+            logo = list[0].name.toLowerCase().replace(' ', '-');
+          }
+          logo = logo.replace('ä', 'a');
+          logo = logo.replace('ö', 'o');
+          logo = logo.replace('\'', '');
+          logo = "img/templogos/" + logo + ".png";
+          target["logo"] = logo;
           var targetObject = Target.create(target);
           for (var j in data.targets[i].questions) {
             var questionItem;
@@ -139,7 +224,6 @@ Target.loadList = function(additionalData) {
           }
           targetObject.save();
         }
-
       },
       error: function(jqxhr, textStatus, error) {
         log('error: ' + textStatus + ', ' + error);
@@ -252,11 +336,11 @@ Target.fromForm = function(form) {
   return target;
 }
 
-/* -------------------------------------- */
+/** =========================================== RESULT ======================================================= */
 /* result (answer of the target question) */
 var Result = Spine.Model.sub();
 
-Result.configure("Result", "value", "timestamp", "location", "textComment","questionItem", "saved");
+Result.configure("Result", "value", "timestamp", "location", "textComment", "questionItem", "saved");
 
 Result.include({
   getType: function() {
@@ -314,7 +398,7 @@ Result.include({
   }
 });
 
-/* -------------------------------------- */
+/** =========================================== USER ========================================================= */
 /* user (logged in via facebook or other) */
 var User = Spine.Model.sub();
 User.configure("User", "name", "logged", "token", "expires", "provider", "points");
@@ -353,6 +437,7 @@ User.getUser = function() {
   return User.last() || User.create();
 };
 
+/** =========================================== LEADERBOARD ===================================================== */
 var LeaderboardEntry = Spine.Model.sub();
 LeaderboardEntry.configure("LeaderboardEntry", "position", "name", "picture", "points");
 
@@ -376,18 +461,7 @@ LeaderboardEntry.load = function() {
   });
 }
 
-var Customer = Spine.Model.sub();
-Customer.configure("Customer", "logo", "name");
-
-/*var Points = Spine.Model.sub();
-Points.configure("Points", "userPoints", "targetName");
-
-Points.include({
-  getUserPoints: function() {
-    return this.userPoints;
-  }
-})*/
-
+/** =========================================== QUESTIONITEM ==================================================== */
 var QuestionItem = Spine.Model.sub();
 QuestionItem.configure("QuestionItem", "name", "done", "showComment", "questionId", "resultId", "results", "resultAllTime", "resultImage", "showResults");
 
@@ -407,6 +481,9 @@ QuestionItem.include({
   },*/
   getResourceName: function() {
     return "questions"
+  },
+  getId: function() {
+    return this.questionId;
   },
   loadResults: function(id) {
     var thisHolder = this;

@@ -9,24 +9,23 @@ var App = Spine.Controller.sub({
       "!/login/": function(params) {
         this.renderView('loginScreen', LoginScreen);
       },
-      "!/customer/": function(params) {
+      "!/customers/": function(params) {
         this.renderView('customerList', CustomersList);
       },
-      "!/targets/": function(params) {
-        this.renderView('targetList', TargetsList);
+      "!/customers/:id": function(params) {
+        this.renderView('targetList', TargetsList, params.id);
       },
       "!/targets/create": function(params) {
         this.renderView('targetCreate', TargetCreate);
       },
       "!/targets/:id": function(params) {
+        console.log(params.id);
         this.renderView('targetDetails', TargetDetails, params.id);
       },
       "!/results/:id": function(params) {
         this.renderView('ownResult', ownResult, params.id);
       },
       "!/questions/:id/results": function(params) {
-        console.log("Koitetaan renderöidä sivua questionResults: " + QuestionResults);
-        console.log(params);
         this.renderView('questionResults', QuestionResults, params.id);
       },
       "!/leaderboard": function(params) {
@@ -35,7 +34,7 @@ var App = Spine.Controller.sub({
       // default route
       "*others": function(params) {
         log("Invalid route ", params.match.input, " - redirecting to default");
-        Spine.Route.navigate("!/targets/");
+        Spine.Route.navigate("!/customers/");
       }
     });
 
@@ -73,6 +72,8 @@ var App = Spine.Controller.sub({
       }
 
       this.pages[name].id = id; // set id if needed
+      console.log("renderview id:");
+      console.log(id);
       this.pages[name].show();
       this.visiblePage = this.pages[name];
 
@@ -286,8 +287,8 @@ App.getRoute = function(obj) {
   if (obj === "create_target") {
     return "!/targets/create";
   }
-  console.log("App.getRoute:   " + "!/" + obj.getResourceName() + "/" + obj.id);
-  return "!/" + obj.getResourceName() + "/" + obj.id;
+  console.log("App.getRoute:   " + "!/" + obj.getResourceName() + "/" + obj.getId());
+  return "!/" + obj.getResourceName() + "/" + obj.getId();
 }
 
 //TODO url resolver?
