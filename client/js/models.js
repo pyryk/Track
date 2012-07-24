@@ -42,6 +42,7 @@ Customer.loadList = function(additionalData) {
           logo = logo.replace('ö', 'o');
           logo = logo.replace('\'', '');
           logo = "img/templogos/" + logo + ".png";
+          console.log(logo);
           customer["logo"] = logo;
           customer["customerId"] = customer["_id"]; // map mongo id
           customer["saved"] = true; // saved i.e. got from backend
