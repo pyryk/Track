@@ -118,24 +118,27 @@ var TargetsList = BaseController.sub({
   },
   getData: function() {
     var items = Target.findAllByAttribute("customerId", this.id);
-    console.log(items);
+    console.log("Kuinka monta itemia: " + items.length);
     return {items: items};
   },
   init: function() {
     console.log(this);
     BaseController.prototype.init.call(this);
-    Target.bind("create", this.proxy(this.addOne));
     //Spine.bind('location:changed', this.proxy(this.locationChanged));
 
     // load list (without location data) even when no location gotten
     Spine.bind('location:error', this.proxy(this.locationChanged));
     this.loadList(this.id);
+    Target.bind("create", this.proxy(this.addOne));
+
   },
   loadList: function() {
+    console.log("Targetin loadList -funktio kontrollerissä");
     Target.loadList();
   },
   addOne: function(task){
     if (window.track.visiblePage == this) {
+      console.log("targetin addone funktio kontrollerissä");
       this.render();
     }
   },
@@ -292,8 +295,19 @@ var TargetDetails = BaseController.sub({
     questionItem.done = true;
     questionItem.loadResults(questionItem.id);
     questionItem.save();
+    var target;
+    var list = Target.findAllByAttribute("saved", true);
+    for (var i in list) {
+      for (var j in list[i].questions) {
+        console.log(list[i].questions)
+        if (list[i].questions[j].questionId == questionItem.questionId) {
+          target = list[i];
+          console.log(target);
+        }
+      }
+    }
 
-    if (Target.find(this.id).getShowQuestionComment() && questionItem.showComment) {
+    if (target.getShowQuestionComment() && questionItem.showComment) {
       this.html(this.template(this.getData()));
       this.addFastButtons();
       questionItem.showComment = false;

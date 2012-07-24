@@ -390,7 +390,8 @@ ul li span {
 #target-details .questionItem {
   margin-left: 1.5em;
   margin-right: 1.5em;
-  margin-top: 20px;
+  margin-top: 15px;
+  margin-bottom: 5px;
   font-size: 100%;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #f5f5f5));
   background-image: -webkit-linear-gradient(#fdfdfd, #f5f5f5);
@@ -407,14 +408,14 @@ ul li span {
   -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 }
-/* line 374, ../scss/app.scss */
+/* line 375, ../scss/app.scss */
 #target-details .questionItem .question {
   color: black;
   margin-left: 1.5em;
   margin-right: 1.5em;
   padding-top: 10px;
 }
-/* line 380, ../scss/app.scss */
+/* line 381, ../scss/app.scss */
 #target-details .questionItem .answer-two {
   display: -webkit-box;
   display: -moz-box;
@@ -432,7 +433,7 @@ ul li span {
   margin-right: 2.0em;
   margin-top: -7px;
 }
-/* line 388, ../scss/app.scss */
+/* line 389, ../scss/app.scss */
 #target-details .questionItem .answer-two .item {
   border-right: none;
   border-left: none;
@@ -444,11 +445,11 @@ ul li span {
   box-flex: 1;
   text-align: center;
 }
-/* line 396, ../scss/app.scss */
+/* line 397, ../scss/app.scss */
 #target-details .questionItem .answer-two .balance {
   margin-top: -3px;
 }
-/* line 400, ../scss/app.scss */
+/* line 401, ../scss/app.scss */
 #target-details .questionItem .answer-four {
   display: -webkit-box;
   display: -moz-box;
@@ -466,7 +467,7 @@ ul li span {
   margin-right: 0.5em;
   margin-top: -7px;
 }
-/* line 409, ../scss/app.scss */
+/* line 410, ../scss/app.scss */
 #target-details .questionItem .answer-four .item {
   border-right: none;
   border-left: none;
@@ -478,18 +479,18 @@ ul li span {
   box-flex: 1;
   text-align: center;
 }
-/* line 417, ../scss/app.scss */
+/* line 418, ../scss/app.scss */
 #target-details .questionItem .answer-four .balance {
   margin-top: -3px;
 }
-/* line 422, ../scss/app.scss */
+/* line 423, ../scss/app.scss */
 #target-details .right {
   float: right;
   margin-top: -39px;
   width: 45px;
   padding: 5px;
 }
-/* line 428, ../scss/app.scss */
+/* line 429, ../scss/app.scss */
 #target-details .target-done {
   margin-left: 1.5em;
   margin-right: 4.5em;
@@ -499,18 +500,18 @@ ul li span {
   font-style: italic;
   padding-bottom: 5px;
 }
-/* line 438, ../scss/app.scss */
+/* line 439, ../scss/app.scss */
 #target-details .link-button {
   position: absolute;
   bottom: 1em;
   left: 0.8em;
   right: 0.8em;
 }
-/* line 445, ../scss/app.scss */
+/* line 446, ../scss/app.scss */
 #target-details .answer-form-hide {
   overflow: hidden;
 }
-/* line 449, ../scss/app.scss */
+/* line 450, ../scss/app.scss */
 #target-details textarea.styled {
   border: 1px solid #cccccc;
   margin-left: 2.0em;
@@ -527,7 +528,7 @@ ul li span {
   border-radius: 5px 5px 5px 5px;
   resize: none;
 }
-/* line 462, ../scss/app.scss */
+/* line 463, ../scss/app.scss */
 #target-details .buttons {
   list-style: none;
   margin-left: auto;
@@ -536,7 +537,7 @@ ul li span {
   margin-top: -2px;
   padding-bottom: 8px;
 }
-/* line 470, ../scss/app.scss */
+/* line 471, ../scss/app.scss */
 #target-details .buttons li {
   display: inline;
   padding: 0.2em 0.6em;
@@ -561,21 +562,21 @@ ul li span {
   border-radius: 5px 5px 5px 5px;
   list-style: none;
 }
-/* line 480, ../scss/app.scss */
+/* line 481, ../scss/app.scss */
 #target-details .buttons li a {
   color: black;
 }
 
 /* target results elements
 * =================================================================================================================== */
-/* line 492, ../scss/app.scss */
+/* line 493, ../scss/app.scss */
 #question-results .question {
   color: black;
   margin-left: 1.5em;
   margin-right: 1.5em;
   padding-top: 10px;
 }
-/* line 498, ../scss/app.scss */
+/* line 499, ../scss/app.scss */
 #question-results .results {
   margin-left: 1.5em;
   margin-right: 1.5em;
@@ -583,32 +584,32 @@ ul li span {
   font-size: 100%;
   font-weight: bold;
 }
-/* line 506, ../scss/app.scss */
+/* line 507, ../scss/app.scss */
 #question-results .result-heading {
   margin: 5px 10px;
   padding-bottom: 0px;
 }
-/* line 511, ../scss/app.scss */
+/* line 512, ../scss/app.scss */
 #question-results table {
   width: 100%;
 }
-/* line 517, ../scss/app.scss */
+/* line 518, ../scss/app.scss */
 #question-results .target-answers th {
   text-align: left;
 }
-/* line 526, ../scss/app.scss */
+/* line 527, ../scss/app.scss */
 #question-results .target-answers td {
   border-width: 0px;
 }
-/* line 532, ../scss/app.scss */
+/* line 533, ../scss/app.scss */
 #question-results .result-number, #question-results .answer {
   padding: 20px 1em;
 }
-/* line 535, ../scss/app.scss */
+/* line 536, ../scss/app.scss */
 #question-results .result-number {
   text-align: right;
 }
-/* line 538, ../scss/app.scss */
+/* line 539, ../scss/app.scss */
 #question-results .target-answers:last-child {
   border-bottom: 1px solid #cccccc;
   -webkit-border-radius: 0px 0px 5px 5px;
@@ -617,7 +618,7 @@ ul li span {
   -o-border-radius: 0px 0px 5px 5px;
   border-radius: 0px 0px 5px 5px;
 }
-/* line 542, ../scss/app.scss */
+/* line 543, ../scss/app.scss */
 #question-results .result-graph {
   color: #fff;
   display: -webkit-box;
@@ -634,12 +635,12 @@ ul li span {
   box-align: stretch;
   margin: 10px 10px;
 }
-/* line 552, ../scss/app.scss */
+/* line 553, ../scss/app.scss */
 #question-results .result-graph .pos, #question-results .result-graph .neg {
   padding: 5px;
   text-align: center;
 }
-/* line 556, ../scss/app.scss */
+/* line 557, ../scss/app.scss */
 #question-results .result-graph .pos .trend, #question-results .result-graph .neg .trend {
   border-top: 20px solid transparent;
   border-bottom: 20px solid transparent;
@@ -647,7 +648,7 @@ ul li span {
   width: 0;
   height: 0;
 }
-/* line 565, ../scss/app.scss */
+/* line 566, ../scss/app.scss */
 #question-results .result-graph .pos {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #00b509), color-stop(100%, #00e80c));
   background-image: -webkit-linear-gradient(#00b509, #00e80c);
@@ -661,12 +662,12 @@ ul li span {
   -o-border-radius: 0px 10px 10px 0px;
   border-radius: 0px 10px 10px 0px;
 }
-/* line 570, ../scss/app.scss */
+/* line 571, ../scss/app.scss */
 #question-results .result-graph .pos .trend {
   border-right: 20px solid #00b509;
   float: left;
 }
-/* line 575, ../scss/app.scss */
+/* line 576, ../scss/app.scss */
 #question-results .result-graph .neg {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff0000), color-stop(100%, #ff4d4d));
   background-image: -webkit-linear-gradient(#ff0000, #ff4d4d);
@@ -681,26 +682,26 @@ ul li span {
   border-radius: 10px 0px 0px 10px;
   border-right: 1px solid gray;
 }
-/* line 581, ../scss/app.scss */
+/* line 582, ../scss/app.scss */
 #question-results .result-graph .neg .trend {
   border-left: 20px solid #ce1e1e;
   float: right;
 }
-/* line 588, ../scss/app.scss */
+/* line 589, ../scss/app.scss */
 #question-results .graph {
   height: 300px;
   width: 100%;
 }
-/* line 592, ../scss/app.scss */
+/* line 593, ../scss/app.scss */
 #question-results .graph .yAxis .tickLabel {
   font-size: 12px;
 }
-/* line 595, ../scss/app.scss */
+/* line 596, ../scss/app.scss */
 #question-results .graph .xAxis .tickLabel {
   font-size: 10px;
 }
 
-/* line 602, ../scss/app.scss */
+/* line 603, ../scss/app.scss */
 #target-ownResult h3 {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffe065), color-stop(100%, #fecb00));
   background-image: -webkit-linear-gradient(#ffe065, #fecb00);
@@ -720,7 +721,7 @@ ul li span {
   -o-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
 }
-/* line 605, ../scss/app.scss */
+/* line 606, ../scss/app.scss */
 #target-ownResult .result-info-body {
   margin: 0;
   border: 1px solid #cccccc;
@@ -734,11 +735,11 @@ ul li span {
   padding-left: 1em;
   color: #666666;
 }
-/* line 610, ../scss/app.scss */
+/* line 611, ../scss/app.scss */
 #target-ownResult .result-info-body .question, #target-ownResult .result-info-body .answer {
   display: none;
 }
-/* line 614, ../scss/app.scss */
+/* line 615, ../scss/app.scss */
 #target-ownResult .result-info-body:last-child {
   border-bottom: 1px solid #cccccc;
   -webkit-border-radius: 0px 0px 5px 5px;
@@ -747,14 +748,14 @@ ul li span {
   -o-border-radius: 0px 0px 5px 5px;
   border-radius: 0px 0px 5px 5px;
 }
-/* line 617, ../scss/app.scss */
+/* line 618, ../scss/app.scss */
 #target-ownResult .link-button {
   margin-top: 2em;
 }
 
 /* button elements
 * =================================================================================================================== */
-/* line 625, ../scss/app.scss */
+/* line 626, ../scss/app.scss */
 #login h2 {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffe065), color-stop(100%, #fecb00));
   background-image: -webkit-linear-gradient(#ffe065, #fecb00);
@@ -775,7 +776,7 @@ ul li span {
   border-radius: 5px 5px 0px 0px;
   margin-top: 20px;
 }
-/* line 630, ../scss/app.scss */
+/* line 631, ../scss/app.scss */
 #login .content {
   margin: 0;
   padding: 1em 1em;
@@ -790,7 +791,7 @@ ul li span {
   background-image: -ms-linear-gradient(#fdfdfd, #f5f5f5);
   background-image: linear-gradient(#fdfdfd, #f5f5f5);
 }
-/* line 639, ../scss/app.scss */
+/* line 640, ../scss/app.scss */
 #login .content .no-login {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #f5f5f5));
   background-image: -webkit-linear-gradient(#fdfdfd, #f5f5f5);
@@ -799,7 +800,7 @@ ul li span {
   background-image: -ms-linear-gradient(#fdfdfd, #f5f5f5);
   background-image: linear-gradient(#fdfdfd, #f5f5f5);
 }
-/* line 641, ../scss/app.scss */
+/* line 642, ../scss/app.scss */
 #login .content .no-login:active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5f5f5), color-stop(100%, #fdfdfd));
   background-image: -webkit-linear-gradient(#f5f5f5, #fdfdfd);
@@ -808,7 +809,7 @@ ul li span {
   background-image: -ms-linear-gradient(#f5f5f5, #fdfdfd);
   background-image: linear-gradient(#f5f5f5, #fdfdfd);
 }
-/* line 646, ../scss/app.scss */
+/* line 647, ../scss/app.scss */
 #login .content .login-button {
   width: 100%;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fff5cb), color-stop(100%, #ffe065));
@@ -818,7 +819,7 @@ ul li span {
   background-image: -ms-linear-gradient(#fff5cb, #ffe065);
   background-image: linear-gradient(#fff5cb, #ffe065);
 }
-/* line 649, ../scss/app.scss */
+/* line 650, ../scss/app.scss */
 #login .content .login-button:active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffe065), color-stop(100%, #fff5cb));
   background-image: -webkit-linear-gradient(#ffe065, #fff5cb);
@@ -828,25 +829,25 @@ ul li span {
   background-image: linear-gradient(#ffe065, #fff5cb);
 }
 
-/* line 656, ../scss/app.scss */
+/* line 657, ../scss/app.scss */
 #back-button, #account-button {
   position: absolute;
   top: 5px;
   display: block;
 }
-/* line 660, ../scss/app.scss */
+/* line 661, ../scss/app.scss */
 #back-button .top-button, #account-button .top-button {
   display: inline-block;
   height: 18px;
   padding: 9px 5px;
 }
-/* line 664, ../scss/app.scss */
+/* line 665, ../scss/app.scss */
 #back-button .top-button a, #back-button .top-button a:link, #back-button .top-button a:active, #back-button .top-button a:visited, #account-button .top-button a, #account-button .top-button a:link, #account-button .top-button a:active, #account-button .top-button a:visited {
   color: inherit;
   text-decoration: inherit;
 }
 
-/* line 671, ../scss/app.scss */
+/* line 672, ../scss/app.scss */
 #account-button {
   height: 36px;
   right: 10px;
@@ -868,7 +869,7 @@ ul li span {
   -o-border-radius: 35px;
   border-radius: 35px;
 }
-/* line 673, ../scss/app.scss */
+/* line 674, ../scss/app.scss */
 #account-button .top-button {
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 6px;
@@ -876,7 +877,7 @@ ul li span {
   padding-top: 8px;
 }
 
-/* line 688, ../scss/app.scss */
+/* line 689, ../scss/app.scss */
 #back-button {
   height: 36px;
   left: 10px;
@@ -898,7 +899,7 @@ ul li span {
   -o-border-radius: 35px;
   border-radius: 35px;
 }
-/* line 690, ../scss/app.scss */
+/* line 691, ../scss/app.scss */
 #back-button .top-button {
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 6px;
@@ -906,7 +907,7 @@ ul li span {
   padding-top: 8px;
 }
 
-/* line 705, ../scss/app.scss */
+/* line 706, ../scss/app.scss */
 .link-button {
   display: block;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fdfdfd), color-stop(100%, #f5f5f5));
@@ -930,12 +931,12 @@ ul li span {
   -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 }
-/* line 717, ../scss/app.scss */
+/* line 718, ../scss/app.scss */
 .link-button:link, .link-button:active, .link-button:visited {
   text-decoration: none;
   color: #666666;
 }
-/* line 721, ../scss/app.scss */
+/* line 722, ../scss/app.scss */
 .link-button:active, .link-button.fake-active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5f5f5), color-stop(100%, #fdfdfd));
   background-image: -webkit-linear-gradient(#f5f5f5, #fdfdfd);
@@ -945,26 +946,26 @@ ul li span {
   background-image: linear-gradient(#f5f5f5, #fdfdfd);
 }
 
-/* line 726, ../scss/app.scss */
+/* line 727, ../scss/app.scss */
 button.link-button {
   width: 100%;
 }
 
 /* leaderboard elements
 * =================================================================================================================== */
-/* line 732, ../scss/app.scss */
+/* line 733, ../scss/app.scss */
 #leaderboard {
   margin-top: 1em;
 }
-/* line 735, ../scss/app.scss */
+/* line 736, ../scss/app.scss */
 #leaderboard table {
   width: 100%;
 }
-/* line 738, ../scss/app.scss */
+/* line 739, ../scss/app.scss */
 #leaderboard table tr.header {
   border: 0;
 }
-/* line 742, ../scss/app.scss */
+/* line 743, ../scss/app.scss */
 #leaderboard table th {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffe065), color-stop(100%, #fecb00));
   background-image: -webkit-linear-gradient(#ffe065, #fecb00);
@@ -984,7 +985,7 @@ button.link-button {
   -o-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
 }
-/* line 746, ../scss/app.scss */
+/* line 747, ../scss/app.scss */
 #leaderboard table tr {
   padding: 1em 1em;
   border: 0;
@@ -1004,21 +1005,21 @@ button.link-button {
   text-overflow: ellipsis;
   -moz-binding: url('/css/xml/ellipsis.xml#ellipsis');
 }
-/* line 748, ../scss/app.scss */
+/* line 749, ../scss/app.scss */
 #leaderboard table tr td {
   padding: 0.5em;
   vertical-align: middle;
 }
-/* line 751, ../scss/app.scss */
+/* line 752, ../scss/app.scss */
 #leaderboard table tr td.position {
   padding-left: 1em;
 }
-/* line 754, ../scss/app.scss */
+/* line 755, ../scss/app.scss */
 #leaderboard table tr td.name img {
   padding-right: 1em;
 }
 
-/* line 762, ../scss/app.scss */
+/* line 763, ../scss/app.scss */
 footer {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2f2f2f), color-stop(50%, #151515), color-stop(51%, #000000), color-stop(100%, #000000));
   background-image: -webkit-linear-gradient(top, #2f2f2f, #151515 50%, #000000 51%, #000000);
@@ -1034,24 +1035,24 @@ footer {
   left: 0;
 }
 
-/* line 772, ../scss/app.scss */
+/* line 773, ../scss/app.scss */
 .loading-indicator {
   margin: 10px;
 }
 
-/* line 776, ../scss/app.scss */
+/* line 777, ../scss/app.scss */
 .hide {
   display: none;
 }
 
-/* line 780, ../scss/app.scss */
+/* line 781, ../scss/app.scss */
 input[type=text] {
   width: 100%;
   box-sizing: border-box;
 }
 
 /* no point to have red bg on untouched text boxes */
-/* line 786, ../scss/app.scss */
+/* line 787, ../scss/app.scss */
 input[type=text]:invalid {
   background-color: white;
 }

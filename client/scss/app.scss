@@ -365,7 +365,8 @@ ul li span {
   .questionItem {
     margin-left: 1.5em;
     margin-right: 1.5em;
-    margin-top: 20px;
+    margin-top: 15px;
+    margin-bottom: 5px;
     font-size: 100%;
     @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
     @include border-radius(10px 10px 10px 10px);
