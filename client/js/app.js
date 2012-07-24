@@ -72,8 +72,6 @@ var App = Spine.Controller.sub({
       }
 
       this.pages[name].id = id; // set id if needed
-      console.log("renderview id:");
-      console.log(id);
       this.pages[name].show();
       this.visiblePage = this.pages[name];
 
@@ -240,14 +238,10 @@ var App = Spine.Controller.sub({
     /*var popped = this.pageStack.pop();
      history.back();*/
     var current = this.visiblePage;
-
     var prev = this.getPreviousPage();
-
     if (!prev) {
       return;
     }
-    //console.log(prev.url);
-    //Spine.Route.navigate(prev.url);
 
     if (prev.id) {
       Spine.Route.navigate(App.getRoute(Target.find(prev.id)))
@@ -263,7 +257,6 @@ var App = Spine.Controller.sub({
     if (!window.trackConfig || !window.trackConfig.enableAuth) {
       return true;
     }
-
     return (User.getUser().logged || this.noLogin)
   },
   noLogin: false
@@ -287,28 +280,23 @@ App.getRoute = function(obj) {
   if (obj === "create_target") {
     return "!/targets/create";
   }
-  console.log("App.getRoute:   " + "!/" + obj.getResourceName() + "/" + obj.getId());
   return "!/" + obj.getResourceName() + "/" + obj.getId();
 }
 
 //TODO url resolver?
-
 App.fastClicksEnabled = function() {
   return true;
   var disable = [
     {browser: "Safari", OS: "iPhone/iPod", version: /OS 4_(.)+/}
   ];
-
   //BrowserDetect = {browser: "Safari", OS: "iPhone/iPod", version: "4_3_3"};
   for (var i in disable) {
     if (BrowserDetect.browser === disable[i].browser &&
       BrowserDetect.OS === disable[i].OS/* &&
      (BrowserDetect.version + "").match(disable[i].version)*/ &&
       navigator.appVersion.match(disable[i].version)) {
-
       return false;
     }
   }
-
   return true;
 }

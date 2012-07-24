@@ -15,7 +15,7 @@ $use-mozilla-ellipsis-binding: true;
 /* app specific styles
 * =================================================================================================================== */
 /* Defining the layout-profile, basically color-palette: frontpage, aalto, rosso, subway */
-$customer: "aalto";
+$customer: "frontpage";
 
 /* Default template **/
 $header_gradient_1: lighten(#0F68A3, 20%);
@@ -51,6 +51,10 @@ $list_item_gradient_2: darken(#ffffff, 1%);
     $list_item_gradient_2: darken(#ffffff, 1%);
     $text_color: #606967;
   }
+
+.mtv3 {
+
+}
 
 /* Rosso-layout */
   @if $customer == rosso {
@@ -204,6 +208,8 @@ body {
 }
 
 .primary-list {
+  -webkit-overflow-scrolling: touch;
+  overflow: scroll;
   list-style-type: none;
   width: 90%;
   padding: 0;
@@ -274,6 +280,18 @@ ul li span {
   padding: 0px;
   float: left;
   width: 86%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.target-list-span {
+  margin-left: 5px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  margin-top: -3px;
+  padding: 0px;
+  width: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -375,6 +393,20 @@ ul li span {
     @include border-radius(10px 10px 10px 10px);
     @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
 
+    textarea.styled {
+      border: 1px solid $border_color;
+      margin-left: 2.0em;
+      margin-right: 2.0em;
+      padding: 0.5em;
+      width: 75%;
+      margin-bottom: 10px;
+      outline: none;
+      color: $text_color;
+      @include border-radius(5px 5px 5px 5px);
+      resize: none;
+      //display: block;
+    }
+
     .question {
       color: $text_color;
       margin-left: 1.5em;
@@ -396,6 +428,9 @@ ul li span {
         display: block;
         @include box-flex(1);
         text-align: center;
+        &:active, &.fake-active {
+          @include background-image(linear-gradient(darken($list_item_gradient_2, 5%), $list_item_gradient_2));
+        }
       }
       .balance {
         margin-top: -3px;
@@ -417,6 +452,9 @@ ul li span {
         display: block;
         @include box-flex(1);
         text-align: center;
+        &:active, &.fake-active {
+          @include background-image(linear-gradient(darken($list_item_gradient_2, 5%), $list_item_gradient_2));
+        }
       }
       .balance {
         margin-top: -3px;
@@ -450,24 +488,11 @@ ul li span {
     overflow: hidden;
   }
 
-  textarea.styled {
-    border: 1px solid $border_color;
-    margin-left: 2.0em;
-    margin-right: 2.0em;
-    padding: 0.5em;
-    width: 15.5em;
-    margin-bottom: 10px;
-    outline: none;
-    color: $text_color;
-    @include border-radius(5px 5px 5px 5px);
-    resize: none;
-    //display: block;
-  }
   .buttons {
     list-style: none;
     margin-left: auto;
     margin-right: auto;
-    width: 150px;
+    width: 170px;
     margin-top: -2px;
     padding-bottom: 8px;
 
@@ -636,8 +661,6 @@ ul li span {
     padding: 1em 1em;
     border: 0;
     border-bottom: 1px solid $border_color;
-    border-left: 1px solid $border_color;
-    border-right: 1px solid $border_color;
     @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
 
     .no-login {
@@ -685,6 +708,8 @@ ul li span {
   @include background-image(linear-gradient($header_gradient_2, $header_gradient_2));
   @include border-radius(35px);
   &:active, &.fake-active {
+    @include background-image(linear-gradient(darken($header_gradient_2, 3%), $header_gradient_2));
+
     //@include background-image(linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.05)));
   }
 }
@@ -702,7 +727,9 @@ ul li span {
   @include background-image(linear-gradient($header_gradient_2, $header_gradient_2));
   @include border-radius(35px);
   &:active, &.fake-active {
+   // @include background-image(linear-gradient($header_gradient_2, $header_gradient_1));
     //background-position: 0 -36px;
+    @include background-image(linear-gradient(darken($header_gradient_2, 3%), $header_gradient_2));
   }
 }
 

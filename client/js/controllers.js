@@ -11,9 +11,7 @@ var BaseController = Spine.Controller.sub({
     this.render();
   },
   render: function() {
-    console.log("render funktio basecontrollerilla + data:");
     var data = this.getData();
-    console.log(data);
     if (typeof this.template === "function") {
       this.html(this.template(data));
       this.addFastButtons();
@@ -65,12 +63,11 @@ var CustomersList = BaseController.sub({
     // TODO update list also when list is not visible
     if (window.track.visiblePage == this) {
       log('location changed - reloading target list');
-      console.log(Customer.findAllByAttribute("saved", true));
-
       this.loadList({lat: location.lat, lon: location.lon});
     }
   },
   addOne: function(task){
+
     if (window.track.visiblePage == this) {
       this.render();
     }
@@ -120,22 +117,28 @@ var TargetsList = BaseController.sub({
     return "List";
   },
   getData: function() {
-    var items = Target.findAllByAttribute("customerId", this.id);
+    console.log(window.location.pathname);
+    console.log(document.URL);
+
+    if (this.id == null) {
+      var items = Target.findAllByAttribute("saved", true);
+    } else {
+      var items = Target.findAllByAttribute("customerId", this.id);
+    }
     return {items: items};
   },
   init: function() {
-    console.log(this);
     BaseController.prototype.init.call(this);
-    //Spine.bind('location:changed', this.proxy(this.locationChanged));
+    Spine.bind('location:changed', this.proxy(this.locationChanged));
 
     // load list (without location data) even when no location gotten
     Spine.bind('location:error', this.proxy(this.locationChanged));
-    this.loadList(this.id);
+    this.loadList();
     Target.bind("create", this.proxy(this.addOne));
 
   },
-  loadList: function(customerId) {
-    Target.loadList(customerId);
+  loadList: function(additionalData) {
+    Target.loadList(additionalData);
   },
   addOne: function(task){
     if (window.track.visiblePage == this) {
@@ -229,6 +232,13 @@ var TargetDetails = BaseController.sub({
     return "Target";
   },
   getData: function() {
+    console.log("==========================================");
+    console.log(this.id);
+    if (Target.findAllByAttribute("saved", true).length == 0) {
+      console.log("ladataan");
+    }
+    console.log(Target.findAllByAttribute("saved", true));
+
     var target, error;
     try {
       var list = Target.findAllByAttribute("targetId",this.id);
@@ -237,7 +247,7 @@ var TargetDetails = BaseController.sub({
       // try to load record
       Target.loadList(this.id);
       error = e;
-      log(e);
+      console.log(e + "VIRHE");
     }
     var name = target.getName();
     var type = target.getQuestionType();
@@ -351,6 +361,8 @@ var TargetDetails = BaseController.sub({
   viewResults: function(e) {
     var el = $(e.target);
     var id = el.attr('data-id');
+    console.log(el);
+    console.log(id);
     var questionItem = QuestionItem.find(id);
     var route = "!/questions/" + questionItem.questionId + "/results";
     Spine.Route.navigate(route);
@@ -516,6 +528,11 @@ var BackButton = BaseController.sub({
       showHome = true;
       showPrev = false;
     }
+    if (this.app.visiblePage === this.app.pages['loginScreen'] && showPrev == false) {
+      showHome = true;
+      showPrev = false;
+    }
+
     return {previous: showPrev, home: showHome};
   },
   backClicked: function() {
@@ -526,9 +543,7 @@ var BackButton = BaseController.sub({
     }
   },
   homeClicked: function() {
-    if (this.app.visiblePage === this.app.pages['targetList']) {
-      Spine.Route.navigate('!/customer/');
-    }
+    Spine.Route.navigate('!/customers/');
   }
 });
 

@@ -13,18 +13,15 @@ Customer.include({
 
 Customer.loadList = function(additionalData) {
   var url = App.serverURL;
-  if (url.substring(url.length-1) !== "/") {
-    url += "/";
-  }
+  if (url.substring(url.length-1) !== "/") url += "/";
   url += "customers";
-  //var data = window.track.getAdditionalData();
+  console.log(url);
   var user = User.getUser();
   var headers = {
     'FB-UserId': user.name,
     'FB-AccessToken': user.token
   };
   var requestComplete = false;
-
   try {
     $.ajax({
       url: url,
@@ -37,12 +34,7 @@ Customer.loadList = function(additionalData) {
         requestComplete = true;
         for (var i in data.customers) {
           var customer = data.customers[i];
-          var logo = customer.name.toLowerCase().replace(' ', '-');
-          logo = logo.replace('ä', 'a');
-          logo = logo.replace('ö', 'o');
-          logo = logo.replace('\'', '');
-          logo = "img/templogos/" + logo + ".png";
-          customer["logo"] = logo;
+          customer["logo"] = "img/templogos/" + customer.name.toLowerCase().replace(' ', '-').replace('ä', 'a').replace('ö', 'o').replace('\'', '') + ".png";
           customer["customerId"] = customer["_id"]; // map mongo id
           customer["saved"] = true; // saved i.e. got from backend
           Customer.create(customer);
@@ -75,7 +67,7 @@ Customer.loadList = function(additionalData) {
  */
 var Target = Spine.Model.sub();
 
-Target.configure("Target", "customerId", "targetId", "logo", "name", "questions", "questionType", "showQuestionComment", "location", "results", "detailsLoaded", "saved");
+Target.configure("Target", "customerId", "targetId", "logo", "showLogo", "isLogo", "name", "questions", "questionType", "showQuestionComment", "location", "results", "detailsLoaded", "saved");
 // Target.configure("Target", "name", "questions", "detailsLoaded", "saved");
 
 Target.include({
@@ -171,29 +163,26 @@ Target.include({
  * Loads a brief list of the track targets, containing only name and id
  * TODO: add more fields here, category/icon etc
  */
-Target.loadList = function(customerId) {
-  console.log("Target.loadList");
+Target.loadList = function(additionalData) {
   var url = App.serverURL;
-  if (url.substring(url.length-1) !== "/") {
-    url += "/";
-  }
+  if (url.substring(url.length-1) !== "/") url += "/";
   url += "targets";
-  //var data = window.track.getAdditionalData();
   var user = User.getUser();
   var headers = {
     'FB-UserId': user.name,
     'FB-AccessToken': user.token
   };
-
   var requestComplete = false;
   try {
     $.ajax({
       url: url,
       dataType: 'json',
       timeout: 5000,
+      data: additionalData,
       cache: false,
       headers: user.logged ? headers : {},
       success: function(data, status, jqXHR) {
+        console.log("succeess funktio");
         requestComplete = true;
         for (var i in data.targets) {
           var target = data.targets[i];
@@ -201,28 +190,17 @@ Target.loadList = function(customerId) {
           target["detailsLoaded"] = false; // target details are only loaded individually
           target["saved"] = true; // saved i.e. got from backend
           target["customerId"] = target.customerId;
-          var list = Customer.findAllByAttribute("customerId", target.customerId);
-          var logo;
-          if (list != null) {
-            logo = list[0].name.toLowerCase().replace(' ', '-');
-          }
-          logo = logo.replace('ä', 'a');
-          logo = logo.replace('ö', 'o');
-          logo = logo.replace('\'', '');
-          logo = "img/templogos/" + logo + ".png";
-          target["logo"] = logo;
+          target["showLogo"] = false;
           var targetObject = Target.create(target);
           for (var j in data.targets[i].questions) {
-            var questionItem;
             if (data.targets[i].showQuestionComment) {
-              questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, showComment: true, questionId: data.targets[i].questions[j]._id});
+              var questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, showComment: true, showResults: true, questionId: data.targets[i].questions[j]._id});
             } else {
-              questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, questionId: data.targets[i].questions[j]._id});
+              var questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, showResults: true, questionId: data.targets[i].questions[j]._id});
             }
             targetObject.questions[j] = questionItem;
             targetObject.save();
           }
-          targetObject.save();
         }
       },
       error: function(jqxhr, textStatus, error) {
@@ -493,6 +471,8 @@ QuestionItem.include({
     }
     url += "results/";
     url += this.questionId;
+    console.log(url);
+
     var requestComplete = false;
     try {
       $.ajax({

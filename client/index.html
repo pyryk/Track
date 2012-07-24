@@ -27,7 +27,7 @@
 
   <!-- iOS web app, delete if not needed. https://github.com/h5bp/mobile-boilerplate/issues/94 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="red">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <script>(function(){var a;if(navigator.platform==="iPad"){a=window.orientation!==90||window.orientation===-90?"img/startup-tablet-landscape.png":"img/startup-tablet-portrait.png"}else{a=window.devicePixelRatio===2?"img/startup-retina.png":"img/startup.png"}document.write('<link rel="apple-touch-startup-image" href="'+a+'"/>')})()</script>
 
   <!-- The script prevents links from opening in mobile safari. https://gist.github.com/1042026 -->
@@ -76,9 +76,9 @@
   <div class="search-field">
     <input type="text" id="search-customer-input" placeholder="Etsi..." autocomplete="off" class="search-field-input" />
   </div>
-  <ul class="primary-list" data-role="listview" data-inset="true" data-filter="true" id="customer-list">
+  <ul class="primary-list scroll-y" data-role="listview" data-inset="true" data-filter="true" id="customer-list">
     {{#each items}}
-    <li name="{{this.name}}" data-id="{{this.id}}">
+    <li name="{{this.name}}" class="scroll-y" data-id="{{this.id}}">
       <img class="customer-list-image" data-id="{{this.id}}" src="{{this.logo}}" alt=""/>
       <span data-id="{{this.id}}" class="customer-list-span">{{this.name}}</span>
       <img class="customer-list-arrow" data-id="{{this.id}}" src="img/next.png" alt=""/>
@@ -89,18 +89,22 @@
 
 <!-- TARGET-LIST -->
 <!-- ------------------------------------------------------------------------------------------------------------- -->
-<script id="template-targetList" type="text/x-handlebars-template">
+<script id="template-targetList" class="scroll-y" type="text/x-handlebars-template">
   <div class="search-field">
     <input type="text" id="search-target-input" placeholder="Etsi..." autocomplete="off" class="search-field-input" />
   </div>
   {{#if error}}
   {{error}}
   {{/if}}
-  <ul class="primary-list" id="target-list">
+  <ul class="primary-list scroll-y" id="target-list">
     {{#each items}}
-    <li name="{{this.name}}" data-id="{{this.id}}">
+    <li name="{{this.name}}" class="scroll-y"  data-id="{{this.id}}">
+      {{#if showLogo}}
       <img class="customer-list-image" data-id="{{this.id}}" src="{{this.logo}}" alt=""/>
       <span data-id="{{this.id}}" class="customer-list-span">{{this.name}}</span>
+      {{else}}
+      <span data-id="{{this.id}}" class="target-list-span">{{this.name}}</span>
+      {{/if}}
       <img class="customer-list-arrow" data-id="{{this.id}}" src="img/next.png" alt=""/>
     </li>
     {{/each}}
@@ -140,7 +144,7 @@
         </ul>
         {{else}}
         <p class="right">{{this.resultAllTime}} % <img src="{{this.resultImage}}" width="25" height="25" alt=":("/></p>
-        <p class="target-done">Kiitos vastauksesta! {{#if this.showResults}} <a class="goToResults"> tulokset</a>{{/if}}</p>
+        <p class="target-done">Kiitos vastauksesta! {{#if this.showResults}} <a data-id={{this.id}} class="goToResults"> tulokset</a>{{/if}}</p>
         {{/if}}
         {{/unless}}
       </div>
@@ -165,11 +169,11 @@
         <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
         <ul class="buttons">
           <li data-id={{this.id}} class="send">Lähetä</li>
-          {{#unless this.showResults}}<li data-id={{this.id}} class="goToResults">Tulokset</li>{{/unless}}
+          {{#if this.showResults}}<li data-id={{this.id}} class="goToResults">Tulokset</li>{{/if}}
         </ul>
         {{else}}
         <p class="right">{{this.resultAllTime}} % <img src="{{this.resultImage}}" width="25" height="25" alt=":("/></p>
-        <p class="target-done">Kiitos vastauksesta! {{#if this.showResults}} <a class="goToResults"> Tulokset</a>{{/if}}</p>
+        <p class="target-done">Kiitos vastauksesta! {{#if this.showResults}} <a data-id={{this.id}} class="goToResults"> Tulokset</a>{{/if}}</p>
         {{/if}}
         {{/unless}}
       </div>
@@ -190,7 +194,7 @@
         </ul>
         {{else}}
         <!--<p class="right">{{this.resultAllTime}} % <img src="img/smiley-thumb-down.png" width="25" height="25" alt=":("/></p>-->
-        <p class="target-done">Kiitos vastauksesta! {{#if this.showResults}} <a class="goToResults"> tulokset</a>{{/if}}
+        <p class="target-done">Kiitos vastauksesta! {{#if this.showResults}} <a data-id={{this.id}} class="goToResults"> tulokset</a>{{/if}}
         </p>
         {{/unless}}
       </div>
