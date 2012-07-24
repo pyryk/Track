@@ -11,7 +11,9 @@ var BaseController = Spine.Controller.sub({
     this.render();
   },
   render: function() {
+    console.log("render funktio basecontrollerilla + data:");
     var data = this.getData();
+    console.log(data);
     if (typeof this.template === "function") {
       this.html(this.template(data));
       this.addFastButtons();
@@ -46,21 +48,25 @@ var CustomersList = BaseController.sub({
     "fastclick #customer-list li span": "clickedCustomer",
     "keyup #search-customer-input": "searchCustomer"
   },
+  getData: function() {
+    return {items: Customer.findAllByAttribute("saved", true)};
+  },
   init: function() {
     BaseController.prototype.init.call(this);
-    Customer.bind("create", this.proxy(this.addOne));
-    Spine.bind('location:changed', this.proxy(this.locationChanged));
-
     // load list (without location data) even when no location gotten
     this.loadList();
+    Customer.bind("create", this.proxy(this.addOne));
+    //Spine.bind('location:changed', this.proxy(this.locationChanged));
   },
-  loadList: function() {
-    Customer.loadList();
+  loadList: function(additionalData) {
+    Customer.loadList(additionalData);
   },
   locationChanged: function(location) {
     // TODO update list also when list is not visible
     if (window.track.visiblePage == this) {
       log('location changed - reloading target list');
+      console.log(Customer.findAllByAttribute("saved", true));
+
       this.loadList({lat: location.lat, lon: location.lon});
     }
   },
@@ -68,9 +74,6 @@ var CustomersList = BaseController.sub({
     if (window.track.visiblePage == this) {
       this.render();
     }
-  },
-  getData: function() {
-    return {items: Customer.findAllByAttribute("saved", true)};
   },
   clickedCustomer: function(e) {
     var el = $(e.target);
@@ -118,7 +121,6 @@ var TargetsList = BaseController.sub({
   },
   getData: function() {
     var items = Target.findAllByAttribute("customerId", this.id);
-    console.log("Kuinka monta itemia: " + items.length);
     return {items: items};
   },
   init: function() {
@@ -132,21 +134,17 @@ var TargetsList = BaseController.sub({
     Target.bind("create", this.proxy(this.addOne));
 
   },
-  loadList: function() {
-    console.log("Targetin loadList -funktio kontrollerissä");
-    Target.loadList();
+  loadList: function(customerId) {
+    Target.loadList(customerId);
   },
   addOne: function(task){
     if (window.track.visiblePage == this) {
-      console.log("targetin addone funktio kontrollerissä");
       this.render();
     }
   },
   locationChanged: function(location) {
     // TODO update list also when list is not visible
     if (window.track.visiblePage == this) {
-      log('location changed - reloading target list');
-
       this.loadList({lat: location.lat, lon: location.lon});
     }
   },
@@ -299,10 +297,8 @@ var TargetDetails = BaseController.sub({
     var list = Target.findAllByAttribute("saved", true);
     for (var i in list) {
       for (var j in list[i].questions) {
-        console.log(list[i].questions)
         if (list[i].questions[j].questionId == questionItem.questionId) {
           target = list[i];
-          console.log(target);
         }
       }
     }

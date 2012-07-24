@@ -42,12 +42,10 @@ Customer.loadList = function(additionalData) {
           logo = logo.replace('ö', 'o');
           logo = logo.replace('\'', '');
           logo = "img/templogos/" + logo + ".png";
-          console.log(logo);
           customer["logo"] = logo;
           customer["customerId"] = customer["_id"]; // map mongo id
           customer["saved"] = true; // saved i.e. got from backend
-          var targetObject = Customer.create(customer);
-          targetObject.save();
+          Customer.create(customer);
         }
       },
       error: function(jqxhr, textStatus, error) {
@@ -174,6 +172,7 @@ Target.include({
  * TODO: add more fields here, category/icon etc
  */
 Target.loadList = function(customerId) {
+  console.log("Target.loadList");
   var url = App.serverURL;
   if (url.substring(url.length-1) !== "/") {
     url += "/";
