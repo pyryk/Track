@@ -46,7 +46,7 @@ var API = {
 
         this.get("/targets/:customerId", this.getTargets, false);
         this.get("/targets", this.getTargets, false);
-        this.get("/targets/:id", this.getTarget, false);
+        this.get("/target/:id", this.getTarget, false);
         this.get("/results/:id", this.getResults, false);
         this.get("/customers", this.getCustomers, false);
         this.post("/targets", this.postTarget, false);
@@ -69,7 +69,7 @@ var API = {
     },
 
     extendHeaders: function(res) {
-        var newAllowedHeaders = 'FB-UserId, FB-AccessToken';
+        var newAllowedHeaders = 'FB-UserId, FB-AccessToken, X-Requested-With';
         var allowedHeaders = res.headers['access-control-allow-headers'] || "";
         allowedHeaders += (allowedHeaders.length ? ', ' : '') + newAllowedHeaders;
 
