@@ -50,7 +50,7 @@ var API = {
         this.get("/results/:id", this.getResults, false);
         this.get("/customers", this.getCustomers, false);
         this.post("/targets", this.postTarget, false);
-        this.post("/result/:questionId", this.postResult, false);
+        this.post("/results/:questionId", this.postResult, false);
         this.post("/customers", this.postCustomer, false);
         this.del("/targets/:id", this.deleteTarget, false);
         this.get("/login", this.getLogin, true);
