@@ -46,13 +46,13 @@ var API = {
 
         this.get("/targets/:customerId", this.getTargets, false);
         this.get("/targets", this.getTargets, false);
-        this.get("/target/:id", this.getTarget, false);
+        this.get("/targets/:id", this.getTarget, false);
         this.get("/results/:id", this.getResults, false);
         this.get("/customers", this.getCustomers, false);
-        this.post("/target", this.postTarget, false);
+        this.post("/targets", this.postTarget, false);
         this.post("/result/:questionId", this.postResult, false);
-        this.post("/customer", this.postCustomer, false);
-        this.del("/target/:id", this.deleteTarget, false);
+        this.post("/customers", this.postCustomer, false);
+        this.del("/targets/:id", this.deleteTarget, false);
         this.get("/login", this.getLogin, true);
         this.get("/leaderboard", this.getLeaderboard, false);
         this.get(/\/dashboard\/*/, this.getPublic, false);
