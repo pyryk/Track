@@ -112,7 +112,7 @@ MBP.fastButton.prototype.onTouchStart = function(event) {
   document.body.addEventListener('touchmove', this, false);
   this.startX = event.touches[0].clientX;
   this.startY = event.touches[0].clientY;
-  this.element.style.backgroundColor = "rgba(0,0,0,.7)";
+  //this.element.style.backgroundColor = "rgba(0,0,0,.7)";
 };
 
 MBP.fastButton.prototype.onTouchMove = function(event) {

@@ -16,7 +16,6 @@ var BaseController = Spine.Controller.sub({
       this.html(this.template(data));
       this.addFastButtons();
     }
-    //this.addPseudoActiveSupport();
   },
   getData: function() {
     return {};
@@ -29,29 +28,12 @@ var BaseController = Spine.Controller.sub({
         // fast clicks are not supported on every browser
         if (App.fastClicksEnabled()) {
           buttons.each(this.proxy(function(no, btn) {
-            log("Adding a fast button listener");
             new MBP.fastButton(btn, this.proxy(this[this.events[i]]));
           }));
         } else {
-          log("Adding a traditional click listener");
           buttons.bind("click", this.proxy(this[this.events[i]]));
         }
       }
-    }
-  },
-  // TODO remove if not needed
-  addPseudoActiveSupport: function() {
-    if (navigator.userAgent.toLowerCase().indexOf("android 2") > -1) {
-      $(".active-button")
-        .bind("touchstart", function () {
-          $(this).addClass("fake-active");
-        })
-        .bind("touchend", function() {
-          $(this).removeClass("fake-active");
-        })
-        .bind("touchcancel", function() {
-          $(this).removeClass("fake-active");
-        });
     }
   }
 });
@@ -61,28 +43,44 @@ var BaseController = Spine.Controller.sub({
 var CustomersList = BaseController.sub({
   events: {
     "click #customer-list": "clickedCustomer",
+    "fastclick #customer-list li span": "clickedCustomer",
     "keyup #search-customer-input": "searchCustomer"
   },
   getData: function() {
-    return {items: [
-      Customer.create({logo: "img/templogos/subway.png", name: "Subway"}),
-      Customer.create({logo: "img/templogos/rosso.png", name: "Rosso"}),
-      Customer.create({logo: "img/templogos/mcdonalds.png", name: "McDonald's"}),
-      Customer.create({logo: "img/templogos/hesburger.png", name: "Hesburger"}),
-      Customer.create({logo: "img/templogos/finnkino.png", name: "Finnkino"}),
-      Customer.create({logo: "img/templogos/aalto_university.png", name: "Aalto university"}),
-      Customer.create({logo: "img/templogos/chicos.png", name: "Chico's"}),
-      Customer.create({logo: "img/templogos/roberts_coffee.png", name: "Robert's Coffee"}),
-      Customer.create({logo: "img/templogos/unisport.png", name: "Unisport"}),
-      Customer.create({logo: "img/templogos/elisa.png", name: "Elisa"}),
-      Customer.create({logo: "img/templogos/abc.png", name: "ABC"}),
-      Customer.create({logo: "img/templogos/HSL.png", name: "HSL"}),
-      Customer.create({logo: "img/templogos/hesburger.png", name: "VR"}),
-      Customer.create({logo: "img/templogos/mcdonalds.png", name: "Picnic"})
-    ]};
+    return {items: Customer.findAllByAttribute("saved", true)};
   },
-  clickedCustomer: function() {
-    Spine.Route.navigate("!/targets/");
+  init: function() {
+    BaseController.prototype.init.call(this);
+    // load list (without location data) even when no location gotten
+    this.loadList();
+    Customer.bind("create", this.proxy(this.addOne));
+    //Spine.bind('location:changed', this.proxy(this.locationChanged));
+  },
+  loadList: function(additionalData) {
+    Customer.loadList(additionalData);
+  },
+  locationChanged: function(location) {
+    // TODO update list also when list is not visible
+    if (window.track.visiblePage == this) {
+      log('location changed - reloading target list');
+      this.loadList({lat: location.lat, lon: location.lon});
+    }
+  },
+  addOne: function(task){
+
+    if (window.track.visiblePage == this) {
+      this.render();
+    }
+  },
+  clickedCustomer: function(e) {
+    var el = $(e.target);
+    var id = el.attr('data-id');
+    if (id) {
+      var customer = Customer.find(id);
+      //console.log(customer);
+      //Target.loadList(customer.customerId);
+      Spine.Route.navigate(App.getRoute(customer));
+    }
   },
   /* List search using jQuery-example */
   searchCustomer: function() {
@@ -90,8 +88,8 @@ var CustomersList = BaseController.sub({
     var searchCustomerInput = $('#search-customer-input').val().toLowerCase(); // to record the written text
     $('li').each(function(index){ // go through every li-element
       var $this = $(this);
-      if($this.text().toLowerCase().indexOf(searchCustomerInput) === -1) { // if customer name doesn't match
-        $this.hide(); // hide customer
+      if($this.text().toLowerCase().indexOf(searchCustomerInput) === -1) { // if customers name doesn't match
+        $this.hide(); // hide target
       } else {
         $this.show();
         $(this).addClass('first-visible-child last-visible-child');
@@ -113,40 +111,31 @@ var TargetsList = BaseController.sub({
   },
   events: {
     "fastclick #target-list li": "clicked",
-    "fastclick #target-list li span": "clicked",
-    "fastclick #target-list li img": "clicked",
     "keyup #search-target-input": "searchTarget"
   },
   getTitle: function() {
     return "List";
   },
   getData: function() {
-    /*return {items: [
-     Target.create({name: "Herttoniemi", question: "Kuinka toimii?"}),
-     Target.create({name: "Kamppi", question: "Kuinka toimii?"})
-     Target.create({logo: "img/templogos/mcdonalds.png", name: "Kaivopuisto"}),
-     Target.create({logo: "img/templogos/hesburger.png", name: "Pitäjänmäki"}),
-     Target.create({logo: "img/templogos/finnkino.png", name: "Kauniainen"}),
-     Target.create({logo: "img/templogos/aalto_university.png", name: "Mannerheimintie"}),
-     Target.create({logo: "img/templogos/chicos.png", name: "Kerava"}),
-     Target.create({logo: "img/templogos/roberts_coffee.png", name: "Punavuori"}),
-     Target.create({logo: "img/templogos/unisport.png", name: "Ruoholahti"}),
-     Target.create({logo: "img/templogos/elisa.png", name: "Kallio"}),
-     Target.create({logo: "img/templogos/abc.png", name: "Hämeenlinna"}),
-     Target.create({logo: "img/templogos/HSL.png", name: "Riihimäri"}),
-     Target.create({logo: "img/templogos/hesburger.png", name: "Olari"}),
-     Target.create({logo: "img/templogos/mcdonalds.png", name: "Vuosaari"})
-     ]};*/
-    return {items: Target.findAllByAttribute("saved", true)};/**/
+    console.log(window.location.pathname);
+    console.log(document.URL);
+
+    if (this.id == null) {
+      var items = Target.findAllByAttribute("saved", true);
+    } else {
+      var items = Target.findAllByAttribute("customerId", this.id);
+    }
+    return {items: items};
   },
   init: function() {
     BaseController.prototype.init.call(this);
-    Target.bind("create", this.proxy(this.addOne));
     Spine.bind('location:changed', this.proxy(this.locationChanged));
 
     // load list (without location data) even when no location gotten
     Spine.bind('location:error', this.proxy(this.locationChanged));
     this.loadList();
+    Target.bind("create", this.proxy(this.addOne));
+
   },
   loadList: function(additionalData) {
     Target.loadList(additionalData);
@@ -159,7 +148,6 @@ var TargetsList = BaseController.sub({
   locationChanged: function(location) {
     // TODO update list also when list is not visible
     if (window.track.visiblePage == this) {
-      log('location changed - reloading target list');
       this.loadList({lat: location.lat, lon: location.lon});
     }
   },
@@ -168,13 +156,12 @@ var TargetsList = BaseController.sub({
     var id = el.attr('data-id');
     if (id) {
       var target = Target.find(id);
-      target.loadDetails();
+      //target.loadDetails();
       Spine.Route.navigate(App.getRoute(target));
     } else if (el.hasClass("create-new")) {
       Spine.Route.navigate(App.getRoute("create_target"));
     }
   },
-
   /* List search using jQuery-example */
   searchTarget: function() {
     var $lastElement = null;
@@ -186,22 +173,12 @@ var TargetsList = BaseController.sub({
       } else {
         $this.show();
         $(this).addClass('first-visible-child last-visible-child');
-        if ($lastElement != null) { // if this target isn't the first in a list
+        if ($lastElement != null) { // if this customer isn't the first in a list
           $(this).removeClass('first-visible-child');
           $($lastElement).removeClass('last-visible-child'); // to remove roundings from bottom
         }
-        $lastElement = this; // record this target so that next target is able to remove roundings from bottom
+        $lastElement = this; // record this customer so that next customer is able to remove roundings from bottom
       }
-      /*var visible = $('li:visible');
-       console.log(visible.text());
-       visible.first().addClass('first-visible-child');
-       visible.last().addClass('last-visible-child');
-       if ($this != visible.last()) {
-       $this.removeClass('last-visible-child');
-       }
-       if ($this != visible.first()) {
-       $this.removeClass('first-visible-child');
-       }*/
     });
   }
 });
@@ -239,34 +216,49 @@ var ownResult = BaseController.sub({
  *====================================================================================================================*/
 var TargetDetails = BaseController.sub({
   events: {
-    "fastclick .active.answer.positive": "savePositiveAnswer",
-    "fastclick .active.answer.negative": "saveNegativeAnswer",
-    "fastclick .view-results": "viewResults"
+    "fastclick .active.balance.item.positive": "savePositiveAnswer",
+    "fastclick .active.balance.middle.item.positive": "saveSemiPositiveAnswer",
+    "fastclick .active.item.middle.negative": "saveSemiNegativeAnswer",
+    "fastclick .active.item.negative": "saveNegativeAnswer",
+    "fastclick .send": "sendMessage",
+    "fastclick .styled": "focus",
+    "fastclick .goToResults": "viewResults"
   },
   init: function() {
     BaseController.prototype.init.call(this);
-
-    // this is binded to all events to avoid the unbind-old/bind-new
-    // hassle when viewing another target
     Target.bind("create update", this.proxy(this.targetUpdated));
   },
   getTitle: function() {
     return "Target";
   },
   getData: function() {
+    console.log("==========================================");
+    console.log(this.id);
+    if (Target.findAllByAttribute("saved", true).length == 0) {
+      console.log("ladataan");
+    }
+    console.log(Target.findAllByAttribute("saved", true));
+
     var target, error;
     try {
-      target = Target.find(this.id);
+      var list = Target.findAllByAttribute("targetId",this.id);
+      target = list[0];
     } catch (e) { // unknown record
       // try to load record
-      Target.loadDetails(this.id, this);
+      Target.loadList(this.id);
       error = e;
-      log(e);
+      console.log(e + "VIRHE");
     }
-    return {target: target, error: error};
-  },
-  render: function() {
-    BaseController.prototype.render.call(this);
+    var name = target.getName();
+    var type = target.getQuestionType();
+    var items = target.getQuestions();
+    var user = User.getUser();
+    if (user.getPoints() == null) {
+      user.points = 0;
+      user.save();
+    }
+    var showQuestionComment = target.getShowQuestionComment();
+    return {name: name, points: user.getPoints(), type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error};
   },
   error: function(reason) {
     if (reason == "notfound") {
@@ -281,18 +273,16 @@ var TargetDetails = BaseController.sub({
   answerSaved: function(answer, success) {
     if (success) {
       //this.viewResults();
-      Spine.Route.navigate(App.getRoute(Target.find(this.id)) + "/results");
+      //Spine.Route.navigate(App.getRoute(Target.find(this.id)) + "/results");
       // uncomment to show thanks view
       // Spine.Route.navigate(App.getRoute(answer));
     } else {
       log("Answer not saved!");
     }
   },
-  saveAnswer: function(value) {
-    log("Saving answer", value);
-    var target = Target.find(this.id);
+  saveAnswer: function(value, id) {
     var result = Result.create({
-      target: target,
+      questionItem: QuestionItem.find(id),
       value: value,
       location: window.track.location
     });
@@ -300,15 +290,90 @@ var TargetDetails = BaseController.sub({
     var user = User.getUser();
     result.post();
   },
-  savePositiveAnswer: function() {
-    this.saveAnswer(1);
+  focus: function(e) {
+    console.log(e);
+    console.log($(e.target).attr("placeholder"));
   },
-  saveNegativeAnswer: function() {
-    this.saveAnswer(0);
+  loadAnswer: function(e, value) {
+    var user = User.getUser();
+    user.points += 1;
+    user.save();
+    var id = $(e.target).attr('data-id');
+    var questionItem = QuestionItem.find(id);
+    questionItem.done = true;
+    questionItem.loadResults(questionItem.id);
+    questionItem.save();
+    var target;
+    var list = Target.findAllByAttribute("saved", true);
+    for (var i in list) {
+      for (var j in list[i].questions) {
+        if (list[i].questions[j].questionId == questionItem.questionId) {
+          target = list[i];
+        }
+      }
+    }
+
+    if (target.getShowQuestionComment() && questionItem.showComment) {
+      this.html(this.template(this.getData()));
+      this.addFastButtons();
+      questionItem.showComment = false;
+    } else {
+      this.html(this.template(this.getData()));
+      this.addFastButtons();
+    }
+    this.saveAnswer(value, questionItem.id);
+  },
+  savePositiveAnswer: function(e) {
+    this.loadAnswer(e, 2);
+  },
+  saveSemiPositiveAnswer: function(e) {
+    this.loadAnswer(e, 1);
+  },
+  saveSemiNegativeAnswer: function(e) {
+    this.loadAnswer(e, -1);
+  },
+  saveNegativeAnswer: function(e) {
+    this.loadAnswer(e, -2);
+  },
+  sendMessage: function(e) {
+    var user = User.getUser();
+    user.points += 3;
+    user.save();
+    var el = $(e.target);
+    var id = el.attr('data-id');
+    var textAreaElements = document.getElementsByClassName("styled");
+    for (var i = 0; i < textAreaElements.length; i++) {
+      if (id == textAreaElements[i].getAttribute('data-id')) {
+        var text = textAreaElements[i].value;
+        var questionItem = QuestionItem.find(id);
+        var resultItem = Result.create({questionItem: questionItem, textComment: text, location: window.track.location});
+//        resultItem.bind('resultSent', this.proxy(this.answerSaved));
+        var user = User.getUser();
+        resultItem.post();
+        questionItem.done = true;
+        questionItem.showComment = false;
+        questionItem.save();
+        this.html(this.template(this.getData()));
+        this.addFastButtons();
+      }
+    }
   },
   viewResults: function(e) {
-    var route = App.getRoute(Target.find(this.id)) + "/results";
+    var el = $(e.target);
+    var id = el.attr('data-id');
+    console.log(el);
+    console.log(id);
+    var questionItem = QuestionItem.find(id);
+    var route = "!/questions/" + questionItem.questionId + "/results";
     Spine.Route.navigate(route);
+
+    if (questionItem.showResults) {
+      var route = App.getRoute(questionItem) + "/results";
+      Spine.Route.navigate(route);
+    } else {
+      questionItem.showResults = true;
+      questionItem.save();
+    }
   }
 });
 
@@ -342,49 +407,60 @@ var TargetCreate = BaseController.sub({
   }
 });
 
-/* TargetResults
+/* QuestionResults
  *=================================================================================================================== */
-var TargetResults = BaseController.sub({
+var QuestionResults = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
 
     // this is binded to all events to avoid the unbind-old/bind-new
     // hassle when viewing another target
-    Target.bind("create update", this.proxy(this.targetUpdated));
+    QuestionItem.bind("create update", this.proxy(this.questionUpdated));
   },
-  targetUpdated: function(target) {
-    if (target.id === this.id && window.track.visiblePage == this) {
+  questionUpdated: function(question) {
+    if (question.id === this.id && window.track.visiblePage == this) {
       this.render();
     }
   },
   getTitle: function() {
-    return "Target Results";
+    return "Question Results";
   },
   getData: function() {
     var data = {};
+    var questionItemList = QuestionItem.findAllByAttribute('questionId', this.id);
+    var questionItem;
+    for (var i in questionItemList) {
+      if (questionItemList[i].results != null) {
+        questionItem = questionItemList[i];
+      }
+    }
+    var targetList = Target.findAllByAttribute("saved",true);
+    for (var i in targetList) {
+      for (var j in targetList[i].questions) {
+        if (targetList[i].questions[j].questionId == questionItem.questionId) {
+          data.name = targetList[i].name;
+          continue;
+        }
+      }
+    }
+
+    data.question = questionItem.name;
     try {
-      data.target = Target.find(this.id).toJSON();
-
+      //data.target = Target.find(this.id).toJSON();
+      data.alltime = questionItem.results.alltime;
       // preprocess alltime results
-      var alltime = data.target.results.alltime;
-      if (alltime.pos == 0 && alltime.neg == 0) {
-        alltime.zerozero = true;
+      //var questionItem.alltime = data.question.results.alltime;
+      if (data.alltime.pos == 0 && data.alltime.neg == 0) {
+        data.alltime.zerozero = true;
       }
-
-      // preprocess "now" results
-      var now = data.target.results.now
-
-      //now.pos = 4; now.neg = 7;
-      //now.trend = -2;
-
-      if (now.pos == 0 && now.neg == 0) {
-        now.zerozero = true;
+      data.now = questionItem.results.now;
+      if (data.now.pos == 0 && data.now.neg == 0) {
+        data.now.zerozero = true;
       }
-      now.trendPos = Math.abs(Math.max(0, now.trend));
-      now.trendNeg = Math.abs(Math.min(0, now.trend));
-
+      data.now.trendPos = Math.abs(Math.max(0, data.now.trend));
+      data.now.trendNeg = Math.abs(Math.min(0, data.now.trend));
     } catch (e) {
-      Target.loadDetails(this.id, this);
+      //Target.loadDetails(this.id, this);
       data.error = e;
     }
     return data;
@@ -411,8 +487,6 @@ var Leaderboard = BaseController.sub({
     BaseController.prototype.show.call(this);
   },
   entryAdded: function() {
-    log('leaderboard entry added');
-
     if (window.track.visiblePage == this) {
       this.render();
     }
@@ -454,10 +528,14 @@ var BackButton = BaseController.sub({
       showHome = true;
       showPrev = false;
     }
+    if (this.app.visiblePage === this.app.pages['loginScreen'] && showPrev == false) {
+      showHome = true;
+      showPrev = false;
+    }
+
     return {previous: showPrev, home: showHome};
   },
   backClicked: function() {
-    log('back button clicked');
     if (window.history.length > 0 && this.app.visiblePage !== this.app.pages['targetList'] && this.app.visiblePage !== this.app.pages['customerList']) {
       //if (window.history.length > 0) {
 
@@ -465,10 +543,7 @@ var BackButton = BaseController.sub({
     }
   },
   homeClicked: function() {
-    log('home button clicked');
-    if (this.app.visiblePage === this.app.pages['targetList']) {
-      Spine.Route.navigate('!/customer/');
-    }
+    Spine.Route.navigate('!/customers/');
   }
 });
 

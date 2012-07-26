@@ -35,7 +35,7 @@ $list_item_gradient_2: darken(#ffffff, 1%);
     $header_gradient_1: lighten(#FECB00, 20%);
     $header_gradient_2: #FECB00;
     $background_gradient_1: darken(#ffffff, 2%);
-    $background_gradient_2: #D9D9D9;
+    $background_gradient_2: #ffffff;
     $list_item_gradient_1: #fdfdfd;
     $list_item_gradient_2: darken(#fdfdfd, 3%);
     $text_color: rgba(0,0,0,1);
@@ -52,6 +52,10 @@ $list_item_gradient_2: darken(#ffffff, 1%);
     $text_color: #606967;
   }
 
+.mtv3 {
+
+}
+
 /* Rosso-layout */
   @if $customer == rosso {
     $header_gradient_1: #ffffff;
@@ -66,6 +70,28 @@ $list_item_gradient_2: darken(#ffffff, 1%);
     $header_gradient_2: #009f4f;
     $background_gradient_1: darken(#ffffff, 2%);
     $background_gradient_2: #D9D9D9;
+  }
+
+/* NG-layout */
+  @if $customer == NG {
+    $header_gradient_1: #323232;
+    $header_gradient_2: #040404;
+    $background_gradient_1: darken(#fefefe, 7%);
+    $background_gradient_2: #fefefe;
+    $list_item_gradient_1: #ffffff;
+    $list_item_gradient_2: darken(#ffffff, 1%);
+    $text_color: #606967;
+  }
+
+/* MTV3-layout */
+  @if $customer == mtv3 {
+    $header_gradient_1: #323232;
+    $header_gradient_2: #040404;
+    $background_gradient_1: darken(#fefefe, 7%);
+    $background_gradient_2: #fefefe;
+    $list_item_gradient_1: #ffffff;
+    $list_item_gradient_2: darken(#ffffff, 1%);
+    $text_color: #606967;
   }
 
 /* mixins elements
@@ -122,23 +148,24 @@ body {
   @include background-image(linear-gradient($background_gradient_1, $background_gradient_2 100%));
 }
 
+.row, .col { overflow: hidden; position: absolute; }
+.row { left: 0; right: 0; }
+.col { top: 0; bottom: 0; }
+.scroll-x { overflow-x: auto; }
+.scroll-y { overflow-y: auto; }
+
 /* container elements
 * =================================================================================================================== */
 #container {
   padding: 0;
+  margin: 0;
 }
 
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
+.header.row {
   height: $header_height;
-  width: 100%;
-  margin-top: 0;
-  padding-top: 0;
+  top: 0px;
   @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
   color: $header_text_color;
-  border-bottom: 1px solid $border_color;
   text-align: center;
 
   h1 {
@@ -156,14 +183,17 @@ header {
     }
   }
 }
-#main {
-  padding-top: $header_height; // if doesn't have javascript support
+
+.main.row {
+  top: $header_height;
+  bottom: 0px;
 }
 
 /* list elements
 * =================================================================================================================== */
 .customer-list-image {
-  padding-right: 20px;
+  float: left;
+  padding-right: 10px;
   margin-top: -5px;
   width: 60px;
   height: 20px;
@@ -178,6 +208,8 @@ header {
 }
 
 .primary-list {
+  -webkit-overflow-scrolling: touch;
+  overflow: scroll;
   list-style-type: none;
   width: 90%;
   padding: 0;
@@ -198,8 +230,8 @@ header {
     @include ellipsis;
 
     &:active, &.fake-active {
-      @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
-    }
+       @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
+     }
 
     &.first-visible-child {
       @include border-top-radius(15px);
@@ -234,11 +266,12 @@ header {
 
   li:first-child {
     border-top: 1px solid $border_color;
-    @include border-radius(15px 15px 0px 0px);
+    @include border-top-radius(15px);
   }
 
   li:last-child {
-    @include border-radius(0px 0px 15px 15px);
+    border-bottom: 1px solid $border_color;
+    @include border-bottom-radius(15px);
   }
 }
 
@@ -247,6 +280,30 @@ ul li span {
   padding: 0px;
   float: left;
   width: 86%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.target-list-span {
+  margin-left: 5px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  margin-top: -3px;
+  padding: 0px;
+  width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.customer-list-span {
+  margin-left: 5px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  margin-top: -3px;
+  padding: 0px;
+  width: 50%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -262,7 +319,7 @@ ul li span {
   font-size: 14px;
   font-weight: bold;
   @include border-radius(11px 11px 11px 11px);
-  text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
+  text-shadow: 0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
 }
 
 .hide {
@@ -281,6 +338,9 @@ ul li span {
   padding-bottom: 0.6em;
   padding-left: 2.2em;
   outline: none;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
 /* target-details elements
@@ -323,46 +383,99 @@ ul li span {
 }
 
 #target-details {
-  .target-question {
+  .questionItem {
     margin-left: 1.5em;
     margin-right: 1.5em;
-    margin-top: 20px;
-    font-size: 110%;
-    //border: 1px solid #0d0e0d;
-    padding: 7px 10px;
-    @include border-radius(10px 10px 10px 10px);
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 100%;
     @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+    @include border-radius(10px 10px 10px 10px);
     @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
-  }
 
-  .target-answer {
-    @include display-box;
-    @include box-orient(horizontal);
-    @include box-align(stretch);
-    margin-left: 1.5em;
-    margin-right: 1.5em;
-    margin-top: -7px;
+    textarea.styled {
+      border: 1px solid $border_color;
+      margin-left: 2.0em;
+      margin-right: 2.0em;
+      padding: 0.5em;
+      width: 75%;
+      margin-bottom: 10px;
+      outline: none;
+      color: $text_color;
+      @include border-radius(5px 5px 5px 5px);
+      resize: none;
+      //display: block;
+    }
 
-    .answer {
-      border-right: none;
-      padding: 1em;
-      display: block;
-      @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
-      @include box-flex(1);
-      text-align: center;
-      @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
+    .question {
+      color: $text_color;
+      margin-left: 1.5em;
+      margin-right: 1.5em;
+      padding-top: 10px;
+    }
+    .answer-two {
+      @include display-box;
+      @include box-orient(horizontal);
+      @include box-align(stretch);
+      margin-left: 2.0em;
+      margin-right: 2.0em;
+      margin-top: -7px;
 
-      &:active, &.fake-active {
-        @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
+      .item {
+        border-right: none;
+        border-left: none;
+        padding: 0.6em;
+        display: block;
+        @include box-flex(1);
+        text-align: center;
+        &:active, &.fake-active {
+          @include background-image(linear-gradient(darken($list_item_gradient_2, 5%), $list_item_gradient_2));
+        }
+      }
+      .balance {
+        margin-top: -3px;
       }
     }
-    .answer:first-child {
-      @include border-radius(20px 0px 0px 20px);
+    .answer-four {
+
+      @include display-box;
+      @include box-orient(horizontal);
+      @include box-align(stretch);
+      margin-left: 0.5em;
+      margin-right: 0.5em;
+      margin-top: -7px;
+
+      .item {
+        border-right: none;
+        border-left: none;
+        padding: 0.6em;
+        display: block;
+        @include box-flex(1);
+        text-align: center;
+        &:active, &.fake-active {
+          @include background-image(linear-gradient(darken($list_item_gradient_2, 5%), $list_item_gradient_2));
+        }
+      }
+      .balance {
+        margin-top: -3px;
+      }
     }
-    .answer:last-child {
-      border-right: 1px solid $border_color;
-      @include border-radius(0px 20px 20px 0px);
-    }
+  }
+  .right {
+    float: right;
+    margin-top: -39px;
+    width: 45px;
+    padding: 5px;
+  }
+  .target-done {
+    margin-left: 1.5em;
+    margin-right: 4.5em;
+    margin-top: -10px;
+    font-size: 100%;
+    color: #000000;
+    font-style: italic;
+    padding-bottom: 5px;
+    //border: 1px solid #0d0e0d;
   }
   .link-button {
     position: absolute;
@@ -374,21 +487,55 @@ ul li span {
   .answer-form-hide {
     overflow: hidden;
   }
+
+  .buttons {
+    list-style: none;
+    margin-left: auto;
+    margin-right: auto;
+    width: 170px;
+    margin-top: -2px;
+    padding-bottom: 8px;
+
+    li {
+      display: inline;
+      padding: 0.2em 0.6em;
+      border: 1px solid $border_color;
+      @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+      @include box-flex(1);
+      @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
+      @include border-radius(5px 5px 5px 5px);
+      list-style: none;
+
+      a {
+        color: $text_color;
+      }
+    }
+  }
 }
+
+
 
 /* target results elements
 * =================================================================================================================== */
-#target-results {
-  .target-question {
-    padding: 0em 10px;
-    font-size: 140%;
+#question-results {
+  .question {
+    color: $text_color;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    padding-top: 10px;
   }
+  .results {
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    margin-top: 20px;
+    font-size: 100%;
+    font-weight: bold;
+  }
+
   .result-heading {
-    font-size: 0.5em;
     // color: lighten($text_color, 40%);
     margin: 5px 10px;
     padding-bottom: 0px;
-    font-weight: bold;
   }
   table {
     width: 100%;
@@ -397,8 +544,8 @@ ul li span {
     // @include body-box;
 
     th {
-      font-size: 2em;
-      font-weight: bold;
+      //font-size: 2em;
+      //font-weight: bold;
       // color: lighten($text_color, 20%);
       text-align: left;
       // @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
@@ -407,7 +554,7 @@ ul li span {
 
     td {
       // color: lighten($text_color, 50%);
-      font-size: 3em;
+      //font-size: 3em;
       border-width: 0px
     }
   }
@@ -514,8 +661,6 @@ ul li span {
     padding: 1em 1em;
     border: 0;
     border-bottom: 1px solid $border_color;
-    border-left: 1px solid $border_color;
-    border-right: 1px solid $border_color;
     @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
 
     .no-login {
@@ -563,6 +708,8 @@ ul li span {
   @include background-image(linear-gradient($header_gradient_2, $header_gradient_2));
   @include border-radius(35px);
   &:active, &.fake-active {
+    @include background-image(linear-gradient(darken($header_gradient_2, 3%), $header_gradient_2));
+
     //@include background-image(linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.05)));
   }
 }
@@ -580,7 +727,9 @@ ul li span {
   @include background-image(linear-gradient($header_gradient_2, $header_gradient_2));
   @include border-radius(35px);
   &:active, &.fake-active {
+   // @include background-image(linear-gradient($header_gradient_2, $header_gradient_1));
     //background-position: 0 -36px;
+    @include background-image(linear-gradient(darken($header_gradient_2, 3%), $header_gradient_2));
   }
 }
 

@@ -9,11 +9,11 @@ var App = Spine.Controller.sub({
       "!/login/": function(params) {
         this.renderView('loginScreen', LoginScreen);
       },
-      "!/customer/": function(params) {
+      "!/customers/": function(params) {
         this.renderView('customerList', CustomersList);
       },
-      "!/targets/": function(params) {
-        this.renderView('targetList', TargetsList);
+      "!/customers/:id": function(params) {
+        this.renderView('targetList', TargetsList, params.id);
       },
       "!/targets/create": function(params) {
         this.renderView('targetCreate', TargetCreate);
@@ -25,8 +25,8 @@ var App = Spine.Controller.sub({
       "!/results/:id": function(params) {
         this.renderView('ownResult', ownResult, params.id);
       },
-      "!/targets/:id/results": function(params) {
-        this.renderView('targetResults', TargetResults, params.id);
+      "!/questions/:id/results": function(params) {
+        this.renderView('questionResults', QuestionResults, params.id);
       },
       "!/leaderboard": function(params) {
         this.renderView('leaderboard', Leaderboard);
@@ -34,7 +34,7 @@ var App = Spine.Controller.sub({
       // default route
       "*others": function(params) {
         log("Invalid route ", params.match.input, " - redirecting to default");
-        Spine.Route.navigate("!/targets/");
+        Spine.Route.navigate("!/customers/");
       }
     });
 
@@ -51,16 +51,13 @@ var App = Spine.Controller.sub({
     if (window.trackConfig && window.trackConfig.enableAuth) {
       this.addLogin();
     }
-
+    this.addLogin();
     // update location data once a minute...
     this.updateLocation(); // ... and at once
     window.setInterval(this.proxy(this.updateLocation), 60000);
 
   },
   renderView: function(name, className, id) {
-    //view.className{name, className, id};
-
-    //name, className, id
     if (name !== "loginScreen" && !this.loginOk()) {
       this.redirect = Spine.Route.getFragment();
       Spine.Route.navigate("!/login/");
@@ -68,14 +65,12 @@ var App = Spine.Controller.sub({
       // create controller if it doesnt already exist
       if (!this.pages[name]) {
         var tmpl = $('#template-' + name);
-        log("creating view " + name, "with template", tmpl);
         this.pages[name] = new className({
           el: $("#main"),
           template: tmpl
         });
       }
 
-      log("rendering view " + name);
       this.pages[name].id = id; // set id if needed
       this.pages[name].show();
       this.visiblePage = this.pages[name];
@@ -99,7 +94,6 @@ var App = Spine.Controller.sub({
     var fb = $('<div id="fb-root"></div>');
     $('body').append(fb);
     Spine.bind('logout', this.proxy(this.loggedOut));
-
     window.fbAsyncInit = function() {
       FB.init({
         appId      : '167103313410896', // App ID
@@ -127,7 +121,8 @@ var App = Spine.Controller.sub({
       var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
       if (d.getElementById(id)) {return;}
       js = d.createElement('script'); js.id = id; js.async = true;
-      js.src = "//connect.facebook.net/en_US/all.js";
+      js.src = "http://connect.facebook.net/en_US/all.js";
+      //js.src = "js/facebook.js";
       ref.parentNode.insertBefore(js, ref);
     }(document));
 
@@ -188,7 +183,6 @@ var App = Spine.Controller.sub({
         }
       }
       else {
-        console.log('destroy user');
         var user = User.getUser();
         user.destroyCookies();
         user.destroy();
@@ -205,7 +199,6 @@ var App = Spine.Controller.sub({
       // update list after location change
       Spine.trigger('location:changed', this.location);
     }), this.proxy(function(error) {
-      log("Could not get user location");
 
       // if location is undefined, trigger error, otherwise stay silent
       if (!this.location.lat && !this.location.long) {
@@ -228,7 +221,7 @@ var App = Spine.Controller.sub({
       case this.pages['targetDetails']:
         return this.pages['targetList'];
       case this.pages['ownResult']:
-      case this.pages['targetResults']:
+      case this.pages['questionResults']:
         return this.pages['targetDetails'];
       case this.pages['loginScreen']:
         return this.pages['targetList'];
@@ -245,14 +238,10 @@ var App = Spine.Controller.sub({
     /*var popped = this.pageStack.pop();
      history.back();*/
     var current = this.visiblePage;
-
     var prev = this.getPreviousPage();
-
     if (!prev) {
       return;
     }
-    //console.log(prev.url);
-    //Spine.Route.navigate(prev.url);
 
     if (prev.id) {
       Spine.Route.navigate(App.getRoute(Target.find(prev.id)))
@@ -268,7 +257,6 @@ var App = Spine.Controller.sub({
     if (!window.trackConfig || !window.trackConfig.enableAuth) {
       return true;
     }
-
     return (User.getUser().logged || this.noLogin)
   },
   noLogin: false
@@ -277,7 +265,8 @@ var App = Spine.Controller.sub({
 if (window.trackConfig && window.trackConfig.serverURL) {
   App.serverURL = window.trackConfig.serverURL
 } else{
-  App.serverURL = "http://mkos.futupeople.com/track/";
+  App.serverURL = "http://86.50.143.113";
+  //App.serverURL = "http://mkos.futupeople.com/track/";
 }
 
 //App.serverURL = "http://localhost:9999/";
@@ -291,28 +280,23 @@ App.getRoute = function(obj) {
   if (obj === "create_target") {
     return "!/targets/create";
   }
-
-  return "!/" + obj.getResourceName() + "/" + obj.id
+  return "!/" + obj.getResourceName() + "/" + obj.getId();
 }
 
 //TODO url resolver?
-
 App.fastClicksEnabled = function() {
   return true;
   var disable = [
     {browser: "Safari", OS: "iPhone/iPod", version: /OS 4_(.)+/}
   ];
-
   //BrowserDetect = {browser: "Safari", OS: "iPhone/iPod", version: "4_3_3"};
   for (var i in disable) {
     if (BrowserDetect.browser === disable[i].browser &&
       BrowserDetect.OS === disable[i].OS/* &&
      (BrowserDetect.version + "").match(disable[i].version)*/ &&
       navigator.appVersion.match(disable[i].version)) {
-
       return false;
     }
   }
-
   return true;
 }
