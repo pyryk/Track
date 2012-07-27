@@ -3,6 +3,10 @@
 var BaseController = Spine.Controller.sub({
   init: function() {
     this.rawTemplate = this.template;
+    
+    this.titlebar = $('#main-title');
+    this.container = $('#container');
+    
     if (this.rawTemplate && this.rawTemplate.length > 0) {
       this.template = Handlebars.compile(this.rawTemplate.html());
     }
@@ -14,6 +18,12 @@ var BaseController = Spine.Controller.sub({
     var data = this.getData();
     if (typeof this.template === "function") {
       this.html(this.template(data));
+      if (data.title) {
+        this.titlebar.text(data.title);
+      }
+      if (data.customizationClass) {
+        this.container.addClass(data.customizationClass);
+      }
       this.addFastButtons();
     }
   },
@@ -48,7 +58,7 @@ var CustomersList = BaseController.sub({
   getData: function() {
     var items = Customer.findAllByAttribute("saved", true);
     console.log(items);
-    return {items: items};
+    return {items: items, title: 'tracktive'};
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -115,17 +125,27 @@ var TargetsList = BaseController.sub({
     return "List";
   },
   getData: function() {
+    var customer, customClass, title;
     if (this.id == null) {
+      // FIXME redirect to the customer page
       var items = Target.findAllByAttribute("saved", true);
     } else {
-      var items = Target.findAllByAttribute("customerId", this.id);
-      if (items[0]) {
-        if (Customer.findAllByAttribute("customerId", items[0].customerId)[0]) {
-          $('#header').addClass(Customer.findAllByAttribute("customerId", items[0].customerId)[0].name.toLowerCase().replace(/'/g,""));
-        }
+      try {
+        log('Finding customer ' + this.id);
+        customer = Customer.find(this.id);
+        customClass = customer.name.toLowerCase().replace(/'/g,"");
+        title = customer.name;
+      } catch (e) {
+        log("Error", e);
+        Customer.loadList(); // TODO load only this customer
       }
+      var items = Target.findAllByAttribute("customerId", this.id);
+      
     }
-    return {items: items};
+    return {items: items, title: title, customizationClass: customClass};
+  },
+  render: function() {
+    BaseController.prototype.render.apply(this);
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -135,7 +155,14 @@ var TargetsList = BaseController.sub({
     Spine.bind('location:error', this.proxy(this.locationChanged));
     this.loadList();
     Target.bind("create", this.proxy(this.addOne));
+    Customer.bind("create update", this.proxy(this.customerUpdated));
 
+  },
+  customerUpdated: function(customer) {
+    log('customer updated!');
+    if (customer.id == this.id) {
+      this.render();
+    }
   },
   loadList: function(additionalData) {
     Target.loadList(additionalData);
@@ -216,10 +243,10 @@ var ownResult = BaseController.sub({
  *====================================================================================================================*/
 var TargetDetails = BaseController.sub({
   events: {
-    "click .active.balance.item.positive": "savePositiveAnswer",
-    "click .active.balance.middle.item.positive": "saveSemiPositiveAnswer",
+    "click .active.item.most.positive": "savePositiveAnswer",
+    "click .active.item.middle.positive": "saveSemiPositiveAnswer",
     "click .active.item.middle.negative": "saveSemiNegativeAnswer",
-    "click .active.item.negative": "saveNegativeAnswer",
+    "click .active.item.most.negative": "saveNegativeAnswer",
     "click .send": "sendMessage",
     "click .styled": "textArea",
     "click .goToResults": "viewResults"
@@ -227,31 +254,32 @@ var TargetDetails = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
     Target.bind("create update", this.proxy(this.targetUpdated));
+    Customer.bind("create update", this.proxy(this.customerUpdated));
   },
   getTitle: function() {
     return "Target";
   },
   getData: function() {
     var target, error;
-    var points;
+    var points, customerName = null;
     try {
-      var list = Target.findAllByAttribute("targetId", this.id);
-      if (list.length != 0) {
-        target = list[0];
-        var name = target.getName();
-        var type = target.getQuestionType();
-        var items = target.getQuestions();
-        var user = User.getUser();
-        if (user.getPoints() == null) {
-          user.points = 0;
-          user.save();
-        }
-        points = user.getPoints();
-        var showQuestionComment = target.getShowQuestionComment();
-      } else {
-        Target.loadList();
+      var target = Target.find(this.id);
+      var name = target.getName();
+      var type = target.getQuestionType();
+      var items = target.getQuestions();
+      var user = User.getUser();
+      if (user.getPoints() == null) {
+        user.points = 0;
+        user.save();
       }
-
+      points = user.getPoints();
+      var showQuestionComment = target.getShowQuestionComment();
+      try {
+        customerName = Customer.find(target.customerId).name
+      } catch(e) {
+        log('Could not find target - ' + error);
+        Customer.loadList();
+      }
     } catch (e) { // unknown record
       // try to load record
       Target.loadList(this.id);
@@ -259,7 +287,15 @@ var TargetDetails = BaseController.sub({
     }
 
 
-    return {name: name, points: points, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error};
+    return {
+      name: name, 
+      points: points, 
+      type: type, 
+      items: items, 
+      showQuestionComment: showQuestionComment, 
+      target: target, 
+      error: error,
+      title: customerName};
   },
   error: function(reason) {
     if (reason == "notfound") {
@@ -269,6 +305,16 @@ var TargetDetails = BaseController.sub({
   targetUpdated: function(target) {
     if (target.targetId === this.id && window.track.visiblePage == this) {
       this.render();
+    }
+  },
+  customerUpdated: function(customer) {
+    try {
+      target = Target.find(this.id);
+      if (customer.id === target.customerId && window.track.visiblePage == this) {
+        this.render();
+      }
+    } catch(e) {
+      log(e);
     }
   },
   answerSaved: function(answer, success) {
@@ -293,6 +339,7 @@ var TargetDetails = BaseController.sub({
   },
   loadAnswer: function(e, value) {
     var user = User.getUser();
+    log('answer ' + value);
     user.points += 1;
     user.save();
     var id = $(e.target).attr('data-id');

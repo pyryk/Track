@@ -160,6 +160,25 @@ Target.include({
   results: {}
 });
 
+Target.fromJSON = function(json) {
+  target = json;
+  
+  target["id"] = target["_id"]; // map mongo id
+  target["targetId"] = target["_id"]; // map mongo id
+  target["detailsLoaded"] = false; // target details are only loaded individually
+  target["saved"] = true; // saved i.e. got from backend
+  target["customerId"] = target.customerId;
+  target["showLogo"] = false;
+  var targetObject = Target.create(target);
+  
+  for (var j in target.questions) {
+    var questionItem = QuestionItem.create({name: target.questions[j].name, showComment: true, showResults: true, questionId: target.questions[j]._id});
+    targetObject.questions[j] = questionItem;
+    targetObject.save();
+  }
+  return targetObject;
+};
+
 /**
  * Loads a brief list of the track targets, containing only name and id
  * TODO: add more fields here, category/icon etc
@@ -187,27 +206,8 @@ Target.loadList = function(additionalData) {
       success: function(data, status, jqXHR) {
         requestComplete = true;
         for (var i in data.targets) {
-          var target = data.targets[i];
-          target["targetId"] = target["_id"]; // map mongo id
-          target["detailsLoaded"] = false; // target details are only loaded individually
-          target["saved"] = true; // saved i.e. got from backend
-          target["customerId"] = target.customerId;
-          target["showLogo"] = false;
-          var targetObject = Target.create(target);
-          if (Target.findAllByAttribute("targetId", target["_id"]).length > 1) {
-            for (var k = 0; k < Target.findAllByAttribute("customerId", target["_id"]).length - 1; i ++) {
-              Target.findAllByAttribute("targetId", target["_id"])[i].destroy();
-            }
-          }
-          for (var j in data.targets[i].questions) {
-            if (data.targets[i].showQuestionComment) {
-              var questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, showComment: true, showResults: true, questionId: data.targets[i].questions[j]._id});
-            } else {
-              var questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, showResults: true, questionId: data.targets[i].questions[j]._id});
-            }
-            targetObject.questions[j] = questionItem;
-            targetObject.save();
-          }
+          var json = data.targets[i];
+          Target.fromJSON(json);
         }
       },
       error: function(jqxhr, textStatus, error) {
@@ -230,7 +230,7 @@ Target.loadList = function(additionalData) {
     }
   }
 }
-/*
+
 Target.loadDetails = function(id, listener) {
   var url = App.serverURL;
   if (url.substring(url.length-1) !== "/") {
@@ -286,7 +286,7 @@ Target.loadDetails = function(id, listener) {
     }
   });
 }
-*/
+
 /**
  * Creates a new Target from the create target form fields
  *

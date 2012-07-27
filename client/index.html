@@ -58,7 +58,7 @@
 <div id="container">
   <div id="header">
     <div id="back-button"></div>
-    <h1><a href="#">Aalto-yliopisto</a></h1>
+    <h1><a href="#" id="main-title">loading...</a></h1>
     <div id="account-button"><a href="#!/login/"><img src="img/account-icon.png" alt=""></a></div>
   </div>
   <div id="main" class="main" role="main">
@@ -133,8 +133,8 @@
         <p class="question">{{this.name}}</p>
         {{#unless this.done}}
         <div class="answer-two">
-          <span data-id={{this.id}} class="active balance item positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="55" height="55" alt=":)"/></span>
-          <span data-id={{this.id}} class="active item negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="55" height="55" alt=":("/></span>
+          <span data-id={{this.id}} class="active balance item most positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="55" height="55" alt=":)"/></span>
+          <span data-id={{this.id}} class="active item most negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="55" height="55" alt=":("/></span>
         </div>
         {{else}}
         {{#if this.showComment}}
@@ -160,10 +160,10 @@
         <p class="question">{{this.name}}</p>
         {{#unless this.done}}
         <div class="answer-four">
-          <span data-id={{this.id}} class="active balance item positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="55" height="55" alt=":)"></span>
+          <span data-id={{this.id}} class="active balance item most positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="55" height="55" alt=":)"></span>
           <span data-id={{this.id}} class="active balance middle item positive"><img data-id={{this.id}} src="img/thumbs-up-little-smiley.png" width="55" height="55" alt=":)"></span>
           <span data-id={{this.id}} class="active item middle negative"><img data-id={{this.id}} src="img/thumbs-down-little-smiley.png" width="55" height="55" alt=":)"></span>
-          <span data-id={{this.id}} class="active item negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="55" height="55" alt=":("></span>
+          <span data-id={{this.id}} class="active item most negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="55" height="55" alt=":("></span>
         </div>
         {{else}}
         {{#if this.showComment}}
