@@ -44,6 +44,8 @@ var API = {
             }
         }.bind(this));
 
+
+        this.get("/customers/:id", this.getCustomers, false);
         this.get("/targets/:customerId", this.getTargets, false);
         this.get("/targets", this.getTargets, false);
         this.get("/target/:id", this.getTarget, false);
@@ -351,7 +353,7 @@ var API = {
     },
 
     getCustomers: function(req, res, next) {
-        Mongo.findAllCustomers().then(function(data) {
+        Mongo.findCustomers(req.params.id).then(function(data) {
             // Filter
             var selectedFields = ['name', '_id'];
             var customers = data.map(function(customer) {
