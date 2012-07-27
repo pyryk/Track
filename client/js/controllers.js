@@ -42,10 +42,21 @@ var BaseController = Spine.Controller.sub({
  *=================================================================================================================== */
 var CustomersList = BaseController.sub({
   events: {
-    "click #customer-list li": "clickedCustomer",
+    "fastclick #customer-list li": "clickedCustomer",
     "keyup #search-customer-input": "searchCustomer"
   },
   getData: function() {
+    var items = Customer.findAllByAttribute("saved", true);
+    for (var i in items) {
+      for (var j in item) {
+        if (i != j && items[i] == items[j]) {
+          if (i < j) {
+
+          }
+        }
+      }
+    }
+    console.log(Customer.findAllByAttribute("saved", true));
     return {items: Customer.findAllByAttribute("saved", true)};
   },
   init: function() {
@@ -53,7 +64,7 @@ var CustomersList = BaseController.sub({
     // load list (without location data) even when no location gotten
     this.loadList();
     Customer.bind("create", this.proxy(this.addOne));
-    //Spine.bind('location:changed', this.proxy(this.locationChanged));
+    Spine.bind('location:changed', this.proxy(this.locationChanged));
   },
   loadList: function(additionalData) {
     Customer.loadList(additionalData);
@@ -62,11 +73,10 @@ var CustomersList = BaseController.sub({
     // TODO update list also when list is not visible
     if (window.track.visiblePage == this) {
       log('location changed - reloading target list');
-      //this.loadList({lat: location.lat, lon: location.lon});
+      this.loadList({lat: location.lat, lon: location.lon});
     }
   },
   addOne: function(task){
-
     if (window.track.visiblePage == this) {
       this.render();
     }
@@ -76,7 +86,6 @@ var CustomersList = BaseController.sub({
     var id = el.attr('data-id');
     if (id) {
       var customer = Customer.find(id);
-      //Target.loadList(customer.customerId);
       Spine.Route.navigate(App.getRoute(customer));
     }
   },
