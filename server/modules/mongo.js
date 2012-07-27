@@ -392,10 +392,10 @@ var Mongo = {
         return promise;
     },
 
-    findAllCustomers: function() {
+    findCustomers: function(customerId) {
         var promise = Promise();
 
-        this.Customer.find({}, function(error, data) {
+        this.Customer.find(!!customerId ? {_id: customerId} : {}, function(error, data) {
             this.resolvePromise(error, data, promise)
         }.bind(this));
 
