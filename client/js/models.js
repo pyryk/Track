@@ -62,6 +62,49 @@ Customer.loadList = function(additionalData) {
   }
 }
 
+Customer.loadCustomer = function(id) {
+  var url = App.serverURL;
+  if (url.substring(url.length-1) !== "/") url += "/";
+  url += "customers/";
+  url += id;
+  var requestComplete = false;
+  try {
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      timeout: 5000,
+      cache: false,
+      success: function(data, status, jqXHR) {
+        requestComplete = true;
+        var customer = data.customers[0];
+        customer["id"] = customer["_id"]; // map mongo id
+        customer["logo"] = "img/templogos/" + customer.name.toLowerCase().replace(' ', '-').replace('ä', 'a').replace('ö', 'o').replace('\'', '') + ".png";
+        // FIXME remove separate customerId
+        customer["customerId"] = customer["_id"]; // map mongo id
+        customer["saved"] = true; // saved i.e. got from backend
+        Customer.create(customer);
+      },
+      error: function(jqxhr, textStatus, error) {
+        console.log('error: ' + textStatus + ', ' + error);
+      }
+    });
+  } catch(e) {
+    log(e);
+  }
+
+  // workaround for android 2.3 bug: requests remain pending when loading the page from cache
+  var xmlHttpTimeout=setTimeout(ajaxTimeout,5000);
+  function ajaxTimeout(){
+    // if request not complete and no sinon (xhr mock lib) present
+    if (!requestComplete && !window.sinon) {
+      log("Request timed out - reloading the whole page");
+      //window.location.reload()
+    } else {
+      log("Request was completed");
+    }
+  }
+}
+
 /** =========================================== TARGET ======================================================= */
 /**
  * The track target, such as "Virgin Oil queue"
@@ -192,7 +235,6 @@ Target.loadList = function(additionalData) {
     'FB-UserId': user.name,
     'FB-AccessToken': user.token
   };
-  console.log(url);
 
   var requestComplete = false;
   try {

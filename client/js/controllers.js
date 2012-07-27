@@ -5,7 +5,7 @@ var BaseController = Spine.Controller.sub({
     this.rawTemplate = this.template;
     
     this.titlebar = $('#main-title');
-    this.container = $('#container');
+    this.header = $('#header');
     
     if (this.rawTemplate && this.rawTemplate.length > 0) {
       this.template = Handlebars.compile(this.rawTemplate.html());
@@ -21,9 +21,11 @@ var BaseController = Spine.Controller.sub({
       if (data.title) {
         this.titlebar.text(data.title);
       }
-      if (data.customizationClass) {
-        this.container.addClass(data.customizationClass);
-      }
+      /*if (data.customizationClass) {
+        console.log(data.customizationClass)
+        this.header.addClass(data.customizationClass);
+        this.titlebar.addClass(data.customizationClass);
+      }*/
       this.addFastButtons();
     }
   },
@@ -57,7 +59,6 @@ var CustomersList = BaseController.sub({
   },
   getData: function() {
     var items = Customer.findAllByAttribute("saved", true);
-    console.log(items);
     return {items: items, title: 'tracktive'};
   },
   init: function() {
@@ -131,12 +132,11 @@ var TargetsList = BaseController.sub({
       var items = Target.findAllByAttribute("saved", true);
     } else {
       try {
-        log('Finding customer ' + this.id);
         customer = Customer.find(this.id);
         customClass = customer.name.toLowerCase().replace(/'/g,"");
         title = customer.name;
       } catch (e) {
-        log("Error", e);
+        console.log("Error", e);
         Customer.loadList(); // TODO load only this customer
       }
       var items = Target.findAllByAttribute("customerId", this.id);
@@ -149,7 +149,7 @@ var TargetsList = BaseController.sub({
   },
   init: function() {
     BaseController.prototype.init.call(this);
-    //Spine.bind('location:changed', this.proxy(this.locationChanged));
+    Spine.bind('location:changed', this.proxy(this.locationChanged));
 
     // load list (without location data) even when no location gotten
     Spine.bind('location:error', this.proxy(this.locationChanged));
@@ -159,7 +159,6 @@ var TargetsList = BaseController.sub({
 
   },
   customerUpdated: function(customer) {
-    log('customer updated!');
     if (customer.id == this.id) {
       this.render();
     }
@@ -175,7 +174,7 @@ var TargetsList = BaseController.sub({
   locationChanged: function(location) {
     // TODO update list also when list is not visible
     if (window.track.visiblePage == this) {
-      //this.loadList({lat: location.lat, lon: location.lon});
+      this.loadList({lat: location.lat, lon: location.lon});
     }
   },
   clicked: function(e) {
@@ -183,7 +182,6 @@ var TargetsList = BaseController.sub({
     var id = el.attr('data-id');
     if (id) {
       var target = Target.find(id);
-      //target.loadDetails();
       Spine.Route.navigate(App.getRoute(target));
     } else if (el.hasClass("create-new")) {
       Spine.Route.navigate(App.getRoute("create_target"));
@@ -243,13 +241,13 @@ var ownResult = BaseController.sub({
  *====================================================================================================================*/
 var TargetDetails = BaseController.sub({
   events: {
-    "click .active.item.most.positive": "savePositiveAnswer",
-    "click .active.item.middle.positive": "saveSemiPositiveAnswer",
-    "click .active.item.middle.negative": "saveSemiNegativeAnswer",
-    "click .active.item.most.negative": "saveNegativeAnswer",
-    "click .send": "sendMessage",
-    "click .styled": "textArea",
-    "click .goToResults": "viewResults"
+    "fastclick .active.item.most.positive": "savePositiveAnswer",
+    "fastclick .active.item.middle.positive": "saveSemiPositiveAnswer",
+    "fastclick .active.item.middle.negative": "saveSemiNegativeAnswer",
+    "fastclick .active.item.most.negative": "saveNegativeAnswer",
+    "fastclick .send": "sendMessage",
+    "fastclick .styled": "textArea",
+    "fastclick .goToResults": "viewResults"
   },
   init: function() {
     BaseController.prototype.init.call(this);
@@ -277,16 +275,13 @@ var TargetDetails = BaseController.sub({
       try {
         customerName = Customer.find(target.customerId).name
       } catch(e) {
-        log('Could not find target - ' + error);
-        Customer.loadList();
+        Customer.loadCustomer(target.customerId);
       }
     } catch (e) { // unknown record
       // try to load record
       Target.loadList(this.id);
       error = e;
     }
-
-
     return {
       name: name, 
       points: points, 
@@ -314,7 +309,7 @@ var TargetDetails = BaseController.sub({
         this.render();
       }
     } catch(e) {
-      log(e);
+      console.log(e);
     }
   },
   answerSaved: function(answer, success) {
@@ -324,7 +319,7 @@ var TargetDetails = BaseController.sub({
       // uncomment to show thanks view
       // Spine.Route.navigate(App.getRoute(answer));
     } else {
-      log("Answer not saved!");
+      console.log("Answer not saved!");
     }
   },
   saveAnswer: function(value, id) {
@@ -339,7 +334,6 @@ var TargetDetails = BaseController.sub({
   },
   loadAnswer: function(e, value) {
     var user = User.getUser();
-    log('answer ' + value);
     user.points += 1;
     user.save();
     var id = $(e.target).attr('data-id');
@@ -437,7 +431,6 @@ var TargetCreate = BaseController.sub({
     return "Create Target";
   },
   targetSavedToServer: function(target, success) {
-    log(target.name + (success ? '' : ' _NOT_') + ' saved to server');
     if (success) {
       Spine.Route.navigate(App.getRoute(target));
     } else {

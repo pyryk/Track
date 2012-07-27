@@ -91,25 +91,30 @@ $list_item_gradient_2: darken(#ffffff, 1%);
     $text_color: #606967;
   }
 
-.aalto-yliopisto #header {
+.aalto-yliopisto{
   background-color: yellow;
   color: black;
 }
 
-.hesburger #header {
+.hesburger #header{
   background-color: green;
   color: blue;
 }
 
-.mtv3 #header {
+.mtv3 #header{
   background-color: black;
   color: red;
 }
 
-.mcdonalds #header {
+.mcdonalds{
   background-color: red;
   color: black;
 }
+/*
+.mcdonalds #header {
+  background-color: red;
+  color: black;
+}*/
 
 /* mixins elements
 * to re-use whole chunks of CSS, properties or selectors
@@ -156,7 +161,7 @@ $list_item_gradient_2: darken(#ffffff, 1%);
 }
 
 html {
-  background-color: $background_gradient_2;
+  @include background-image(linear-gradient($background_gradient_1, $background_gradient_2 100%));
 }
 
 body {
