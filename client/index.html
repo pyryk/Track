@@ -7,13 +7,13 @@
 <head>
   <meta charset="utf-8">
 
-  <title>Track</title>
+  <title>tracktive</title>
   <meta name="description" content="mobile feedback collection service">
 
   <!-- Mobile viewport optimization h5bp.com/ad -->
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0, width=320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 
   <!-- Home screen icon  Mathias Bynens mathiasbynens.be/notes/touch-icons -->
   <!-- For iPhone 4 with high-resolution Retina display: -->
@@ -35,7 +35,6 @@
 
   <!-- Mobile IE allows us to activate ClearType technology for smoothing fonts for easy reading -->
   <meta http-equiv="cleartype" content="on">
-
   <!-- more tags for your 'head' to consider h5bp.com/d/head-Tips -->
 
   <!-- MBP Stylesheet -->
@@ -56,13 +55,13 @@
 
 <!-- CONTAINER -->
 <!-- ------------------------------------------------------------------------------------------------------------- -->
+<div id="header">
+  <div id="back-button"></div>
+  <h1><a href="#">Aalto-yliopisto</a></h1><!--<a href="#"><img src="img/mtv3-logo.png" style="padding-bottom: 5px; padding-right: 0px"></a>--><!---->
+  <div id="account-button"><a href="#!/login/"><img src="img/account-icon.png" alt=""></a></div>
+</div>
 <div id="container">
-  <div class="header row">
-    <div id="back-button"><!--<a href="#!/customer/"><img src="img/home-icon.png" alt=""></a>--></div>
-    <h1><!--<a href="#"><img src="img/mtv3-logo.png" style="padding-bottom: 5px; padding-right: 0px"></a>--><!----><a href="#">Aalto-yliopisto</a></h1>
-    <div id="account-button"><a href="#!/login/"><img src="img/account-icon.png" alt=""></a></div>
-  </div>
-  <div id="main" class="main row scroll-y" role="main">
+  <div id="main" class="main" role="main">
     <noscript>This application requires JavaScript support. Currently it is tested only on iPhone and Android devices.</noscript>
   </div>
   <!--<footer>
@@ -76,9 +75,9 @@
   <div class="search-field">
     <input type="text" id="search-customer-input" placeholder="Etsi..." autocomplete="off" class="search-field-input" />
   </div>
-  <ul class="primary-list scroll-y" data-role="listview" data-inset="true" data-filter="true" id="customer-list">
+  <ul class="primary-list" data-role="listview" data-inset="true" data-filter="true" id="customer-list">
     {{#each items}}
-    <li name="{{this.name}}" class="scroll-y" data-id="{{this.id}}">
+    <li name="{{this.name}}" data-id="{{this.id}}">
       <img class="customer-list-image" data-id="{{this.id}}" src="{{this.logo}}" alt=""/>
       <span data-id="{{this.id}}" class="customer-list-span">{{this.name}}</span>
       <img class="customer-list-arrow" data-id="{{this.id}}" src="img/next.png" alt=""/>
@@ -89,26 +88,28 @@
 
 <!-- TARGET-LIST -->
 <!-- ------------------------------------------------------------------------------------------------------------- -->
-<script id="template-targetList" class="scroll-y" type="text/x-handlebars-template">
+<script id="template-targetList" type="text/x-handlebars-template">
   <div class="search-field">
     <input type="text" id="search-target-input" placeholder="Etsi..." autocomplete="off" class="search-field-input" />
   </div>
   {{#if error}}
   {{error}}
   {{/if}}
-  <ul class="primary-list scroll-y" id="target-list">
+  <ul class="primary-list" id="target-list" data-role="listview" data-inset="true">
+
+
     {{#each items}}
-    <li name="{{this.name}}" class="scroll-y"  data-id="{{this.id}}">
-      {{#if showLogo}}
-      <img class="customer-list-image" data-id="{{this.id}}" src="{{this.logo}}" alt=""/>
-      <span data-id="{{this.id}}" class="customer-list-span">{{this.name}}</span>
-      {{else}}
-      <span data-id="{{this.id}}" class="target-list-span">{{this.name}}</span>
-      {{/if}}
-      <img class="customer-list-arrow" data-id="{{this.id}}" src="img/next.png" alt=""/>
-    </li>
+      <li name="{{this.name}}" data-id="{{this.id}}">
+        {{#if showLogo}}
+        <img class="customer-list-image" data-id="{{this.id}}" src="{{this.logo}}" alt=""/>
+        <span data-id="{{this.id}}" class="customer-list-span">{{this.name}}</span>
+        {{else}}
+        <span data-id="{{this.id}}" class="target-list-span">{{this.name}}</span>
+        {{/if}}
+        <img class="customer-list-arrow" data-id="{{this.id}}" src="img/next.png" alt=""/>
+      </li>
     {{/each}}
-    <!--<li class="create-new"><span class="create-new text">Create a new target</span></li>-->
+  <!--<li class="create-new"><span class="create-new text">Create a new target</span></li>-->
   </ul>
 </script>
 
@@ -328,8 +329,8 @@
     <h2>Welcome to Tracktive!</h2>
     <div class="content">
       <p>
-        Track can be used without logging in. However, the social aspect of
-        Track can be used only after login. Currently, we provide logging in
+        Tracktive can be used without logging in. However, the social aspect of
+        Tracktive can be used only after login. Currently, we provide logging in
         only via Facebook Connect.
       </p>
       <p><span class="no-login link-button">Continue without logging in</span></p>
@@ -383,6 +384,8 @@
 <script src="js/helper.js"></script>
 <script src="js/plugins.js"></script>
 <!-- end scripts-->
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+
 
 <!-- Debugger - remove for production -->
 <!-- <script src="https://getfirebug.com/firebug-lite.js"></script> -->

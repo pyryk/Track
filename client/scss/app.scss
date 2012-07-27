@@ -52,10 +52,6 @@ $list_item_gradient_2: darken(#ffffff, 1%);
     $text_color: #606967;
   }
 
-.mtv3 {
-
-}
-
 /* Rosso-layout */
   @if $customer == rosso {
     $header_gradient_1: #ffffff;
@@ -93,6 +89,26 @@ $list_item_gradient_2: darken(#ffffff, 1%);
     $list_item_gradient_2: darken(#ffffff, 1%);
     $text_color: #606967;
   }
+
+.aalto-yliopisto {
+  background-color: yellow;
+  color: black;
+}
+
+.hesburger {
+  background-color: green;
+  color: blue;
+}
+
+.mtv3 {
+  background-color: black;
+  color: red;
+}
+
+.mcdonalds {
+  background-color: red;
+  color: black;
+}
 
 /* mixins elements
 * to re-use whole chunks of CSS, properties or selectors
@@ -146,24 +162,34 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 14px;
   @include background-image(linear-gradient($background_gradient_1, $background_gradient_2 100%));
+  -webkit-user-select:none;
+  -webkit-text-size-adjust:none;
 }
 
-.row, .col { overflow: hidden; position: absolute; }
-.row { left: 0; right: 0; }
-.col { top: 0; bottom: 0; }
-.scroll-x { overflow-x: auto; }
-.scroll-y { overflow-y: auto; }
+.row {left: 0; right: 0; overflow: hidden; position: absolute;}
+.scroll-y {overflow-y: auto;}
 
 /* container elements
 * =================================================================================================================== */
 #container {
-  padding: 0;
-  margin: 0;
+  position:absolute;
+  z-index:1;
+  top: $header_height;
+  bottom:0;
+  left:0;
+  width:100%;
+  overflow:auto;
 }
 
-.header.row {
+#header {
+  position: absolute;
+  //display: none;
   height: $header_height;
-  top: 0px;
+  top:0;
+  left: 0;
+  padding: 0;
+  z-index: 2;
+  width: 100%;
   @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
   color: $header_text_color;
   text-align: center;
@@ -184,9 +210,13 @@ body {
   }
 }
 
-.main.row {
-  top: $header_height;
-  bottom: 0px;
+#main {
+  position:absolute;
+  z-index:1;
+/*  -webkit-touch-callout:none;*/
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+  width:100%;
+  padding:0;
 }
 
 /* list elements
@@ -208,8 +238,8 @@ body {
 }
 
 .primary-list {
-  -webkit-overflow-scrolling: touch;
-  overflow: scroll;
+  //-webkit-overflow-scrolling: touch;
+  //overflow: scroll;
   list-style-type: none;
   width: 90%;
   padding: 0;
@@ -218,7 +248,6 @@ body {
   font-weight: 500;
   border-left: 1px solid #999;
   border-right: 1px solid #999;
-
   @include border-radius(15px 15px 15px 15px);
 
   li {
@@ -505,6 +534,10 @@ ul li span {
       @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
       @include border-radius(5px 5px 5px 5px);
       list-style: none;
+
+      &:active, &.fake-active {
+        @include background-image(linear-gradient(darken($list_item_gradient_2, 5%), $list_item_gradient_2));
+      }
 
       a {
         color: $text_color;
@@ -815,5 +848,6 @@ input[type=text] {
 
 /* no point to have red bg on untouched text boxes */
 input[type=text]:invalid {
-  background-color: white;
+  background-color: black;
+  color: red;
 }

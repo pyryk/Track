@@ -15,7 +15,6 @@ Customer.loadList = function(additionalData) {
   var url = App.serverURL;
   if (url.substring(url.length-1) !== "/") url += "/";
   url += "customers";
-  console.log(url);
   var user = User.getUser();
   var headers = {
     'FB-UserId': user.name,
@@ -172,6 +171,8 @@ Target.loadList = function(additionalData) {
     'FB-UserId': user.name,
     'FB-AccessToken': user.token
   };
+  console.log(url);
+
   var requestComplete = false;
   try {
     $.ajax({
@@ -182,7 +183,6 @@ Target.loadList = function(additionalData) {
       cache: false,
       headers: user.logged ? headers : {},
       success: function(data, status, jqXHR) {
-        console.log("succeess funktio");
         requestComplete = true;
         for (var i in data.targets) {
           var target = data.targets[i];
@@ -192,6 +192,11 @@ Target.loadList = function(additionalData) {
           target["customerId"] = target.customerId;
           target["showLogo"] = false;
           var targetObject = Target.create(target);
+          if (Target.findAllByAttribute("targetId", target["_id"]).length > 1) {
+            for (var k = 0; k < Target.findAllByAttribute("customerId", target["_id"]).length - 1; i ++) {
+              Target.findAllByAttribute("targetId", target["_id"])[i].destroy();
+            }
+          }
           for (var j in data.targets[i].questions) {
             if (data.targets[i].showQuestionComment) {
               var questionItem = QuestionItem.create({name: data.targets[i].questions[j].name, showComment: true, showResults: true, questionId: data.targets[i].questions[j]._id});
@@ -337,7 +342,7 @@ Result.include({
     if (url.substring(url.length-1) !== "/") {
       url += "/";
     };
-    url += "result/" + this.questionItem.questionId;
+    url += "results/" + this.questionItem.questionId;
 
     var user = User.getUser();
     var headers = {
@@ -471,7 +476,6 @@ QuestionItem.include({
     }
     url += "results/";
     url += this.questionId;
-    console.log(url);
 
     var requestComplete = false;
     try {

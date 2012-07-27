@@ -47,6 +47,8 @@ var App = Spine.Controller.sub({
       app: this
     }).render();
 
+
+
     // enable logins
     if (window.trackConfig && window.trackConfig.enableAuth) {
       this.addLogin();
@@ -103,7 +105,6 @@ var App = Spine.Controller.sub({
         xfbml      : true  // parse XFBML
       });
       User.getUser();
-
       // check login status; may conflict with cookies (if e.g. logged out from fb elsewhere)
       FB.getLoginStatus(function(response) {
         if (!response.authResponse) {
