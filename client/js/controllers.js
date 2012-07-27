@@ -47,17 +47,8 @@ var CustomersList = BaseController.sub({
   },
   getData: function() {
     var items = Customer.findAllByAttribute("saved", true);
-    for (var i in items) {
-      for (var j in item) {
-        if (i != j && items[i] == items[j]) {
-          if (i < j) {
-
-          }
-        }
-      }
-    }
-    console.log(Customer.findAllByAttribute("saved", true));
-    return {items: Customer.findAllByAttribute("saved", true)};
+    console.log(items);
+    return {items: items};
   },
   init: function() {
     BaseController.prototype.init.call(this);

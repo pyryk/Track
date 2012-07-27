@@ -33,7 +33,9 @@ Customer.loadList = function(additionalData) {
         requestComplete = true;
         for (var i in data.customers) {
           var customer = data.customers[i];
+          customer["id"] = customer["_id"]; // map mongo id
           customer["logo"] = "img/templogos/" + customer.name.toLowerCase().replace(' ', '-').replace('ä', 'a').replace('ö', 'o').replace('\'', '') + ".png";
+          // FIXME remove separate customerId
           customer["customerId"] = customer["_id"]; // map mongo id
           customer["saved"] = true; // saved i.e. got from backend
           Customer.create(customer);
