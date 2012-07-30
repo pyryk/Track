@@ -159,10 +159,16 @@ var Mongo = {
 
     },
 
-    findTargets: function(customerId) {
+    findTargets: function(field, value) {
         var promise = Promise();
 
-        this.Target.find((!!customerId ? {customerId: customerId} : {}), function(error, data) {
+        var query = this.Target.find({});
+
+        if (!!field && !!value) {
+            query.where(field, value);
+        }
+
+        query.exec(function(error, data) {
             this.resolvePromise(error, data, promise)
         }.bind(this));
 
@@ -392,10 +398,16 @@ var Mongo = {
         return promise;
     },
 
-    findCustomers: function(customerId) {
+    findCustomers: function(field, value) {
         var promise = Promise();
 
-        this.Customer.find(!!customerId ? {_id: customerId} : {}, function(error, data) {
+        var query = this.Customer.find({});
+
+        if (!!field && !!value) {
+            query.where(field, value);
+        }
+
+        query.exec(function(error, data) {
             this.resolvePromise(error, data, promise)
         }.bind(this));
 
