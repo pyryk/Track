@@ -46,7 +46,7 @@ var API = {
 
 
         this.get("/customers", this.getCustomers, false);
-        this.get("/customers/:id", this.getCustomers, false);
+        this.get("/customers/:id", this.getCustomerDetails, false);
         this.get("/targets/:customerId", this.getTargets, false);
         this.get("/targets", this.getTargets, false);
         this.get("/target/:id", this.getTarget, false);
@@ -354,18 +354,11 @@ var API = {
     },
 
     getCustomers: function(req, res, next) {
-        Mongo.findCustomers(req.params.id).then(function(data) {
-            // Filter
+        Mongo.findCustomers().then(function(data) {
             var selectedFields = ['name', '_id'];
             var customers = data.map(function(customer) {
                 return API.selectFields(customer, selectedFields);
             });
-
-
-            // Remove array when queried with an id
-            if (req.params.id) {
-                customers = customers[0];
-            }
 
             res.send(200, customers);
             return next();
@@ -373,6 +366,31 @@ var API = {
             return next(error);
         });
 
+    },
+
+    getCustomerDetails: function(req, res, next) {
+        var customerId = req.params.id;
+
+        Mongo.findCustomers('_id', customerId).then(function(data) {
+
+            var customerFields = ['name', '_id'];
+            var customerDetails = API.selectFields(data[0], customerFields);
+
+            Mongo.findTargets('customerId', customerId).then(function(data) {
+                var targetFields = ['name', '_id'];
+                var targets = data.map(function(targets) {
+                   return API.selectFields(targets, targetFields);
+                });
+
+                customerDetails.targets = targets;
+
+                res.send(200, customerDetails);
+                return next();
+            });
+
+        }, function(error) {
+            return next(error);
+        });
     },
 
     postCustomer: function(req, res, next) {
