@@ -21,12 +21,15 @@ var Mongo = {
         var ObjectId = mongoose.Schema.ObjectId;
 
         var Question = new mongoose.Schema({
-            name: String
+            name: String,
+            targetId: ObjectId
         });
+
+        mongoose.model('Question', Question);
+        this.Question = mongoose.model('Question');
 
         var Target = new mongoose.Schema({
             name: String,
-            questions: [Question],
             questionType: String,
             showQuestionComment: Boolean,
 
@@ -290,7 +293,7 @@ var Mongo = {
     updateResult: function(params) {
       var promise = Promise();
 
-      this.findResultById(params.resultId).then(function success(foundResult) {
+      this.findResults('_id', params.resultId).then(function success(foundResult) {
           foundResult.textComment = params.textComment;
           foundResult.save(function(error) {
               var id = foundResult._id;
@@ -301,22 +304,32 @@ var Mongo = {
         return promise;
     },
 
-    findResultById: function(resultId) {
+    findQuestions: function(field, value) {
         var promise = Promise();
-        console.log(resultId);
 
-        this.Result.findOne({_id: resultId}, function(error, data) {
-            Mongo.resolvePromise(error, data, promise)
-        });
+        var query = this.Question.find({});
+
+        if (!!field && !!value) {
+            query.where(field, value);
+        }
+
+        query.exec(function(error, data) {
+            this.resolvePromise(error, data, promise)
+        }.bind(this));
 
         return promise;
-
     },
 
-    findResultsByQuestionId: function(id) {
+    findResults: function(field, value) {
         var promise = Promise();
 
-        this.Result.find({questionId: id}, function(error, data) {
+        var query = this.Result.find({});
+
+        if (!!field && !!value) {
+            query.where(field, value);
+        }
+
+        query.exec(function(error, data) {
             this.resolvePromise(error, data, promise)
         }.bind(this));
 
@@ -421,6 +434,20 @@ var Mongo = {
         customer.name = params.name;
 
         customer.save(function(error) {
+            var id = customer._id;
+            this.resolvePromise(error, id, promise)
+        }.bind(this));
+
+        return promise;
+    },
+
+    createQuestion: function(params) {
+        var promise = Promise();
+        var question = new this.Question();
+
+        question.name = params.name;
+
+        question.save(function(error) {
             var id = customer._id;
             this.resolvePromise(error, id, promise)
         }.bind(this));

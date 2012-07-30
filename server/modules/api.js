@@ -47,15 +47,16 @@ var API = {
 
         this.get("/customers", this.getCustomers, false);
         this.get("/customers/:id", this.getCustomerDetails, false);
-        this.get("/targets/:customerId", this.getTargets, false);
-        this.get("/targets", this.getTargets, false);
-        this.get("/target/:id", this.getTarget, false);
-        this.get("/results/:id", this.getResults, false);
+        this.get("/targets/:id", this.getTargetDetails, false);
+        this.get("/questions/:id/results", this.getResults, false);
 
         this.post("/targets", this.postTarget, false);
         this.post("/results/:questionId", this.postResult, false);
         this.post("/customers", this.postCustomer, false);
+        this.post("/questions", this.postQuestion, false);
+
         this.del("/targets/:id", this.deleteTarget, false);
+
         this.get("/login", this.getLogin, true);
         this.get("/leaderboard", this.getLeaderboard, false);
         this.get(/\/dashboard\/*/, this.getPublic, false);
@@ -241,18 +242,30 @@ var API = {
         return {alltime: alltimeResults, now: nowResults};
     },
 
-    getTarget: function(req, res, next) {
-        Mongo.findTargetById(req.params.id).then(function(data) {
-            if(data == null) {
+    getTargetDetails: function(req, res, next) {
+        var targetId = req.params.id;
+
+        Mongo.findTargets('_id', targetId).then(function(data) {
+            var target = data[0];
+
+            if(target == null) {
                 return next(new restify.ResourceNotFoundError("Could not find target with ID " + req.params.id));
             }
 
             // Filter
-            var target = API.selectFields(data, ['name', '_id', 'questions', 'questionType', 'showQuestionComment']);
+            target = API.selectFields(target, ['name', '_id', 'questionType', 'showQuestionComment']);
 
-            res.send(200, {target: target});
+            Mongo.findQuestions('targetId', targetId).then(function(data) {
+                var questionFields = ['name', '_id'];
+                var questions = data.map(function(questions) {
+                    return API.selectFields(questions, questionFields);
+                });
 
-            return next();
+                target.questions = questions;
+
+                res.send(200, {target: target});
+                return next();
+            });
         }, function(error) {
             return next(error);
         });
@@ -329,24 +342,38 @@ var API = {
     getResults: function(req, res, next) {
         var debugging = req.headers['debug'] === 'true';
 
-        Mongo.findResultsByQuestionId(req.params.id).then(function success(data) {
-            var results = data;
+        var questionId = req.params.id;
+        console.log("reqparamsid " + req.params.id);
 
-            // Aggregate
-            var aggregatedResults = API.aggregateResults(results);
+        Mongo.findQuestions('_id', questionId).then(function success(data) {
+
+            console.log(data);
+            var questionFields = ['name', '_id'];
+            var questionDetails = API.selectFields(data[0], questionFields);
+
+            console.log(questionDetails);
+            Mongo.findResults('questionId', questionId).then(function success(data) {
+                var results = data;
+
+                // Aggregate
+                var aggregatedResults = API.aggregateResults(results);
 
 
-            if(aggregatedResults) {
-                results = aggregatedResults;
-            }
+                if(aggregatedResults) {
+                    results = aggregatedResults;
+                }
 
-            if(debugging) {
-                results.all = results;
-            }
+                if(debugging) {
+                    results.all = results;
+                }
 
+                questionDetails.results = results;
 
-            res.send(200, {results: results});
-            return next();
+                res.send(200, {question: questionDetails});
+                return next();
+
+            });
+
         }, function(error) {
             return next(error);
         });
@@ -384,7 +411,7 @@ var API = {
 
                 customerDetails.targets = targets;
 
-                res.send(200, customerDetails);
+                res.send(200, {customer: customerDetails});
                 return next();
             });
 
@@ -403,6 +430,18 @@ var API = {
             return next(err);
         });
     },
+
+    postQuestion: function(req, res, next) {
+        var question = req.params;
+        Mongo.createQuestion(question).then(function success(createQuestionResult) {
+            var id = createQuestionResult;
+            res.send(201, {_id: id});
+            return next();
+        }, function error(err) {
+            return next(err);
+        });
+    },
+
 
     getLogin: function(req, res, next) {
         var body = req.authorization;
