@@ -273,8 +273,19 @@ var API = {
 
     postTarget: function(req, res, next) {
         var target = req.params;
-        // Create the new target
+        var questions = req.params.questions;
+
         Mongo.createTarget(target).then(function success(createTargetResult) {
+            // Create questions if present
+            if (questions) {
+                for (var i in questions) {
+                    questions[i].targetId = createTargetResult;
+                    Mongo.createQuestion(questions[i]), function(error) {
+                        Mongo.resolvePromise(error, id, promise);
+                    };
+                }
+            }
+
             var id = createTargetResult;
             res.send(201, {_id: id});
             return next();
