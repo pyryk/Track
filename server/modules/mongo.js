@@ -214,10 +214,6 @@ var Mongo = {
         target.questionType = params.questionType;
         target.showQuestionComment = params.showQuestionComment;
 
-        for (questionItem in params.questions) {
-            target.questions.push(params.questions[questionItem]);
-        }
-
         var loc = params.location;
         if(loc) {
             target.location = {lat: loc.lat, lon: loc.lon};
@@ -446,9 +442,10 @@ var Mongo = {
         var question = new this.Question();
 
         question.name = params.name;
+        question.targetId = params.targetId;
 
         question.save(function(error) {
-            var id = customer._id;
+            var id = question._id;
             this.resolvePromise(error, id, promise)
         }.bind(this));
 
