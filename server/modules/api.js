@@ -49,6 +49,7 @@ var API = {
         this.get("/customers/:id", this.getCustomerDetails, false);
         this.get("/targets/:id", this.getTargetDetails, false);
         this.get("/questions/:id/results", this.getResults, false);
+        this.get("/questions/:id", this.getQuestionDetails, false);
 
         this.post("/targets", this.postTarget, false);
         this.post("/results/:questionId", this.postResult, false);
@@ -427,6 +428,20 @@ var API = {
             });
 
         }, function(error) {
+            return next(error);
+        });
+    },
+
+    getQuestionDetails: function(req, res, next) {
+        var questionId = req.params.id;
+
+        Mongo.findQuestions('_id', questionId).then(function(data) {
+            var questionFields = ['_id', 'name', 'targetId'];
+            var questionDetails = API.selectFields(data[0], questionFields);
+
+            res.send(200, {question: questionDetails});
+            return next();
+        }, function(error) {
             return next(error);
         });
     },
