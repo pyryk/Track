@@ -45,12 +45,13 @@ var API = {
         }.bind(this));
 
 
+        this.get("/customers", this.getCustomers, false);
         this.get("/customers/:id", this.getCustomers, false);
         this.get("/targets/:customerId", this.getTargets, false);
         this.get("/targets", this.getTargets, false);
         this.get("/target/:id", this.getTarget, false);
         this.get("/results/:id", this.getResults, false);
-        this.get("/customers", this.getCustomers, false);
+
         this.post("/targets", this.postTarget, false);
         this.post("/results/:questionId", this.postResult, false);
         this.post("/customers", this.postCustomer, false);
@@ -360,7 +361,13 @@ var API = {
                 return API.selectFields(customer, selectedFields);
             });
 
-            res.send(200, {customers: customers});
+
+            // Remove array when queried with an id
+            if (req.params.id) {
+                customers = customers[0];
+            }
+
+            res.send(200, customers);
             return next();
         }, function(error) {
             return next(error);
