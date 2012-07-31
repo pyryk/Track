@@ -59,6 +59,8 @@ var API = {
         this.put("/results/:id", this.updateResult, false);
 
         this.del("/targets/:id", this.deleteTarget, false);
+        this.del("/questions/:id", this.deleteQuestion, false);
+        this.del("/customers/:id", this.deleteCustomer, false);
 
         this.get("/login", this.getLogin, true);
         this.get("/leaderboard", this.getLeaderboard, false);
@@ -248,17 +250,15 @@ var API = {
     getTargetDetails: function(req, res, next) {
         var targetId = req.params.id;
 
-        Mongo.findTargets('_id', targetId).then(function(data) {
-            var target = data[0];
-
-            if(target == null) {
-                return next(new restify.ResourceNotFoundError("Could not find target with ID " + req.params.id));
+        Mongo.findTargetById(targetId).then(function success(data) {
+            if(data == null) {
+                return next(new restify.ResourceNotFoundError("Could not find target with ID " + targetId));
             }
 
             // Filter
-            target = API.selectFields(target, ['name', '_id', 'questionType', 'showQuestionComment']);
+            var target = API.selectFields(data, ['name', '_id', 'questionType', 'showQuestionComment']);
 
-            Mongo.findQuestions('targetId', targetId).then(function(data) {
+            Mongo.findQuestions('targetId', targetId).then(function success(data) {
                 var questionFields = ['name', '_id'];
                 var questions = data.map(function(questions) {
                     return API.selectFields(questions, questionFields);
@@ -309,6 +309,28 @@ var API = {
 
     },
 
+    deleteQuestion: function(req, res, next) {
+
+        Mongo.questionById(req.params.id).then(function success() {
+            res.send(204);
+            return next();
+        }, function error(err) {
+            return next(err);
+        });
+
+    },
+
+    deleteCustomer: function(req, res, next) {
+
+        Mongo.deleteCustomerById(req.params.id).then(function success() {
+            res.send(204);
+            return next();
+        }, function error(err) {
+            return next(err);
+        });
+
+    },
+
 
     postResult: function(req, res, next) {
         var result = {
@@ -344,7 +366,6 @@ var API = {
 
         // All ready
         p.all(promises).then(function success(addResultData) {
-            console.log(addResultData);
             var id = addResultData[0]
             res.send(201, {_id: id});
             return next();
@@ -367,17 +388,12 @@ var API = {
 
     getResults: function(req, res, next) {
         var debugging = req.headers['debug'] === 'true';
-
         var questionId = req.params.id;
-        console.log("reqparamsid " + req.params.id);
 
-        Mongo.findQuestions('_id', questionId).then(function success(data) {
-
-            console.log(data);
+        Mongo.findQuestionById(questionId).then(function success(data) {
             var questionFields = ['name', '_id'];
-            var questionDetails = API.selectFields(data[0], questionFields);
+            var questionDetails = API.selectFields(data, questionFields);
 
-            console.log(questionDetails);
             Mongo.findResults('questionId', questionId).then(function success(data) {
                 var results = data;
 
@@ -407,13 +423,13 @@ var API = {
     },
 
     getCustomers: function(req, res, next) {
-        Mongo.findCustomers().then(function(data) {
+        Mongo.findCustomers().then(function success(data) {
             var selectedFields = ['name', '_id'];
             var customers = data.map(function(customer) {
                 return API.selectFields(customer, selectedFields);
             });
 
-            res.send(200, customers);
+            res.send(200, {customers: customers});
             return next();
         }, function(error) {
             return next(error);
@@ -424,10 +440,10 @@ var API = {
     getCustomerDetails: function(req, res, next) {
         var customerId = req.params.id;
 
-        Mongo.findCustomers('_id', customerId).then(function(data) {
+        Mongo.findCustomerById(customerId).then(function success(data) {
 
             var customerFields = ['name', '_id'];
-            var customerDetails = API.selectFields(data[0], customerFields);
+            var customerDetails = API.selectFields(data, customerFields);
 
             Mongo.findTargets('customerId', customerId).then(function(data) {
                 var targetFields = ['name', '_id'];
@@ -449,9 +465,9 @@ var API = {
     getQuestionDetails: function(req, res, next) {
         var questionId = req.params.id;
 
-        Mongo.findQuestions('_id', questionId).then(function(data) {
+        Mongo.findQuestionById(questionId).then(function(data) {
             var questionFields = ['_id', 'name', 'targetId'];
-            var questionDetails = API.selectFields(data[0], questionFields);
+            var questionDetails = API.selectFields(data, questionFields);
 
             res.send(200, {question: questionDetails});
             return next();

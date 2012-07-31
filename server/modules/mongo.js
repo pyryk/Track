@@ -327,6 +327,16 @@ var Mongo = {
         return promise;
     },
 
+    findQuestionById: function(id) {
+        var promise = Promise();
+
+        this.Question.findById(id, function(error, data) {
+           Mongo.resolvePromise(error, data, promise);
+        }.bind(this));
+
+        return promise;
+    },
+
     findResults: function(field, value) {
         var promise = Promise();
 
@@ -338,6 +348,16 @@ var Mongo = {
 
         query.exec(function(error, data) {
             this.resolvePromise(error, data, promise)
+        }.bind(this));
+
+        return promise;
+    },
+
+    findResultById: function(id) {
+        var promise = Promise();
+
+        this.Result.findById(id, function(error, data) {
+            Mongo.resolvePromise(error, data, promise);
         }.bind(this));
 
         return promise;
@@ -434,6 +454,16 @@ var Mongo = {
         return promise;
     },
 
+    findCustomerById: function(id) {
+        var promise = Promise();
+
+        this.Customer.findById(id, function(error, data) {
+            Mongo.resolvePromise(error, data, promise);
+        }.bind(this));
+
+        return promise;
+    },
+
     createCustomer: function(params) {
         var promise = Promise();
         var customer = new this.Customer();
@@ -447,6 +477,38 @@ var Mongo = {
 
         return promise;
     },
+
+    deleteCustomer: function(customer) {
+
+        var promise = Promise();
+
+        customer.remove(function(error) {
+            Mongo.resolvePromise(error, promise)
+        }.bind(this));
+
+        return promise;
+
+    },
+
+    deleteCustomerById: function(customerId) {
+
+        var promise = Promise();
+
+        Mongo.findCustomers('_id', customerId).then(function(data) {
+            if(!data) {
+                Mongo.resolvePromise(new restify.ResourceNotFoundError("Could not find customer with ID " + customerId)
+                    , data, promise);
+            } else {
+                var customer = data[0];
+                Mongo.deleteCustomer(customer).then(function error(err) {
+                    Mongo.resolvePromise(err, customer, promise);
+                })
+            }
+        });
+
+        return promise;
+    },
+
 
     createQuestion: function(params) {
         var promise = Promise();
@@ -462,6 +524,38 @@ var Mongo = {
 
         return promise;
     },
+
+    deleteQuestion: function(question) {
+
+        var promise = Promise();
+
+        question.remove(function(error) {
+            Mongo.resolvePromise(error, promise)
+        }.bind(this));
+
+        return promise;
+
+    },
+
+    deleteQuestionById: function(questionId) {
+
+        var promise = Promise();
+
+        Mongo.findQuestions('_id', questionId).then(function(data) {
+            if(!data) {
+                Mongo.resolvePromise(new restify.ResourceNotFoundError("Could not find question with ID " + questionId)
+                    , data, promise);
+            } else {
+                var question = data[0];
+                Mongo.deleteQuestion(question).then(function error(err) {
+                    Mongo.resolvePromise(err, question, promise);
+                })
+            }
+        });
+
+        return promise;
+    },
+
 
     resolvePromise: function(error) {
         var data, promise;
