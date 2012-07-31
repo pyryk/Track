@@ -52,7 +52,7 @@ var API = {
         this.get("/questions/:id", this.getQuestionDetails, false);
 
         this.post("/targets", this.postTarget, false);
-        this.post("questions/:id/results", this.postResult, false);
+        this.post("/questions/:id/results", this.postResult, false);
         this.post("/customers", this.postCustomer, false);
         this.post("/questions", this.postQuestion, false);
 
@@ -128,6 +128,67 @@ var API = {
         return API.staticFileServer(req, res, next);
     },
 
+    getCustomers: function(req, res, next) {
+        Mongo.findCustomers().then(function success(data) {
+            var selectedFields = ['name', '_id'];
+            var customers = data.map(function(customer) {
+                return API.selectFields(customer, selectedFields);
+            });
+
+            res.send(200, {customers: customers});
+            return next();
+        }, function(error) {
+            return next(error);
+        });
+    },
+
+    getCustomerDetails: function(req, res, next) {
+        var customerId = req.params.id;
+
+        Mongo.findCustomerById(customerId).then(function success(data) {
+
+            var customerFields = ['name', '_id'];
+            var customerDetails = API.selectFields(data, customerFields);
+
+            Mongo.findTargets('customerId', customerId).then(function(data) {
+                var targetFields = ['name', '_id'];
+                var targets = data.map(function(targets) {
+                    return API.selectFields(targets, targetFields);
+                });
+
+                customerDetails.targets = targets;
+
+                res.send(200, {customer: customerDetails});
+                return next();
+            });
+
+        }, function(error) {
+            return next(error);
+        });
+    },
+
+    postCustomer: function(req, res, next) {
+        var customer = req.params;
+        Mongo.createCustomer(customer).then(function success(createCustomerResult) {
+            var id = createCustomerResult;
+            res.send(201, {_id: id});
+            return next();
+        }, function error(err) {
+            return next(err);
+        });
+    },
+
+    deleteCustomer: function(req, res, next) {
+
+        Mongo.deleteCustomerById(req.params.id).then(function success() {
+            res.send(204);
+            return next();
+        }, function error(err) {
+            return next(err);
+        });
+
+    },
+
     getTargets: function(req, res, next) {
         var rel = API.rel;
         var debugging = req.headers['debug'] === 'true';
@@ -167,6 +228,194 @@ var API = {
         }, function(error) {
             return next(error);
         });
+    },
+
+    getTargetDetails: function(req, res, next) {
+        var targetId = req.params.id;
+
+        Mongo.findTargetById(targetId).then(function success(data) {
+            if(data == null) {
+                return next(new restify.ResourceNotFoundError("Could not find target with ID " + targetId));
+            }
+
+            // Filter
+            var target = API.selectFields(data, ['name', 'customerId', '_id', 'questionType', 'showQuestionComment']);
+
+            Mongo.findQuestions('targetId', targetId).then(function success(data) {
+                var questionFields = ['name', '_id'];
+                var questions = data.map(function(questions) {
+                    return API.selectFields(questions, questionFields);
+                });
+
+                target.questions = questions;
+
+                res.send(200, {target: target});
+                return next();
+            });
+        }, function(error) {
+            return next(error);
+        });
+    },
+
+    postTarget: function(req, res, next) {
+        var target = req.params;
+        var questions = req.params.questions;
+
+        Mongo.createTarget(target).then(function success(createTargetResult) {
+            // Create questions if present
+            if (questions) {
+                for (var i in questions) {
+                    questions[i].targetId = createTargetResult;
+                    Mongo.createQuestion(questions[i]), function(error) {
+                        Mongo.resolvePromise(error, id, promise);
+                    };
+                }
+            }
+
+            var id = createTargetResult;
+            res.send(201, {_id: id});
+            return next();
+        }, function error(err) {
+            return next(err);
+        });
+
+    },
+
+    deleteTarget: function(req, res, next) {
+
+        Mongo.deleteTargetById(req.params.id).then(function success() {
+            res.send(204);
+            return next();
+        }, function error(err) {
+            return next(err);
+        });
+
+    },
+
+    getQuestionDetails: function(req, res, next) {
+        var questionId = req.params.id;
+
+        Mongo.findQuestionById(questionId).then(function(data) {
+            var questionFields = ['_id', 'name', 'targetId'];
+            var questionDetails = API.selectFields(data, questionFields);
+
+            res.send(200, {question: questionDetails});
+            return next();
+        }, function(error) {
+            return next(error);
+        });
+    },
+
+    postQuestion: function(req, res, next) {
+        var question = req.params;
+        Mongo.createQuestion(question).then(function success(createQuestionResult) {
+            var id = createQuestionResult;
+            res.send(201, {_id: id});
+            return next();
+        }, function error(err) {
+            return next(err);
+        });
+    },
+
+    deleteQuestion: function(req, res, next) {
+
+        Mongo.deleteQuestionById(req.params.id).then(function success() {
+            res.send(204);
+            return next();
+        }, function error(err) {
+            return next(err);
+        });
+
+    },
+
+    getResults: function(req, res, next) {
+        var debugging = req.headers['debug'] === 'true';
+        var questionId = req.params.id;
+
+        Mongo.findQuestionById(questionId).then(function success(data) {
+            var questionFields = ['name', '_id'];
+            var questionDetails = API.selectFields(data, questionFields);
+
+            Mongo.findResults('questionId', questionId).then(function success(data) {
+                var results = data;
+
+                // Aggregate
+                var aggregatedResults = API.aggregateResults(results);
+
+
+                if(aggregatedResults) {
+                    results = aggregatedResults;
+                }
+
+                if(debugging) {
+                    results.all = results;
+                }
+
+                questionDetails.results = results;
+
+                res.send(200, {question: questionDetails});
+                return next();
+
+            });
+
+        }, function(error) {
+            return next(error);
+        });
+
+    },
+
+    postResult: function(req, res, next) {
+        var result = {
+            questionId: req.params.id,
+            value: req.params.value,
+            textComment: req.params.textComment,
+            resultId: req.params.resultId
+        };
+        var fbUserId = req.authorization ? req.authorization.fbUserId : null;
+        var isAuthorized = !!fbUserId;
+        var promises = [];
+
+        if(isAuthorized) {
+            result.fbUserId = fbUserId;
+        }
+
+        var loc = req.params.location
+        if(req.params.location) {
+            result.location = {lat: loc.lat, lon: loc.lon};
+        }
+
+        // Add result
+        if (!req.params.resultId) {
+            promises.push(Mongo.addResult(result));
+        } else {
+            promises.push(Mongo.updateResult(result));
+        }
+
+        // Add points
+        if(isAuthorized) {
+            promises.push(Mongo.addPoints(fbUserId, 1));
+        }
+
+        // All ready
+        p.all(promises).then(function success(addResultData) {
+            var id = addResultData[0]
+            res.send(201, {_id: id});
+            return next();
+        }, function error(error) {
+            return next(error);
+        });
+    },
+
+    updateResult: function(req, res, next) {
+        var updatedFields = ['textComment'];
+
+        Mongo.updateResult(req.params, updatedFields).then(function success(data) {
+            res.send(204);
+
+        }, function(error) {
+            return next(error);
+        })
+
     },
 
     aggregateResults: function(results) {
@@ -246,258 +495,6 @@ var API = {
 
         return {alltime: alltimeResults, now: nowResults};
     },
-
-    getTargetDetails: function(req, res, next) {
-        var targetId = req.params.id;
-
-        Mongo.findTargetById(targetId).then(function success(data) {
-            if(data == null) {
-                return next(new restify.ResourceNotFoundError("Could not find target with ID " + targetId));
-            }
-
-            // Filter
-            var target = API.selectFields(data, ['name', '_id', 'questionType', 'showQuestionComment']);
-
-            Mongo.findQuestions('targetId', targetId).then(function success(data) {
-                var questionFields = ['name', '_id'];
-                var questions = data.map(function(questions) {
-                    return API.selectFields(questions, questionFields);
-                });
-
-                target.questions = questions;
-
-                res.send(200, {target: target});
-                return next();
-            });
-        }, function(error) {
-            return next(error);
-        });
-    },
-
-    postTarget: function(req, res, next) {
-        var target = req.params;
-        var questions = req.params.questions;
-
-        Mongo.createTarget(target).then(function success(createTargetResult) {
-            // Create questions if present
-            if (questions) {
-                for (var i in questions) {
-                    questions[i].targetId = createTargetResult;
-                    Mongo.createQuestion(questions[i]), function(error) {
-                        Mongo.resolvePromise(error, id, promise);
-                    };
-                }
-            }
-
-            var id = createTargetResult;
-            res.send(201, {_id: id});
-            return next();
-        }, function error(err) {
-            return next(err);
-        });
-
-    },
-
-    deleteTarget: function(req, res, next) {
-
-        Mongo.deleteTargetById(req.params.id).then(function success() {
-            res.send(204);
-            return next();
-        }, function error(err) {
-            return next(err);
-        });
-
-    },
-
-    deleteQuestion: function(req, res, next) {
-
-        Mongo.questionById(req.params.id).then(function success() {
-            res.send(204);
-            return next();
-        }, function error(err) {
-            return next(err);
-        });
-
-    },
-
-    deleteCustomer: function(req, res, next) {
-
-        Mongo.deleteCustomerById(req.params.id).then(function success() {
-            res.send(204);
-            return next();
-        }, function error(err) {
-            return next(err);
-        });
-
-    },
-
-
-    postResult: function(req, res, next) {
-        var result = {
-            questionId: req.params.id,
-            value: req.params.value,
-            textComment: req.params.textComment,
-            resultId: req.params.resultId
-        };
-        var fbUserId = req.authorization ? req.authorization.fbUserId : null;
-        var isAuthorized = !!fbUserId;
-        var promises = [];
-
-        if(isAuthorized) {
-            result.fbUserId = fbUserId;
-        }
-
-        var loc = req.params.location
-        if(req.params.location) {
-            result.location = {lat: loc.lat, lon: loc.lon};
-        }
-
-        // Add result
-        if (!req.params.resultId) {
-            promises.push(Mongo.addResult(result));
-        } else {
-            promises.push(Mongo.updateResult(result));
-        }
-
-        // Add points
-        if(isAuthorized) {
-            promises.push(Mongo.addPoints(fbUserId, 1));
-        }
-
-        // All ready
-        p.all(promises).then(function success(addResultData) {
-            var id = addResultData[0]
-            res.send(201, {_id: id});
-            return next();
-        }, function error(error) {
-            return next(error);
-        });
-    },
-
-    updateResult: function(req, res, next) {
-        var updatedFields = ['textComment'];
-
-        Mongo.updateResult(req.params, updatedFields).then(function success(data) {
-            res.send(204);
-
-        }, function(error) {
-            return next(error);
-        })
-
-    },
-
-    getResults: function(req, res, next) {
-        var debugging = req.headers['debug'] === 'true';
-        var questionId = req.params.id;
-
-        Mongo.findQuestionById(questionId).then(function success(data) {
-            var questionFields = ['name', '_id'];
-            var questionDetails = API.selectFields(data, questionFields);
-
-            Mongo.findResults('questionId', questionId).then(function success(data) {
-                var results = data;
-
-                // Aggregate
-                var aggregatedResults = API.aggregateResults(results);
-
-
-                if(aggregatedResults) {
-                    results = aggregatedResults;
-                }
-
-                if(debugging) {
-                    results.all = results;
-                }
-
-                questionDetails.results = results;
-
-                res.send(200, {question: questionDetails});
-                return next();
-
-            });
-
-        }, function(error) {
-            return next(error);
-        });
-
-    },
-
-    getCustomers: function(req, res, next) {
-        Mongo.findCustomers().then(function success(data) {
-            var selectedFields = ['name', '_id'];
-            var customers = data.map(function(customer) {
-                return API.selectFields(customer, selectedFields);
-            });
-
-            res.send(200, {customers: customers});
-            return next();
-        }, function(error) {
-            return next(error);
-        });
-
-    },
-
-    getCustomerDetails: function(req, res, next) {
-        var customerId = req.params.id;
-
-        Mongo.findCustomerById(customerId).then(function success(data) {
-
-            var customerFields = ['name', '_id'];
-            var customerDetails = API.selectFields(data, customerFields);
-
-            Mongo.findTargets('customerId', customerId).then(function(data) {
-                var targetFields = ['name', '_id'];
-                var targets = data.map(function(targets) {
-                   return API.selectFields(targets, targetFields);
-                });
-
-                customerDetails.targets = targets;
-
-                res.send(200, {customer: customerDetails});
-                return next();
-            });
-
-        }, function(error) {
-            return next(error);
-        });
-    },
-
-    getQuestionDetails: function(req, res, next) {
-        var questionId = req.params.id;
-
-        Mongo.findQuestionById(questionId).then(function(data) {
-            var questionFields = ['_id', 'name', 'targetId'];
-            var questionDetails = API.selectFields(data, questionFields);
-
-            res.send(200, {question: questionDetails});
-            return next();
-        }, function(error) {
-            return next(error);
-        });
-    },
-
-    postCustomer: function(req, res, next) {
-        var customer = req.params;
-        Mongo.createCustomer(customer).then(function success(createCustomerResult) {
-            var id = createCustomerResult;
-            res.send(201, {_id: id});
-            return next();
-        }, function error(err) {
-            return next(err);
-        });
-    },
-
-    postQuestion: function(req, res, next) {
-        var question = req.params;
-        Mongo.createQuestion(question).then(function success(createQuestionResult) {
-            var id = createQuestionResult;
-            res.send(201, {_id: id});
-            return next();
-        }, function error(err) {
-            return next(err);
-        });
-    },
-
 
     getLogin: function(req, res, next) {
         var body = req.authorization;
