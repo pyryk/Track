@@ -286,15 +286,26 @@ var Mongo = {
 
 
     // Fixed for textComment. Should be reimplemented.
-    updateResult: function(params) {
+    updateResult: function(params, updatedFields) {
       var promise = Promise();
 
-      this.findResults('_id', params.resultId).then(function success(foundResult) {
-          foundResult.textComment = params.textComment;
-          foundResult.save(function(error) {
-              var id = foundResult._id;
-              Mongo.resolvePromise(error, id, promise);
-          }.bind(this));
+      this.findResults('_id', params.id).then(function success(data) {
+          var foundResult = data[0];
+
+          if(!foundResult) {
+              Mongo.resolvePromise(new restify.ResourceNotFoundError(
+                  "Could not find result with ID " + params.id)
+                  , data, promise);
+          } else {
+              for (var i in updatedFields) {
+                  foundResult[updatedFields[i]] = params[updatedFields[i]];
+              }
+
+              foundResult.save(function(error) {
+                  var id = foundResult._id;
+                  Mongo.resolvePromise(error, id, promise);
+              }.bind(this));
+          }
       })
 
         return promise;
