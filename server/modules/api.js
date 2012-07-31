@@ -52,9 +52,11 @@ var API = {
         this.get("/questions/:id", this.getQuestionDetails, false);
 
         this.post("/targets", this.postTarget, false);
-        this.post("/results/:questionId", this.postResult, false);
+        this.post("questions/:id/results", this.postResult, false);
         this.post("/customers", this.postCustomer, false);
         this.post("/questions", this.postQuestion, false);
+
+        this.put("/results/:id", this.updateResult, false);
 
         this.del("/targets/:id", this.deleteTarget, false);
 
@@ -310,7 +312,7 @@ var API = {
 
     postResult: function(req, res, next) {
         var result = {
-            questionId: req.params.questionId,
+            questionId: req.params.id,
             value: req.params.value,
             textComment: req.params.textComment,
             resultId: req.params.resultId
@@ -349,6 +351,18 @@ var API = {
         }, function error(error) {
             return next(error);
         });
+    },
+
+    updateResult: function(req, res, next) {
+        var updatedFields = ['textComment'];
+
+        Mongo.updateResult(req.params, updatedFields).then(function success(data) {
+            res.send(204);
+
+        }, function(error) {
+            return next(error);
+        })
+
     },
 
     getResults: function(req, res, next) {
