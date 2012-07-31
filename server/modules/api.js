@@ -56,7 +56,7 @@ var API = {
         this.post("/customers", this.postCustomer, false);
         this.post("/questions", this.postQuestion, false);
 
-        this.put("/results/:id", this.updateResult, false);
+        this.put("/results/:id", this.addTextComment, false);
 
         this.del("/targets/:id", this.deleteTarget, false);
         this.del("/questions/:id", this.deleteQuestion, false);
@@ -368,8 +368,7 @@ var API = {
         var result = {
             questionId: req.params.id,
             value: req.params.value,
-            textComment: req.params.textComment,
-            resultId: req.params.resultId
+            textComment: req.params.textComment
         };
         var fbUserId = req.authorization ? req.authorization.fbUserId : null;
         var isAuthorized = !!fbUserId;
@@ -385,12 +384,7 @@ var API = {
         }
 
         // Add result
-        if (!req.params.resultId) {
-            promises.push(Mongo.addResult(result));
-        } else {
-            promises.push(Mongo.updateResult(result));
-        }
-
+        promises.push(Mongo.addResult(result));
         // Add points
         if(isAuthorized) {
             promises.push(Mongo.addPoints(fbUserId, 1));
@@ -406,10 +400,20 @@ var API = {
         });
     },
 
-    updateResult: function(req, res, next) {
+    addTextComment: function(req, res, next) {
         var updatedFields = ['textComment'];
+        var fbUserId = req.authorization ? req.authorization.fbUserId : null;
+        var isAuthorized = !!fbUserId;
+        var promises = [];
 
-        Mongo.updateResult(req.params, updatedFields).then(function success(data) {
+        // Add two points for a comment
+        if(isAuthorized) {
+            promises.push(Mongo.addPoints(fbUserId, 2));
+        }
+
+        promises.push(Mongo.updateResult(req.params, updatedFields));
+
+        p.all(promises).then(function success(data) {
             res.send(204);
 
         }, function(error) {
