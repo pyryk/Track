@@ -3,10 +3,10 @@
 var BaseController = Spine.Controller.sub({
   init: function() {
     this.rawTemplate = this.template;
-    
     this.titlebar = $('#main-title');
     this.header = $('#header');
-    
+    this.button_one = $('#back-button');
+    this.button_two = $('#account-button');
     if (this.rawTemplate && this.rawTemplate.length > 0) {
       this.template = Handlebars.compile(this.rawTemplate.html());
     }
@@ -21,11 +21,14 @@ var BaseController = Spine.Controller.sub({
       if (data.title) {
         this.titlebar.text(data.title);
       }
-      /*if (data.customizationClass) {
-        console.log(data.customizationClass)
+      if (data.customizationClass) {
+        this.header.removeClass();
+        this.button_one.removeClass();
+        this.button_two.removeClass();
         this.header.addClass(data.customizationClass);
-        this.titlebar.addClass(data.customizationClass);
-      }*/
+        this.button_one.addClass(data.customizationClass + "-button");
+        this.button_two.addClass(data.customizationClass + "-button");
+      }
       this.addFastButtons();
     }
   },
@@ -59,11 +62,10 @@ var CustomersList = BaseController.sub({
   },
   getData: function() {
     var items = Customer.findAllByAttribute("saved", true);
-    return {items: items, title: 'tracktive'};
+    return {items: items, title: 'tracktive', customizationClass: 'tracktive'};
   },
   init: function() {
     BaseController.prototype.init.call(this);
-    // load list (without location data) even when no location gotten
     this.loadList();
     Customer.bind("create", this.proxy(this.addOne));
     Spine.bind('location:changed', this.proxy(this.locationChanged));
@@ -74,7 +76,6 @@ var CustomersList = BaseController.sub({
   locationChanged: function(location) {
     // TODO update list also when list is not visible
     if (window.track.visiblePage == this) {
-      log('location changed - reloading target list');
       this.loadList({lat: location.lat, lon: location.lon});
     }
   },
@@ -84,11 +85,10 @@ var CustomersList = BaseController.sub({
     }
   },
   clickedCustomer: function(e) {
-    var el = $(e.target);
-    var id = el.attr('data-id');
+    var id = $(e.target).attr('data-id');
     if (id) {
-      var customer = Customer.find(id);
-      Spine.Route.navigate(App.getRoute(customer));
+      Customer.loadCustomer(id);
+      Spine.Route.navigate("!/customers/" + id);
     }
   },
   /* List search using jQuery-example */
@@ -119,44 +119,37 @@ var TargetsList = BaseController.sub({
     ".targets": "targets"
   },
   events: {
-    "click #target-list li": "clicked",
+    "fastclick #target-list li": "clicked",
     "keyup #search-target-input": "searchTarget"
   },
   getTitle: function() {
     return "List";
   },
+  init: function() {
+    BaseController.prototype.init.call(this);
+    Spine.bind('location:changed', this.proxy(this.locationChanged));
+    Spine.bind('location:error', this.proxy(this.locationChanged));
+    Customer.bind("create update", this.proxy(this.customerUpdated));
+  },
   getData: function() {
-    var customer, customClass, title;
-    if (this.id == null) {
-      // FIXME redirect to the customer page
-      var items = Target.findAllByAttribute("saved", true);
+    var customer, customClass, title, items;
+    if (this.id == undefined) {
+      Spine.Route.navigate("!/customers/");
     } else {
       try {
         customer = Customer.find(this.id);
         customClass = customer.name.toLowerCase().replace(/'/g,"");
         title = customer.name;
+        items = customer.targets;
       } catch (e) {
         console.log("Error", e);
-        Customer.loadList(); // TODO load only this customer
+        Customer.loadCustomer(this.id);
       }
-      var items = Target.findAllByAttribute("customerId", this.id);
-      
     }
     return {items: items, title: title, customizationClass: customClass};
   },
   render: function() {
     BaseController.prototype.render.apply(this);
-  },
-  init: function() {
-    BaseController.prototype.init.call(this);
-    Spine.bind('location:changed', this.proxy(this.locationChanged));
-
-    // load list (without location data) even when no location gotten
-    Spine.bind('location:error', this.proxy(this.locationChanged));
-    this.loadList();
-    Target.bind("create", this.proxy(this.addOne));
-    Customer.bind("create update", this.proxy(this.customerUpdated));
-
   },
   customerUpdated: function(customer) {
     if (customer.id == this.id) {
@@ -164,27 +157,18 @@ var TargetsList = BaseController.sub({
     }
   },
   loadList: function(additionalData) {
-    Target.loadList(additionalData);
-  },
-  addOne: function(task){
-    if (window.track.visiblePage == this) {
-      this.render();
-    }
+    Customer.loadCustomer(this.id, additionalData);
   },
   locationChanged: function(location) {
-    // TODO update list also when list is not visible
     if (window.track.visiblePage == this) {
       this.loadList({lat: location.lat, lon: location.lon});
     }
   },
   clicked: function(e) {
-    var el = $(e.target);
-    var id = el.attr('data-id');
+    var id = $(e.target).attr('data-id');
     if (id) {
-      var target = Target.find(id);
-      Spine.Route.navigate(App.getRoute(target));
-    } else if (el.hasClass("create-new")) {
-      Spine.Route.navigate(App.getRoute("create_target"));
+      Target.loadDetails(id);
+      Spine.Route.navigate("!/targets/" + id);
     }
   },
   /* List search using jQuery-example */
@@ -275,22 +259,16 @@ var TargetDetails = BaseController.sub({
       try {
         customerName = Customer.find(target.customerId).name
       } catch(e) {
-        Customer.loadCustomer(target.customerId);
+        if (target.customerId) Customer.loadCustomer(target.customerId);
+        console.log(e);
       }
     } catch (e) { // unknown record
       // try to load record
-      Target.loadList(this.id);
+      Target.loadDetails(this.id);
       error = e;
     }
-    return {
-      name: name, 
-      points: points, 
-      type: type, 
-      items: items, 
-      showQuestionComment: showQuestionComment, 
-      target: target, 
-      error: error,
-      title: customerName};
+    console.log(target);
+    return {name: name,points: points,type: type,items: items,showQuestionComment: showQuestionComment,target: target,error: error,title: customerName};
   },
   error: function(reason) {
     if (reason == "notfound") {
@@ -298,28 +276,18 @@ var TargetDetails = BaseController.sub({
     }
   },
   targetUpdated: function(target) {
-    if (target.targetId === this.id && window.track.visiblePage == this) {
+    if (target.id === this.id && window.track.visiblePage == this) {
       this.render();
     }
   },
   customerUpdated: function(customer) {
     try {
-      target = Target.find(this.id);
+      var target = Target.find(this.id);
       if (customer.id === target.customerId && window.track.visiblePage == this) {
         this.render();
       }
     } catch(e) {
       console.log(e);
-    }
-  },
-  answerSaved: function(answer, success) {
-    if (success) {
-      //this.viewResults();
-      //Spine.Route.navigate(App.getRoute(Target.find(this.id)) + "/results");
-      // uncomment to show thanks view
-      // Spine.Route.navigate(App.getRoute(answer));
-    } else {
-      console.log("Answer not saved!");
     }
   },
   saveAnswer: function(value, id) {
@@ -328,36 +296,30 @@ var TargetDetails = BaseController.sub({
       value: value,
       location: window.track.location
     });
-    result.bind('resultSent', this.proxy(this.answerSaved));
-    var user = User.getUser();
     result.post();
   },
   loadAnswer: function(e, value) {
+    var id = $(e.target).attr('data-id');
     var user = User.getUser();
     user.points += 1;
     user.save();
-    var id = $(e.target).attr('data-id');
     var questionItem = QuestionItem.find(id);
     questionItem.done = true;
     questionItem.loadResults(questionItem.id);
     questionItem.save();
-    var target;
-    var list = Target.findAllByAttribute("saved", true);
-    for (var i in list) {
-      for (var j in list[i].questions) {
-        if (list[i].questions[j].questionId == questionItem.questionId) {
-          target = list[i];
-        }
-      }
-    }
 
-    if (target.getShowQuestionComment() && questionItem.showComment) {
-      this.html(this.template(this.getData()));
-      this.addFastButtons();
-      questionItem.showComment = false;
-    } else {
-      this.html(this.template(this.getData()));
-      this.addFastButtons();
+    try {
+      var target = Target.find(this.id);
+      if (target.getShowQuestionComment() && questionItem.showComment) {
+        this.html(this.template(this.getData()));
+        this.addFastButtons();
+        questionItem.showComment = false;
+      } else {
+        this.html(this.template(this.getData()));
+        this.addFastButtons();
+      }
+    } catch(e) {
+      console.log(e + " loadAnswer FAIL");
     }
     this.saveAnswer(value, questionItem.id);
   },
@@ -374,20 +336,21 @@ var TargetDetails = BaseController.sub({
     this.loadAnswer(e, -2);
   },
   sendMessage: function(e) {
+    var id = $(e.target).attr('data-id');
+    console.log(id);
     var user = User.getUser();
     user.points += 3;
     user.save();
-    var el = $(e.target);
-    var id = el.attr('data-id');
+    console.log(user);
     var textAreaElements = document.getElementsByClassName("styled");
     for (var i = 0; i < textAreaElements.length; i++) {
       if (id == textAreaElements[i].getAttribute('data-id')) {
         var text = textAreaElements[i].value;
         var questionItem = QuestionItem.find(id);
         var resultItem = Result.create({questionItem: questionItem, textComment: text, location: window.track.location});
-//        resultItem.bind('resultSent', this.proxy(this.answerSaved));
+        resultItem.bind('resultSent', this.proxy(this.updateResults()));
         var user = User.getUser();
-        resultItem.post();
+        resultItem.put();
         questionItem.done = true;
         questionItem.showComment = false;
         questionItem.save();
@@ -396,16 +359,23 @@ var TargetDetails = BaseController.sub({
       }
     }
   },
+  updateResults: function() {
+    this.html(this.template(this.getData()));
+    this.addFastButtons();
+  },
   textArea: function(e) {
     var el = $(e.target);
     var id = el.attr('data-id');
-    console.log(el);
   },
   viewResults: function(e) {
     var el = $(e.target);
     var id = el.attr('data-id');
-    var questionItem = QuestionItem.find(id);
-    var route = "!/questions/" + questionItem.questionId + "/results";
+    try {
+      var questionItem = QuestionItem.find(id);
+    } catch(e) {
+      console.log(e);
+    }
+    var route = "!/questions/" + questionItem.id + "/results";
     Spine.Route.navigate(route);
 
     if (questionItem.showResults) {
@@ -467,17 +437,16 @@ var QuestionResults = BaseController.sub({
   },
   getData: function() {
     var data = {};
-    var questionItemList = QuestionItem.findAllByAttribute('questionId', this.id);
-    var questionItem;
-    for (var i in questionItemList) {
-      if (questionItemList[i].results != null) {
-        questionItem = questionItemList[i];
-      }
+    try {
+      var questionItem = QuestionItem.find(this.id);
+    } catch(e) {
+      console.log(e);
     }
+
     var targetList = Target.findAllByAttribute("saved",true);
     for (var i in targetList) {
       for (var j in targetList[i].questions) {
-        if (targetList[i].questions[j].questionId == questionItem.questionId) {
+        if (targetList[i].questions[j].id == questionItem.id) {
           data.name = targetList[i].name;
           continue;
         }
@@ -515,11 +484,7 @@ var QuestionResults = BaseController.sub({
 var Leaderboard = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
-
     LeaderboardEntry.bind('create update', this.proxy(this.entryAdded));
-
-    // update the list
-    //LeaderboardEntry.load();
   },
   show: function() {
     // update the list
@@ -557,9 +522,7 @@ var BackButton = BaseController.sub({
   },
   getData: function() {
     var showPrev = this.app.getPreviousPage() !== undefined && this.app.loginOk();
-    //var showPrev = true; // so that we are able to go customer page !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     var showHome = false;
-
     if (this.app.visiblePage === this.app.pages['customerList']) {
       showHome = false;
       showPrev = false;
@@ -572,13 +535,10 @@ var BackButton = BaseController.sub({
       showHome = true;
       showPrev = false;
     }
-
     return {previous: showPrev, home: showHome};
   },
   backClicked: function() {
     if (window.history.length > 0 && this.app.visiblePage !== this.app.pages['targetList'] && this.app.visiblePage !== this.app.pages['customerList']) {
-      //if (window.history.length > 0) {
-
       window.history.back();
     }
   },
@@ -620,17 +580,14 @@ var LoginScreen = BaseController.sub({
   },
   useRedirectURI: function() {
     var ua = navigator.userAgent;
-
     // no iphone, ipod or ipad => no redirect URI
     if (ua.indexOf('iPhone') == -1 && ua.indexOf('iPad') == -1 && ua.indexOf('iPod') == -1) {
       return false;
     }
-
     // ua contains safari => not homescreen app => no redirect URI
     if (ua.indexOf('Safari') > -1) {
       return false;
     }
-
     // ios but not safari => add redirect URI
     return true;
 

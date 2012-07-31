@@ -1,42 +1,23 @@
 /** =========================================== CUSTOMER ===================================================== */
 var Customer = Spine.Model.sub();
-Customer.configure("Customer", "logo", "name", "customerId", "saved");
-
-Customer.include({
-  getResourceName: function() {
-    return "customers";
-  },
-  getId: function() {
-    return this.customerId;
-  }
-});
+Customer.configure("Customer", "logo", "name", "targets", "saved");
 
 Customer.loadList = function(additionalData) {
   var url = App.serverURL;
   if (url.substring(url.length-1) !== "/") url += "/";
   url += "customers";
   var user = User.getUser();
-  var headers = {
-    'FB-UserId': user.name,
-    'FB-AccessToken': user.token
-  };
+  var headers = {'FB-UserId': user.name,'FB-AccessToken': user.token};
   var requestComplete = false;
   try {
     $.ajax({
-      url: url,
-      data: additionalData,
-      dataType: 'json',
-      timeout: 5000,
-      cache: false,
-      headers: user.logged ? headers : {},
+      url: url,data: additionalData,dataType: 'json',timeout: 5000,cache: false,headers: user.logged ? headers : {},
       success: function(data, status, jqXHR) {
         requestComplete = true;
-        for (var i in data.customers) {
-          var customer = data.customers[i];
+        for (var i in data) {
+          var customer = data[i];
           customer["id"] = customer["_id"]; // map mongo id
           customer["logo"] = "img/templogos/" + customer.name.toLowerCase().replace(' ', '-').replace('ä', 'a').replace('ö', 'o').replace('\'', '') + ".png";
-          // FIXME remove separate customerId
-          customer["customerId"] = customer["_id"]; // map mongo id
           customer["saved"] = true; // saved i.e. got from backend
           Customer.create(customer);
         }
@@ -62,25 +43,19 @@ Customer.loadList = function(additionalData) {
   }
 }
 
-Customer.loadCustomer = function(id) {
+Customer.loadCustomer = function(id, additionaldata) {
   var url = App.serverURL;
   if (url.substring(url.length-1) !== "/") url += "/";
-  url += "customers/";
-  url += id;
+  url += "customers/" + id;
   var requestComplete = false;
   try {
     $.ajax({
-      url: url,
-      dataType: 'json',
-      timeout: 5000,
-      cache: false,
+      url: url,dataType: 'json',data: additionaldata,timeout: 5000,cache: false,
       success: function(data, status, jqXHR) {
         requestComplete = true;
-        var customer = data.customers[0];
+        var customer = data.customer;
         customer["id"] = customer["_id"]; // map mongo id
         customer["logo"] = "img/templogos/" + customer.name.toLowerCase().replace(' ', '-').replace('ä', 'a').replace('ö', 'o').replace('\'', '') + ".png";
-        // FIXME remove separate customerId
-        customer["customerId"] = customer["_id"]; // map mongo id
         customer["saved"] = true; // saved i.e. got from backend
         Customer.create(customer);
       },
@@ -106,34 +81,12 @@ Customer.loadCustomer = function(id) {
 }
 
 /** =========================================== TARGET ======================================================= */
-/**
- * The track target, such as "Virgin Oil queue"
- */
 var Target = Spine.Model.sub();
-
-Target.configure("Target", "customerId", "targetId", "logo", "showLogo", "isLogo", "name", "questions", "questionType", "showQuestionComment", "location", "results", "detailsLoaded", "saved");
-// Target.configure("Target", "name", "questions", "detailsLoaded", "saved");
+Target.configure("Target", "customerId", "logo", "showLogo", "isLogo", "name", "questions", "questionType", "showQuestionComment", "location", "results", "detailsLoaded", "saved");
 
 Target.include({
-  setDefaults: function() {
-    this.results = this.results || {};
-
-    this.results.now = this.results.now || {};
-    this.results.now.pos = this.results.now.pos || 0;
-    this.results.now.neg = this.results.now.neg || 0;
-    this.results.now.trend = this.results.now.trend || 0;
-    this.results.now.period = this.results.now.period || 0;
-
-    this.results.alltime = this.results.alltime || {};
-    this.results.alltime.pos = this.results.alltime.pos || 0;
-    this.results.alltime.neg = this.results.alltime.neg || 0;
-
-  },
   getType: function() {
     return "target";
-  },
-  getResourceName: function() {
-    return "targets";
   },
   getQuestions: function() {
     return this.questions;
@@ -141,54 +94,28 @@ Target.include({
   getName: function() {
     return this.name;
   },
-  getQuestionType: function() {
-    return this.questionType;
-  },
   getShowQuestionComment: function() {
     return this.showQuestionComment;
   },
-  loadDetails: function(listener) {
-    Target.loadDetails(this.id, listener);
+  loadDetails: function(id, listener) {
+    Target.loadDetails(id, listener);
   },
-  getId: function() {
-    return this.targetId;
-  },
+  // For future....
   saveToServer: function() {
     var url = App.serverURL;
-
-    if (url.substring(url.length-1) !== "/") {
-      url += "/";
-    }
-    url += "target";
-
+    if (url.substring(url.length-1) !== "/") {url += "/";}
+    url += "targets";
     var user = User.getUser();
-    var headers = {
-      'FB-UserId': user.name,
-      'FB-AccessToken': user.token
-    };
-
-    // append the create location to the post
+    var headers = {'FB-UserId': user.name,'FB-AccessToken': user.token};
     var location = window.track.location;
-
-    var toSend = {
-      name: this.name,
-      questions: this.questions,
-      location: this.location
-    }
+    var toSend = {name: this.name,questions: this.questions,location: location}
     var data = JSON.stringify(toSend);
-
     $.ajax({
-      url: url,
-      type: "POST",
-      contentType: "application/json",
-      dataType: "json",
-      data: data,
-      headers: user.logged ? headers : {},
+      url: url,type: "POST",contentType: "application/json",dataType: "json",data: data,headers: user.logged ? headers : {},
       success: this.proxy(function(data) {
         this.id = data._id;
         this.saved = true;
         this.detailsLoaded = true;
-
         this.save();
         this.trigger("saveToServer", true);
       }),
@@ -203,121 +130,34 @@ Target.include({
   results: {}
 });
 
-Target.fromJSON = function(json) {
-  target = json;
-  
-  target["id"] = target["_id"]; // map mongo id
-  target["targetId"] = target["_id"]; // map mongo id
-  target["detailsLoaded"] = false; // target details are only loaded individually
-  target["saved"] = true; // saved i.e. got from backend
-  target["customerId"] = target.customerId;
-  target["showLogo"] = false;
-  var targetObject = Target.create(target);
-  
-  for (var j in target.questions) {
-    var questionItem = QuestionItem.create({name: target.questions[j].name, showComment: true, showResults: true, questionId: target.questions[j]._id});
-    targetObject.questions[j] = questionItem;
-    targetObject.save();
-  }
-  return targetObject;
-};
-
-/**
- * Loads a brief list of the track targets, containing only name and id
- * TODO: add more fields here, category/icon etc
- */
-Target.loadList = function(additionalData) {
-  var url = App.serverURL;
-  if (url.substring(url.length-1) !== "/") url += "/";
-  url += "targets";
-  var user = User.getUser();
-  var headers = {
-    'FB-UserId': user.name,
-    'FB-AccessToken': user.token
-  };
-
-  var requestComplete = false;
-  try {
-    $.ajax({
-      url: url,
-      dataType: 'json',
-      timeout: 5000,
-      data: additionalData,
-      cache: false,
-      headers: user.logged ? headers : {},
-      success: function(data, status, jqXHR) {
-        requestComplete = true;
-        for (var i in data.targets) {
-          var json = data.targets[i];
-          Target.fromJSON(json);
-        }
-      },
-      error: function(jqxhr, textStatus, error) {
-        log('error: ' + textStatus + ', ' + error);
-      }
-    });
-  } catch(e) {
-    log(e);
-  }
-
-  // workaround for android 2.3 bug: requests remain pending when loading the page from cache
-  var xmlHttpTimeout=setTimeout(ajaxTimeout,5000);
-  function ajaxTimeout(){
-    // if request not complete and no sinon (xhr mock lib) present
-    if (!requestComplete && !window.sinon) {
-      log("Request timed out - reloading the whole page");
-      //window.location.reload()
-    } else {
-      log("Request was completed");
-    }
-  }
-}
-
 Target.loadDetails = function(id, listener) {
   var url = App.serverURL;
-  if (url.substring(url.length-1) !== "/") {
-    url += "/";
-  }
-  url += "target/" + id;
-
+  if (url.substring(url.length-1) !== "/") url += "/";
+  url += "targets/" + id;
   var user = User.getUser();
   var headers = {
     'FB-UserId': user.name,
     'FB-AccessToken': user.token
   };
-
   $.ajax({
-    url: url,
-    dataType: 'json',
-    headers: user.logged ? headers : {},
+    url: url,dataType: 'json',timeout: 5000,cache: false,headers: user.logged ? headers : {},
     success: function(data, status, jqXHR) {
-      var targetData = data.target;
-      //targetData["id"] = targetData["_id"]; // map mongo id
-      //targetData["saved"] = true; // saved i.e. got from backend
-
-      try {
-        var target = Target.find(id);
-        target.questionType = targetData.questionType;
-
-
-        for (var j in targetData.questions) {
-          var questionItem;
-          if (targetData.showQuestionComment) {
-            questionItem = QuestionItem.create({name: targetData.questions[j].name, showComment: true, questionId: data.targets[i].questions[j]._id});
-          } else {
-            questionItem = QuestionItem.create({name: targetData.questions[j].name, questionId: data.targets[i].questions[j]._id});
-          }
-          questionItem.save();
-          target.questions[j] = questionItem;
-          target.save();
+      var target = data.target;
+      target["id"] = target._id; // map mongo id
+      target["customerId"] = target.customerId;
+      target["showLogo"] = false;
+      var targetObject = Target.create(target);
+      for (var i in targetObject.questions) {
+        if (targetObject.showQuestionComment) {
+           var questionItem = QuestionItem.create({name: targetObject.questions[i].name, showComment: true, id: targetObject.questions[i]._id, showResults: true});
+        } else {
+          var questionItem = QuestionItem.create({name: targetObject.questions[i].name, id: targetObject.questions[i]._id, showResults: true});
         }
-      } catch (e) { // target not found locally
-        target = Target.create(targetData);
-        console.log("exeption");
+        questionItem.save();
+        targetObject.questions[i] = questionItem;
       }
-      // mark details loaded (i.e. no need for loading spinner)
-      target.detailsLoaded = true;
-      target.save();
+      targetObject.detailsLoaded = true;
+      targetObject.save();
     },
     statusCode: {
       404: function() {
@@ -331,7 +171,7 @@ Target.loadDetails = function(id, listener) {
 
 /**
  * Creates a new Target from the create target form fields
- *
+ * For future...
  */
 Target.fromForm = function(form) {
   var fields = form.find('input, textarea');
@@ -339,8 +179,6 @@ Target.fromForm = function(form) {
   $(fields).each(function(i, field) {
     var $field = $(field);
     var name = $field.attr('name');
-
-    // form structures with field names containing __
     // e.g. metric__unit => metric["unit"]
     var nameParts = name.split("__");
     var fieldVal;
@@ -359,60 +197,52 @@ Target.fromForm = function(form) {
     }
   });
   var target = Target.create(data);
-  target.setDefaults();
   return target;
 }
 
 /** =========================================== RESULT ======================================================= */
 /* result (answer of the target question) */
 var Result = Spine.Model.sub();
-
 Result.configure("Result", "value", "timestamp", "location", "textComment", "questionItem", "saved");
 
 Result.include({
   getType: function() {
     return "result"
   },
-  getResourceName: function() {
-    return "results"
-  },
-  post: function() {
-    if (!this.questionItem) {
-      log("a result without target!", this);
-      return;
-    }
+  put: function() {
+    if (!this.questionItem) return;
     var url = App.serverURL;
-    var headers;
-    if (url.substring(url.length-1) !== "/") {
-      url += "/";
-    };
-    url += "results/" + this.questionItem.questionId;
-
+    if (url.substring(url.length-1) !== "/") url += "/results/";
+    url += this.questionItem.resultId;
     var user = User.getUser();
-    var headers = {
-      'FB-UserId': user.name,
-      'FB-AccessToken': user.token
-    };
-
-    var toSend = {
-      value: this.value,
-      textComment: this.textComment,
-      resultId: this.questionItem.resultId,
-      location: this.location
-    };
+    var headers = {'FB-UserId': user.name,'FB-AccessToken': user.token};
+    var toSend = {textComment: this.textComment,location: this.location};
     var data = JSON.stringify(toSend);
     $.ajax({
-      url: url,
-      type: "POST",
-      contentType: "application/json",
-      dataType: "json",
-      data: data,
-      headers: user.logged ? headers : {},
+      url: url,type: "PUT",contentType: "application/json",dataType: "json",data: data,headers: user.logged ? headers : {},
       success: this.proxy(function(data) {
         this.saved = true;
         this.save();
-
-        //this.target.loadDetails();
+      }),
+      error: this.proxy(function(jqxhr, status, err) {
+        alert(status + ': ' + err);
+      })
+    });
+  },
+  post: function() {
+    if (!this.questionItem) return;
+    var url = App.serverURL;
+    if (url.substring(url.length-1) !== "/") url += "/questions/";
+    url += this.questionItem.id + "/results/";
+    var user = User.getUser();
+    var headers = {'FB-UserId': user.name,'FB-AccessToken': user.token};
+    var toSend = {value: this.value,resultId: this.questionItem.resultId,location: this.location};
+    var data = JSON.stringify(toSend);
+    $.ajax({
+      url: url,type: "POST",contentType: "application/json",dataType: "json",data: data,headers: user.logged ? headers : {},
+      success: this.proxy(function(data) {
+        this.saved = true;
+        this.save();
         this.trigger("resultSent", true);
         this.questionItem.resultId = data._id;
         this.questionItem.save();
@@ -435,12 +265,7 @@ User.include({
     var user = User.getUser();
     user.name = $.cookie('fb_user');
     user.token = $.cookie('fb_token');
-
-    if (user.name && user.token) {
-      user.logged = true;
-      user.provider = "facebook";
-    }
-
+    if (user.name && user.token) {user.logged = true;user.provider = "facebook";}
     user.save();
   },
   /**
@@ -470,14 +295,10 @@ LeaderboardEntry.configure("LeaderboardEntry", "position", "name", "picture", "p
 
 LeaderboardEntry.load = function() {
   var url = App.serverURL;
-  if (url.substring(url.length-1) !== "/") {
-    url += "/";
-  }
+  if (url.substring(url.length-1) !== "/") url += "/";
   url += "leaderboard/";
-
   $.ajax({
-    url: url,
-    dataType: 'json',
+    url: url,dataType: 'json',
     success: function(data) {
       for (var i in data.users) {
         var user = data.users[i];
@@ -490,48 +311,21 @@ LeaderboardEntry.load = function() {
 
 /** =========================================== QUESTIONITEM ==================================================== */
 var QuestionItem = Spine.Model.sub();
-QuestionItem.configure("QuestionItem", "name", "done", "showComment", "questionId", "resultId", "results", "resultAllTime", "resultImage", "showResults");
+QuestionItem.configure("QuestionItem", "name", "done", "showComment", "id", "resultId", "results", "resultAllTime", "resultImage", "showResults");
 
 QuestionItem.include({
-  /*setDefaults: function() {
-    this.results = this.results || {};
-
-    this.results.now = this.results.now || {};
-    this.results.now.pos = this.results.now.pos || 0;
-    this.results.now.neg = this.results.now.neg || 0;
-    this.results.now.trend = this.results.now.trend || 0;
-    this.results.now.period = this.results.now.period || 0;
-
-    this.results.alltime = this.results.alltime || {};
-    this.results.alltime.pos = this.results.alltime.pos || 0;
-    this.results.alltime.neg = this.results.alltime.neg || 0;
-  },*/
-  getResourceName: function() {
-    return "questions"
-  },
-  getId: function() {
-    return this.questionId;
-  },
   loadResults: function(id) {
     var thisHolder = this;
     var url = App.serverURL;
-    if (url.substring(url.length-1) !== "/") {
-      url += "/";
-    }
-    url += "results/";
-    url += this.questionId;
-
+    if (url.substring(url.length-1) !== "/") url += "/questions/";
+    url += id + "/results";
     var requestComplete = false;
     try {
       $.ajax({
-        url: url,
-        dataType: 'json',
-        timeout: 5000,
-        cache: false,
-        headers: {},
+        url: url,dataType: 'json',timeout: 5000,cache: false,headers: {},
         success: function(data, status, jqXHR) {
           requestComplete = true;
-          thisHolder.results  = data.results;
+          thisHolder.results = data.question.results;
           if (thisHolder.results.alltime.neg + thisHolder.results.alltime.pos == 0) {
             thisHolder.results.alltime.neg = 1;
             thisHolder.results.alltime.pos = 1;
@@ -560,7 +354,6 @@ QuestionItem.include({
       // if request not complete and no sinon (xhr mock lib) present
       if (!requestComplete && !window.sinon) {
         log("Request timed out - reloading the whole page");
-        //window.location.reload()
       } else {
         log("Request was completed");
       }
@@ -568,6 +361,3 @@ QuestionItem.include({
   }
 })
 
-QuestionItem.saveResultAllTime = function(value) {
-  this.resultAllTime = value;
-};

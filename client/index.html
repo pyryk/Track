@@ -96,17 +96,15 @@
   {{error}}
   {{/if}}
   <ul class="primary-list" id="target-list" data-role="listview" data-inset="true">
-
-
     {{#each items}}
-      <li name="{{this.name}}" data-id="{{this.id}}">
+      <li name="{{this.name}}" data-id="{{this._id}}">
         {{#if showLogo}}
-        <img class="customer-list-image" data-id="{{this.id}}" src="{{this.logo}}" alt=""/>
-        <span data-id="{{this.id}}" class="customer-list-span">{{this.name}}</span>
+        <img class="customer-list-image" data-id="{{this._id}}" src="{{this.logo}}" alt=""/>
+        <span data-id="{{this._id}}" class="customer-list-span">{{this.name}}</span>
         {{else}}
-        <span data-id="{{this.id}}" class="target-list-span">{{this.name}}</span>
+        <span data-id="{{this._id}}" class="target-list-span">{{this.name}}</span>
         {{/if}}
-        <img class="customer-list-arrow" data-id="{{this.id}}" src="img/next.png" alt=""/>
+        <img class="customer-list-arrow" data-id="{{this._id}}" src="img/next.png" alt=""/>
       </li>
     {{/each}}
   <!--<li class="create-new"><span class="create-new text">Create a new target</span></li>-->

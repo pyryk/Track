@@ -15,12 +15,10 @@ $use-mozilla-ellipsis-binding: true;
 
 /* app specific styles
 * =================================================================================================================== */
-/* Defining the layout-profile, basically color-palette: frontpage, aalto, rosso, subway */
-$customer: "frontpage";
 
 /* Default template **/
 $header_gradient_1: lighten(#0F68A3, 20%);
-$header_gradient_2: #0F68A3;
+$header_gradient_2: lighten(#0F68A3, 5%);
 $header_text_color: #fff;
 $footer_color: rgba(100,100,100,1);
 $header_height: 46px;
@@ -31,90 +29,53 @@ $text_color: #606967;
 $list_item_gradient_1: #ffffff;
 $list_item_gradient_2: darken(#ffffff, 1%);
 
-/* Aalto-layout */
-  @if $customer == aalto {
-    $header_gradient_1: lighten(#FECB00, 20%);
-    $header_gradient_2: #FECB00;
-    $background_gradient_1: darken(#ffffff, 2%);
-    $background_gradient_2: #ffffff;
-    $list_item_gradient_1: #fdfdfd;
-    $list_item_gradient_2: darken(#fdfdfd, 3%);
-    $text_color: rgba(0,0,0,1);
+.tracktive {
+  @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
+  h1 {a:link, a:visited, a:active {color: $header_text_color;}}
+}
+.tracktive-button {
+  @include background-image(linear-gradient($header_gradient_2, $header_gradient_2));
+  &:active, &.fake-active {
+    //background-position: 0 -36px;
+    @include background-image(linear-gradient(darken($header_gradient_2, 3%), $header_gradient_2));
   }
-
-/* Track frontpage-layout */
-  @if $customer == frontpage {
-    $header_gradient_1: lighten(#0F68A3, 20%);
-    $header_gradient_2: lighten(#0F68A3, 5%);
-    $background_gradient_1: darken(#f6f6f6, 2%);
-    $background_gradient_2: #f6f6f6;
-    $list_item_gradient_1: #ffffff;
-    $list_item_gradient_2: darken(#ffffff, 1%);
-    $text_color: #606967;
-  }
-
-/* Rosso-layout */
-  @if $customer == rosso {
-    $header_gradient_1: #ffffff;
-    $header_gradient_2: #fdfdfd;
-    $background_gradient_1: #bd1627;
-    $background_gradient_2: #bd1627;
-  }
-
-/* Subway-layout */
-  @if $customer == subway {
-    $header_gradient_1: #009f4f;
-    $header_gradient_2: #009f4f;
-    $background_gradient_1: darken(#ffffff, 2%);
-    $background_gradient_2: #D9D9D9;
-  }
-
-/* NG-layout */
-  @if $customer == NG {
-    $header_gradient_1: #323232;
-    $header_gradient_2: #040404;
-    $background_gradient_1: darken(#fefefe, 7%);
-    $background_gradient_2: #fefefe;
-    $list_item_gradient_1: #ffffff;
-    $list_item_gradient_2: darken(#ffffff, 1%);
-    $text_color: #606967;
-  }
-
-/* MTV3-layout */
-  @if $customer == mtv3 {
-    $header_gradient_1: #323232;
-    $header_gradient_2: #040404;
-    $background_gradient_1: darken(#fefefe, 7%);
-    $background_gradient_2: #fefefe;
-    $list_item_gradient_1: #ffffff;
-    $list_item_gradient_2: darken(#ffffff, 1%);
-    $text_color: #606967;
-  }
-
-.aalto-yliopisto{
-  background-color: yellow;
-  color: black;
 }
 
-.hesburger #header{
-  background-color: green;
-  color: blue;
+.aalto-yliopisto {
+  @include background-image(linear-gradient(lighten(#FECB00, 20%), #FECB00));
+  h1 {a:link, a:visited, a:active {color: $header_text_color;}}
+}
+.aalto-yliopisto-button {
+  @include background-image(linear-gradient(lighten(#FECB00, 20%), #FECB00));
+  &:active, &.fake-active {@include background-image(linear-gradient(darken(lighten(#FECB00, 20%), 3%), #FECB00));}
 }
 
-.mtv3 #header{
-  background-color: black;
-  color: red;
+.hesburger {
+  @include background-image(linear-gradient(green, blue));
+  h1 {a:link, a:visited, a:active {color: red;}}
+}
+.hesburger-button {
+  @include background-image(linear-gradient(blue, green));
+  &:active, &.fake-active {@include background-image(linear-gradient(darken(blue, 3%), green));}
 }
 
-.mcdonalds{
-  background-color: red;
-  color: black;
+.mtv3 {
+  @include background-image(linear-gradient(#323232, #040404));
+  h1 {a:link, a:visited, a:active {color: $header_text_color;}}
 }
-/*
-.mcdonalds #header {
-  background-color: red;
-  color: black;
-}*/
+.mtv3-button {
+  @include background-image(linear-gradient(#040404, #323232));
+  &:active, &.fake-active {@include background-image(linear-gradient(darken(#040404, 3%), #323232));}
+}
+
+.mcdonalds {
+  @include background-image(linear-gradient(red, blue));
+  h1 {a:link, a:visited, a:active {color: white;}}
+}
+.mcdonalds-button {
+  @include background-image(linear-gradient(blue, red));
+  &:active, &.fake-active {@include background-image(linear-gradient(darken(blue, 3%), red));}
+}
 
 /* mixins elements
 * to re-use whole chunks of CSS, properties or selectors
@@ -161,11 +122,10 @@ $list_item_gradient_2: darken(#ffffff, 1%);
 }
 
 html {
-  @include background-image(linear-gradient($background_gradient_1, $background_gradient_2 100%));
+  background-color: $background_gradient_2;
 }
 
 body {
-  color: $text_color;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 14px;
   @include background-image(linear-gradient($background_gradient_1, $background_gradient_2 100%));
@@ -188,8 +148,6 @@ body {
   z-index: 2;
   width: 100%;
   @include filter-gradient($header_gradient_1, $header_gradient_2);
-  @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
-  color: $header_text_color;
   text-align: center;
 
   h1 {
@@ -200,9 +158,7 @@ body {
     font-weight: 500;
 
     a:link, a:visited, a:active {
-      color: $text_color;
       text-decoration: none;
-      color: $header_text_color;
       text-shadow:  0  /*{a-bar-shadow-x}*/  1px  /*{a-bar-shadow-y}*/  1px  /*{a-bar-shadow-radius}*/ #444444 /*{a-bar-shadow-color}*/;
     }
   }
@@ -416,8 +372,9 @@ ul li span {
 
     textarea.styled {
       border: 1px solid $border_color;
-      margin-left: 2.0em;
-      margin-right: 2.0em;
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
       padding: 0.5em;
       width: 75%;
       margin-bottom: 10px;
@@ -425,7 +382,7 @@ ul li span {
       color: $text_color;
       @include border-radius(5px 5px 5px 5px);
       resize: none;
-      //display: block;
+      display: block;
     }
 
     .question {
@@ -728,14 +685,7 @@ ul li span {
     padding-top: 8px;
   }
   right: 10px;
-  @include background-image(linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.1)));
-  @include background-image(linear-gradient($header_gradient_2, $header_gradient_2));
   @include border-radius(35px);
-  &:active, &.fake-active {
-    @include background-image(linear-gradient(darken($header_gradient_2, 3%), $header_gradient_2));
-
-    //@include background-image(linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.05)));
-  }
 }
 
 #back-button {
@@ -747,14 +697,7 @@ ul li span {
     padding-top: 8px;
   }
   left: 10px;
-  @include background-image(linear-gradient(rgba(0,0,0,0.05),rgba(0,0,0,0.1)));
-  @include background-image(linear-gradient($header_gradient_2, $header_gradient_2));
   @include border-radius(35px);
-  &:active, &.fake-active {
-   // @include background-image(linear-gradient($header_gradient_2, $header_gradient_1));
-    //background-position: 0 -36px;
-    @include background-image(linear-gradient(darken($header_gradient_2, 3%), $header_gradient_2));
-  }
 }
 
 .link-button {
