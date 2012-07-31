@@ -14,8 +14,8 @@ Customer.loadList = function(additionalData) {
       url: url,data: additionalData,dataType: 'json',timeout: 5000,cache: false,headers: user.logged ? headers : {},
       success: function(data, status, jqXHR) {
         requestComplete = true;
-        for (var i in data) {
-          var customer = data[i];
+        for (var i in data.customers) {
+          var customer = data.customers[i];
           customer["id"] = customer["_id"]; // map mongo id
           customer["logo"] = "img/templogos/" + customer.name.toLowerCase().replace(' ', '-').replace('ä', 'a').replace('ö', 'o').replace('\'', '') + ".png";
           customer["saved"] = true; // saved i.e. got from backend
@@ -94,6 +94,12 @@ Target.include({
   getName: function() {
     return this.name;
   },
+  getCustomerId: function() {
+    return this.customerId;
+  },
+  getQuestionType: function() {
+    return this.questionType;
+  },
   getShowQuestionComment: function() {
     return this.showQuestionComment;
   },
@@ -135,23 +141,19 @@ Target.loadDetails = function(id, listener) {
   if (url.substring(url.length-1) !== "/") url += "/";
   url += "targets/" + id;
   var user = User.getUser();
-  var headers = {
-    'FB-UserId': user.name,
-    'FB-AccessToken': user.token
-  };
+  var headers = {'FB-UserId': user.name,'FB-AccessToken': user.token};
   $.ajax({
     url: url,dataType: 'json',timeout: 5000,cache: false,headers: user.logged ? headers : {},
     success: function(data, status, jqXHR) {
       var target = data.target;
       target["id"] = target._id; // map mongo id
-      target["customerId"] = target.customerId;
       target["showLogo"] = false;
       var targetObject = Target.create(target);
       for (var i in targetObject.questions) {
         if (targetObject.showQuestionComment) {
-           var questionItem = QuestionItem.create({name: targetObject.questions[i].name, showComment: true, id: targetObject.questions[i]._id, showResults: true});
+           var questionItem = QuestionItem.create({name: targetObject.questions[i].name, showComment: true, id: targetObject.questions[i]._id, targetId: target._id, showResults: true});
         } else {
-          var questionItem = QuestionItem.create({name: targetObject.questions[i].name, id: targetObject.questions[i]._id, showResults: true});
+          var questionItem = QuestionItem.create({name: targetObject.questions[i].name, id: targetObject.questions[i]._id, targetId: target._id, showResults: true});
         }
         questionItem.save();
         targetObject.questions[i] = questionItem;
@@ -311,7 +313,7 @@ LeaderboardEntry.load = function() {
 
 /** =========================================== QUESTIONITEM ==================================================== */
 var QuestionItem = Spine.Model.sub();
-QuestionItem.configure("QuestionItem", "name", "done", "showComment", "id", "resultId", "results", "resultAllTime", "resultImage", "showResults");
+QuestionItem.configure("QuestionItem", "name", "done", "showComment", "id", "resultId", "targetId", "results", "resultAllTime", "resultImage", "showResults");
 
 QuestionItem.include({
   loadResults: function(id) {
@@ -347,7 +349,6 @@ QuestionItem.include({
     } catch(e) {
       log(e);
     }
-
     // workaround for android 2.3 bug: requests remain pending when loading the page from cache
     var xmlHttpTimeout=setTimeout(ajaxTimeout,5000);
     function ajaxTimeout(){
@@ -360,4 +361,27 @@ QuestionItem.include({
     }
   }
 })
+
+QuestionItem.loadQuestion = function(id) {
+  var url = App.serverURL;
+  if (url.substring(url.length-1) !== "/") url += "/";
+  url += "questions/" + id;
+  var requestComplete = false;
+  var user = User.getUser();
+  var headers = {'FB-UserId': user.name,'FB-AccessToken': user.token};
+  $.ajax({
+    url: url,dataType: 'json',timeout: 5000,cache: false,headers: user.logged ? headers : {},
+    success: function(data, status, jqXHR) {
+      var question = data.question;
+      question["id"] = question._id; // map mongo id
+      var questionObject = QuestionItem.create(question);
+      questionObject.detailsLoaded = true;
+      questionObject.save();
+      requestComplete = true;
+    },
+    error: function(jqxhr, textStatus, error) {
+      log('error: ' + textStatus + ', ' + error);
+    }
+  });
+}
 

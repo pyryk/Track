@@ -142,8 +142,8 @@ var TargetsList = BaseController.sub({
         title = customer.name;
         items = customer.targets;
       } catch (e) {
-        console.log("Error", e);
-        Customer.loadCustomer(this.id);
+        //console.log("Error", e);
+        this.loadList();
       }
     }
     return {items: items, title: title, customizationClass: customClass};
@@ -167,7 +167,14 @@ var TargetsList = BaseController.sub({
   clicked: function(e) {
     var id = $(e.target).attr('data-id');
     if (id) {
-      Target.loadDetails(id);
+      try {
+        if (Target.find(id).questions.length > 0) {
+        } else {
+          Target.loadDetails(id);
+        }
+      } catch(e) {
+        Target.loadDetails(id);
+      }
       Spine.Route.navigate("!/targets/" + id);
     }
   },
@@ -243,7 +250,7 @@ var TargetDetails = BaseController.sub({
   },
   getData: function() {
     var target, error;
-    var points, customerName = null;
+    var points, customerName, customClass = null;
     try {
       var target = Target.find(this.id);
       var name = target.getName();
@@ -257,18 +264,16 @@ var TargetDetails = BaseController.sub({
       points = user.getPoints();
       var showQuestionComment = target.getShowQuestionComment();
       try {
-        customerName = Customer.find(target.customerId).name
+        customerName = Customer.find(target.getCustomerId()).name;
+        customClass = customerName.toLowerCase().replace(/'/g,"");
       } catch(e) {
-        if (target.customerId) Customer.loadCustomer(target.customerId);
-        console.log(e);
+        if (target.getCustomerId) Customer.loadCustomer(target.getCustomerId());
       }
-    } catch (e) { // unknown record
-      // try to load record
+    } catch (e) {
       Target.loadDetails(this.id);
       error = e;
     }
-    console.log(target);
-    return {name: name,points: points,type: type,items: items,showQuestionComment: showQuestionComment,target: target,error: error,title: customerName};
+    return {name: name,points: points,type: type,items: items,showQuestionComment: showQuestionComment,target: target,error: error,title: customerName, customizationClass: customClass};
   },
   error: function(reason) {
     if (reason == "notfound") {
@@ -283,7 +288,8 @@ var TargetDetails = BaseController.sub({
   customerUpdated: function(customer) {
     try {
       var target = Target.find(this.id);
-      if (customer.id === target.customerId && window.track.visiblePage == this) {
+      if (customer.id === target.getCustomerId() && window.track.visiblePage == this) {
+        console.log("Render");
         this.render();
       }
     } catch(e) {
@@ -319,7 +325,7 @@ var TargetDetails = BaseController.sub({
         this.addFastButtons();
       }
     } catch(e) {
-      console.log(e + " loadAnswer FAIL");
+      //console.log(e + " loadAnswer FAIL");
     }
     this.saveAnswer(value, questionItem.id);
   },
@@ -337,23 +343,21 @@ var TargetDetails = BaseController.sub({
   },
   sendMessage: function(e) {
     var id = $(e.target).attr('data-id');
-    console.log(id);
     var user = User.getUser();
     user.points += 3;
     user.save();
-    console.log(user);
     var textAreaElements = document.getElementsByClassName("styled");
     for (var i = 0; i < textAreaElements.length; i++) {
       if (id == textAreaElements[i].getAttribute('data-id')) {
         var text = textAreaElements[i].value;
         var questionItem = QuestionItem.find(id);
         var resultItem = Result.create({questionItem: questionItem, textComment: text, location: window.track.location});
-        resultItem.bind('resultSent', this.proxy(this.updateResults()));
         var user = User.getUser();
         resultItem.put();
         questionItem.done = true;
         questionItem.showComment = false;
         questionItem.save();
+        resultItem.bind('resultSent', this.proxy(this.updateResults()));
         this.html(this.template(this.getData()));
         this.addFastButtons();
       }
@@ -373,16 +377,16 @@ var TargetDetails = BaseController.sub({
     try {
       var questionItem = QuestionItem.find(id);
     } catch(e) {
-      console.log(e);
+      //console.log(e);
     }
-    var route = "!/questions/" + questionItem.id + "/results";
-    Spine.Route.navigate(route);
+    Spine.Route.navigate("!/questions/" + questionItem.id + "/results");
 
     if (questionItem.showResults) {
-      var route = App.getRoute(questionItem) + "/results";
-      Spine.Route.navigate(route);
+      Spine.Route.navigate("!/questions/"+ questionItem.id + "/results");
     } else {
       questionItem.showResults = true;
+      questionItem.done = true;
+      questionItem.showComment = false;
       questionItem.save();
     }
   }
@@ -402,10 +406,8 @@ var TargetCreate = BaseController.sub({
   },
   targetSavedToServer: function(target, success) {
     if (success) {
-      Spine.Route.navigate(App.getRoute(target));
     } else {
       alert('For some reason, target was not saved to server. Please try again later.');
-      // signal failure to the user
     }
   },
   saveTarget: function(e) {
@@ -425,10 +427,25 @@ var QuestionResults = BaseController.sub({
 
     // this is binded to all events to avoid the unbind-old/bind-new
     // hassle when viewing another target
-    QuestionItem.bind("create update", this.proxy(this.questionUpdated));
+    QuestionItem.bind("create", this.proxy(this.questionUpdated));
+    Target.bind("create", this.proxy(this.targetUpdated));
+    Customer.bind("create", this.proxy(this.customerUpdated));
   },
   questionUpdated: function(question) {
     if (question.id === this.id && window.track.visiblePage == this) {
+      console.log("questionUpdated");
+      this.render();
+    }
+  },
+  targetUpdated: function(target) {
+    if (target.id === QuestionItem.find(this.id).targetId && window.track.visiblePage == this) {
+      console.log("targetUpdated");
+      this.render();
+    }
+  },
+  customerUpdated: function(customer) {
+    if (customer.id === Target.find(QuestionItem.find(this.id).targetId).getCustomerId() && window.track.visiblePage == this) {
+      console.log("customerUpdated");
       this.render();
     }
   },
@@ -437,28 +454,21 @@ var QuestionResults = BaseController.sub({
   },
   getData: function() {
     var data = {};
+    var questionItem, target, customer = null;
     try {
-      var questionItem = QuestionItem.find(this.id);
-    } catch(e) {
-      console.log(e);
-    }
+      questionItem = QuestionItem.find(this.id);
+      questionItem.loadResults(this.id);
+      target = Target.find(questionItem.targetId);
+      customer = Customer.find(target.getCustomerId());
+      var user = User.getUser();
+      data.points = user.getPoints();
+      if (!data.points) data.points = 0;
+      data.name = target.name;
+      data.title = customer.name;
+      data.customizationClass = customer.name.toLowerCase().replace(/'/g,"");
+      data.question = questionItem.name;
 
-    var targetList = Target.findAllByAttribute("saved",true);
-    for (var i in targetList) {
-      for (var j in targetList[i].questions) {
-        if (targetList[i].questions[j].id == questionItem.id) {
-          data.name = targetList[i].name;
-          continue;
-        }
-      }
-    }
-
-    data.question = questionItem.name;
-    try {
-      //data.target = Target.find(this.id).toJSON();
       data.alltime = questionItem.results.alltime;
-      // preprocess alltime results
-      //var questionItem.alltime = data.question.results.alltime;
       if (data.alltime.pos == 0 && data.alltime.neg == 0) {
         data.alltime.zerozero = true;
       }
@@ -468,10 +478,13 @@ var QuestionResults = BaseController.sub({
       }
       data.now.trendPos = Math.abs(Math.max(0, data.now.trend));
       data.now.trendNeg = Math.abs(Math.min(0, data.now.trend));
-    } catch (e) {
-      //Target.loadDetails(this.id, this);
-      data.error = e;
+
+    } catch(e) {
+      QuestionItem.loadQuestion(this.id);
+      if (questionItem) Target.loadDetails(questionItem.targetId);
+      if (target) Customer.loadCustomer(target.getCustomerId());
     }
+    console.log(data);
     return data;
   },
   render: function() {
@@ -504,7 +517,7 @@ var Leaderboard = BaseController.sub({
     for (var i in entries) {
       entries[i].position = parseInt(i) + 1;
     }
-    return {entries: entries};
+    return {entries: entries, customizationClass: "tracktive", title: "tracktive"};
   }
 });
 
@@ -534,6 +547,10 @@ var BackButton = BaseController.sub({
     if (this.app.visiblePage === this.app.pages['loginScreen'] && showPrev == false) {
       showHome = true;
       showPrev = false;
+    }
+    if (this.app.visiblePage === this.app.pages['questionResults'] && showPrev == false) {
+      showHome = false;
+      showPrev = true;
     }
     return {previous: showPrev, home: showHome};
   },
@@ -569,7 +586,11 @@ var LoginScreen = BaseController.sub({
     this.show();
   },
   getData: function() {
-    return User.last() || {};
+    var data = User.last() || {};
+    data.customizationClass = "tracktive";
+    data.title = "tracktive";
+    console.log(data);
+    return data;
   },
   loginUser: function() {
     var opts = {scope:'email'};

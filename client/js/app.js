@@ -244,7 +244,7 @@ var App = Spine.Controller.sub({
     }
 
     if (prev.id) {
-      Spine.Route.navigate(App.getRoute(Target.find(prev.id)))
+      Spine.Route.navigate("!/targets/" + prev.id)
       // hard coded. couldnt come up with anything better :(
     } else if (prev == this.pages['loginScreen']) {
       Spine.Route.navigate("!/login/");
@@ -267,20 +267,6 @@ if (window.trackConfig && window.trackConfig.serverURL) {
 } else{
   App.serverURL = "http://86.50.143.113";
   //App.serverURL = "http://mkos.futupeople.com/track/";
-}
-
-//App.serverURL = "http://localhost:9999/";
-
-/**
- * Return a route fragment to a specific domain object (target etc.)
- *
- */
-App.getRoute = function(obj) {
-  // special cases first
-  if (obj === "create_target") {
-    return "!/targets/create";
-  }
-  return "!/" + obj.getResourceName() + "/" + obj.getId();
 }
 
 //TODO url resolver?

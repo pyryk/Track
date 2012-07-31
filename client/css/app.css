@@ -766,23 +766,23 @@ ul li span {
 #question-results table {
   width: 100%;
 }
-/* line 527, ../scss/app.scss */
+/* line 526, ../scss/app.scss */
 #question-results .target-answers th {
   text-align: left;
 }
-/* line 536, ../scss/app.scss */
+/* line 534, ../scss/app.scss */
 #question-results .target-answers td {
   border-width: 0px;
 }
-/* line 542, ../scss/app.scss */
+/* line 540, ../scss/app.scss */
 #question-results .result-number, #question-results .answer {
   padding: 20px 1em;
 }
-/* line 545, ../scss/app.scss */
+/* line 543, ../scss/app.scss */
 #question-results .result-number {
   text-align: right;
 }
-/* line 548, ../scss/app.scss */
+/* line 546, ../scss/app.scss */
 #question-results .target-answers:last-child {
   border-bottom: 1px solid #cccccc;
   -webkit-border-radius: 0px 0px 5px 5px;
@@ -791,7 +791,7 @@ ul li span {
   -o-border-radius: 0px 0px 5px 5px;
   border-radius: 0px 0px 5px 5px;
 }
-/* line 552, ../scss/app.scss */
+/* line 550, ../scss/app.scss */
 #question-results .result-graph {
   color: #fff;
   display: -webkit-box;
@@ -808,12 +808,12 @@ ul li span {
   box-align: stretch;
   margin: 10px 10px;
 }
-/* line 562, ../scss/app.scss */
+/* line 560, ../scss/app.scss */
 #question-results .result-graph .pos, #question-results .result-graph .neg {
   padding: 5px;
   text-align: center;
 }
-/* line 566, ../scss/app.scss */
+/* line 564, ../scss/app.scss */
 #question-results .result-graph .pos .trend, #question-results .result-graph .neg .trend {
   border-top: 20px solid transparent;
   border-bottom: 20px solid transparent;
@@ -821,7 +821,7 @@ ul li span {
   width: 0;
   height: 0;
 }
-/* line 575, ../scss/app.scss */
+/* line 573, ../scss/app.scss */
 #question-results .result-graph .pos {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #00b509), color-stop(100%, #00e80c));
   background-image: -webkit-linear-gradient(#00b509, #00e80c);
@@ -835,12 +835,12 @@ ul li span {
   -o-border-radius: 0px 10px 10px 0px;
   border-radius: 0px 10px 10px 0px;
 }
-/* line 580, ../scss/app.scss */
+/* line 578, ../scss/app.scss */
 #question-results .result-graph .pos .trend {
   border-right: 20px solid #00b509;
   float: left;
 }
-/* line 585, ../scss/app.scss */
+/* line 583, ../scss/app.scss */
 #question-results .result-graph .neg {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff0000), color-stop(100%, #ff4d4d));
   background-image: -webkit-linear-gradient(#ff0000, #ff4d4d);
@@ -855,26 +855,26 @@ ul li span {
   border-radius: 10px 0px 0px 10px;
   border-right: 1px solid #e3e5e5;
 }
-/* line 591, ../scss/app.scss */
+/* line 589, ../scss/app.scss */
 #question-results .result-graph .neg .trend {
   border-left: 20px solid #ce1e1e;
   float: right;
 }
-/* line 598, ../scss/app.scss */
+/* line 596, ../scss/app.scss */
 #question-results .graph {
   height: 300px;
   width: 100%;
 }
-/* line 602, ../scss/app.scss */
+/* line 600, ../scss/app.scss */
 #question-results .graph .yAxis .tickLabel {
   font-size: 12px;
 }
-/* line 605, ../scss/app.scss */
+/* line 603, ../scss/app.scss */
 #question-results .graph .xAxis .tickLabel {
   font-size: 10px;
 }
 
-/* line 612, ../scss/app.scss */
+/* line 610, ../scss/app.scss */
 #target-ownResult h3 {
   *zoom: 1;
   filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FF2C9FEC', endColorstr='#FF1177BA');
@@ -896,7 +896,7 @@ ul li span {
   -o-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
 }
-/* line 615, ../scss/app.scss */
+/* line 613, ../scss/app.scss */
 #target-ownResult .result-info-body {
   margin: 0;
   border: 1px solid #cccccc;
@@ -910,11 +910,11 @@ ul li span {
   padding-left: 1em;
   color: #c8cdcc;
 }
-/* line 620, ../scss/app.scss */
+/* line 618, ../scss/app.scss */
 #target-ownResult .result-info-body .question, #target-ownResult .result-info-body .answer {
   display: none;
 }
-/* line 624, ../scss/app.scss */
+/* line 622, ../scss/app.scss */
 #target-ownResult .result-info-body:last-child {
   border-bottom: 1px solid #cccccc;
   -webkit-border-radius: 0px 0px 5px 5px;
@@ -923,14 +923,14 @@ ul li span {
   -o-border-radius: 0px 0px 5px 5px;
   border-radius: 0px 0px 5px 5px;
 }
-/* line 627, ../scss/app.scss */
+/* line 625, ../scss/app.scss */
 #target-ownResult .link-button {
   margin-top: 2em;
 }
 
 /* button elements
 * =================================================================================================================== */
-/* line 635, ../scss/app.scss */
+/* line 633, ../scss/app.scss */
 #login h2 {
   *zoom: 1;
   filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FF2C9FEC', endColorstr='#FF1177BA');
@@ -953,7 +953,7 @@ ul li span {
   border-radius: 5px 5px 0px 0px;
   margin-top: 20px;
 }
-/* line 640, ../scss/app.scss */
+/* line 638, ../scss/app.scss */
 #login .content {
   margin: 0;
   padding: 1em 1em;
@@ -966,7 +966,7 @@ ul li span {
   background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
   background-image: linear-gradient(#ffffff, #fcfcfc);
 }
-/* line 647, ../scss/app.scss */
+/* line 645, ../scss/app.scss */
 #login .content .no-login {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
   background-image: -webkit-linear-gradient(#ffffff, #fcfcfc);
@@ -975,7 +975,7 @@ ul li span {
   background-image: -ms-linear-gradient(#ffffff, #fcfcfc);
   background-image: linear-gradient(#ffffff, #fcfcfc);
 }
-/* line 649, ../scss/app.scss */
+/* line 647, ../scss/app.scss */
 #login .content .no-login:active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
   background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
@@ -984,7 +984,7 @@ ul li span {
   background-image: -ms-linear-gradient(#fcfcfc, #ffffff);
   background-image: linear-gradient(#fcfcfc, #ffffff);
 }
-/* line 654, ../scss/app.scss */
+/* line 652, ../scss/app.scss */
 #login .content .login-button {
   width: 100%;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8acaf4), color-stop(100%, #44aaee));
@@ -994,7 +994,7 @@ ul li span {
   background-image: -ms-linear-gradient(#8acaf4, #44aaee);
   background-image: linear-gradient(#8acaf4, #44aaee);
 }
-/* line 657, ../scss/app.scss */
+/* line 655, ../scss/app.scss */
 #login .content .login-button:active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #44aaee), color-stop(100%, #8acaf4));
   background-image: -webkit-linear-gradient(#44aaee, #8acaf4);
@@ -1004,25 +1004,25 @@ ul li span {
   background-image: linear-gradient(#44aaee, #8acaf4);
 }
 
-/* line 664, ../scss/app.scss */
+/* line 662, ../scss/app.scss */
 #back-button, #account-button {
   position: absolute;
   top: 5px;
   display: block;
 }
-/* line 668, ../scss/app.scss */
+/* line 666, ../scss/app.scss */
 #back-button .top-button, #account-button .top-button {
   display: inline-block;
   height: 18px;
   padding: 9px 5px;
 }
-/* line 672, ../scss/app.scss */
+/* line 670, ../scss/app.scss */
 #back-button .top-button a, #back-button .top-button a:link, #back-button .top-button a:active, #back-button .top-button a:visited, #account-button .top-button a, #account-button .top-button a:link, #account-button .top-button a:active, #account-button .top-button a:visited {
   color: inherit;
   text-decoration: inherit;
 }
 
-/* line 679, ../scss/app.scss */
+/* line 677, ../scss/app.scss */
 #account-button {
   height: 36px;
   right: 10px;
@@ -1032,7 +1032,7 @@ ul li span {
   -o-border-radius: 35px;
   border-radius: 35px;
 }
-/* line 681, ../scss/app.scss */
+/* line 679, ../scss/app.scss */
 #account-button .top-button {
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 6px;
@@ -1040,7 +1040,7 @@ ul li span {
   padding-top: 8px;
 }
 
-/* line 691, ../scss/app.scss */
+/* line 689, ../scss/app.scss */
 #back-button {
   height: 36px;
   left: 10px;
@@ -1050,7 +1050,7 @@ ul li span {
   -o-border-radius: 35px;
   border-radius: 35px;
 }
-/* line 693, ../scss/app.scss */
+/* line 691, ../scss/app.scss */
 #back-button .top-button {
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 6px;
@@ -1058,7 +1058,7 @@ ul li span {
   padding-top: 8px;
 }
 
-/* line 703, ../scss/app.scss */
+/* line 701, ../scss/app.scss */
 .link-button {
   display: block;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #fcfcfc));
@@ -1082,12 +1082,12 @@ ul li span {
   -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 }
-/* line 715, ../scss/app.scss */
+/* line 713, ../scss/app.scss */
 .link-button:link, .link-button:active, .link-button:visited {
   text-decoration: none;
   color: #c8cdcc;
 }
-/* line 719, ../scss/app.scss */
+/* line 717, ../scss/app.scss */
 .link-button:active, .link-button.fake-active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fcfcfc), color-stop(100%, #ffffff));
   background-image: -webkit-linear-gradient(#fcfcfc, #ffffff);
@@ -1097,26 +1097,26 @@ ul li span {
   background-image: linear-gradient(#fcfcfc, #ffffff);
 }
 
-/* line 724, ../scss/app.scss */
+/* line 722, ../scss/app.scss */
 button.link-button {
   width: 100%;
 }
 
 /* leaderboard elements
 * =================================================================================================================== */
-/* line 730, ../scss/app.scss */
+/* line 728, ../scss/app.scss */
 #leaderboard {
   margin-top: 1em;
 }
-/* line 733, ../scss/app.scss */
+/* line 731, ../scss/app.scss */
 #leaderboard table {
   width: 100%;
 }
-/* line 736, ../scss/app.scss */
+/* line 734, ../scss/app.scss */
 #leaderboard table tr.header {
   border: 0;
 }
-/* line 740, ../scss/app.scss */
+/* line 738, ../scss/app.scss */
 #leaderboard table th {
   *zoom: 1;
   filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FF2C9FEC', endColorstr='#FF1177BA');
@@ -1138,7 +1138,7 @@ button.link-button {
   -o-border-radius: 5px 5px 0px 0px;
   border-radius: 5px 5px 0px 0px;
 }
-/* line 744, ../scss/app.scss */
+/* line 742, ../scss/app.scss */
 #leaderboard table tr {
   padding: 1em 1em;
   border: 0;
@@ -1158,21 +1158,21 @@ button.link-button {
   text-overflow: ellipsis;
   -moz-binding: url('/css/xml/ellipsis.xml#ellipsis');
 }
-/* line 746, ../scss/app.scss */
+/* line 744, ../scss/app.scss */
 #leaderboard table tr td {
   padding: 0.5em;
   vertical-align: middle;
 }
-/* line 749, ../scss/app.scss */
+/* line 747, ../scss/app.scss */
 #leaderboard table tr td.position {
   padding-left: 1em;
 }
-/* line 752, ../scss/app.scss */
+/* line 750, ../scss/app.scss */
 #leaderboard table tr td.name img {
   padding-right: 1em;
 }
 
-/* line 760, ../scss/app.scss */
+/* line 758, ../scss/app.scss */
 footer {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #2f2f2f), color-stop(50%, #151515), color-stop(51%, #000000), color-stop(100%, #000000));
   background-image: -webkit-linear-gradient(top, #2f2f2f, #151515 50%, #000000 51%, #000000);
@@ -1188,24 +1188,24 @@ footer {
   left: 0;
 }
 
-/* line 770, ../scss/app.scss */
+/* line 768, ../scss/app.scss */
 .loading-indicator {
   margin: 10px;
 }
 
-/* line 774, ../scss/app.scss */
+/* line 772, ../scss/app.scss */
 .hide {
   display: none;
 }
 
-/* line 778, ../scss/app.scss */
+/* line 776, ../scss/app.scss */
 input[type=text] {
   width: 100%;
   box-sizing: border-box;
 }
 
 /* no point to have red bg on untouched text boxes */
-/* line 784, ../scss/app.scss */
+/* line 782, ../scss/app.scss */
 input[type=text]:invalid {
   background-color: black;
   color: red;
