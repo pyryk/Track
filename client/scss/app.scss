@@ -42,12 +42,12 @@ $list_item_gradient_2: darken(#ffffff, 1%);
 }
 
 .aalto-yliopisto {
-  @include background-image(linear-gradient(lighten(#FECB00, 20%), #FECB00));
+  @include background-image(linear-gradient(lighten(#FECB00, 20%), lighten(#FECB00, 5%)));
   h1 {a:link, a:visited, a:active {color: $header_text_color;}}
 }
 .aalto-yliopisto-button {
-  @include background-image(linear-gradient(lighten(#FECB00, 20%), #FECB00));
-  &:active, &.fake-active {@include background-image(linear-gradient(darken(lighten(#FECB00, 20%), 3%), #FECB00));}
+  @include background-image(linear-gradient(darken(lighten(#FECB00, 5%), 3%), lighten(#FECB00, 20%)));
+  &:active, &.fake-active {@include background-image(linear-gradient(darken(darken(#FECB00, 3%), 3%), lighten(#FECB00, 30%)));}
 }
 
 .hesburger {

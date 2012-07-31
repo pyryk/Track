@@ -544,6 +544,10 @@ var BackButton = BaseController.sub({
       showHome = true;
       showPrev = false;
     }
+    if (this.app.visiblePage === this.app.pages['targetDetails']) {
+      showHome = false;
+      showPrev = true;
+    }
     if (this.app.visiblePage === this.app.pages['loginScreen'] && showPrev == false) {
       showHome = true;
       showPrev = false;
@@ -552,6 +556,7 @@ var BackButton = BaseController.sub({
       showHome = false;
       showPrev = true;
     }
+    console.log("showHome: " + showHome + "   showPrev: " + showPrev);
     return {previous: showPrev, home: showHome};
   },
   backClicked: function() {

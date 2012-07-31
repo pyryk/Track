@@ -41,12 +41,12 @@
 
 /* line 44, ../scss/app.scss */
 .aalto-yliopisto {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffe065), color-stop(100%, #fecb00));
-  background-image: -webkit-linear-gradient(#ffe065, #fecb00);
-  background-image: -moz-linear-gradient(#ffe065, #fecb00);
-  background-image: -o-linear-gradient(#ffe065, #fecb00);
-  background-image: -ms-linear-gradient(#ffe065, #fecb00);
-  background-image: linear-gradient(#ffe065, #fecb00);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffe065), color-stop(100%, #ffd119));
+  background-image: -webkit-linear-gradient(#ffe065, #ffd119);
+  background-image: -moz-linear-gradient(#ffe065, #ffd119);
+  background-image: -o-linear-gradient(#ffe065, #ffd119);
+  background-image: -ms-linear-gradient(#ffe065, #ffd119);
+  background-image: linear-gradient(#ffe065, #ffd119);
 }
 /* line 46, ../scss/app.scss */
 .aalto-yliopisto h1 a:link, .aalto-yliopisto h1 a:visited, .aalto-yliopisto h1 a:active {
@@ -55,21 +55,21 @@
 
 /* line 48, ../scss/app.scss */
 .aalto-yliopisto-button {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffe065), color-stop(100%, #fecb00));
-  background-image: -webkit-linear-gradient(#ffe065, #fecb00);
-  background-image: -moz-linear-gradient(#ffe065, #fecb00);
-  background-image: -o-linear-gradient(#ffe065, #fecb00);
-  background-image: -ms-linear-gradient(#ffe065, #fecb00);
-  background-image: linear-gradient(#ffe065, #fecb00);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffce09), color-stop(100%, #ffe065));
+  background-image: -webkit-linear-gradient(#ffce09, #ffe065);
+  background-image: -moz-linear-gradient(#ffce09, #ffe065);
+  background-image: -o-linear-gradient(#ffce09, #ffe065);
+  background-image: -ms-linear-gradient(#ffce09, #ffe065);
+  background-image: linear-gradient(#ffce09, #ffe065);
 }
 /* line 50, ../scss/app.scss */
 .aalto-yliopisto-button:active, .aalto-yliopisto-button.fake-active {
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffdd56), color-stop(100%, #fecb00));
-  background-image: -webkit-linear-gradient(#ffdd56, #fecb00);
-  background-image: -moz-linear-gradient(#ffdd56, #fecb00);
-  background-image: -o-linear-gradient(#ffdd56, #fecb00);
-  background-image: -ms-linear-gradient(#ffdd56, #fecb00);
-  background-image: linear-gradient(#ffdd56, #fecb00);
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dfb300), color-stop(100%, #ffea98));
+  background-image: -webkit-linear-gradient(#dfb300, #ffea98);
+  background-image: -moz-linear-gradient(#dfb300, #ffea98);
+  background-image: -o-linear-gradient(#dfb300, #ffea98);
+  background-image: -ms-linear-gradient(#dfb300, #ffea98);
+  background-image: linear-gradient(#dfb300, #ffea98);
 }
 
 /* line 53, ../scss/app.scss */
