@@ -27,7 +27,7 @@ $background_gradient_1: darken(#f6f6f6, 2%);
 $background_gradient_2: #f6f6f6;
 $text_color: #606967;
 $list_item_gradient_1: #ffffff;
-$list_item_gradient_2: darken(#ffffff, 1%);
+$list_item_gradient_2: darken(#ffffff, 2%);
 
 $aalto_gradient_1: lighten(#FECB00, 20%);
 $aalto_gradient_2: lighten(#FECB00, 5%);
@@ -183,13 +183,14 @@ body {
 .customer-list-image {
   float: left;
   padding-right: 10px;
-  margin-top: -5px;
+  margin-top: -3px;
   width: 60px;
   height: 20px;
 }
 
 .customer-list-arrow {
   float: right; // for every list item
+  margin-top: 1px;
 }
 
 .page { // What is this???????????????????????
@@ -210,13 +211,13 @@ body {
   li {
     padding: 1em 1em;
     border: 0;
-    border-top: 1px solid #fff;
+    //border-top: 1px solid #fff;
     border-bottom: 1px solid $border_color;
     @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
     @include ellipsis;
 
     &:active, &.fake-active {
-       @include background-image(linear-gradient($list_item_gradient_2, $list_item_gradient_1));
+       @include background-image(linear-gradient(darken($list_item_gradient_2, 6%), darken($list_item_gradient_2, 4%)));
      }
 
     &.first-visible-child {
@@ -275,7 +276,7 @@ ul li span {
   margin-left: 5px;
   margin-bottom: 0px;
   margin-right: 0px;
-  margin-top: -3px;
+  margin-top: -1px;
   padding: 0px;
   width: 80%;
   overflow: hidden;
@@ -287,7 +288,7 @@ ul li span {
   margin-left: 5px;
   margin-bottom: 0px;
   margin-right: 0px;
-  margin-top: -3px;
+  margin-top: -1px;
   padding: 0px;
   width: 50%;
   overflow: hidden;
@@ -416,7 +417,7 @@ ul li span {
         @include box-flex(1);
         text-align: center;
         &:active, &.fake-active {
-          @include background-image(linear-gradient(darken($list_item_gradient_2, 5%), $list_item_gradient_2));
+          @include background-image(linear-gradient(darken($list_item_gradient_2, 6%), darken($list_item_gradient_2, 4%)));
         }
       }
       .balance {
@@ -440,7 +441,7 @@ ul li span {
         @include box-flex(1);
         text-align: center;
         &:active, &.fake-active {
-          @include background-image(linear-gradient(darken($list_item_gradient_2, 5%), $list_item_gradient_2));
+          @include background-image(linear-gradient(darken($list_item_gradient_2, 6%), darken($list_item_gradient_2, 4%)));
         }
       }
       .balance {
@@ -462,6 +463,11 @@ ul li span {
     color: #000000;
     font-style: italic;
     padding-bottom: 5px;
+    a {
+      &:active, &.fake-active {
+        color: darken(red, 6%);
+      }
+    }
   }
   .link-button {
     position: absolute;
@@ -493,7 +499,7 @@ ul li span {
       list-style: none;
 
       &:active, &.fake-active {
-        @include background-image(linear-gradient(darken($list_item_gradient_2, 5%), $list_item_gradient_2));
+        @include background-image(linear-gradient(darken($list_item_gradient_2, 6%), darken($list_item_gradient_2, 4%)));
       }
 
       a {

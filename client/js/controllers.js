@@ -257,6 +257,9 @@ var TargetDetails = BaseController.sub({
       var type = target.getQuestionType();
       var items = target.getQuestions();
       var user = User.getUser();
+      console.log(user);
+      user.loadFromCookies();
+      console.log(user);
       if (user.getPoints() == null) {
         user.points = 0;
         user.save();
@@ -273,7 +276,7 @@ var TargetDetails = BaseController.sub({
       Target.loadDetails(this.id);
       error = e;
     }
-    return {name: name,points: points,type: type,items: items,showQuestionComment: showQuestionComment,target: target,error: error,title: customerName, customizationClass: customClass};
+    return {name: name, points: points,type: type,items: items,showQuestionComment: showQuestionComment,target: target,error: error,title: customerName, customizationClass: customClass};
   },
   error: function(reason) {
     if (reason == "notfound") {
@@ -585,7 +588,6 @@ var LoginScreen = BaseController.sub({
     var data = User.last() || {};
     data.customizationClass = "tracktive";
     data.title = "tracktive";
-    console.log(data);
     return data;
   },
   loginUser: function() {
