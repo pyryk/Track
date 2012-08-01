@@ -22,22 +22,22 @@ module.exports = {
     ],
 
     results : [
-        { _id: '12345678901234567890dbcd', value : 1, timestamp : new Date('2012-03-23T08:03:48.223Z'), fbUserId: '123456' },
-        { _id: '12345678901234567890dbce', value : 1, timestamp : new Date('2012-03-23T08:04:48.223Z') },
-        { _id: '12345678901234567890dbcf', value : 1, timestamp : new Date('2012-03-23T08:05:48.223Z') },
-        { _id: '12345678901234567890dbcg', value : 0, timestamp : new Date('2012-03-23T08:10:48.223Z') },
-        { _id: '12345678901234567890dbch', value : 0, timestamp : new Date('2012-03-23T08:50:48.223Z') },
-        { _id: '12345678901234567890dbci', value : 0, timestamp : new Date('2012-03-23T08:51:48.223Z') },
-        { _id: '12345678901234567890dbcj', value : 1, timestamp : new Date('2012-03-23T10:03:48.223Z') },
-        { _id: '12345678901234567890dbck', value : 1, timestamp : new Date('2012-03-23T10:13:48.223Z') },
-        { _id: '12345678901234567890dbcl', value : 1, timestamp : new Date('2012-03-23T10:14:48.223Z') },
-        { _id: '12345678901234567890dbcm', value : 0, timestamp : new Date('2012-03-23T12:01:48.223Z') },
-        { _id: '12345678901234567890dbcn', value : 0, timestamp : new Date('2012-03-23T12:03:48.223Z') },
-        { _id: '12345678901234567890dbco', value : 0, timestamp : new Date('2012-03-23T12:05:48.223Z') },
-        { _id: '12345678901234567890dbcp', value : 1, timestamp : new Date('2012-03-23T13:33:48.223Z') },
-        { _id: '12345678901234567890dbcq', value : 1, timestamp : new Date('2012-03-23T13:43:48.223Z') },
-        { _id: '12345678901234567890dbcr', value : 1, timestamp : new Date('2012-03-23T13:50:48.223Z') },
-        { _id: '12345678901234567890dbcs', value : 0, timestamp : new Date('2012-03-23T13:51:48.223Z') } ]
+        { _id: '12345678901234567890dbcd', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T08:03:48.223Z'), fbUserId: '123456' },
+        { _id: '12345678901234567890dbce', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T08:04:48.223Z') },
+        { _id: '12345678901234567890dbcf', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T08:05:48.223Z') },
+        { _id: '12345678901234567890dbcg', questionId: '12345678901234567890bbcd', value : 0, timestamp : new Date('2012-03-23T08:10:48.223Z') },
+        { _id: '12345678901234567890dbch', questionId: '12345678901234567890bbcd', value : 0, timestamp : new Date('2012-03-23T08:50:48.223Z') },
+        { _id: '12345678901234567890dbci', questionId: '12345678901234567890bbcd', value : 0, timestamp : new Date('2012-03-23T08:51:48.223Z') },
+        { _id: '12345678901234567890dbcj', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T10:03:48.223Z') },
+        { _id: '12345678901234567890dbck', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T10:13:48.223Z') },
+        { _id: '12345678901234567890dbcl', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T10:14:48.223Z') },
+        { _id: '12345678901234567890dbcm', questionId: '12345678901234567890bbcd', value : 0, timestamp : new Date('2012-03-23T12:01:48.223Z') },
+        { _id: '12345678901234567890dbcn', questionId: '12345678901234567890bbcd', value : 0, timestamp : new Date('2012-03-23T12:03:48.223Z') },
+        { _id: '12345678901234567890dbco', questionId: '12345678901234567890bbcd', value : 0, timestamp : new Date('2012-03-23T12:05:48.223Z') },
+        { _id: '12345678901234567890dbcp', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T13:33:48.223Z') },
+        { _id: '12345678901234567890dbcq', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T13:43:48.223Z') },
+        { _id: '12345678901234567890dbcr', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T13:50:48.223Z') },
+        { _id: '12345678901234567890dbcs', questionId: '12345678901234567890bbcd', value : 0, timestamp : new Date('2012-03-23T13:51:48.223Z') } ]
 }, {
 
     users: [
