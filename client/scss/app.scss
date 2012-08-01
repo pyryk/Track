@@ -29,52 +29,61 @@ $text_color: #606967;
 $list_item_gradient_1: #ffffff;
 $list_item_gradient_2: darken(#ffffff, 1%);
 
+$aalto_gradient_1: lighten(#FECB00, 20%);
+$aalto_gradient_2: lighten(#FECB00, 5%);
+$hesburger_gradient_1: lighten(#ec232b, 20%);
+$hesburger_gradient_2: lighten(#ec232b, 5%);
+$mtv3_gradient_1: lighten(#000000, 20%);
+$mtv3_gradient_2: lighten(#000000, 5%);
+$mcdonalds_gradient_1: lighten(#ffe103, 20%);
+$mcdonalds_gradient_2: lighten(#ffe103, 5%);
+
 .tracktive {
   @include background-image(linear-gradient($header_gradient_1, $header_gradient_2));
   h1 {a:link, a:visited, a:active {color: $header_text_color;}}
 }
 .tracktive-button {
-  @include background-image(linear-gradient($header_gradient_2, $header_gradient_2));
+  @include background-image(linear-gradient(darken($header_gradient_2, 4%), $header_gradient_2));
   &:active, &.fake-active {
     //background-position: 0 -36px;
-    @include background-image(linear-gradient(darken($header_gradient_2, 3%), $header_gradient_2));
+    @include background-image(linear-gradient(darken($header_gradient_2, 6%), darken($header_gradient_2, 4%)));
   }
 }
 
 .aalto-yliopisto {
-  @include background-image(linear-gradient(lighten(#FECB00, 20%), lighten(#FECB00, 5%)));
+  @include background-image(linear-gradient($aalto_gradient_1, $aalto_gradient_2));
   h1 {a:link, a:visited, a:active {color: $header_text_color;}}
 }
 .aalto-yliopisto-button {
-  @include background-image(linear-gradient(darken(lighten(#FECB00, 5%), 3%), lighten(#FECB00, 20%)));
-  &:active, &.fake-active {@include background-image(linear-gradient(darken(darken(#FECB00, 3%), 3%), lighten(#FECB00, 30%)));}
+  @include background-image(linear-gradient(darken($aalto_gradient_2, 4%), $aalto_gradient_2));
+  &:active, &.fake-active {@include background-image(linear-gradient(darken($aalto_gradient_2, 6%), darken($aalto_gradient_2, 4%)));}
 }
 
 .hesburger {
-  @include background-image(linear-gradient(green, blue));
-  h1 {a:link, a:visited, a:active {color: red;}}
+  @include background-image(linear-gradient($hesburger_gradient_1, $hesburger_gradient_2));
+  h1 {a:link, a:visited, a:active {color: $header_text_color;}}
 }
 .hesburger-button {
-  @include background-image(linear-gradient(blue, green));
-  &:active, &.fake-active {@include background-image(linear-gradient(darken(blue, 3%), green));}
+  @include background-image(linear-gradient(darken($hesburger_gradient_2, 4%), $hesburger_gradient_2));
+  &:active, &.fake-active {@include background-image(linear-gradient(darken($hesburger_gradient_2, 6%), darken($hesburger_gradient_2, 4%)));}
 }
 
 .mtv3 {
-  @include background-image(linear-gradient(#323232, #040404));
+  @include background-image(linear-gradient($mtv3_gradient_1, $mtv3_gradient_2));
   h1 {a:link, a:visited, a:active {color: $header_text_color;}}
 }
 .mtv3-button {
-  @include background-image(linear-gradient(#040404, #323232));
-  &:active, &.fake-active {@include background-image(linear-gradient(darken(#040404, 3%), #323232));}
+  @include background-image(linear-gradient(darken($mtv3_gradient_2, 4%), $mtv3_gradient_2));
+  &:active, &.fake-active {@include background-image(linear-gradient(darken($mtv3_gradient_2, 6%), darken($mtv3_gradient_2, 4%)));}
 }
 
 .mcdonalds {
-  @include background-image(linear-gradient(red, blue));
-  h1 {a:link, a:visited, a:active {color: white;}}
+  @include background-image(linear-gradient($mcdonalds_gradient_1, $mcdonalds_gradient_2));
+  h1 {a:link, a:visited, a:active {color: $header_text_color;}}
 }
 .mcdonalds-button {
-  @include background-image(linear-gradient(blue, red));
-  &:active, &.fake-active {@include background-image(linear-gradient(darken(blue, 3%), red));}
+  @include background-image(linear-gradient(darken($mcdonalds_gradient_2, 4%), $mcdonalds_gradient_2));
+  &:active, &.fake-active {@include background-image(linear-gradient(darken($mcdonalds_gradient_2, 6%), darken($mcdonalds_gradient_2, 4%)));}
 }
 
 /* mixins elements
