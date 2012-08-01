@@ -52,9 +52,37 @@ module.exports = {
     ],
 
     results : [
-        { _id: '12345678901234567890dbca', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T08:03:48.223Z'), fbUserId: '123456' },
-        { _id: '12345678901234567890dbcb', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T08:04:48.223Z') },
-        { _id: '12345678901234567890dbcc', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T08:05:48.223Z') }
+        {
+            _id: '12345678901234567890dbca',
+            questionId: '12345678901234567890bbcd',
+            value : 1,
+            timestamp : new Date('2012-03-23T08:03:48.223Z'),
+            fbUserId: '123456',
+            location: {
+                lat: 12.345,
+                lon: 67.890
+            }
+        },
+        {
+            _id: '12345678901234567890dbcb',
+            questionId: '12345678901234567890bbcd',
+            value : 1,
+            timestamp : new Date('2012-03-23T08:04:48.223Z'),
+            location: {
+                lat: 12.345,
+                lon: 67.890
+            }
+        },
+        {
+            _id: '12345678901234567890dbcc',
+            questionId: '12345678901234567890bbcd',
+            value : 1,
+            timestamp : new Date('2012-03-23T08:05:48.223Z'),
+            location: {
+                lat: 12.345,
+                lon: 67.890
+            }
+        }
     ],
 
     users: [

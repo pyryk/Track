@@ -88,7 +88,6 @@ describe('Mongo', function() {
         });
     });
 
-    // TODO: add location
     describe('findResultById', function() {
         it('should return details of specific result by id', function() {
             testDB(Mongo.findResultById('12345678901234567890dbca'), function(dbResult) {
@@ -96,6 +95,8 @@ describe('Mongo', function() {
                 expect(dbResult.fbUserId).toEqual('123456');
                 expect(dbResult.timestamp).toEqual(new Date('2012-03-23T08:03:48.223Z'));
                 expect(dbResult.questionId.toString()).toEqual('12345678901234567890bbcd');
+                expect(dbResult.location.lat).toEqual(12.345);
+                expect(dbResult.location.lon).toEqual(67.890);
             });
         });
     });
