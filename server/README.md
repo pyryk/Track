@@ -22,7 +22,51 @@ Status (if authenticaion fails): 403 Forbidden
 
 ## API endpoints
 
-### GET /targets - Lists all targets
+### GET /customer - Lists all customers
+
+Requires authentication: No
+
+Status: 200 OK
+
+Response body:
+
+{
+    "customers":[
+        {"name":"Hesburger","_id":"500cf09dda8f3be960000095"},
+        {"name":"McDonald's","_id":"500cf0afda8f3be960000097"},
+        {"name":"Aalto-yliopisto","_id":"500cf0a7da8f3be960000096"},
+        {"name":"MTV3","_id":"500d3a5fac1b513963000002"}
+    ]
+}
+
+### GET /customer/:id - Get customer details with target list
+
+Requires authentication: No
+
+Status: 200 OK
+
+Response body:
+
+{
+    "customer":
+        {
+            "name":"Hesburger",
+            "_id":"500cf09dda8f3be960000095",
+            "targets":[
+                {"name":"Hesburger Kamppi","_id":"5018de83e6ce5a6e8300067d"},
+                {"name":"Hesburger Hakaniemi","_id":"5018de9be6ce5a6e8300068a"},
+                {"name":"Hesburger Asematunneli","_id":"5018deade6ce5a6e8300068e"},
+                {"name":"Hesburger Ideapark","_id":"5018deb9e6ce5a6e83000692"},
+                {"name":"Hesburger Sello","_id":"5018dee0e6ce5a6e830006a7"},
+                {"name":"Hesburger Turku","_id":"5018deefe6ce5a6e830006ab"},
+                {"name":"Hesburger Hämeenlinna","_id":"5018decee6ce5a6e8300069f"},
+                {"name":"Hesburger Itäkeskus","_id":"5018ded6e6ce5a6e830006a3"}
+            ]
+        }
+    }
+}
+
+### GET /targets/:id - Get target details with question list
 
 Requires authentication: No
 
@@ -32,14 +76,20 @@ Status: 200 Ok
 
 Response body:
 
-	{
-		targets: [
-			{_id: “12faggf”, name: “T-Talon ruokajono”, relevancy: 9.1251},
-			{_id: “12fa41gf”, name: “Baarin meininki”, relevancy: 5.23521},
-			{_id: “12fa113f”, name: “Mikä fiilis?”, relevancy: 1.2427254}
-		]
-	}
-
+    {"target":
+        {
+            "name":"Hesburger Kamppi",
+            "customerId":"500cf09dda8f3be960000095",
+            "_id":"5018de83e6ce5a6e8300067d",
+            "questionType":"twoSmiles",
+            "showQuestionComment":false,
+            "questions":[
+                {"name":"Maistuiko ruoka?", "_id":"5018de83e6ce5a6e8300067f"},
+                {"name":"Oliko ravintolassa siistiä?","_id":"5018de83e6ce5a6e8300067e"},
+                {"name":"Oliko palvelu nopeaa?","_id":"5018de83e6ce5a6e83000680"}
+            ]
+        }
+    }
 **New design of response body**
 *Target details are passed to in order to tackle front end issues. Should be changed.*
 
