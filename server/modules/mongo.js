@@ -97,19 +97,6 @@ var Mongo = {
                 target[key] = targetHash[key];
             }
 
-            if(target.results) {
-                var results = target.results;
-                for(var i = 0, len = results.length; i < len; i++) {
-                    if(results[i].timestamp) {
-                        continue;
-                    }
-
-                    var value = results[i];
-                    var timestamp = new Date();
-                    results[i] = {value: value, timestamp: timestamp};
-                }
-            };
-
             var targetSaved = new Promise();
 
             target.save(function(error) {
@@ -148,6 +135,91 @@ var Mongo = {
                 });
 
                 savePromises.push(userSaved);
+            });
+
+        });
+
+        // ... Customers ... //
+
+        var Customer = this.Customer;
+        Customer.remove({}, function() {
+
+            Fixtures.customers.forEach(function(customerHash) {
+                var customer = new Customer();
+
+                for(key in customerHash) {
+                    customer[key] = customerHash[key];
+                }
+
+                var customerSaved = new Promise();
+
+                customer.save(function(error) {
+                    if(error) {
+                        console.error(error);
+                        return customerSaved.reject();
+                    }
+
+                    customerSaved.resolve();
+                });
+
+                savePromises.push(customerSaved);
+            });
+
+        });
+
+        // ... Questions ... //
+
+        var Question = this.Question;
+        Question.remove({}, function() {
+
+            Fixtures.questions.forEach(function(questionHash) {
+                var question = new Question();
+
+                for(key in questionHash) {
+                    question[key] = questionHash[key];
+                }
+
+                var questionSaved = new Promise();
+
+                question.save(function(error) {
+                    if(error) {
+                        console.error(error);
+                        return questionSaved.reject();
+                    }
+
+                    questionSaved.resolve();
+                });
+
+                savePromises.push(questionSaved);
+            });
+
+        });
+
+
+        // ... Results ... //
+
+        var Result = this.Result;
+        Result.remove({}, function() {
+
+            Fixtures.results.forEach(function(resultHash) {
+                var result = new Result();
+
+                for(key in resultHash) {
+                    result[key] = resultHash[key];
+                }
+
+                var resultSaved = new Promise();
+
+                result.save(function(error) {
+                    if(error) {
+                        console.error(error);
+                        return resultSaved.reject();
+                    }
+
+                    resultSaved.resolve();
+                });
+
+                savePromises.push(resultSaved);
             });
 
         });
