@@ -50,6 +50,7 @@ var API = {
         this.get("/targets/:id", this.getTargetDetails, false);
         this.get("/questions/:id/results", this.getResults, false);
         this.get("/questions/:id", this.getQuestionDetails, false);
+        this.get("/users/:id", this.getUser, false);
 
         this.post("/targets", this.postTarget, false);
         this.post("/questions/:id/results", this.postResult, false);
@@ -505,6 +506,20 @@ var API = {
 
         res.send(200, body);
         return next();
+    },
+
+    getUser: function(req, res, next) {
+        var userId = req.params.id;
+
+        Mongo.findUserByFBUserId(userId).then(function success(data) {
+            var selectedFields = ['fbUserId', 'points'];
+            var user = API.selectFields(data, selectedFields);
+
+            res.send(200, {user: user});
+            return next();
+        }, function(error) {
+            return next(error);
+        });
     },
 
     getLeaderboard: function(req, res, next) {
