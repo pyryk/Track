@@ -152,7 +152,7 @@ var TargetsList = BaseController.sub({
     BaseController.prototype.render.apply(this);
   },
   customerUpdated: function(customer) {
-    if (customer.id == this.id) {
+    if (customer.id == this.id && window.track.visiblePage == this) {
       this.render();
     }
   },
@@ -289,7 +289,6 @@ var TargetDetails = BaseController.sub({
     try {
       var target = Target.find(this.id);
       if (customer.id === target.getCustomerId() && window.track.visiblePage == this) {
-        console.log("Render");
         this.render();
       }
     } catch(e) {
@@ -536,27 +535,19 @@ var BackButton = BaseController.sub({
   getData: function() {
     var showPrev = this.app.getPreviousPage() !== undefined && this.app.loginOk();
     var showHome = false;
+    if (this.app.visiblePage === this.app.pages['targetList'] || this.app.visiblePage === this.app.pages['targetDetails']
+      || this.app.visiblePage === this.app.pages['questionResults'] || this.app.visiblePage === this.app.pages['leaderboard']) {
+      showPrev = true;
+    }
+    if (this.app.visiblePage === this.app.pages['targetList'] || (this.app.visiblePage === this.app.pages['loginScreen'] && showPrev == false)
+      || (this.app.visiblePage === this.app.pages['loginScreen'] && showPrev == false)) {
+      showHome = true;
+      showPrev = false;
+    }
     if (this.app.visiblePage === this.app.pages['customerList']) {
       showHome = false;
       showPrev = false;
     }
-    if (this.app.visiblePage === this.app.pages['targetList']) {
-      showHome = true;
-      showPrev = false;
-    }
-    if (this.app.visiblePage === this.app.pages['targetDetails']) {
-      showHome = false;
-      showPrev = true;
-    }
-    if (this.app.visiblePage === this.app.pages['loginScreen'] && showPrev == false) {
-      showHome = true;
-      showPrev = false;
-    }
-    if (this.app.visiblePage === this.app.pages['questionResults'] && showPrev == false) {
-      showHome = false;
-      showPrev = true;
-    }
-    console.log("showHome: " + showHome + "   showPrev: " + showPrev);
     return {previous: showPrev, home: showHome};
   },
   backClicked: function() {
