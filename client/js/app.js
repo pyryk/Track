@@ -128,7 +128,7 @@ var App = Spine.Controller.sub({
 
     var handleStatusChange = this.proxy(function(response) {
       //document.body.className = response.authResponse ? 'connected' : 'not_connected';
-      log("FB login response: ", response);
+      console.log("FB login response: ", response);
       if (response.authResponse) {
         var user = User.getUser();
         user.token = response.authResponse.accessToken;

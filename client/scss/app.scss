@@ -45,7 +45,6 @@ $mcdonalds_gradient_2: lighten(#ffe103, 5%);
 .tracktive-button {
   @include background-image(linear-gradient(darken($header_gradient_2, 4%), $header_gradient_2));
   &:active, &.fake-active {
-    //background-position: 0 -36px;
     @include background-image(linear-gradient(darken($header_gradient_2, 6%), darken($header_gradient_2, 4%)));
   }
 }
@@ -211,7 +210,6 @@ body {
   li {
     padding: 1em 1em;
     border: 0;
-    //border-top: 1px solid #fff;
     border-bottom: 1px solid $border_color;
     @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
     @include ellipsis;
@@ -416,6 +414,7 @@ ul li span {
         display: block;
         @include box-flex(1);
         text-align: center;
+
         &:active, &.fake-active {
           @include background-image(linear-gradient(darken($list_item_gradient_2, 6%), darken($list_item_gradient_2, 4%)));
         }

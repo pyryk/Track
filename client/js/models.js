@@ -260,7 +260,7 @@ Result.include({
 /** =========================================== USER ========================================================= */
 /* user (logged in via facebook or other) */
 var User = Spine.Model.sub();
-User.configure("User", "id", "logged", "token", "expires", "provider", "points");
+User.configure("User", "name", "id","logged", "token", "expires", "provider", "points");
 
 User.include({
   loadFromCookies: function() {
@@ -275,36 +275,37 @@ User.include({
    * @param expires, access token expiry, in days after today
    */
   saveCookies: function(expires) {
-    $.cookie('fb_user', this.id, {expires: expires});
+    $.cookie('fb_user', this.name, {expires: expires});
     $.cookie('fb_token', this.token, {expires: expires});
   },
   destroyCookies: function() {
     $.cookie('fb_user', null);
     $.cookie('fb_token', null);
   },
-  getPoints: function() {
-    return User.getPoints(this.id);
+  getPoints: function(user) {
+    var url = App.serverURL;
+    if (url.substring(url.length-1) !== "/") url += "/";
+    url += "users/" + user.name;
+    $.ajax({
+      url: url, dataType: 'json',
+      success: function(data) {
+        user.points = data.user.points;
+        user.id = data.user.fbUserId;
+        user.save();
+        $(".target-points-font").text(user.points);
+      }
+    });
   }
 });
-
-User.getPoints = function(id) {
-  var url = App.serverURL;
-  if (url.substring(url.length-1) !== "/") url += "/";
-  url += "users/" + id;
-  $.ajax({
-    url: url, dataType: 'json',
-    success: function(data) {
-      for (var i in data.users) {
-        var user = data.users[i];
-        user.id = user._id; // map the id
-      }
-    }
-  });
-}
 
 User.getUser = function() {
   return User.last() || User.create();
 };
+
+var Pointsit = Spine.Model.sub();
+Pointsit.configure("Pointsit", "points", "id");
+
+
 
 /** =========================================== LEADERBOARD ===================================================== */
 var LeaderboardEntry = Spine.Model.sub();

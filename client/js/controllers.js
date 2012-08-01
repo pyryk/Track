@@ -257,14 +257,11 @@ var TargetDetails = BaseController.sub({
       var type = target.getQuestionType();
       var items = target.getQuestions();
       var user = User.getUser();
-      console.log(user);
-      user.loadFromCookies();
-      console.log(user);
-      if (user.getPoints() == null) {
-        user.points = 0;
-        user.save();
+      console.log(user.name);
+      if (user.name) {
+        user.getPoints(user);
       }
-      points = user.getPoints();
+      points = 0;
       var showQuestionComment = target.getShowQuestionComment();
       try {
         customerName = Customer.find(target.getCustomerId()).name;
@@ -276,7 +273,7 @@ var TargetDetails = BaseController.sub({
       Target.loadDetails(this.id);
       error = e;
     }
-    return {name: name, points: points,type: type,items: items,showQuestionComment: showQuestionComment,target: target,error: error,title: customerName, customizationClass: customClass};
+    return {name: name, points: points, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error, title: customerName, customizationClass: customClass};
   },
   error: function(reason) {
     if (reason == "notfound") {
@@ -463,8 +460,8 @@ var QuestionResults = BaseController.sub({
       target = Target.find(questionItem.targetId);
       customer = Customer.find(target.getCustomerId());
       var user = User.getUser();
-      data.points = user.getPoints();
-      if (!data.points) data.points = 0;
+      user.getPoints(user);
+      data.points = 0;
       data.name = target.name;
       data.title = customer.name;
       data.customizationClass = customer.name.toLowerCase().replace(/'/g,"");
@@ -486,7 +483,6 @@ var QuestionResults = BaseController.sub({
       if (questionItem) Target.loadDetails(questionItem.targetId);
       if (target) Customer.loadCustomer(target.getCustomerId());
     }
-    console.log(data);
     return data;
   },
   render: function() {
