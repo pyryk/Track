@@ -504,8 +504,16 @@ var API = {
     getLogin: function(req, res, next) {
         var body = req.authorization;
 
-        res.send(200, body);
-        return next();
+        Mongo.findUserByFBUserId(body.fbUserId).then(function success(data) {
+            body.points = data.points;
+
+            res.send(200, body);
+            return next();
+
+        }, function(error) {
+            return next(error);
+        });
+
     },
 
     getUser: function(req, res, next) {

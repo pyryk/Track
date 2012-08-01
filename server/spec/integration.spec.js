@@ -128,40 +128,59 @@ describe('Integration test', function() {
             });
         });
 
-        it('GET /target/:id', function() {
-            request = {method: 'GET', path: '/target/12345678901234567890abce', headers: authHeaders};
+        it('GET /customers/:id', function() {
+            request = {method: 'GET', path: '/customers/12345678901234567890cbcd', headers: authHeaders};
+            testRequest(request, function(result) {
+                var customer = result.body.customer;
+
+                expect(result.statusCode).toEqual(200);
+                expect(customer._id).toEqual('12345678901234567890cbcd');
+                expect(customer.name).toEqual('Aalto-yliopisto');
+            });
+        });
+
+        it('GET /targets/:id', function() {
+            request = {method: 'GET', path: '/targets/12345678901234567890abcd', headers: authHeaders};
             testRequest(request, function(result) {
                 var target = result.body.target;
 
                 expect(result.statusCode).toEqual(200);
-                expect(target._id).toEqual('12345678901234567890abce');
-                expect(target.name).toEqual('T-Talon ruokajono');
-                expect(target.question).toEqual('Oliko paljon jonoa?');
-
-                var isValidTrend = function(val) {
-                    return _.isNumber(val) && val >= -3 && val <= 3;
-                };
-
-                var isPositiveNumber = function(val) {
-                    return _.isNumber(val) && val >= 0 && val <= 60;
-                };
-
-                var isPositiveNumber = function(val) {
-                    return _.isNumber(val) && val >= 0;
-                };
-
-                expect(target.results.now).toMeetObjectRequirements({
-                    pos: isPositiveNumber,
-                    neg: isPositiveNumber,
-                    trend: isValidTrend,
-                    period: isPositiveNumber
-                });
-
-                expect(target.results.alltime).toMeetObjectRequirements({
-                    pos: isPositiveNumber,
-                    neg: isPositiveNumber
-                });
+                expect(target._id).toEqual('12345678901234567890abcd');
+                expect(target.customerId).toEqual('12345678901234567890cbcd');
+                expect(target.questionType).toEqual('fourSmiles');
+                expect(target.showQuestionComment).toEqual(true);
+                expect(target.questions[0].name).toEqual('Opettaako luennoitsija hyvin?');
+                expect(target.questions[1].name).toEqual('Toimivatko kurssin järjestelyt?');
+                expect(target.questions[2].name).toEqual('Onko kurssi haastava?');
+                expect(target.questions[3].name).toEqual('Suosittelisitko kurssia kaverille?');
             });
+
+
+                /*                var isValidTrend = function(val) {
+                                    return _.isNumber(val) && val >= -3 && val <= 3;
+                                };
+
+                                var isPositiveNumber = function(val) {
+                                    return _.isNumber(val) && val >= 0 && val <= 60;
+                                };
+
+                                var isPositiveNumber = function(val) {
+                                    return _.isNumber(val) && val >= 0;
+                                };
+
+                                expect(target.results.now).toMeetObjectRequirements({
+                                    pos: isPositiveNumber,
+                                    neg: isPositiveNumber,
+                                    trend: isValidTrend,
+                                    period: isPositiveNumber
+                                });
+
+                                expect(target.results.alltime).toMeetObjectRequirements({
+                                    pos: isPositiveNumber,
+                                    neg: isPositiveNumber
+                                });
+                */
+
         });
 
         it('GET /target/:id empty result', function() {
