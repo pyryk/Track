@@ -23,10 +23,27 @@ describe('Mongo', function() {
         });
     });
 
+    describe('findAllCustomers', function() {
+
+        it('should return list of all customers', function() {
+            testDB(Mongo.findCustomers(), function(dbResult) {
+                expect(dbResult.length).toEqual(3);
+            });
+        });
+    });
+
+    describe('findCustomerById', function() {
+        it('should return details of specific customer by id', function() {
+            testDB(Mongo.findCustomerById('12345678901234567890cbcd'), function(dbResult) {
+                expect(dbResult.name).toEqual('Aalto-yliopisto');
+            });
+        });
+    });
+
     describe('findAllTargets', function() {
 
         it('should return list of all targets', function() {
-            testDB(Mongo.findAllTargets(), function(dbResult) {
+            testDB(Mongo.findTargets(), function(dbResult) {
                 expect(dbResult.length).toEqual(3);
             });
         });
@@ -34,9 +51,63 @@ describe('Mongo', function() {
 
     describe('findTargetById', function() {
         it('should return details of specific target by id', function() {
-            testDB(Mongo.findTargetById('12345678901234567890ABCD'), function(dbResult) {
-                expect(dbResult.name).toEqual('Mikä fiilis?');
-                expect(dbResult.question).toEqual('Millainen fiilis sinulla on tällä hetkellä?');
+            testDB(Mongo.findTargetById('12345678901234567890abcd'), function(dbResult) {
+                expect(dbResult.name).toEqual('Matematiikka C1');
+                expect(dbResult.customerId.toString()).toEqual('12345678901234567890cbcd');
+                expect(dbResult.questionType).toEqual('fourSmiles');
+                expect(dbResult.showQuestionComment).toEqual(true);
+                expect(dbResult.location.lat).toEqual(12.345);
+                expect(dbResult.location.lon).toEqual(67.890);
+            });
+        });
+    });
+
+    describe('findAllQuestions', function() {
+
+        it('should return list of all questions', function() {
+            testDB(Mongo.findQuestions(), function(dbResult) {
+                expect(dbResult.length).toEqual(4);
+            });
+        });
+    });
+
+    describe('findQuestionById', function() {
+        it('should return details of specific question by id', function() {
+            testDB(Mongo.findQuestionById('12345678901234567890bbcd'), function(dbResult) {
+                expect(dbResult.name).toEqual('Opettaako luennoitsija hyvin?');
+                expect(dbResult.targetId.toString()).toEqual('12345678901234567890abcd');
+            });
+        });
+    });
+
+    describe('findAllResults', function() {
+        it('should return list of all results', function() {
+            testDB(Mongo.findResults(), function(dbResult) {
+                expect(dbResult.length).toEqual(3);
+            });
+        });
+    });
+
+    // TODO: add location
+    describe('findResultById', function() {
+        it('should return details of specific result by id', function() {
+            testDB(Mongo.findResultById('12345678901234567890dbca'), function(dbResult) {
+                expect(dbResult.value).toEqual(1);
+                expect(dbResult.fbUserId).toEqual('123456');
+                expect(dbResult.timestamp).toEqual(new Date('2012-03-23T08:03:48.223Z'));
+                expect(dbResult.questionId.toString()).toEqual('12345678901234567890bbcd');
+            });
+        });
+    });
+
+    describe('createCustomer', function() {
+        it('should create a new customer', function() {
+            testDB(Mongo.createCustomer({
+                name: 'Ravintolafirma A'
+            }), function(id) {
+                testDB(Mongo.findCustomerById(id), function(dbResult) {
+                    expect(dbResult.name).toEqual('Ravintolafirma A');
+                });
             });
         });
     });
@@ -44,16 +115,62 @@ describe('Mongo', function() {
     describe('createTarget', function() {
         it('should create a new target', function() {
             testDB(Mongo.createTarget({
-                name: 'Virgin oil mikä meno?',
-                question: 'Millanen fiilis Virgin Oilissa on?',
-                location: {lat: 12.3456, lon: 23.45678},
-                fbUserId: '123456'
+                name: 'Tuotantotalouden peruskurssi',
+                questions: [
+                    { name: 'Opettaako luennoitsija hyvin?' },
+                    { name: 'Toimivatko kurssin järjestelyt?' },
+                    { name: 'Onko kurssi haastava?' },
+                    { name: 'Suosittelisitko kurssia kaverille?' }
+                ],
+                questionType : 'fourSmiles',
+                showQuestionComment: false,
+                location: {
+                    lat: 12.345,
+                    lon: 67.890
+                },
+                customerId: '12345678901234567890cbcd'
             }), function(id) {
                 testDB(Mongo.findTargetById(id), function(dbResult) {
-                    expect(dbResult.name).toEqual('Virgin oil mikä meno?');
-                    expect(dbResult.question).toEqual('Millanen fiilis Virgin Oilissa on?');
-                    expect(dbResult.createdLocation.lat).toEqual(12.3456);
-                    expect(dbResult.creatorFbUserId).toEqual('123456');
+                    expect(dbResult.name).toEqual('Tuotantotalouden peruskurssi');
+                    expect(dbResult.location.lat).toEqual(12.345);
+                    expect(dbResult.location.lon).toEqual(67.890);
+                    expect(dbResult.questionType).toEqual('fourSmiles');
+                    expect(dbResult.showQuestionComment).toEqual(false);
+                    expect(dbResult.customerId.toString()).toEqual('12345678901234567890cbcd');
+                });
+            });
+        });
+    });
+
+    describe('createQuestion', function() {
+        it('should create a new question', function() {
+            testDB(Mongo.createQuestion({
+                name: 'Miten menee?'
+            }), function(id) {
+                testDB(Mongo.findQuestionById(id), function(dbResult) {
+                    expect(dbResult.name).toEqual('Miten menee?');
+                });
+            });
+        });
+    });
+
+    describe('deleteCustomer', function() {
+        it('should remove the given customer object', function() {
+            testDB(Mongo.findCustomerById('12345678901234567890cbcd'), function(customer) {
+                testDB(Mongo.deleteCustomer(customer), function() {
+                    testDB(Mongo.findCustomerById('12345678901234567890cbcd'), function(findResult) {
+                        expect(findResult).toBe(null);
+                    });
+                });
+            });
+        });
+    });
+
+    describe('deleteCustomerById', function() {
+        it('should remove a customer specified by the id', function() {
+            testDB(Mongo.deleteCustomerById('12345678901234567890cbcd'), function() {
+                testDB(Mongo.findCustomerById('12345678901234567890cbcd'), function(findResult) {
+                    expect(findResult).toBe(null);
                 });
             });
         });
@@ -81,33 +198,61 @@ describe('Mongo', function() {
         });
     });
 
+    describe('deleteQuestion', function() {
+        it('should remove the given question object', function() {
+            testDB(Mongo.findQuestionById('12345678901234567890bbcd'), function(question) {
+                testDB(Mongo.deleteQuestion(question), function() {
+                    testDB(Mongo.findQuestionById('12345678901234567890bbcd'), function(findResult) {
+                        expect(findResult).toBe(null);
+                    });
+                });
+            });
+        });
+    });
+
+    describe('deleteQuestionById', function() {
+        it('should remove a question specified by the id', function() {
+            testDB(Mongo.deleteQuestionById('12345678901234567890bbcd'), function() {
+                testDB(Mongo.findQuestionById('12345678901234567890bbcd'), function(findResult) {
+                    expect(findResult).toBe(null);
+                });
+            });
+        });
+    });
+
     describe('addResult', function() {
         it('should add a new result entry to the tracking target', function() {
             testDB(Mongo.addResult({
-                _id: '12345678901234567890abce',
-                value: 17,
+                questionId: '12345678901234567890bbcd',
+                value: 1,
+                textComment: 'Hyvä kurssi.',
                 fbUserId: '123456',
                 location: {lat: 12.3456, lon: 23.45678}
-            }), function() {
-                testDB(Mongo.findTargetById('12345678901234567890abce'), function(dbResult) {
-                    expect(dbResult.results.length).toEqual(17);
-                    var result = dbResult.results[16];
-                    expect(result.value).toEqual(17);
-                    expect(result.fbUserId).toEqual('123456');
-                    expect(result.location.lat).toEqual(12.3456);
-                    expect(result.location.lon).toEqual(23.45678);
+            }), function(id) {
+                testDB(Mongo.findResultById(id), function(dbResult) {
+                    expect(dbResult.questionId.toString()).toEqual('12345678901234567890bbcd');
+                    expect(dbResult.value).toEqual(1);
+                    expect(dbResult.textComment).toEqual('Hyvä kurssi.');
+                    expect(dbResult.fbUserId).toEqual('123456');
+                    expect(dbResult.location.lat).toEqual(12.3456);
+                    expect(dbResult.location.lon).toEqual(23.45678);
                 });
             });
         });
 
         it('should be possible to add new entry without user', function() {
             testDB(Mongo.addResult({
-                _id: '12345678901234567890abce',
-                value: 19
-            }), function() {
-                testDB(Mongo.findTargetById('12345678901234567890abce'), function(dbResult) {
-                    expect(dbResult.results.length).toEqual(17);
-                    expect(dbResult.results[16].value).toEqual(19);
+                questionId: '12345678901234567890bbcd',
+                value: 1,
+                textComment: 'Hyvä kurssi.',
+                location: {lat: 12.3456, lon: 23.45678}
+            }), function(id) {
+                testDB(Mongo.findResultById(id), function(dbResult) {
+                    expect(dbResult.questionId.toString()).toEqual('12345678901234567890bbcd');
+                    expect(dbResult.value).toEqual(1);
+                    expect(dbResult.textComment).toEqual('Hyvä kurssi.');
+                    expect(dbResult.location.lat).toEqual(12.3456);
+                    expect(dbResult.location.lon).toEqual(23.45678);
                 });
             });
         });

@@ -83,12 +83,11 @@ var Mongo = {
 
     loadFixtures: function() {
         var fixturesSaved = new Promise();
+        var savePromises = [];
 
         // ... Targets ... //
         var Target = this.Target;
         Target.remove({}, function() {});
-
-        var savePromises = [];
 
         Fixtures.targets.forEach(function(targetHash) {
             var target = new Target();
@@ -296,7 +295,7 @@ var Mongo = {
                     , data, promise);
             } else {
                 Mongo.deleteCustomer(data).then(function error(err) {
-                    Mongo.resolvePromise(err, customer, promise);
+                    Mongo.resolvePromise(err, data, promise);
                 })
             }
         });
@@ -446,7 +445,7 @@ var Mongo = {
                     , data, promise);
             } else {
                 Mongo.deleteQuestion(data).then(function error(err) {
-                    Mongo.resolvePromise(err, question, promise);
+                    Mongo.resolvePromise(err, data, promise);
                 })
             }
         });

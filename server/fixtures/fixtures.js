@@ -9,9 +9,39 @@ module.exports = {
     ],
 
     targets: [
-        { name: 'Matematiikka C1', _id: '12345678901234567890abce', customerId: '12345678901234567890cbcd' },
-        { name: 'Matematiikka C2', _id: '12345678901234567890abcd', customerId: '12345678901234567890cbcd' },
-        { name: 'Matematiikka C3', _id: '12345678901234567890abce', customerId: '12345678901234567890cbcd' }
+        {
+            name: 'Matematiikka C1',
+            _id: '12345678901234567890abcd',
+            customerId: '12345678901234567890cbcd',
+            questionType: 'fourSmiles',
+            showQuestionComment: true,
+            location: {
+                lat: 12.345,
+                lon: 67.890
+            }
+        },
+        {
+            name: 'Matematiikka C2',
+            _id: '12345678901234567890abce',
+            customerId: '12345678901234567890cbcd',
+            questionType: 'twoSmiles',
+            showQuestionComment: false,
+            location: {
+                lat: 12.345,
+                lon: 67.890
+            }
+        },
+        {
+            name: 'Matematiikka C3',
+            _id: '12345678901234567890abcf',
+            customerId: '12345678901234567890cbcd',
+            questionType: 'comment',
+            showQuestionComment: false,
+            location: {
+                lat: 12.345,
+                lon: 67.890
+            }
+        }
     ],
 
     questions: [
@@ -22,23 +52,10 @@ module.exports = {
     ],
 
     results : [
-        { _id: '12345678901234567890dbcd', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T08:03:48.223Z'), fbUserId: '123456' },
-        { _id: '12345678901234567890dbce', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T08:04:48.223Z') },
-        { _id: '12345678901234567890dbcf', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T08:05:48.223Z') },
-        { _id: '12345678901234567890dbcg', questionId: '12345678901234567890bbcd', value : 0, timestamp : new Date('2012-03-23T08:10:48.223Z') },
-        { _id: '12345678901234567890dbch', questionId: '12345678901234567890bbcd', value : 0, timestamp : new Date('2012-03-23T08:50:48.223Z') },
-        { _id: '12345678901234567890dbci', questionId: '12345678901234567890bbcd', value : 0, timestamp : new Date('2012-03-23T08:51:48.223Z') },
-        { _id: '12345678901234567890dbcj', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T10:03:48.223Z') },
-        { _id: '12345678901234567890dbck', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T10:13:48.223Z') },
-        { _id: '12345678901234567890dbcl', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T10:14:48.223Z') },
-        { _id: '12345678901234567890dbcm', questionId: '12345678901234567890bbcd', value : 0, timestamp : new Date('2012-03-23T12:01:48.223Z') },
-        { _id: '12345678901234567890dbcn', questionId: '12345678901234567890bbcd', value : 0, timestamp : new Date('2012-03-23T12:03:48.223Z') },
-        { _id: '12345678901234567890dbco', questionId: '12345678901234567890bbcd', value : 0, timestamp : new Date('2012-03-23T12:05:48.223Z') },
-        { _id: '12345678901234567890dbcp', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T13:33:48.223Z') },
-        { _id: '12345678901234567890dbcq', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T13:43:48.223Z') },
-        { _id: '12345678901234567890dbcr', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T13:50:48.223Z') },
-        { _id: '12345678901234567890dbcs', questionId: '12345678901234567890bbcd', value : 0, timestamp : new Date('2012-03-23T13:51:48.223Z') } ]
-}, {
+        { _id: '12345678901234567890dbca', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T08:03:48.223Z'), fbUserId: '123456' },
+        { _id: '12345678901234567890dbcb', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T08:04:48.223Z') },
+        { _id: '12345678901234567890dbcc', questionId: '12345678901234567890bbcd', value : 1, timestamp : new Date('2012-03-23T08:05:48.223Z') }
+    ],
 
     users: [
         {_id: '111111111111111111111100', fbUserId: '111111', fbInformation: {name: 'Pyry Kröger'}}, // No points
