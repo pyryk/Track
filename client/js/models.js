@@ -260,12 +260,12 @@ Result.include({
 /** =========================================== USER ========================================================= */
 /* user (logged in via facebook or other) */
 var User = Spine.Model.sub();
-User.configure("User", "name", "logged", "token", "expires", "provider", "points");
+User.configure("User", "id", "logged", "token", "expires", "provider", "points");
 
 User.include({
   loadFromCookies: function() {
     var user = User.getUser();
-    user.name = $.cookie('fb_user');
+    user.id = $.cookie('fb_user');
     user.token = $.cookie('fb_token');
     if (user.name && user.token) {user.logged = true;user.provider = "facebook";}
     user.save();
@@ -275,7 +275,7 @@ User.include({
    * @param expires, access token expiry, in days after today
    */
   saveCookies: function(expires) {
-    $.cookie('fb_user', this.name, {expires: expires});
+    $.cookie('fb_user', this.id, {expires: expires});
     $.cookie('fb_token', this.token, {expires: expires});
   },
   destroyCookies: function() {
@@ -283,9 +283,24 @@ User.include({
     $.cookie('fb_token', null);
   },
   getPoints: function() {
-    return this.points;
+    return User.getPoints(this.id);
   }
 });
+
+User.getPoints = function(id) {
+  var url = App.serverURL;
+  if (url.substring(url.length-1) !== "/") url += "/";
+  url += "users/" + id;
+  $.ajax({
+    url: url, dataType: 'json',
+    success: function(data) {
+      for (var i in data.users) {
+        var user = data.users[i];
+        user.id = user._id; // map the id
+      }
+    }
+  });
+}
 
 User.getUser = function() {
   return User.last() || User.create();
