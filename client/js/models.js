@@ -269,7 +269,7 @@ User.include({
   destroyCookies: function() {
     $.cookie('fb_user', null);
     $.cookie('fb_token', null);
-  },
+  }
 });
 
 User.getUser = function() {
