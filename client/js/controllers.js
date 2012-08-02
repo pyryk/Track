@@ -122,9 +122,6 @@ var TargetsList = BaseController.sub({
     "fastclick #target-list li": "clicked",
     "keyup #search-target-input": "searchTarget"
   },
-  getTitle: function() {
-    return "List";
-  },
   init: function() {
     BaseController.prototype.init.call(this);
     Spine.bind('location:changed', this.proxy(this.locationChanged));
@@ -208,9 +205,6 @@ var ownResult = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
   },
-  getTitle: function() {
-    return "My Answer";
-  },
   getData: function() {
     try {
       var result = Result.find(this.id)
@@ -237,38 +231,24 @@ var TargetDetails = BaseController.sub({
     "fastclick .active.item.middle.negative": "saveSemiNegativeAnswer",
     "fastclick .active.item.most.negative": "saveNegativeAnswer",
     "fastclick .send": "sendMessage",
-    "fastclick .styled": "textArea",
     "fastclick .goToResults": "viewResults"
   },
   init: function() {
     BaseController.prototype.init.call(this);
     Target.bind("create update", this.proxy(this.targetUpdated));
-    Customer.bind("create update", this.proxy(this.customerUpdated));
-  },
-  getTitle: function() {
-    return "Target";
   },
   getData: function() {
     var target, error;
-    var points, customerName, customClass = null;
+    var points, customerName, customClass, name, type, items, showQuestionComment = null;
     try {
-      var target = Target.find(this.id);
-      var name = target.getName();
-      var type = target.getQuestionType();
-      var items = target.getQuestions();
-      var user = User.getUser();
-      console.log(user.name);
-      if (user.name) {
-        user.getPoints(user);
-      }
+      target = Target.find(this.id);
+      name = target.getName();
+      type = target.getQuestionType();
+      items = target.getQuestions();
+      customerName = target.getCustomerName();
+      customClass = customerName.toLowerCase().replace(/'/g,"");
+      showQuestionComment = target.getShowQuestionComment();
       points = 0;
-      var showQuestionComment = target.getShowQuestionComment();
-      try {
-        customerName = Customer.find(target.getCustomerId()).name;
-        customClass = customerName.toLowerCase().replace(/'/g,"");
-      } catch(e) {
-        if (target.getCustomerId) Customer.loadCustomer(target.getCustomerId());
-      }
     } catch (e) {
       Target.loadDetails(this.id);
       error = e;
@@ -285,15 +265,10 @@ var TargetDetails = BaseController.sub({
       this.render();
     }
   },
-  customerUpdated: function(customer) {
-    try {
-      var target = Target.find(this.id);
-      if (customer.id === target.getCustomerId() && window.track.visiblePage == this) {
-        this.render();
-      }
-    } catch(e) {
-      console.log(e);
-    }
+  userTest: function() {
+    var user = User.getUser();
+    console.log(user);
+    console.log(user.name);
   },
   saveAnswer: function(value, id) {
     var result = Result.create({
@@ -312,7 +287,6 @@ var TargetDetails = BaseController.sub({
     questionItem.done = true;
     questionItem.loadResults(questionItem.id);
     questionItem.save();
-
     try {
       var target = Target.find(this.id);
       if (target.getShowQuestionComment() && questionItem.showComment) {
@@ -366,10 +340,6 @@ var TargetDetails = BaseController.sub({
     this.html(this.template(this.getData()));
     this.addFastButtons();
   },
-  textArea: function(e) {
-    var el = $(e.target);
-    var id = el.attr('data-id');
-  },
   viewResults: function(e) {
     var el = $(e.target);
     var id = el.attr('data-id');
@@ -400,9 +370,6 @@ var TargetCreate = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
   },
-  getTitle: function() {
-    return "Create Target";
-  },
   targetSavedToServer: function(target, success) {
     if (success) {
     } else {
@@ -423,12 +390,8 @@ var TargetCreate = BaseController.sub({
 var QuestionResults = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
-
-    // this is binded to all events to avoid the unbind-old/bind-new
     // hassle when viewing another target
     QuestionItem.bind("create", this.proxy(this.questionUpdated));
-    Target.bind("create", this.proxy(this.targetUpdated));
-    Customer.bind("create", this.proxy(this.customerUpdated));
   },
   questionUpdated: function(question) {
     if (question.id === this.id && window.track.visiblePage == this) {
@@ -436,52 +399,25 @@ var QuestionResults = BaseController.sub({
       this.render();
     }
   },
-  targetUpdated: function(target) {
-    if (target.id === QuestionItem.find(this.id).targetId && window.track.visiblePage == this) {
-      console.log("targetUpdated");
-      this.render();
-    }
-  },
-  customerUpdated: function(customer) {
-    if (customer.id === Target.find(QuestionItem.find(this.id).targetId).getCustomerId() && window.track.visiblePage == this) {
-      console.log("customerUpdated");
-      this.render();
-    }
-  },
-  getTitle: function() {
-    return "Question Results";
-  },
   getData: function() {
     var data = {};
-    var questionItem, target, customer = null;
+    var questionItem = null;
     try {
       questionItem = QuestionItem.find(this.id);
       questionItem.loadResults(this.id);
-      target = Target.find(questionItem.targetId);
-      customer = Customer.find(target.getCustomerId());
-      var user = User.getUser();
-      user.getPoints(user);
+      //var user = User.getUser();
+      //user.getPoints(user);
       data.points = 0;
-      data.name = target.name;
-      data.title = customer.name;
-      data.customizationClass = customer.name.toLowerCase().replace(/'/g,"");
+      data.name = questionItem.targetName;
+      data.title = questionItem.customerName;
+      data.customizationClass = data.title.toLowerCase().replace(/'/g,"");
       data.question = questionItem.name;
-
       data.alltime = questionItem.results.alltime;
-      if (data.alltime.pos == 0 && data.alltime.neg == 0) {
-        data.alltime.zerozero = true;
-      }
       data.now = questionItem.results.now;
-      if (data.now.pos == 0 && data.now.neg == 0) {
-        data.now.zerozero = true;
-      }
       data.now.trendPos = Math.abs(Math.max(0, data.now.trend));
       data.now.trendNeg = Math.abs(Math.min(0, data.now.trend));
-
     } catch(e) {
       QuestionItem.loadQuestion(this.id);
-      if (questionItem) Target.loadDetails(questionItem.targetId);
-      if (target) Customer.loadCustomer(target.getCustomerId());
     }
     return data;
   },

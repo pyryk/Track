@@ -229,13 +229,8 @@
         <tr class="target-answers"><td>
           <p class="result-heading">Yhteensä</p>
           <div class="result-graph">
-            {{#if zerozero}}
-            <div class="neg" style="-webkit-box-flex:1;">0</div>
-            <div class="pos" style="-webkit-box-flex:1;">0</div>
-            {{else}}
             <div class="neg" style="-webkit-box-flex:{{neg}}">{{neg}}{{trend trendPos}}</div>
             <div class="pos" style="-webkit-box-flex:{{pos}}">{{pos}}{{trend trendNeg}}</div>
-            {{/if}}
           </div>
         </td></tr>
         {{/with}}
@@ -245,17 +240,12 @@
         <tr class="target-answers"><td>
           <p class="result-heading">Viimeiset 15 minuuttia</p>
           <div class="result-graph">
-            {{#if zerozero}}
-            <div class="neg" style="-webkit-box-flex:1;">0</div>
-            <div class="pos" style="-webkit-box-flex:1;">0</div>
-            {{else}}
             <div class="neg" style="-webkit-box-flex:{{neg}}">{{neg}}{{trend trendNeg}}</div>
             <div class="pos" style="-webkit-box-flex:{{pos}}">{{pos}}{{trend trendPos}}</div>
-            {{/if}}
           </div>
         </td>
-          {{/with}}
-          {{/if}}
+        {{/with}}
+        {{/if}}
       </table>
     </div>
     </div>
