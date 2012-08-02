@@ -52,11 +52,9 @@ var App = Spine.Controller.sub({
     if (window.trackConfig && window.trackConfig.enableAuth) {
       this.addLogin();
     }
-    this.addLogin();
     // update location data once a minute...
     this.updateLocation(); // ... and at once
     window.setInterval(this.proxy(this.updateLocation), 60000);
-
   },
   renderView: function(name, className, id) {
     if (name !== "loginScreen" && !this.loginOk()) {
@@ -88,7 +86,6 @@ var App = Spine.Controller.sub({
     Spine.trigger('page:change');
   },
   loggedOut: function() {
-    log('logged out - displaying login page');
     Spine.Route.navigate('!/login');
   },
   addLogin: function() {
@@ -122,7 +119,6 @@ var App = Spine.Controller.sub({
       if (d.getElementById(id)) {return;}
       js = d.createElement('script'); js.id = id; js.async = true;
       js.src = "http://connect.facebook.net/en_US/all.js";
-      //js.src = "js/facebook.js";
       ref.parentNode.insertBefore(js, ref);
     }(document));
 
@@ -165,7 +161,7 @@ var App = Spine.Controller.sub({
             user.saveCookies(expires);
           },
           error: function() {
-            log('Error getting long-term FB token. Using short-term one instead.');
+            console.log('Error getting long-term FB token. Using short-term one instead.');
           }
         });
 

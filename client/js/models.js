@@ -82,27 +82,16 @@ Customer.loadCustomer = function(id, additionaldata) {
 
 /** =========================================== TARGET ======================================================= */
 var Target = Spine.Model.sub();
-Target.configure("Target", "customerId", "logo", "showLogo", "isLogo", "name", "questions", "questionType", "showQuestionComment", "location", "results", "detailsLoaded", "saved");
+Target.configure("Target", "name","customerId", "customerName", "logo", "showLogo", "questions", "questionType", "showQuestionComment", "location", "detailsLoaded", "saved");
 
 Target.include({
-  getType: function() {
-    return "target";
-  },
-  getQuestions: function() {
-    return this.questions;
-  },
-  getName: function() {
-    return this.name;
-  },
-  getCustomerId: function() {
-    return this.customerId;
-  },
-  getQuestionType: function() {
-    return this.questionType;
-  },
-  getShowQuestionComment: function() {
-    return this.showQuestionComment;
-  },
+  getType: function() {return "target";},
+  getQuestions: function() {return this.questions;},
+  getName: function() {return this.name;},
+  getCustomerId: function() {return this.customerId;},
+  getQuestionType: function() {return this.questionType;},
+  getShowQuestionComment: function() {return this.showQuestionComment;},
+  getCustomerName: function() {return this.customerName;},
   loadDetails: function(id, listener) {
     Target.loadDetails(id, listener);
   },
@@ -150,11 +139,9 @@ Target.loadDetails = function(id, listener) {
       target["showLogo"] = false;
       var targetObject = Target.create(target);
       for (var i in targetObject.questions) {
-        if (targetObject.showQuestionComment) {
-           var questionItem = QuestionItem.create({name: targetObject.questions[i].name, showComment: true, id: targetObject.questions[i]._id, targetId: target._id, showResults: true});
-        } else {
-          var questionItem = QuestionItem.create({name: targetObject.questions[i].name, id: targetObject.questions[i]._id, targetId: target._id, showResults: true});
-        }
+        var questionItem = QuestionItem.create({name: targetObject.questions[i].name,
+          showComment: targetObject.showQuestionComment, id: targetObject.questions[i]._id,
+          targetId: target._id, targetName: target.name, customerName: target.customerName, showResults: true});
         questionItem.save();
         targetObject.questions[i] = questionItem;
       }
@@ -270,6 +257,7 @@ User.include({
     if (user.name && user.token) {user.logged = true;user.provider = "facebook";}
     user.save();
   },
+
   /**
    * Saves user id and access token to a cookie for quicker return to app
    * @param expires, access token expiry, in days after today
@@ -289,6 +277,7 @@ User.include({
     $.ajax({
       url: url, dataType: 'json',
       success: function(data) {
+        if (user)
         user.points = data.user.points;
         user.id = data.user.fbUserId;
         user.save();
@@ -301,11 +290,6 @@ User.include({
 User.getUser = function() {
   return User.last() || User.create();
 };
-
-var Pointsit = Spine.Model.sub();
-Pointsit.configure("Pointsit", "points", "id");
-
-
 
 /** =========================================== LEADERBOARD ===================================================== */
 var LeaderboardEntry = Spine.Model.sub();
@@ -329,7 +313,7 @@ LeaderboardEntry.load = function() {
 
 /** =========================================== QUESTIONITEM ==================================================== */
 var QuestionItem = Spine.Model.sub();
-QuestionItem.configure("QuestionItem", "name", "done", "showComment", "id", "resultId", "targetId", "results", "resultAllTime", "resultImage", "showResults");
+QuestionItem.configure("QuestionItem", "name", "done", "showComment", "id", "resultId", "targetId", "targetName", "customerName", "results", "resultAllTime", "resultImage", "showResults");
 
 QuestionItem.include({
   loadResults: function(id) {
