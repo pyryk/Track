@@ -22,7 +22,7 @@ Status (if authenticaion fails): 403 Forbidden
 
 ## API endpoints
 
-### GET /customer - Lists all customers
+### GET /customers - Lists all customers
 
 Requires authentication: No
 
@@ -39,7 +39,7 @@ Response body:
     ]
 }
 
-### GET /customer/:id - Get customer details with target list
+### GET /customers/:id - Get customer details with target list
 
 Requires authentication: No
 
@@ -47,37 +47,29 @@ Status: 200 OK
 
 Response body:
 
-{
-    "customer":
-        {
+    {
+        "customer": {
             "name":"Hesburger",
             "_id":"500cf09dda8f3be960000095",
             "targets":[
                 {"name":"Hesburger Kamppi","_id":"5018de83e6ce5a6e8300067d"},
                 {"name":"Hesburger Hakaniemi","_id":"5018de9be6ce5a6e8300068a"},
                 {"name":"Hesburger Asematunneli","_id":"5018deade6ce5a6e8300068e"},
-                {"name":"Hesburger Ideapark","_id":"5018deb9e6ce5a6e83000692"},
-                {"name":"Hesburger Sello","_id":"5018dee0e6ce5a6e830006a7"},
-                {"name":"Hesburger Turku","_id":"5018deefe6ce5a6e830006ab"},
-                {"name":"Hesburger Hämeenlinna","_id":"5018decee6ce5a6e8300069f"},
-                {"name":"Hesburger Itäkeskus","_id":"5018ded6e6ce5a6e830006a3"}
             ]
         }
     }
-}
+
 
 ### GET /targets/:id - Get target details with question list
 
 Requires authentication: No
 
-GET params: lat, lon, i.e. GET /targets?lat=60.16981200000001&lon=24.93824
-
 Status: 200 Ok
 
 Response body:
 
-    {"target":
-        {
+    {
+        "target": {
             "name":"Hesburger Kamppi",
             "customerId":"500cf09dda8f3be960000095",
             "_id":"5018de83e6ce5a6e8300067d",
@@ -90,118 +82,23 @@ Response body:
             ]
         }
     }
-**New design of response body**
-*Target details are passed to in order to tackle front end issues. Should be changed.*
 
-{
-    "targets":[
-        {
-            "name":"McDonalds Herttoniemi",
-            "_id":"5003bd7e5e76f78e31000002",
-            "questions":[
-                {"name":"Viihdyitkö?", "_id":"5003bd7e5e76f78e31000003"},
-                {"name":"Maistuiko?", "_id":"5003bd7e5e76f78e31000004"},
-                {"name":"Oliko kivaa?","_id":"5003bd7e5e76f78e31000005"}
-            ],
-            "relevance":0,
-            "questionType":"twoSmiles",
-            "showQuestionComment":true
-        },
-        {
-            "name":"McDonalds Kaisaniemi",
-            "_id":"5003c012ca06eaa231000006",
-            "questions":[
-                {"name":"Viihdyitkö?","_id":"5003c012ca06eaa231000007"},
-                {"name":"Maistuiko?","_id":"5003c012ca06eaa231000008"},
-                {"name":"Oliko kivaa?","_id":"5003c012ca06eaa231000009"}],
-            "relevance":0,
-            "questionType":"fourSmiles",
-            "showQuestionComment":true
-        }
-    ]
-}
-
-### GET /targets/:customerId - Lists all targets of the specified customer
+### POST /targets - Create a new target
 
 Requires authentication: No
 
-GET params: lat, lon, i.e. GET /targets/500cf0afda8f3be960000097?lat=60.16981200000001&lon=24.93824
-
-Status: 200 Ok
-
-Same response body as in GET /targets.
-
-### GET /target/:_id - Returns specific target with detailed info
-
-Requires authentication: No
-
-Status: 200 Ok
-
-Response body:
-
-	{
-		target: {
-			_id: “12faggf”,
-			name: “T-Talon ruokajono”,
-			question: “T-Talon ruokajonon jonotusaika”
-
-			results: {
-				now: {
-					pos: 10, neg: 3, trend: 3, period: 15
-				},
-				alltime: {
-					pos: 300, neg: 100
-				}
-			}
-		}
-	}
-
-**New design of response body:** (results are in a separate response)
-
-	{
-		target: {
-			_id: “12faggf”,
-			name: “T-Talon ruokajono”,
-			customerId: "500cf0afda8f3be960000097",
-			questions: [
-			    {_id: "4afdfadfdafeaf", name: "Viihdyitkö?"},
-			    {_id: "4afdfadfdafeag", name: "Maistuiko?"}
-			    {_id: "4afdfadfdafeah", name: "Muuta sanottavaa?"}
-            ],
-            questionType: fourSmiles,
-            showQuestionComment: true
-		}
-	}
-
-
-
-* **trend**: integer [-3, 3], where -3 means getting worse with high speed, 0 not changing, 3 getting better with high speed
-* **period**: results from last XX minutes
-
-### POST /target - Create a new target
-
-Requires authentication: No
+Possible questionTypes: fourSmiles, twoSmiles, comment. Others are currently accepted too though.
 
 Request body:
 
-	{
-		"name": “Track target name”,
-		"question": "Kauanko/paljonko/jne plaa plaa plaa otsikkoa tarkentava kysymys",
-		"location": {
-		  "lat": 12.345,
-		  "lon": 67.890
-		}
-	}
-
-**New design of request body:**
 
     {
         "name": "Track target name",
         "customerId": "500cf0afda8f3be960000097",
         "questions": [
-            {"name": "Viihdyitkö?", type: "fourSmiles"},
-            {"name": "Maistuiko?", type: "twoSmiles"},
-            {"name": "Oliko kivaa?", type: "comment"}
+            {"name": "Viihdyitkö?"},
+            {"name": "Maistuiko?"},
+            {"name": "Oliko kivaa?"}
         ],
         "questionType": "fourSmiles",
         "showQuestionComment": true,
@@ -223,7 +120,7 @@ Requires authentication: No
 
 Status: 204 No Content or 404 Not Found
 
-### POST /target/:_id/result - Send tracking result
+### POST /question/:_id/result - Send tracking result
 
 Requires authentication: No
 
@@ -282,42 +179,6 @@ Response body:
 			{fbUserId: "5662685410", name: "Heikki Korhonen", picture: "https://graph.facebook.com/<fb_id>/picture", points: 9},
 		]
 	}
-
-## To be implemented (customer-target-question-result)
-
-### GET /customers - returns customers
-
-Requires authentication: No
-
-Status: 200 OK
-
-Response body:
-
-    {
-        "customers": [
-            {"_id": “12faggf”, "name": “Rosso”},
-            {"_id": “13faggf”, "name": “McDonald's”}
-        ]
-    }
-
-### GET /targets/:_customerId - returns targets of the specified customer
-
-E.g. tracktive.net/targets/44215tadfaf434343 brings the targets of McDonald's
-
-GET params: lat, lon, i.e. GET /targets?lat=60.16981200000001&lon=24.93824
-
-Requires authentication: No
-
-Status: 200 OK
-
-Response body:
-
-    {
-        "targets": [
-            {"_id": “12faggf”, "name": “Kaisaniemi”, "relevancy": 9.1251},
-            {"_id": “13faggf”, "name": “Kamppi”, "relevancy": 9.1251}
-        ]
-    }
 
 ### GET /target/:_id/results - results of the specified target
 

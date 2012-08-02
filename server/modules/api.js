@@ -316,11 +316,18 @@ var API = {
                 Mongo.findCustomerById(target.customerId).then(function success(customer) {
                     questionDetails.customerName = customer.name;
 
-                    res.send(200, {question: questionDetails});
-                    return next();
+                    Mongo.findResults('questionId', questionId).then(function success(results) {
+                        var aggregatedResults = API.aggregateResults(results);
 
+                        if(aggregatedResults) {
+                            results = aggregatedResults;
+                        }
+
+                        questionDetails.results = results;
+                        res.send(200, {question: questionDetails});
+                        return next();
+                    });
                 });
-
             });
 
         }, function(error) {
