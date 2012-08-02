@@ -233,26 +233,32 @@ var API = {
 
     getTargetDetails: function(req, res, next) {
         var targetId = req.params.id;
+        var target;
 
         Mongo.findTargetById(targetId).then(function success(data) {
             if(data == null) {
                 return next(new restify.ResourceNotFoundError("Could not find target with ID " + targetId));
             }
 
-            // Filter
-            var target = API.selectFields(data, ['name', 'customerId', '_id', 'questionType', 'showQuestionComment']);
+            target = API.selectFields(data, ['name', 'customerId', '_id', 'questionType', 'showQuestionComment']);
 
-            Mongo.findQuestions('targetId', targetId).then(function success(data) {
-                var questionFields = ['name', '_id'];
-                var questions = data.map(function(questions) {
-                    return API.selectFields(questions, questionFields);
+            Mongo.findCustomerById(target.customerId).then(function success(data) {
+                target.customerName = data.name;
+
+                Mongo.findQuestions('targetId', targetId).then(function success(data) {
+                    var questionFields = ['name', '_id'];
+                    var questions = data.map(function(questions) {
+                        return API.selectFields(questions, questionFields);
+                    });
+
+                    target.questions = questions;
+
+                    res.send(200, {target: target});
+                    return next();
                 });
 
-                target.questions = questions;
-
-                res.send(200, {target: target});
-                return next();
             });
+
         }, function(error) {
             return next(error);
         });
