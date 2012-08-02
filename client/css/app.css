@@ -819,9 +819,9 @@ ul li span {
 }
 /* line 578, ../scss/app.scss */
 #question-results .result-graph .pos .trend, #question-results .result-graph .neg .trend {
-  border-top: 20px solid transparent;
-  border-bottom: 20px solid transparent;
-  margin: 6px 10px;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  margin: 5px 10px;
   width: 0;
   height: 0;
 }

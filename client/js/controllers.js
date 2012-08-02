@@ -17,7 +17,6 @@ var BaseController = Spine.Controller.sub({
   render: function() {
     var data = this.getData();
     if (typeof this.template === "function") {
-      this.html(this.template(data));
       if (data.title) {
         this.titlebar.text(data.title);
       }
@@ -29,6 +28,7 @@ var BaseController = Spine.Controller.sub({
         this.button_one.addClass(data.customizationClass + "-button");
         this.button_two.addClass(data.customizationClass + "-button");
       }
+      this.html(this.template(data));
       this.addFastButtons();
     }
   },
@@ -130,23 +130,15 @@ var TargetsList = BaseController.sub({
   },
   getData: function() {
     var customer, customClass, title, items;
-    if (this.id == undefined) {
-      Spine.Route.navigate("!/customers/");
-    } else {
-      try {
-        customer = Customer.find(this.id);
-        customClass = customer.name.toLowerCase().replace(/'/g,"");
-        title = customer.name;
-        items = customer.targets;
-      } catch (e) {
-        //console.log("Error", e);
-        this.loadList();
-      }
+    try {
+      customer = Customer.find(this.id);
+      customClass = customer.name.toLowerCase().replace(/'/g,"");
+      title = customer.name;
+      items = customer.targets;
+    } catch (e) {
+      this.loadList();
     }
     return {items: items, title: title, customizationClass: customClass};
-  },
-  render: function() {
-    BaseController.prototype.render.apply(this);
   },
   customerUpdated: function(customer) {
     if (customer.id == this.id && window.track.visiblePage == this) {
@@ -163,17 +155,9 @@ var TargetsList = BaseController.sub({
   },
   clicked: function(e) {
     var id = $(e.target).attr('data-id');
-    if (id) {
-      try {
-        if (Target.find(id).questions.length > 0) {
-        } else {
-          Target.loadDetails(id);
-        }
-      } catch(e) {
-        Target.loadDetails(id);
-      }
-      Spine.Route.navigate("!/targets/" + id);
-    }
+    Target.loadDetails(id);
+    Spine.Route.navigate("!/targets/" + id);
+
   },
   /* List search using jQuery-example */
   searchTarget: function() {
@@ -236,10 +220,11 @@ var TargetDetails = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
     Target.bind("create update", this.proxy(this.targetUpdated));
+    User.bind("create update", this.proxy(this.userUpdated));
   },
   getData: function() {
     var target, error;
-    var points, customerName, customClass, name, type, items, showQuestionComment = null;
+    var user, customerName, customClass, name, type, items, showQuestionComment = null;
     try {
       target = Target.find(this.id);
       name = target.getName();
@@ -248,12 +233,13 @@ var TargetDetails = BaseController.sub({
       customerName = target.getCustomerName();
       customClass = customerName.toLowerCase().replace(/'/g,"");
       showQuestionComment = target.getShowQuestionComment();
-      points = 0;
     } catch (e) {
       Target.loadDetails(this.id);
       error = e;
     }
-    return {name: name, points: points, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error, title: customerName, customizationClass: customClass};
+    user = User.getUser();
+    User.loadPoints(user);
+    return {name: name, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error, title: customerName, customizationClass: customClass};
   },
   error: function(reason) {
     if (reason == "notfound") {
@@ -265,99 +251,45 @@ var TargetDetails = BaseController.sub({
       this.render();
     }
   },
-  userTest: function() {
-    var user = User.getUser();
-    console.log(user);
-    console.log(user.name);
+  userUpdated: function() {
+    if (window.track.visiblePage == this) {
+      var user = User.getUser();
+      $(".target-points-font").text(user.points);
+    }
   },
-  saveAnswer: function(value, id) {
-    var result = Result.create({
-      questionItem: QuestionItem.find(id),
-      value: value,
-      location: window.track.location
-    });
-    result.post();
-  },
+  savePositiveAnswer: function(e) {this.loadAnswer(e, 2);},
+  saveSemiPositiveAnswer: function(e) {this.loadAnswer(e, 1);},
+  saveSemiNegativeAnswer: function(e) {this.loadAnswer(e, -1);},
+  saveNegativeAnswer: function(e) {this.loadAnswer(e, -2);},
+  sendMessage: function(e) {this.loadAnswer(e, 0);},
   loadAnswer: function(e, value) {
     var id = $(e.target).attr('data-id');
-    var user = User.getUser();
-    user.points += 1;
-    user.save();
-    var questionItem = QuestionItem.find(id);
+    try {var questionItem = QuestionItem.find(id);}
+    catch(e) {return console.log(e);}
     questionItem.done = true;
-    questionItem.loadResults(questionItem.id);
-    questionItem.save();
-    try {
-      var target = Target.find(this.id);
-      if (target.getShowQuestionComment() && questionItem.showComment) {
-        this.html(this.template(this.getData()));
-        this.addFastButtons();
-        questionItem.showComment = false;
-      } else {
-        this.html(this.template(this.getData()));
-        this.addFastButtons();
+    if (value !== 0) {
+      QuestionItem.loadResults(questionItem.id, true, questionItem);
+      var resultItem = Result.create({questionItem: questionItem, value: value, location: window.track.location});
+      resultItem.post();
+    } else {
+      var textAreaElements = document.getElementsByClassName('styled');
+      for (var i = 0; i < textAreaElements.length; i++) {
+        if (id == textAreaElements[i].getAttribute('data-id')) {
+          var resultItem = Result.create({questionItem: questionItem, textComment: textAreaElements[i].value, location: window.track.location});
+          resultItem.put();
+          questionItem.showComment = false;
+        }
       }
-    } catch(e) {
-      //console.log(e + " loadAnswer FAIL");
     }
-    this.saveAnswer(value, questionItem.id);
-  },
-  savePositiveAnswer: function(e) {
-    this.loadAnswer(e, 2);
-  },
-  saveSemiPositiveAnswer: function(e) {
-    this.loadAnswer(e, 1);
-  },
-  saveSemiNegativeAnswer: function(e) {
-    this.loadAnswer(e, -1);
-  },
-  saveNegativeAnswer: function(e) {
-    this.loadAnswer(e, -2);
-  },
-  sendMessage: function(e) {
-    var id = $(e.target).attr('data-id');
     var user = User.getUser();
-    user.points += 3;
-    user.save();
-    var textAreaElements = document.getElementsByClassName("styled");
-    for (var i = 0; i < textAreaElements.length; i++) {
-      if (id == textAreaElements[i].getAttribute('data-id')) {
-        var text = textAreaElements[i].value;
-        var questionItem = QuestionItem.find(id);
-        var resultItem = Result.create({questionItem: questionItem, textComment: text, location: window.track.location});
-        var user = User.getUser();
-        resultItem.put();
-        questionItem.done = true;
-        questionItem.showComment = false;
-        questionItem.save();
-        resultItem.bind('resultSent', this.proxy(this.updateResults()));
-        this.html(this.template(this.getData()));
-        this.addFastButtons();
-      }
-    }
-  },
-  updateResults: function() {
-    this.html(this.template(this.getData()));
-    this.addFastButtons();
+    User.loadPoints(user);
+    questionItem.save();
+    this.render();
   },
   viewResults: function(e) {
-    var el = $(e.target);
-    var id = el.attr('data-id');
-    try {
-      var questionItem = QuestionItem.find(id);
-    } catch(e) {
-      //console.log(e);
-    }
-    Spine.Route.navigate("!/questions/" + questionItem.id + "/results");
-
-    if (questionItem.showResults) {
-      Spine.Route.navigate("!/questions/"+ questionItem.id + "/results");
-    } else {
-      questionItem.showResults = true;
-      questionItem.done = true;
-      questionItem.showComment = false;
-      questionItem.save();
-    }
+    var id = $(e.target).attr('data-id');
+    QuestionItem.loadResults(id, false, null);
+    Spine.Route.navigate("!/questions/" + id + "/results");
   }
 });
 
@@ -391,38 +323,34 @@ var QuestionResults = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
     // hassle when viewing another target
-    QuestionItem.bind("create", this.proxy(this.questionUpdated));
+    QuestionItem.bind("create update", this.proxy(this.questionUpdated));
   },
   questionUpdated: function(question) {
     if (question.id === this.id && window.track.visiblePage == this) {
-      console.log("questionUpdated");
       this.render();
     }
   },
   getData: function() {
     var data = {};
     var questionItem = null;
+    var user = User.getUser();
+    $(".target-points-font").text(user.points);
     try {
       questionItem = QuestionItem.find(this.id);
-      questionItem.loadResults(this.id);
-      //var user = User.getUser();
-      //user.getPoints(user);
-      data.points = 0;
       data.name = questionItem.targetName;
       data.title = questionItem.customerName;
       data.customizationClass = data.title.toLowerCase().replace(/'/g,"");
       data.question = questionItem.name;
       data.alltime = questionItem.results.alltime;
       data.now = questionItem.results.now;
-      data.now.trendPos = Math.abs(Math.max(0, data.now.trend));
-      data.now.trendNeg = Math.abs(Math.min(0, data.now.trend));
+      if (data.alltime.pos == 0 && data.alltime.neg == 0) data.alltime.zerozero = true;
+      if (data.now.pos == 0 && data.now.neg == 0) data.now.zerozero = true;
+      //data.now.trendPos = Math.abs(Math.max(0, data.now.trend));
+      //data.now.trendNeg = Math.abs(Math.min(0, data.now.trend));
     } catch(e) {
-      QuestionItem.loadQuestion(this.id);
+      QuestionItem.loadResults(this.id, false, null);
     }
     return data;
-  },
-  render: function() {
-    BaseController.prototype.render.call(this);
   }
 });
 
@@ -518,8 +446,7 @@ var LoginScreen = BaseController.sub({
   },
   getData: function() {
     var data = User.last() || {};
-    data.customizationClass = "tracktive";
-    data.title = "tracktive";
+    data.customizationClass = data.title = "tracktive";
     return data;
   },
   loginUser: function() {
