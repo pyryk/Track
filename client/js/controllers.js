@@ -220,11 +220,11 @@ var TargetDetails = BaseController.sub({
   init: function() {
     BaseController.prototype.init.call(this);
     Target.bind("create update", this.proxy(this.targetUpdated));
-    User.bind("create update", this.proxy(this.userUpdated));
+    User.bind("update", this.proxy(this.userUpdated));
   },
   getData: function() {
     var target, error;
-    var user, customerName, customClass, name, type, items, showQuestionComment = null;
+    var customerName, customClass, name, type, items, showQuestionComment = null;
     try {
       target = Target.find(this.id);
       name = target.getName();
@@ -237,9 +237,7 @@ var TargetDetails = BaseController.sub({
       Target.loadDetails(this.id);
       error = e;
     }
-    user = User.getUser();
-    User.loadPoints(user);
-    return {name: name, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error, title: customerName, customizationClass: customClass};
+    return {name: name, points: User.getUser().points, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error, title: customerName, customizationClass: customClass};
   },
   error: function(reason) {
     if (reason == "notfound") {
@@ -254,6 +252,8 @@ var TargetDetails = BaseController.sub({
   userUpdated: function() {
     if (window.track.visiblePage == this) {
       var user = User.getUser();
+      if (!user.points) user.points = 0;
+      console.log(user.points);
       $(".target-points-font").text(user.points);
     }
   },
@@ -268,10 +268,12 @@ var TargetDetails = BaseController.sub({
     catch(e) {return console.log(e);}
     questionItem.done = true;
     if (value !== 0) {
+      User.loadPoints(1);
       QuestionItem.loadResults(questionItem.id, true, questionItem);
       var resultItem = Result.create({questionItem: questionItem, value: value, location: window.track.location});
       resultItem.post();
     } else {
+      User.loadPoints(2);
       var textAreaElements = document.getElementsByClassName('styled');
       for (var i = 0; i < textAreaElements.length; i++) {
         if (id == textAreaElements[i].getAttribute('data-id')) {
@@ -281,8 +283,6 @@ var TargetDetails = BaseController.sub({
         }
       }
     }
-    var user = User.getUser();
-    User.loadPoints(user);
     questionItem.save();
     this.render();
   },
@@ -324,17 +324,26 @@ var QuestionResults = BaseController.sub({
     BaseController.prototype.init.call(this);
     // hassle when viewing another target
     QuestionItem.bind("create update", this.proxy(this.questionUpdated));
+    User.bind("update", this.proxy(this.userUpdated));
   },
   questionUpdated: function(question) {
     if (question.id === this.id && window.track.visiblePage == this) {
       this.render();
     }
   },
+  userUpdated: function() {
+    console.log("userUpdated??");
+    console.log(window.track.visiblePage == this);
+    if (window.track.visiblePage == this) {
+      var user = User.getUser();
+      if (!user.points) user.points = 0;
+      console.log(user.points);
+      $(".target-points-font").text(user.points);
+    }
+  },
   getData: function() {
     var data = {};
     var questionItem = null;
-    var user = User.getUser();
-    $(".target-points-font").text(user.points);
     try {
       questionItem = QuestionItem.find(this.id);
       data.name = questionItem.targetName;
@@ -343,6 +352,7 @@ var QuestionResults = BaseController.sub({
       data.question = questionItem.name;
       data.alltime = questionItem.results.alltime;
       data.now = questionItem.results.now;
+      data.points = User.getUser().points;
       if (data.alltime.pos == 0 && data.alltime.neg == 0) data.alltime.zerozero = true;
       if (data.now.pos == 0 && data.now.neg == 0) data.now.zerozero = true;
       //data.now.trendPos = Math.abs(Math.max(0, data.now.trend));
@@ -350,6 +360,7 @@ var QuestionResults = BaseController.sub({
     } catch(e) {
       QuestionItem.loadResults(this.id, false, null);
     }
+    User.loadPoints(0);
     return data;
   }
 });

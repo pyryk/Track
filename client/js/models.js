@@ -273,23 +273,26 @@ User.include({
 });
 
 User.getUser = function() {
-  return User.last() || User.create();
+  return User.last() || User.create({points: 0});
 };
 
-User.loadPoints = function(user) {
+User.loadPoints = function(points) {
+  var user = User.getUser();
   var url = App.serverURL;
   if (url.substring(url.length-1) !== "/") url += "/";
   url += "users/" + user.name;
   $.ajax({
     url: url, dataType: 'json',
     success: function(data) {
-      if (data.user == null) {
-       user.points = 3;
-      } else {
-        user.points = data.user.points;
+      if (data.user !== null) {
+        user.points = data.user.points + user.points;
         user.id = data.user.fbUserId;
+      } else {
+        user.points = user.points + points;
       }
       user.save();
+      console.log("MODELS - loadPoints");
+      console.log(user.points);
     }
   });
 }
@@ -345,8 +348,6 @@ QuestionItem.loadResults = function(id, onlyResults, questionItem) {
           var resultTemp = questionItem.resultAllTime + " % \<img src=\"" + questionItem.resultImage + "\" width=\"25\" height=\"25\" alt=\":(\"\>";
           questionItem.save();
           $("#item-" + id + " .right").html(resultTemp);
-          console.log(questionItem.results);
-
         } else {
           requestComplete = true;
           data.question["id"] = data.question._id; // map mongo id
