@@ -474,19 +474,19 @@ var API = {
 
             // Past
             if(timestamp > pastPeriod && timestamp < nowPeriod) {
-                if(val) {
-                    pastResults.pos++;
+                if(val > 0) {
+                    pastResults.pos += val;
                 } else {
-                    pastResults.neg++;
+                    pastResults.neg -= val;
                 }
             }
 
             // Now
             if(timestamp > nowPeriod) {
-                if(val) {
-                    nowResults.pos++;
+                if(val > 0) {
+                    nowResults.pos += val;
                 } else {
-                    nowResults.neg++;
+                    nowResults.neg -= val;
                 }
             }
 
