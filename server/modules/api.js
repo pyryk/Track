@@ -302,12 +302,27 @@ var API = {
     getQuestionDetails: function(req, res, next) {
         var questionId = req.params.id;
 
-        Mongo.findQuestionById(questionId).then(function(data) {
-            var questionFields = ['_id', 'name', 'targetId'];
-            var questionDetails = API.selectFields(data, questionFields);
+        Mongo.findQuestionById(questionId).then(function success(question) {
+            if (!question) {
+                return next(new restify.ResourceNotFoundError("Could not find question with ID " + questionId));
+            }
 
-            res.send(200, {question: questionDetails});
-            return next();
+            var questionFields = ['_id', 'name', 'targetId'];
+            var questionDetails = API.selectFields(question, questionFields);
+
+            Mongo.findTargetById(question.targetId).then(function success(target) {
+                questionDetails.targetName = target.name;
+
+                Mongo.findCustomerById(target.customerId).then(function success(customer) {
+                    questionDetails.customerName = customer.name;
+
+                    res.send(200, {question: questionDetails});
+                    return next();
+
+                });
+
+            });
+
         }, function(error) {
             return next(error);
         });
