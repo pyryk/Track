@@ -117,7 +117,7 @@
   <div id="target-details">
     <div id="target-header">
       <div class="target-name">{{this.name}}</div>
-      <div class="target-points"><span class="target-points-font">{{points}}</span></div>
+      <div class="target-points"><span class="target-points-font">0</span></div>
       <div id="target-header-clear"/>
     </div>
     <!--{{#unless detailsLoaded}}
@@ -215,7 +215,7 @@
 
     <div id="target-header">
       <div class="target-name">{{this.name}}</div>
-      <div class="target-points"><span class="target-points-font">{{this.points}}</span></div>
+      <div class="target-points"><span class="target-points-font">0</span></div>
       <div id="target-header-clear"/>
     </div>
 
@@ -229,8 +229,13 @@
         <tr class="target-answers"><td>
           <p class="result-heading">Yhteensä</p>
           <div class="result-graph">
+            {{#if zerozero}}
+            <div class="neg" style="-webkit-box-flex:1;">0</div>
+            <div class="pos" style="-webkit-box-flex:1;">0</div>
+            {{else}}
             <div class="neg" style="-webkit-box-flex:{{neg}}">{{neg}}{{trend trendPos}}</div>
             <div class="pos" style="-webkit-box-flex:{{pos}}">{{pos}}{{trend trendNeg}}</div>
+            {{/if}}
           </div>
         </td></tr>
         {{/with}}
@@ -240,12 +245,17 @@
         <tr class="target-answers"><td>
           <p class="result-heading">Viimeiset 15 minuuttia</p>
           <div class="result-graph">
+            {{#if zerozero}}
+            <div class="neg" style="-webkit-box-flex:1;">0</div>
+            <div class="pos" style="-webkit-box-flex:1;">0</div>
+            {{else}}
             <div class="neg" style="-webkit-box-flex:{{neg}}">{{neg}}{{trend trendNeg}}</div>
             <div class="pos" style="-webkit-box-flex:{{pos}}">{{pos}}{{trend trendPos}}</div>
+            {{/if}}
           </div>
         </td>
-        {{/with}}
-        {{/if}}
+          {{/with}}
+          {{/if}}
       </table>
     </div>
     </div>

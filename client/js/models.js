@@ -247,7 +247,7 @@ Result.include({
 /** =========================================== USER ========================================================= */
 /* user (logged in via facebook or other) */
 var User = Spine.Model.sub();
-User.configure("User", "name", "id","logged", "token", "expires", "provider", "points");
+User.configure("User", "name", "id", "logged", "token", "expires", "provider", "points");
 
 User.include({
   loadFromCookies: function() {
@@ -270,26 +270,29 @@ User.include({
     $.cookie('fb_user', null);
     $.cookie('fb_token', null);
   },
-  getPoints: function(user) {
-    var url = App.serverURL;
-    if (url.substring(url.length-1) !== "/") url += "/";
-    url += "users/" + user.name;
-    $.ajax({
-      url: url, dataType: 'json',
-      success: function(data) {
-        if (user)
-        user.points = data.user.points;
-        user.id = data.user.fbUserId;
-        user.save();
-        $(".target-points-font").text(user.points);
-      }
-    });
-  }
 });
 
 User.getUser = function() {
   return User.last() || User.create();
 };
+
+User.loadPoints = function(user) {
+  var url = App.serverURL;
+  if (url.substring(url.length-1) !== "/") url += "/";
+  url += "users/" + user.name;
+  $.ajax({
+    url: url, dataType: 'json',
+    success: function(data) {
+      if (data.user == null) {
+       user.points = 3;
+      } else {
+        user.points = data.user.points;
+        user.id = data.user.fbUserId;
+      }
+      user.save();
+    }
+  });
+}
 
 /** =========================================== LEADERBOARD ===================================================== */
 var LeaderboardEntry = Spine.Model.sub();
@@ -315,73 +318,62 @@ LeaderboardEntry.load = function() {
 var QuestionItem = Spine.Model.sub();
 QuestionItem.configure("QuestionItem", "name", "done", "showComment", "id", "resultId", "targetId", "targetName", "customerName", "results", "resultAllTime", "resultImage", "showResults");
 
-QuestionItem.include({
-  loadResults: function(id) {
-    var thisHolder = this;
-    var url = App.serverURL;
-    if (url.substring(url.length-1) !== "/") url += "/questions/";
-    url += id + "/results";
-    var requestComplete = false;
-    try {
-      $.ajax({
-        url: url,dataType: 'json',timeout: 5000,cache: false,headers: {},
-        success: function(data, status, jqXHR) {
-          requestComplete = true;
-          thisHolder.results = data.question.results;
-          if (thisHolder.results.alltime.neg + thisHolder.results.alltime.pos == 0) {
-            thisHolder.results.alltime.neg = 1;
-            thisHolder.results.alltime.pos = 1;
-          }
-          thisHolder.resultAllTime = Math.round((thisHolder.results.alltime.pos/(thisHolder.results.alltime.neg + thisHolder.results.alltime.pos))*100);
-          if (thisHolder.resultAllTime < 50) {
-            thisHolder.resultImage = "img/smiley-thumb-down.png";
-          } else {
-            thisHolder.resultImage = "img/smiley-thumb-up.png";
-          }
-          var resultTemp = thisHolder.resultAllTime + " % \<img src=\"" + thisHolder.resultImage + "\" width=\"25\" height=\"25\" alt=\":(\"\>";
-          thisHolder.save();
-          $("#item-" + id + " .right").html(resultTemp);
-        },
-        error: function(jqxhr, textStatus, error) {
-          log('error: ' + textStatus + ', ' + error);
-        }
-      });
-    } catch(e) {
-      log(e);
-    }
-    // workaround for android 2.3 bug: requests remain pending when loading the page from cache
-    var xmlHttpTimeout=setTimeout(ajaxTimeout,5000);
-    function ajaxTimeout(){
-      // if request not complete and no sinon (xhr mock lib) present
-      if (!requestComplete && !window.sinon) {
-        log("Request timed out - reloading the whole page");
-      } else {
-        log("Request was completed");
-      }
-    }
-  }
-})
-
-QuestionItem.loadQuestion = function(id) {
+QuestionItem.loadResults = function(id, onlyResults, questionItem) {
   var url = App.serverURL;
   if (url.substring(url.length-1) !== "/") url += "/";
-  url += "questions/" + id;
+  if (onlyResults) {url += "questions/" + id + "/results";} else {url += "questions/" + id;}
   var requestComplete = false;
   var user = User.getUser();
   var headers = {'FB-UserId': user.name,'FB-AccessToken': user.token};
-  $.ajax({
-    url: url,dataType: 'json',timeout: 5000,cache: false,headers: user.logged ? headers : {},
-    success: function(data, status, jqXHR) {
-      var question = data.question;
-      question["id"] = question._id; // map mongo id
-      var questionObject = QuestionItem.create(question);
-      questionObject.detailsLoaded = true;
-      questionObject.save();
-      requestComplete = true;
-    },
-    error: function(jqxhr, textStatus, error) {
-      log('error: ' + textStatus + ', ' + error);
+  try {
+    $.ajax({
+      url: url,dataType: 'json',timeout: 5000,cache: false,headers: user.logged ? headers : {},
+      success: function(data, status, jqXHR) {
+        if (onlyResults) {
+          requestComplete = true;
+          questionItem.results = data.question.results;
+          if (questionItem.results.alltime.neg + questionItem.results.alltime.pos == 0) {
+            questionItem.results.alltime.neg = 1;
+            questionItem.results.alltime.pos = 1;
+          }
+          questionItem.resultAllTime = Math.round((questionItem.results.alltime.pos/(questionItem.results.alltime.neg + questionItem.results.alltime.pos))*100);
+          if (questionItem.resultAllTime < 50) {
+            questionItem.resultImage = "img/smiley-thumb-down.png";
+          } else {
+            questionItem.resultImage = "img/smiley-thumb-up.png";
+          }
+          var resultTemp = questionItem.resultAllTime + " % \<img src=\"" + questionItem.resultImage + "\" width=\"25\" height=\"25\" alt=\":(\"\>";
+          questionItem.save();
+          $("#item-" + id + " .right").html(resultTemp);
+          console.log(questionItem.results);
+
+        } else {
+          requestComplete = true;
+          data.question["id"] = data.question._id; // map mongo id
+          var questionObject = QuestionItem.create(data.question);
+          questionObject.detailsLoaded = true;
+          questionObject.save();
+          console.log(questionObject.results);
+        }
+      },
+      error: function(jqxhr, textStatus, error) {
+        log('error: ' + textStatus + ', ' + error);
+      }
+    });
+  } catch(e) {
+    log(e);
+  }
+  // workaround for android 2.3 bug: requests remain pending when loading the page from cache
+  var xmlHttpTimeout=setTimeout(ajaxTimeout,5000);
+  function ajaxTimeout(){
+    // if request not complete and no sinon (xhr mock lib) present
+    if (!requestComplete && !window.sinon) {
+      log("Request timed out - reloading the whole page");
+    } else {
+      log("Request was completed");
     }
-  });
+  }
 }
+
+
 
