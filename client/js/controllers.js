@@ -253,7 +253,6 @@ var TargetDetails = BaseController.sub({
     if (window.track.visiblePage == this) {
       var user = User.getUser();
       if (!user.points) user.points = 0;
-      console.log(user.points);
       $(".target-points-font").text(user.points);
     }
   },
