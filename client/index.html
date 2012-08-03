@@ -187,14 +187,13 @@
         <p class="question">{{this.name}}</p>
         {{#unless this.done}}
         <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
-        <ul class="buttons">
-          <li data-id={{this.id}} class="send">Lähetä</li>
-          {{#if this.showResults}}<li data-id={{this.id}} class="goToResults">Tulokset</li>{{/if}}
+        <ul class="buttons-lonely">
+          <li data-id={{this.id}} class="send">Lähetää</li>
+          <!--{{#if this.showResults}}<li data-id={{this.id}} class="goToResults">Tulokset</li>{{/if}}-->
         </ul>
         {{else}}
         <!--<p class="right">{{this.resultAllTime}} % <img src="img/smiley-thumb-down.png" width="25" height="25" alt=":("/></p>-->
-        <p class="target-done">Kiitos vastauksesta! {{#if this.showResults}} <a data-id={{this.id}} class="goToResults"> tulokset</a>{{/if}}
-        </p>
+        <p class="target-done">Kiitos vastauksesta! </p>
         {{/unless}}
       </div>
     </form>

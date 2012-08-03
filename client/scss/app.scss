@@ -45,7 +45,7 @@ $mcdonalds_gradient_2: lighten(#ffe103, 5%);
 .tracktive-button {
   @include background-image(linear-gradient(darken($header_gradient_2, 4%), $header_gradient_2));
   &:active, &.fake-active {
-    @include background-image(linear-gradient(darken($header_gradient_2, 6%), darken($header_gradient_2, 4%)));
+    @include background-image(linear-gradient(darken($header_gradient_2, 20%), darken($header_gradient_2, 12%)));
   }
 }
 
@@ -55,7 +55,7 @@ $mcdonalds_gradient_2: lighten(#ffe103, 5%);
 }
 .aalto-yliopisto-button {
   @include background-image(linear-gradient(darken($aalto_gradient_2, 4%), $aalto_gradient_2));
-  &:active, &.fake-active {@include background-image(linear-gradient(darken($aalto_gradient_2, 6%), darken($aalto_gradient_2, 4%)));}
+  &:active, &.fake-active {@include background-image(linear-gradient(darken($aalto_gradient_2, 20%), darken($aalto_gradient_2, 12%)));}
 }
 
 .hesburger {
@@ -64,7 +64,7 @@ $mcdonalds_gradient_2: lighten(#ffe103, 5%);
 }
 .hesburger-button {
   @include background-image(linear-gradient(darken($hesburger_gradient_2, 4%), $hesburger_gradient_2));
-  &:active, &.fake-active {@include background-image(linear-gradient(darken($hesburger_gradient_2, 6%), darken($hesburger_gradient_2, 4%)));}
+  &:active, &.fake-active {@include background-image(linear-gradient(darken($hesburger_gradient_2, 20%), darken($hesburger_gradient_2, 12%)));}
 }
 
 .mtv3 {
@@ -73,7 +73,7 @@ $mcdonalds_gradient_2: lighten(#ffe103, 5%);
 }
 .mtv3-button {
   @include background-image(linear-gradient(darken($mtv3_gradient_2, 4%), $mtv3_gradient_2));
-  &:active, &.fake-active {@include background-image(linear-gradient(darken($mtv3_gradient_2, 6%), darken($mtv3_gradient_2, 4%)));}
+  &:active, &.fake-active {@include background-image(linear-gradient(darken($mtv3_gradient_2, 20%), darken($mtv3_gradient_2, 12%)));}
 }
 
 .mcdonalds {
@@ -82,7 +82,7 @@ $mcdonalds_gradient_2: lighten(#ffe103, 5%);
 }
 .mcdonalds-button {
   @include background-image(linear-gradient(darken($mcdonalds_gradient_2, 4%), $mcdonalds_gradient_2));
-  &:active, &.fake-active {@include background-image(linear-gradient(darken($mcdonalds_gradient_2, 6%), darken($mcdonalds_gradient_2, 4%)));}
+  &:active, &.fake-active {@include background-image(linear-gradient(darken($mcdonalds_gradient_2, 20%), darken($mcdonalds_gradient_2, 12%)));}
 }
 
 /* mixins elements
@@ -484,6 +484,33 @@ ul li span {
     margin-left: auto;
     margin-right: auto;
     width: 170px;
+    margin-top: -2px;
+    padding-bottom: 8px;
+
+    li {
+      display: inline;
+      padding: 0.2em 0.6em;
+      border: 1px solid $border_color;
+      @include background-image(linear-gradient($list_item_gradient_1, $list_item_gradient_2));
+      @include box-flex(1);
+      @include box-shadow( 0px 1px 4px rgba(0,0,0,.3));
+      @include border-radius(5px 5px 5px 5px);
+      list-style: none;
+
+      &:active, &.fake-active {
+        @include background-image(linear-gradient(darken($list_item_gradient_2, 6%), darken($list_item_gradient_2, 4%)));
+      }
+
+      a {
+        color: $text_color;
+      }
+    }
+  }
+  .buttons-lonely {
+    list-style: none;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100px;
     margin-top: -2px;
     padding-bottom: 8px;
 

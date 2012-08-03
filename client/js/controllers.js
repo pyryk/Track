@@ -277,7 +277,8 @@ var TargetDetails = BaseController.sub({
       for (var i = 0; i < textAreaElements.length; i++) {
         if (id == textAreaElements[i].getAttribute('data-id')) {
           var resultItem = Result.create({questionItem: questionItem, textComment: textAreaElements[i].value, location: window.track.location});
-          resultItem.put();
+          if (questionItem.resultId) {resultItem.put();}
+          else {resultItem.post();}
           questionItem.showComment = false;
         }
       }

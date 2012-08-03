@@ -6,6 +6,7 @@ Customer.loadList = function(additionalData) {
   var url = App.serverURL;
   if (url.substring(url.length-1) !== "/") url += "/";
   url += "customers";
+  console.log(url);
   var user = User.getUser();
   var headers = {'FB-UserId': user.name,'FB-AccessToken': user.token};
   var requestComplete = false;
