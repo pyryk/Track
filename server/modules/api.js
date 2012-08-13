@@ -394,11 +394,17 @@ var API = {
     },
 
     postResult: function(req, res, next) {
+
+        if (!req.params.value) {
+            return next(new restify.InvalidContentError("Value missing from request."));
+        }
+
         var result = {
             questionId: req.params.id,
             value: req.params.value,
             textComment: req.params.textComment
         };
+
         var fbUserId = req.authorization ? req.authorization.fbUserId : null;
         var isAuthorized = !!fbUserId;
         var promises = [];
