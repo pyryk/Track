@@ -128,17 +128,6 @@ describe('Integration test', function() {
             });
         });
 
-        it('GET /customers/:id', function() {
-            request = {method: 'GET', path: '/customers/12345678901234567890cbcd', headers: authHeaders};
-            testRequest(request, function(result) {
-                var customer = result.body.customer;
-
-                expect(result.statusCode).toEqual(200);
-                expect(customer._id).toEqual('12345678901234567890cbcd');
-                expect(customer.name).toEqual('Aalto-yliopisto');
-            });
-        });
-
         it('GET /targets/:id', function() {
             request = {method: 'GET', path: '/targets/12345678901234567890abcd', headers: authHeaders};
             testRequest(request, function(result) {
@@ -156,50 +145,62 @@ describe('Integration test', function() {
             });
 
 
-                /*                var isValidTrend = function(val) {
-                                    return _.isNumber(val) && val >= -3 && val <= 3;
-                                };
+            /*                var isValidTrend = function(val) {
+                                return _.isNumber(val) && val >= -3 && val <= 3;
+                            };
 
-                                var isPositiveNumber = function(val) {
-                                    return _.isNumber(val) && val >= 0 && val <= 60;
-                                };
+                            var isPositiveNumber = function(val) {
+                                return _.isNumber(val) && val >= 0 && val <= 60;
+                            };
 
-                                var isPositiveNumber = function(val) {
-                                    return _.isNumber(val) && val >= 0;
-                                };
+                            var isPositiveNumber = function(val) {
+                                return _.isNumber(val) && val >= 0;
+                            };
 
-                                expect(target.results.now).toMeetObjectRequirements({
-                                    pos: isPositiveNumber,
-                                    neg: isPositiveNumber,
-                                    trend: isValidTrend,
-                                    period: isPositiveNumber
-                                });
+                            expect(target.results.now).toMeetObjectRequirements({
+                                pos: isPositiveNumber,
+                                neg: isPositiveNumber,
+                                trend: isValidTrend,
+                                period: isPositiveNumber
+                            });
 
-                                expect(target.results.alltime).toMeetObjectRequirements({
-                                    pos: isPositiveNumber,
-                                    neg: isPositiveNumber
-                                });
-                */
+                            expect(target.results.alltime).toMeetObjectRequirements({
+                                pos: isPositiveNumber,
+                                neg: isPositiveNumber
+                            });
+            */
 
         });
 
-        it('GET /target/:id empty result', function() {
-            request = {method: 'GET', path: '/target/12345678901234567890FFFF', headers: authHeaders};
+        it('GET /customers/:id', function() {
+            request = {method: 'GET', path: '/customers/12345678901234567890cbcd', headers: authHeaders};
+            testRequest(request, function(result) {
+                var customer = result.body.customer;
+
+                expect(result.statusCode).toEqual(200);
+                expect(customer._id).toEqual('12345678901234567890cbcd');
+                expect(customer.name).toEqual('Aalto-yliopisto');
+            });
+        });
+
+
+        it('GET /targets/:id empty result', function() {
+            request = {method: 'GET', path: '/targets/12345678901234567890FFFF', headers: authHeaders};
             testRequest(request, function(result) {
                 expect(result.statusCode).toEqual(404);
                 expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find target with ID 12345678901234567890FFFF'})
             });
         });
 
-        it('DELETE /target/:_id existing id', function() {
-            request = {method: 'DELETE', path: '/target/12345678901234567890abce', headers: authHeaders};
+        it('DELETE /targets/:id existing id', function() {
+            request = {method: 'DELETE', path: '/targets/12345678901234567890abce', headers: authHeaders};
             testRequest(request, function(result) {
                 expect(result.statusCode).toEqual(204);
             });
         });
 
-        it('DELETE /target/:_id non-existing id', function() {
-            request = {method: 'DELETE', path: '/target/12345678901234567890FFFF', headers: authHeaders};
+        it('DELETE /targets/:id non-existing id', function() {
+            request = {method: 'DELETE', path: '/targets/12345678901234567890FFFF', headers: authHeaders};
             testRequest(request, function(result) {
                 expect(result.statusCode).toEqual(404);
                 expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find target with ID 12345678901234567890FFFF'})
@@ -207,20 +208,27 @@ describe('Integration test', function() {
         });
 
 
-        it('POST /target', function() {
+        it('POST /targets', function() {
             var id;
 
             runs(function() {
                 var body = {
-                    name: "New track target",
-                    question: "Mitä mitä?",
+                    name: "Track target name",
+                    customerId: "12345678901234567890cbcd",
+                    questions: [
+                        {name: "Viihdyitkö?"},
+                        {name: "Maistuiko?"},
+                        {name: "Oliko kivaa?"}
+                    ],
+                    questionType: "fourSmiles",
+                    showQuestionComment: true,
                     location: {
-                        lat: 12.3456
-                        ,lon : 23.4567
+                        lat: 12.345,
+                        lon: 67.890
                     }
                 };
 
-                request = {method: 'POST', path: '/target', body: body, headers: authHeaders}
+                request = {method: 'POST', path: '/targets', body: body, headers: authHeaders}
                 testRequest(request, function(result) {
                     expect(result.statusCode).toEqual(201);
                     expect(result.body._id.length).toEqual(24); // Valid 24 length string
@@ -233,65 +241,57 @@ describe('Integration test', function() {
             });
 
             runs(function() {
-                testRequest({method: 'GET', path: '/target/' + id, headers: authHeaders}, function(result) {
+                testRequest({method: 'GET', path: '/targets/' + id, headers: authHeaders}, function(result) {
                     expect(result.statusCode).toEqual(200);
-                    expect(result.body.target.name).toEqual("New track target");
-                    expect(result.body.target.question).toEqual("Mitä mitä?");
+                    expect(result.body.target.name).toEqual("Track target name");
+                    expect(result.body.target.customerId).toEqual("12345678901234567890cbcd");
+                    expect(result.body.target.questions[0].name).toEqual("Viihdyitkö?");
+                    expect(result.body.target.questions[1].name).toEqual("Maistuiko?");
+                    expect(result.body.target.questions[2].name).toEqual("Oliko kivaa?");
+                    expect(result.body.target.questionType).toEqual("fourSmiles");
+                    expect(result.body.target.showQuestionComment).toEqual(true);
                 });
 
                 testDB(Mongo.findTargetById(id), function(target) {
-                    expect(target.creatorFbUserId).toEqual('123456');
-                    expect(target.createdLocation.lat).toEqual(12.3456);
-                    expect(target.createdLocation.lon).toEqual(23.4567);
+                    expect(target.location.lat).toEqual(12.345);
+                    expect(target.location.lon).toEqual(67.890);
                 });
 
-                testDB(Mongo.findUserByFBUserId('123456'), function(user) {
-                    expect(user.points).toEqual(5);
-                });
             });
         });
 
-        it('POST /target/:id/result', function() {
-            var id = '12345678901234567890abce';
+        it('POST /questions/:id/results', function() {
+            var id = '12345678901234567890bbcd';
             spyOn(DateUtils, 'now').andReturn(new Date('2012-03-23T13:59:00.000Z'));
-
-            // Guard assertion
-            runs(function() {
-                testRequest({method: 'GET', path: '/target/' + id, headers: authHeaders}, function(result) {
-                    expect(result.statusCode).toEqual(200);
-                    expect(result.body.target.results.alltime.neg).toEqual(7);
-
-                    requestComplete = true;
-                });
-            });
 
             runs(function() {
                 var body = {
-                    value: 0
-                    , location: {
-                        lat: 12.3456
-                        ,lon : 23.4567
+                    value: 1,
+                    location: {
+                        lat: 12.3456,
+                        lon : 23.4567
                     }
                 };
 
-                request = {method: 'POST', path: '/target/' + id + '/result', body: body, headers: authHeaders};
+                request = {method: 'POST', path: '/questions/' + id + '/results', body: body, headers: authHeaders};
                 testRequest(request, function(result) {
-                    expect(result.statusCode).toEqual(204);
-                    expect(result.body).toEqual({});
+                    expect(result.statusCode).toEqual(201);
+                    expect(result.body._id.length).toEqual(24); // Valid 24 length string
 
                     requestComplete = true;
                 });
             });
 
+            var resultId;
             runs(function() {
-                testRequest({method: 'GET', path: '/target/' + id, headers: authHeaders}, function(result) {
+                testRequest({method: 'GET', path: '/questions/' + id + '/results', headers: authHeaders}, function(result) {
                     expect(result.statusCode).toEqual(200);
-                    expect(result.body.target.results.alltime.neg).toEqual(8);
+                    resultId = result._id;
                 });
 
-                testDB(Mongo.findTargetById(id), function(target) {
-                    expect(_.last(target.results).location.lat).toEqual(12.3456);
-                    expect(_.last(target.results).location.lon).toEqual(23.4567);
+                testDB(Mongo.findResultById(resultId), function(result) {
+                    expect(_.last(result.value).toEqual(1));
+
                 });
 
                 testDB(Mongo.findUserByFBUserId('123456'), function(user) {
