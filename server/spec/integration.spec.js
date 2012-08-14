@@ -128,6 +128,7 @@ describe('Integration test', function() {
             });
         });
 
+
         it('GET /targets/:id', function() {
             request = {method: 'GET', path: '/targets/12345678901234567890abcd', headers: authHeaders};
             testRequest(request, function(result) {
@@ -160,9 +161,27 @@ describe('Integration test', function() {
             testRequest(request, function(result) {
                 var customer = result.body.customer;
 
+                // TODO: targets
+                /* var testRelevance = function(val) {
+                    return _.isNumber(val) && val >= 0 && val <= 10;
+                }*/
+
+
                 expect(result.statusCode).toEqual(200);
                 expect(customer._id).toEqual('12345678901234567890cbcd');
                 expect(customer.name).toEqual('Aalto-yliopisto');
+
+
+            });
+        });
+
+        it('GET /customers', function() {
+            testRequest({method: 'GET', path: '/customers', headers: authHeaders}, function(result) {
+                expect(result.statusCode).toEqual(200);
+                expect(result.body.customers[0].name).toEqual('Aalto-yliopisto');
+                expect(result.body.customers[1].name).toEqual('McDonald\'s');
+                expect(result.body.customers[2].name).toEqual('Hesburger');
+
             });
         });
 
@@ -284,6 +303,20 @@ describe('Integration test', function() {
             });
         });
 
+        it ('POST /customers', function() {
+            runs(function() {
+                var body = {
+                    name: 'Customer A'
+                };
+
+                testRequest({method: 'POST', path: '/customers', body: body, headers: authHeaders}, function(result) {
+                    expect(result.statusCode).toEqual(201);
+                    expect(result.body._id.length).toEqual(24); // Valid 24 length string
+                });
+
+            });
+
+        });
 
         it('POST /targets', function() {
             var id;
@@ -337,6 +370,22 @@ describe('Integration test', function() {
             });
         });
 
+        it ('POST /questions', function() {
+            runs(function() {
+                var body = {
+                    name: 'Question A',
+                    targetId: '12345678901234567890abcd'
+                };
+
+                testRequest({method: 'POST', path: '/questions', body: body, headers: authHeaders}, function(result) {
+                    expect(result.statusCode).toEqual(201);
+                    expect(result.body._id.length).toEqual(24); // Valid 24 length string
+                });
+
+            });
+
+        });
+
         it('POST /questions/:id/results', function() {
             var id = '12345678901234567890bbcd';
             spyOn(DateUtils, 'now').andReturn(new Date('2012-03-23T13:59:00.000Z'));
@@ -386,37 +435,43 @@ describe('Integration test', function() {
             });
         });
 
-        it ('POST /customers', function() {
+        it('PUT /results/:id', function() {
+            var id = '12345678901234567890bbcd';
+            spyOn(DateUtils, 'now').andReturn(new Date('2012-03-23T13:59:00.000Z'));
+
+            var resultId;
+
             runs(function() {
-                var body = {
-                    name: 'Customer A'
+                var body = {
+                    value: 1,
+                    location: {
+                        lat: 12.3456,
+                        lon : 23.4567
+                    }
                 };
 
-                testRequest({method: 'POST', path: '/customers', body: body, headers: authHeaders}, function(result) {
+                request = {method: 'POST', path: '/questions/' + id + '/results', body: body, headers: authHeaders};
+                testRequest(request, function(result) {
                     expect(result.statusCode).toEqual(201);
                     expect(result.body._id.length).toEqual(24); // Valid 24 length string
+                    resultId = result.body._id;
+
+                    requestComplete = true;
                 });
 
-            });
-
-        });
-
-        it ('POST /questions', function() {
-            runs(function() {
-                var body = {
-                    name: 'Question A',
-                    targetId: '12345678901234567890abcd'
-                };
-
-                testRequest({method: 'POST', path: '/questions', body: body, headers: authHeaders}, function(result) {
-                    expect(result.statusCode).toEqual(201);
-                    expect(result.body._id.length).toEqual(24); // Valid 24 length string
+                waitsFor(function() {
+                    return resultId;
                 });
 
+                runs(function() {
+                    var body = {textComment: 'Test comment.'};
+                    testRequest({method: 'PUT', path: '/results/' + resultId, body: body, headers: authHeaders}, function(result) {
+                        expect(result.statusCode).toEqual(204);
+                    });
+
+                });
             });
-
         });
-
 
         it('GET /leaderboard', function() {
             testRequest({method: 'GET', path: '/leaderboard'}, function(result) {
@@ -439,37 +494,6 @@ describe('Integration test', function() {
                     {_id: '111111111111111111111120', fbUserId: '000010', name: 'James Bond', points: 3, picture: "https://graph.facebook.com/000010/picture"}
                 ]);
             });
-        });
-    });
-
-    it('GET /targets', function() {
-        request = {method: 'GET', path: '/targets'};
-        testRequest(request, function(result) {
-            expect(result.statusCode).toEqual(200);
-
-            var testRelevance = function(val) {
-                return _.isNumber(val) && val >= 0 && val <= 10;
-            }
-
-            // Expect
-            var expectedTargets = [{
-                name: 'T-Talon ruokajono',
-                _id: '12345678901234567890abce',
-                question: 'Oliko paljon jonoa?',
-                relevance: testRelevance
-            }, {
-                name: 'Putouksen munamiehen läpän taso',
-                _id: '12345678901234567890abcf',
-                question: 'No millasta läpyskää puskee?',
-                relevance: testRelevance
-            }, {
-                name: 'Mikä fiilis?',
-                _id: '12345678901234567890abcd',
-                question: 'Millainen fiilis sinulla on tällä hetkellä?',
-                relevance: testRelevance
-            }];
-
-            expect(result.body.targets).toMeetTargetArrayRequirements(expectedTargets);
         });
     });
 
