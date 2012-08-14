@@ -147,6 +147,9 @@ var API = {
         var customerId = req.params.id;
 
         Mongo.findCustomerById(customerId).then(function success(data) {
+            if(data == null) {
+                return next(new restify.ResourceNotFoundError("Could not find customer with ID " + customerId));
+            }
 
             var customerFields = ['name', '_id'];
             var customerDetails = API.selectFields(data, customerFields);
@@ -362,6 +365,10 @@ var API = {
         var questionId = req.params.id;
 
         Mongo.findQuestionById(questionId).then(function success(data) {
+            if(data == null) {
+                return next(new restify.ResourceNotFoundError("Could not find question with ID " + questionId));
+            }
+
             var questionFields = ['name', '_id'];
             var questionDetails = API.selectFields(data, questionFields);
 

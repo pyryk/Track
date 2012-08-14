@@ -145,31 +145,6 @@ describe('Integration test', function() {
             });
 
 
-            /*                var isValidTrend = function(val) {
-                                return _.isNumber(val) && val >= -3 && val <= 3;
-                            };
-
-                            var isPositiveNumber = function(val) {
-                                return _.isNumber(val) && val >= 0 && val <= 60;
-                            };
-
-                            var isPositiveNumber = function(val) {
-                                return _.isNumber(val) && val >= 0;
-                            };
-
-                            expect(target.results.now).toMeetObjectRequirements({
-                                pos: isPositiveNumber,
-                                neg: isPositiveNumber,
-                                trend: isValidTrend,
-                                period: isPositiveNumber
-                            });
-
-                            expect(target.results.alltime).toMeetObjectRequirements({
-                                pos: isPositiveNumber,
-                                neg: isPositiveNumber
-                            });
-            */
-
         });
 
         it('GET /customers/:id', function() {
@@ -183,12 +158,86 @@ describe('Integration test', function() {
             });
         });
 
+        it('GET /questions/:id', function() {
+            request = {method: 'GET', path: '/questions/12345678901234567890bbcd', headers: authHeaders};
+            testRequest(request, function(result) {
+                var question = result.body.question;
+
+                expect(result.statusCode).toEqual(200);
+                expect(question._id).toEqual('12345678901234567890bbcd');
+                expect(question.name).toEqual('Opettaako luennoitsija hyvin?');
+                expect(question.targetId).toEqual('12345678901234567890abcd');
+                expect(question.targetName).toEqual('Matematiikka C1');
+                expect(question.customerName).toEqual('Aalto-yliopisto');
+            });
+        });
+
+        it('GET /questions/:id/results', function() {
+            request = {method: 'GET', path: '/questions/12345678901234567890bbcd/results', headers: authHeaders};
+            testRequest(request, function(result) {
+                var question = result.body.question;
+
+                expect(result.statusCode).toEqual(200);
+                expect(question._id).toEqual('12345678901234567890bbcd');
+                expect(question.name).toEqual('Opettaako luennoitsija hyvin?');
+
+                var isValidTrend = function(val) {
+                    return _.isNumber(val) && val >= -3 && val <= 3;
+                };
+
+                var isPositiveNumber = function(val) {
+                    return _.isNumber(val) && val >= 0 && val <= 60;
+                };
+
+                var isPositiveNumber = function(val) {
+                    return _.isNumber(val) && val >= 0;
+                };
+
+                expect(question.results.now).toMeetObjectRequirements({
+                    pos: isPositiveNumber,
+                    neg: isPositiveNumber,
+                    trend: isValidTrend,
+                    period: isPositiveNumber
+                });
+
+                expect(question.results.alltime).toMeetObjectRequirements({
+                    pos: isPositiveNumber,
+                    neg: isPositiveNumber
+                });
+            });
+        });
+
+
+        it('GET /customers/:id empty result', function() {
+            request = {method: 'GET', path: '/customers/12345678901234567890FFFF', headers: authHeaders};
+            testRequest(request, function(result) {
+                expect(result.statusCode).toEqual(404);
+                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find customer with ID 12345678901234567890FFFF'});
+            });
+        });
+
 
         it('GET /targets/:id empty result', function() {
             request = {method: 'GET', path: '/targets/12345678901234567890FFFF', headers: authHeaders};
             testRequest(request, function(result) {
                 expect(result.statusCode).toEqual(404);
-                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find target with ID 12345678901234567890FFFF'})
+                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find target with ID 12345678901234567890FFFF'});
+            });
+        });
+
+        it('GET /questions/:id empty result', function() {
+            request = {method: 'GET', path: '/questions/12345678901234567890FFFF', headers: authHeaders};
+            testRequest(request, function(result) {
+                expect(result.statusCode).toEqual(404);
+                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find question with ID 12345678901234567890FFFF'});
+            });
+        });
+
+        it('GET /questions/:id/results empty result', function() {
+            request = {method: 'GET', path: '/questions/12345678901234567890FFFF/results', headers: authHeaders};
+            testRequest(request, function(result) {
+                expect(result.statusCode).toEqual(404);
+                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find question with ID 12345678901234567890FFFF'});
             });
         });
 
@@ -264,6 +313,8 @@ describe('Integration test', function() {
             var id = '12345678901234567890bbcd';
             spyOn(DateUtils, 'now').andReturn(new Date('2012-03-23T13:59:00.000Z'));
 
+            var resultId;
+
             runs(function() {
                 var body = {
                     value: 1,
@@ -277,20 +328,20 @@ describe('Integration test', function() {
                 testRequest(request, function(result) {
                     expect(result.statusCode).toEqual(201);
                     expect(result.body._id.length).toEqual(24); // Valid 24 length string
+                    resultId = result.body._id;
 
                     requestComplete = true;
                 });
             });
 
-            var resultId;
+
             runs(function() {
                 testRequest({method: 'GET', path: '/questions/' + id + '/results', headers: authHeaders}, function(result) {
                     expect(result.statusCode).toEqual(200);
-                    resultId = result._id;
                 });
 
                 testDB(Mongo.findResultById(resultId), function(result) {
-                    expect(_.last(result.value).toEqual(1));
+                    expect(result.value).toEqual(1);
 
                 });
 
