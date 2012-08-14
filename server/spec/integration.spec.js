@@ -147,6 +147,14 @@ describe('Integration test', function() {
 
         });
 
+        it('GET /targets/:id empty result', function() {
+            request = {method: 'GET', path: '/targets/12345678901234567890FFFF', headers: authHeaders};
+            testRequest(request, function(result) {
+                expect(result.statusCode).toEqual(404);
+                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find target with ID 12345678901234567890FFFF'});
+            });
+        });
+
         it('GET /customers/:id', function() {
             request = {method: 'GET', path: '/customers/12345678901234567890cbcd', headers: authHeaders};
             testRequest(request, function(result) {
@@ -155,6 +163,14 @@ describe('Integration test', function() {
                 expect(result.statusCode).toEqual(200);
                 expect(customer._id).toEqual('12345678901234567890cbcd');
                 expect(customer.name).toEqual('Aalto-yliopisto');
+            });
+        });
+
+        it('GET /customers/:id empty result', function() {
+            request = {method: 'GET', path: '/customers/12345678901234567890FFFF', headers: authHeaders};
+            testRequest(request, function(result) {
+                expect(result.statusCode).toEqual(404);
+                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find customer with ID 12345678901234567890FFFF'});
             });
         });
 
@@ -169,6 +185,14 @@ describe('Integration test', function() {
                 expect(question.targetId).toEqual('12345678901234567890abcd');
                 expect(question.targetName).toEqual('Matematiikka C1');
                 expect(question.customerName).toEqual('Aalto-yliopisto');
+            });
+        });
+
+        it('GET /questions/:id empty result', function() {
+            request = {method: 'GET', path: '/questions/12345678901234567890FFFF', headers: authHeaders};
+            testRequest(request, function(result) {
+                expect(result.statusCode).toEqual(404);
+                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find question with ID 12345678901234567890FFFF'});
             });
         });
 
@@ -207,37 +231,26 @@ describe('Integration test', function() {
             });
         });
 
-
-        it('GET /customers/:id empty result', function() {
-            request = {method: 'GET', path: '/customers/12345678901234567890FFFF', headers: authHeaders};
-            testRequest(request, function(result) {
-                expect(result.statusCode).toEqual(404);
-                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find customer with ID 12345678901234567890FFFF'});
-            });
-        });
-
-
-        it('GET /targets/:id empty result', function() {
-            request = {method: 'GET', path: '/targets/12345678901234567890FFFF', headers: authHeaders};
-            testRequest(request, function(result) {
-                expect(result.statusCode).toEqual(404);
-                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find target with ID 12345678901234567890FFFF'});
-            });
-        });
-
-        it('GET /questions/:id empty result', function() {
-            request = {method: 'GET', path: '/questions/12345678901234567890FFFF', headers: authHeaders};
-            testRequest(request, function(result) {
-                expect(result.statusCode).toEqual(404);
-                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find question with ID 12345678901234567890FFFF'});
-            });
-        });
-
         it('GET /questions/:id/results empty result', function() {
             request = {method: 'GET', path: '/questions/12345678901234567890FFFF/results', headers: authHeaders};
             testRequest(request, function(result) {
                 expect(result.statusCode).toEqual(404);
                 expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find question with ID 12345678901234567890FFFF'});
+            });
+        });
+
+        it('DELETE /customers/:id existing id', function() {
+            request = {method: 'DELETE', path: '/customers/12345678901234567890cbcd', headers: authHeaders};
+            testRequest(request, function(result) {
+                expect(result.statusCode).toEqual(204);
+            });
+        });
+
+        it('DELETE /customers/:id non-existing id', function() {
+            request = {method: 'DELETE', path: '/customers/12345678901234567890FFFF', headers: authHeaders};
+            testRequest(request, function(result) {
+                expect(result.statusCode).toEqual(404);
+                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find customer with ID 12345678901234567890FFFF'})
             });
         });
 
@@ -253,6 +266,21 @@ describe('Integration test', function() {
             testRequest(request, function(result) {
                 expect(result.statusCode).toEqual(404);
                 expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find target with ID 12345678901234567890FFFF'})
+            });
+        });
+
+        it('DELETE /questions/:id existing id', function() {
+            request = {method: 'DELETE', path: '/questions/12345678901234567890bbcd', headers: authHeaders};
+            testRequest(request, function(result) {
+                expect(result.statusCode).toEqual(204);
+            });
+        });
+
+        it('DELETE /questions/:id non-existing id', function() {
+            request = {method: 'DELETE', path: '/questions/12345678901234567890FFFF', headers: authHeaders};
+            testRequest(request, function(result) {
+                expect(result.statusCode).toEqual(404);
+                expect(result.body).toEqual({code: 'ResourceNotFound', message: 'Could not find question with ID 12345678901234567890FFFF'})
             });
         });
 
@@ -357,6 +385,38 @@ describe('Integration test', function() {
                 });
             });
         });
+
+        it ('POST /customers', function() {
+            runs(function() {
+                var body = {
+                    name: 'Customer A'
+                };
+
+                testRequest({method: 'POST', path: '/customers', body: body, headers: authHeaders}, function(result) {
+                    expect(result.statusCode).toEqual(201);
+                    expect(result.body._id.length).toEqual(24); // Valid 24 length string
+                });
+
+            });
+
+        });
+
+        it ('POST /questions', function() {
+            runs(function() {
+                var body = {
+                    name: 'Question A',
+                    targetId: '12345678901234567890abcd'
+                };
+
+                testRequest({method: 'POST', path: '/questions', body: body, headers: authHeaders}, function(result) {
+                    expect(result.statusCode).toEqual(201);
+                    expect(result.body._id.length).toEqual(24); // Valid 24 length string
+                });
+
+            });
+
+        });
+
 
         it('GET /leaderboard', function() {
             testRequest({method: 'GET', path: '/leaderboard'}, function(result) {

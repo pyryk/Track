@@ -144,7 +144,10 @@ var API = {
     },
 
     getCustomerDetails: function(req, res, next) {
+        var rel = API.rel;
         var customerId = req.params.id;
+        var fbUserId = req.authorization ? req.authorization.fbUserId : null;
+
 
         Mongo.findCustomerById(customerId).then(function success(data) {
             if(data == null) {
@@ -155,10 +158,27 @@ var API = {
             var customerDetails = API.selectFields(data, customerFields);
 
             Mongo.findTargets('customerId', customerId).then(function(data) {
-                var targetFields = ['name', '_id'];
+                rel.calculate(data, fbUserId);
+
+                var targetFields = ['name', '_id', 'relevance'];
                 var targets = data.map(function(targets) {
                     return API.selectFields(targets, targetFields);
                 });
+
+
+
+                // Sort
+                targets.sort(function(a, b) {
+                    var aRel = a.relevance, bRel = b.relevance;
+                    if(aRel > bRel) {
+                        return -1;
+                    } else if(aRel === bRel) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                });
+
 
                 customerDetails.targets = targets;
 
@@ -191,47 +211,6 @@ var API = {
             return next(err);
         });
 
-    },
-
-    getTargets: function(req, res, next) {
-        var rel = API.rel;
-        var debugging = req.headers['debug'] === 'true';
-        var fbUserId = req.authorization ? req.authorization.fbUserId : null;
-        var customerId = req.params.customerId;
-
-        Mongo.findTargets(customerId).then(function(data) {
-            var targets = data;
-
-            rel.calculate(targets, fbUserId);
-
-            // Filter
-            var selectedFields = ['name', '_id', 'customerId', 'questions', 'relevance', 'questionType', 'showQuestionComment'];
-
-            if(debugging) {
-                selectedFields.push('relevanceFrom');
-            }
-
-            targets = data.map(function(target) {
-                return API.selectFields(target, selectedFields);
-            });
-
-            // Sort
-            targets.sort(function(a, b) {
-                var aRel = a.relevance, bRel = b.relevance;
-                if(aRel > bRel) {
-                    return -1;
-                } else if(aRel === bRel) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            });
-
-            res.send(200, {targets: targets});
-            return next();
-        }, function(error) {
-            return next(error);
-        });
     },
 
     getTargetDetails: function(req, res, next) {
