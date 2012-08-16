@@ -50,7 +50,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</a>
-			<a class="brand" href="#">Dashboard</a>
+			<a class="brand" href="#">Tracktive DashBoard</a>
 			<div class="btn-group pull-right">
 				<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 					<i class="icon-user"></i> Username
@@ -64,88 +64,65 @@
 			</div>
 			<div class="nav-collapse">
 				<ul class="nav">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#about">About</a></li>
-					<li><a href="#contact">Contact</a></li>
+          <li class="active"><a href="#">Tulokset</a></li>
+					<li><a href="#about">Hallitse kohteita</a></li>
+					<li><a href="#contact">Profiili</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
 		</div>
 	</div>
 </div>
 
+
+
 <div class="container">
+  <header class="jumbotron subhead" id="overview">
+    <div class="subnav subnav-fixed">
+      <ul class="nav nav-pills">
+        <li class=""><a href="#labels">Kaavio</a></li>
+        <li class=""><a href="#badges">Kartta</a></li>
+        <li class=""><a href="#typography">Kommentit</a></li>
+        <li class=""><a href="#thumbnails">Data</a></li>
+      </ul>
+    </div>
+  </header>
 	<div class="row">
-		<div class="span2">
-			<div class="well sidebar-nav">
-				<ul id="targets" class="nav nav-list">
-					<li class="nav-header">Sidebar</li>
-				</ul>
-			</div><!--/.well -->
-		</div><!--/span-->
-		<div class="span10">
-			<div class="row">
-				<div class="span5 chart-span">
-					<h2>Results by age and gender</h2>
-					<div id="chart1"></div>
-					<div class="chart1-labels gender-labels">
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-					</div>
-					<div class="chart1-labels age-labels">
-						<div>0-10</div>
-						<div>10-15</div>
-						<div>15-20</div>
-						<div>20-25</div>
-						<div>25-30</div>
-						<div>30-40</div>
-						<div>40-50</div>
-						<div>50-60</div>
-						<div>60+</div>
-					</div>
-				</div>
-				<div class="span5 chart-span">
-					<h2>Results by time</h2>
-					<div id="chart2"></div>
-				</div>
-			</div>
-			<!-- TODO Change these -->
-			<br />
-			<br />
-			<div class="row">
-				<div class="span5 chart-span">
-					<h2>Precentage results by time</h2>
-					<div id="chart3"></div>
-				</div>
-				<div class="span5 chart-span">
-					<div id="chart4"></div>
-					<div id="legend_container4">
-						<div id="smoother4" title="Smoothing"></div>
-						<div id="legend4"></div>
-					</div>
-				</div>
-			</div>
-		</div><!--/span-->
-	</div><!--/row-->
+		<div class="span2 margin-top-10">
+      <h4>Valitse kohde:</h4>
+      <form class="navbar-form pull-left">
+        <input type="text" class="span2" placeholder="etsi...">
+      </form>
 
-	<hr>
+				<ul class="nav nav-list">
+          <li class="nav-header">Hesburger Esplanadi</li>
+          <li class="nav-header">Hesburger Kamppi</li>
+          <li class="nav-header">Hesburger Kaivopuisto</li>
+          <li class="nav-header">Hesburger Linnanmäki</li>
+          <li class="nav-header">Hesburger Esplanadi</li>
+          <li class="nav-header">Hesburger Kamppi</li>
+          <li class="nav-header">Hesburger Kaivopuisto</li>
+          <li class="nav-header">Hesburger Linnanmäki</li>
 
-	<footer>
+        </ul>
+		</div><!--/span-->
+
+    <div class="span10">
+      <h3>Hesburger Kamppi</h3>
+      <div id="chart1" class="span9"></div>
+      <div class="span1">0:00</div>
+      <div class="span1">3:00</div>
+      <div class="span1">6:00</div>
+      <div class="span1">9:00</div>
+      <div class="span1">12:00</div>
+      <div class="span1">15:00</div>
+      <div class="span1">18:00</div>
+      <div class="span1">21:00</div>
+      <div class="span1">24:00</div>
+    </div>
+
+  </div>
+
+  <footer>
 		<p>&copy; Company 2012</p>
 	</footer>
 
@@ -212,7 +189,7 @@ seriesData = [ [], [] ];
 // 6: 40-50
 // 7: 50-60
 // 8: 60-
-for (var ageCategory = 0; ageCategory < 9; ageCategory++) {
+for (var ageCategory = 0; ageCategory < 24; ageCategory++) {
 	for(var gender = 0; gender < 2; gender++) {
 		var votes = Math.round(Math.random() * 100);
 		var pos = Math.round(Math.random() * votes);
@@ -230,8 +207,8 @@ for (var ageCategory = 0; ageCategory < 9; ageCategory++) {
 var graph;
 graph = new Rickshaw.Graph( {
 	element: document.getElementById("chart1"),
-	width: 470,
-	height: 300,
+	//width: 770,
+	height: 360,
 	renderer: 'bar',
 	series: [
 		{
@@ -265,160 +242,6 @@ for (var i = 0; i < 150; i++) {
 	prevNeg = neg;
 }
 
-// Chart 2 ---------------------------------------------------------------------------------------------------------
-
-seriesData = [ [], [] ];
-
-for (var i = 0; i < 150; i++) {
-	seriesData[0].push({x: i, y: votes[i].pos});
-	seriesData[1].push({x: i, y: votes[i].neg});
-}
-
-// instantiate our graph!
-
-graph = new Rickshaw.Graph( {
-	element: document.getElementById("chart2"),
-	width: 470,
-	height: 300,
-	renderer: 'area',
-	stroke: true,
-	series: [
-		{
-			color: "#30c020",
-			data: seriesData[0],
-			name: 'Positive'
-		},
-		{
-			color: "#c05020",
-			data: seriesData[1],
-			name: 'Negative'
-		}
-	]
-} );
-
-graph.render();
-
-var axes = new Rickshaw.Graph.Axis.Time( {
-	graph: graph
-} );
-axes.render();
-
-// Chart 3 ---------------------------------------------------------------------------------------------------------
-
-seriesData = [ [] ];
-
-for (var i = 0; i < 150; i++) {
-	var total = votes[i].pos + votes[i].neg;
-	var value = total === 0 ? 0 : votes[i].pos / total;
-
-	value = Math.round(value * 100);
-
-	console.log(votes[i].pos, votes[i].neg, total, value);
-
-	seriesData[0].push({x: i, y: value});
-}
-
-// instantiate our graph!
-
-graph = new Rickshaw.Graph( {
-	element: document.getElementById("chart3"),
-	width: 470,
-	height: 300,
-	renderer: 'line',
-	series: [
-		{
-			color: "#333333",
-			data: seriesData[0],
-			name: 'Moscow'
-		}
-	]
-} );
-
-var yAxis = new Rickshaw.Graph.Axis.Y({
-    graph: graph
-});
-
-yAxis.render();
-
-graph.render();
-
-// Chart 4 ---------------------------------------------------------------------------------------------------------
-
-seriesData = [ [], [], [] ];
-random = new Rickshaw.Fixtures.RandomData(150);
-
-for (var i = 0; i < 150; i++) {
-	random.addData(seriesData);
-}
-
-// instantiate our graph!
-
-graph = new Rickshaw.Graph( {
-	element: document.getElementById("chart4"),
-	width: 470,
-	height: 300,
-	renderer: 'line',
-	series: [
-		{
-			color: "#c05020",
-			data: seriesData[0],
-			name: 'New York'
-		}, {
-			color: "#30c020",
-			data: seriesData[1],
-			name: 'London'
-		}, {
-			color: "#6060c0",
-			data: seriesData[2],
-			name: 'Tokyo'
-		}
-	]
-} );
-
-graph.render();
-
-var legend = document.querySelector('#legend4');
-
-var Hover = Rickshaw.Class.create(Rickshaw.Graph.HoverDetail, {
-
-	render: function(args) {
-
-		legend.innerHTML = args.formattedXValue;
-
-		args.detail.sort(function(a, b) { return a.order - b.order }).forEach( function(d) {
-
-			var line = document.createElement('div');
-			line.className = 'line';
-
-			var swatch = document.createElement('div');
-			swatch.className = 'swatch';
-			swatch.style.backgroundColor = d.series.color;
-
-			var label = document.createElement('div');
-			label.className = 'label';
-			label.innerHTML = d.name + ": " + d.formattedYValue;
-
-			line.appendChild(swatch);
-			line.appendChild(label);
-
-			legend.appendChild(line);
-
-			var dot = document.createElement('div');
-			dot.className = 'dot';
-			dot.style.top = graph.y(d.value.y0 + d.value.y) + 'px';
-			dot.style.backgroundColor = d.series.color;
-
-			this.element.appendChild(dot);
-
-			dot.className = 'dot active';
-
-			this.show();
-
-		}, this );
-	}
-});
-
-var hover = new Hover( { graph: graph } );
 
 </script>
 
