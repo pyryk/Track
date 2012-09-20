@@ -8,7 +8,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<!-- Le styles -->
+    <!-- Le styles -->
 	<link href="css/bootstrap/bootstrap.css" rel="stylesheet">
 	<style type="text/css">
 		body {
@@ -50,7 +50,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</a>
-			<a class="brand" href="#">Dashboard</a>
+			<a class="brand" href="#">Tracktive</a>
 			<div class="btn-group pull-right">
 				<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 					<i class="icon-user"></i> Username
@@ -73,83 +73,207 @@
 	</div>
 </div>
 
-<div class="container">
-	<div class="row">
-		<div class="span2">
-			<div class="well sidebar-nav">
-				<ul id="targets" class="nav nav-list">
-					<li class="nav-header">Sidebar</li>
-				</ul>
-			</div><!--/.well -->
-		</div><!--/span-->
-		<div class="span10">
-			<div class="row">
-				<div class="span5 chart-span">
-					<h2>Results by age and gender</h2>
-					<div id="chart1"></div>
-					<div class="chart1-labels gender-labels">
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-						<div>M</div>
-						<div>N</div>
-					</div>
-					<div class="chart1-labels age-labels">
-						<div>0-10</div>
-						<div>10-15</div>
-						<div>15-20</div>
-						<div>20-25</div>
-						<div>25-30</div>
-						<div>30-40</div>
-						<div>40-50</div>
-						<div>50-60</div>
-						<div>60+</div>
-					</div>
-				</div>
-				<div class="span5 chart-span">
-					<h2>Results by time</h2>
-					<div id="chart2"></div>
-				</div>
-			</div>
-			<!-- TODO Change these -->
-			<br />
-			<br />
-			<div class="row">
-				<div class="span5 chart-span">
-					<h2>Precentage results by time</h2>
-					<div id="chart3"></div>
-				</div>
-				<div class="span5 chart-span">
-					<div id="chart4"></div>
-					<div id="legend_container4">
-						<div id="smoother4" title="Smoothing"></div>
-						<div id="legend4"></div>
-					</div>
-				</div>
-			</div>
-		</div><!--/span-->
-	</div><!--/row-->
+<header class="margintop20">
+    <div class="navbar">
+        <div class="navbar-inner grey">
+            <a class="brand span3" href="#">McDonald's</a>
+            <ul class="nav">
+                <li><a href="#">Grafiikka</a></li>
+                <li><a href="#">Kommentit</a></li>
+                <li><a href="#">Jotain muuta</a></li>
+                <li><a href="#">Arviointi</a></li>
+                <li><a href="#">Johtopäätökset</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
 
-	<hr>
 
-	<footer>
-		<p>&copy; Company 2012</p>
-	</footer>
+<div class="row">
+    <div class="span3">
+        <div class="accordion" id="accordion2">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseOne">
+                        <b>Kohteet</b>
+                    </a>
+                </div>
 
-</div><!--/.fluid-container-->
+                <div id="collapseOne" class="accordion-body collapse" style="height: 0px; ">
+                    <div class="accordion-inner">
+
+                        <ul class="nav">
+
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" href="#collapse1">
+                                    Helsinki
+                                </a>
+                            </div>
+                            <div id="collapse1" class="accordion-body collapse" style="height: auto; ">
+                                <div class="accordion-inner">
+                                    <ul class="nav">
+                                        <li><label class="checkbox"><input type="checkbox" value="">Miten menee?</label></li>
+                                        <li><label class="checkbox"><input type="checkbox" value="">Kuka menee?</label></li>
+                                        <li><label class="checkbox"><input type="checkbox" value="">Mihin menee?</label></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" href="#collapse2">
+                                    Turku
+                                </a>
+                            </div>
+                            <div id="collapse2" class="accordion-body collapse" style="height: auto; ">
+                                <div class="accordion-inner">
+                                    <ul class="nav">
+                                        <li><label class="checkbox"><input type="checkbox" value="">Miten menee?</label></li>
+                                        <li><label class="checkbox"><input type="checkbox" value="">Kuka menee?</label></li>
+                                        <li><label class="checkbox"><input type="checkbox" value="">Mihin menee?</label></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" href="#collapse3">
+                                    Tampere
+                                </a>
+                            </div>
+                            <div id="collapse3" class="accordion-body collapse" style="height: auto; ">
+                                <div class="accordion-inner">
+                                    <ul class="nav">
+                                        <li><label class="checkbox"><input type="checkbox" value="">Miten menee?</label></li>
+                                        <li><label class="checkbox"><input type="checkbox" value="">Kuka menee?</label></li>
+                                        <li><label class="checkbox"><input type="checkbox" value="">Mihin menee?</label></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </ul>
+
+                    </div>
+                </div>
+
+                <div class="accordion-heading">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseTwo">
+                        <b>Määrittelyt</b>
+                    </a>
+                </div>
+
+                <div id="collapseTwo" class="accordion-body collapse" style="height: 0px; ">
+                    <div class="accordion-inner">
+
+                        <ul class="nav">
+                            <li>Ikä</li>
+                            <li>Sukupuoli</li>
+                            <li>Ikä</li>
+                            <li>Ikä</li>
+                            <li>Ikä</li>
+
+                        </ul>
+
+                    </div>
+                </div>
+
+                <div class="accordion-heading">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseThree">
+                        <b>Ennustukset</b>
+                    </a>
+                </div>
+
+                <div id="collapseThree" class="accordion-body collapse" style="height: 0px; ">
+                    <div class="accordion-inner">
+
+                        <ul class="nav">
+                            <li>Ikä</li>
+                            <li>Sukupuoli</li>
+                            <li>Ikä</li>
+                            <li>Ikä</li>
+                            <li>Ikä</li>
+
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!--
+        <div class="well sidebar-nav">
+            <ul id="targets" class="nav nav-list">
+                <li class="nav-header">Sidebar</li>
+            </ul>
+        </div><!--/.well -->
+    </div><!--/span-->
+    <div class="span10">
+        <div class="row">
+            <div class="span5 chart-span">
+                <h2>Results by age and gender</h2>
+                <div id="chart1"></div>
+                <div class="chart1-labels gender-labels">
+                    <div>M</div>
+                    <div>N</div>
+                    <div>M</div>
+                    <div>N</div>
+                    <div>M</div>
+                    <div>N</div>
+                    <div>M</div>
+                    <div>N</div>
+                    <div>M</div>
+                    <div>N</div>
+                    <div>M</div>
+                    <div>N</div>
+                    <div>M</div>
+                    <div>N</div>
+                    <div>M</div>
+                    <div>N</div>
+                    <div>M</div>
+                    <div>N</div>
+                </div>
+                <div class="chart1-labels age-labels">
+                    <div>0-10</div>
+                    <div>10-15</div>
+                    <div>15-20</div>
+                    <div>20-25</div>
+                    <div>25-30</div>
+                    <div>30-40</div>
+                    <div>40-50</div>
+                    <div>50-60</div>
+                    <div>60+</div>
+                </div>
+            </div>
+            <div class="span5 chart-span">
+                <h2>Results by time</h2>
+                <div id="chart2"></div>
+            </div>
+        </div>
+        <!-- TODO Change these -->
+        <br />
+        <br />
+        <div class="row">
+            <div class="span5 chart-span">
+                <h2>Precentage results by time</h2>
+                <div id="chart3"></div>
+            </div>
+            <div class="span5 chart-span">
+                <div id="chart4"></div>
+                <div id="legend_container4">
+                    <div id="smoother4" title="Smoothing"></div>
+                    <div id="legend4"></div>
+                </div>
+            </div>
+        </div>
+    </div><!--/span-->
+</div><!--/row-->
+
+<hr>
+
+<footer>
+    <p>&copy; Company 2012</p>
+</footer>
+
 
 <!-- Le templates
 	================================================== -->
@@ -175,9 +299,10 @@
 
 <script src="js/dashboard/models.js"></script>
 <script src="js/dashboard/controllers.js"></script>
+<script src="js/bootstrap/bootstrap.min.js"></script>
 
 <!--
-	<script src="js/bootstrap-transition.js"></script>
+
 	<script src="js/bootstrap-alert.js"></script>
 	<script src="js/bootstrap-modal.js"></script>
 	<script src="js/bootstrap-dropdown.js"></script>
@@ -313,7 +438,6 @@ for (var i = 0; i < 150; i++) {
 
 	value = Math.round(value * 100);
 
-	console.log(votes[i].pos, votes[i].neg, total, value);
 
 	seriesData[0].push({x: i, y: value});
 }

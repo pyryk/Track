@@ -27,6 +27,7 @@
             if (item) this.item = item;
 
             this.html(TargetItem.template(this.item));
+            console.log(this.item);
             return this;
         },
 

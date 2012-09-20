@@ -24,3 +24,21 @@
 .age-labels > div {
     width: 52px;
 }
+
+.margintop20 {
+  margin-top: -20px;
+}
+
+.grey {
+  background-color: #ffffff;
+  background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+  background-image: -ms-linear-gradient(top, #ffffff, #f2f2f2);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
+  background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+  background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+  background-image: linear-gradient(top, #ffffff, #f2f2f2);
+}
+
+.borders {
+  border: 1px solid black;
+}
