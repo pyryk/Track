@@ -4,10 +4,22 @@
         init: function() {
             Spine.Model.host = "http://86.50.145.125/";
             SidebarQuestionItem.extend({template: Handlebars.compile($("#sidebar-tmpl").html())});
-            Chart.extend({template: Handlebars.compile($("#chart-tmpl").html())});
+            Title.extend({template: Handlebars.compile($("#title-tmpl").html())});
             new SidebarQuestions({el: $('#sidebar')});
-            global.Question.fetch();
             new Chart({el: $('#chart')});
+            new Title({el: $('#title')});
+            global.Question.fetch();
+        }
+    });
+
+    var Title;
+    global.Title = Title = Spine.Controller.sub({
+        init: function() {
+            Dashboard.Question.bind("refresh", this.proxy(this.setTitle));
+        },
+        setTitle: function() {
+            console.log(Question.all()[0].name);
+            this.html(Title.template(Question.all()[0]));
         }
     });
 
@@ -18,44 +30,54 @@
         },
         getData: function() {
             var question = Question.all()[0];
-            for (var j in question.results.timeDistribution) {
-
-            }
-            console.log(question.results.timeDistribution.neg);
             var seriesData = [ [],[] ];
+            var alltimeData = [ [],[] ];
             for (var i = 0; i < question.results.timeDistribution.length; i++) {
-                seriesData[0].push({x: i, y: question.results.timeDistribution[i].pos_sum});
-                seriesData[1].push({x: i, y: question.results.timeDistribution[i].neg_sum});
+                var date = (new Date(question.results.timeDistribution[i].timestamp)).getTime()/1000;
+                seriesData[0].push({x: date, y: question.results.timeDistribution[i].pos_sum});
+                seriesData[1].push({x: date, y: question.results.timeDistribution[i].neg_sum});
             }
-            this.drawGraph(seriesData);
+
+            alltimeData[0].push({x: 0, y: 0});
+            alltimeData[1].push({x: 0, y: 0});
+            alltimeData[0].push({x: 1, y: question.results.alltime.pos});
+            alltimeData[1].push({x: 1, y: question.results.alltime.neg});
+            alltimeData[0].push({x: 2, y: 0});
+            alltimeData[1].push({x: 2, y: 0});
+
+
+            this.drawGraph(seriesData, alltimeData);
         },
-        drawGraph: function(seriesData) {
+        drawGraph: function(seriesData, alltimeData) {
             var graph;
             graph = new Rickshaw.Graph( {
-                element: document.getElementById("chart"),
+                element: document.getElementById("chart1"),
                 width: 470,
                 height: 300,
                 renderer: 'bar',
-                series: [
-                    {
-                        color: "#c05020",
-                        data: seriesData[0]
-                    }, {
-                        color: "#30c020",
-                        data: seriesData[1]
-                    }
-                ]
+                series: [{color: "#30c020",data: seriesData[0]},
+                    {color: "#c05020",data: seriesData[1]}]
             } );
             graph.renderer.unstack = true;
             graph.render();
             this.drawAxis(graph);
+
+            var graph2
+            graph2 = new Rickshaw.Graph( {
+                element: document.getElementById("chart2"),
+                width: 470,
+                height: 300,
+                renderer: 'bar',
+                series: [{color: "#30c020",data: alltimeData[0]},
+                    {color: "#c05020",data: alltimeData[1]}]
+            });
+            graph2.renderer.unstack = true;
+            graph2.render();
+            //this.drawAxis(graph2);
         },
         drawAxis: function(graph) {
-            var xAxis = new Rickshaw.Graph.Axis.Time({
-                graph: graph
-            });
-
-            xAxis.render();
+            var axes = new Rickshaw.Graph.Axis.Time( { graph: graph } );
+            graph.render();
         }
     });
 
@@ -83,7 +105,6 @@
             Dashboard.Question.bind("create",  this.proxy(this.addOne));
         },
         addOne: function(item){
-            console.log("SidebarQuestions addone");
             var question = new SidebarQuestionItem({item: item});
             this.append(question.render());
         },

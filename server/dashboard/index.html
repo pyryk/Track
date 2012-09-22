@@ -97,6 +97,11 @@
     </div>
     <!-- === RIGHTSIDE CONTENT === -->
     <div id="chart" class="span10">
+        <div id="title"></div>
+        <div class="row">
+            <div id="chart1" class="span5"></div>
+            <div id="chart2" class="span5"></div>
+        </div>
     </div>
 </div><!--/row-->
 
@@ -296,13 +301,12 @@
     </div>
 </script>
 
+<script id="title-tmpl" type="text/x-handlebars-template">
+    <h2>{{this.name}}</h2>
+</script>
+
 <script id="chart-tmpl" type="text/x-handlebars-template">
-    <div class="row">
-        <div class="span5 chart-span">
-            <h2>Results by age and gender</h2>
-            <div id="chart1"></div>
-        </div>
-    </div>
+
 </script>
 
 <script id="questionitem-tmpl" type="text/x-handlebars-template">
