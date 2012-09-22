@@ -209,88 +209,92 @@ var ownResult = BaseController.sub({
 /* TargetDetails
  *====================================================================================================================*/
 var TargetDetails = BaseController.sub({
-  events: {
-    "fastclick .active.item.most.positive": "savePositiveAnswer",
-    "fastclick .active.item.middle.positive": "saveSemiPositiveAnswer",
-    "fastclick .active.item.middle.negative": "saveSemiNegativeAnswer",
-    "fastclick .active.item.most.negative": "saveNegativeAnswer",
-    "fastclick .send": "sendMessage",
-    "fastclick .goToResults": "viewResults"
-  },
-  init: function() {
-    BaseController.prototype.init.call(this);
-    Target.bind("create update", this.proxy(this.targetUpdated));
-    User.bind("update", this.proxy(this.userUpdated));
-  },
-  getData: function() {
-    var target, error;
-    var customerName, customClass, name, type, items, showQuestionComment = null;
-    try {
-      target = Target.find(this.id);
-      name = target.getName();
-      type = target.getQuestionType();
-      items = target.getQuestions();
-      customerName = target.getCustomerName();
-      customClass = customerName.toLowerCase().replace(/'/g,"");
-      showQuestionComment = target.getShowQuestionComment();
-    } catch (e) {
-      Target.loadDetails(this.id);
-      error = e;
-    }
-    return {name: name, points: User.getUser().points, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error, title: customerName, customizationClass: customClass};
-  },
-  error: function(reason) {
-    if (reason == "notfound") {
-      alert('not found');
-    }
-  },
-  targetUpdated: function(target) {
-    if (target.id === this.id && window.track.visiblePage == this) {
-      this.render();
-    }
-  },
-  userUpdated: function() {
-    if (window.track.visiblePage == this) {
-      var user = User.getUser();
-      if (!user.points) user.points = 0;
-      $(".target-points-font").text(user.points);
-    }
-  },
-  savePositiveAnswer: function(e) {this.loadAnswer(e, 2);},
-  saveSemiPositiveAnswer: function(e) {this.loadAnswer(e, 1);},
-  saveSemiNegativeAnswer: function(e) {this.loadAnswer(e, -1);},
-  saveNegativeAnswer: function(e) {this.loadAnswer(e, -2);},
-  sendMessage: function(e) {this.loadAnswer(e, 0);},
-  loadAnswer: function(e, value) {
-    var id = $(e.target).attr('data-id');
-    try {var questionItem = QuestionItem.find(id);}
-    catch(e) {return console.log(e);}
-    questionItem.done = true;
-    if (value !== 0) {
-      User.loadPoints(1);
-      QuestionItem.loadResults(questionItem.id, true, questionItem);
-      var resultItem = Result.create({questionItem: questionItem, value: value, location: window.track.location});
-      resultItem.post();
-    } else {
-      User.loadPoints(2);
-      var textAreaElements = document.getElementsByClassName('styled');
-      for (var i = 0; i < textAreaElements.length; i++) {
-        if (id == textAreaElements[i].getAttribute('data-id')) {
-          var resultItem = Result.create({questionItem: questionItem, textComment: textAreaElements[i].value, location: window.track.location});
-          if (questionItem.resultId) {resultItem.put();}
-          else {resultItem.post();}
-          questionItem.showComment = false;
+    events: {
+        "fastclick .active.item._44": "save44Answer",
+        "fastclick .active.item._43": "save43Answer",
+        "fastclick .active.item._42": "save42Answer",
+        "fastclick .active.item._41": "save41Answer",
+        "fastclick .active.item._22": "save22Answer",
+        "fastclick .active.item._21": "save21Answer",
+        "fastclick .send": "sendMessage",
+        "fastclick .goToResults": "viewResults"
+    },
+    init: function() {
+        BaseController.prototype.init.call(this);
+        Target.bind("create update", this.proxy(this.targetUpdated));
+        User.bind("update", this.proxy(this.userUpdated));
+    },
+    getData: function() {
+        var target, error;
+        var customerName, customClass, name, type, items, showQuestionComment = null;
+        try {
+            target = Target.find(this.id);
+            name = target.getName();
+            type = target.getQuestionType();
+            items = target.getQuestions();
+            customerName = target.getCustomerName();
+            customClass = customerName.toLowerCase().replace(/'/g,"");
+            showQuestionComment = target.getShowQuestionComment();
+        } catch (e) {
+            Target.loadDetails(this.id);
+            error = e;
         }
-      }
+        return {name: name, points: User.getUser().points, type: type, items: items, showQuestionComment: showQuestionComment, target: target, error: error, title: customerName, customizationClass: customClass};
+    },
+    error: function(reason) {
+        if (reason == "notfound") {
+            alert('not found');
+        }
+    },
+    targetUpdated: function(target) {
+            if (target.id === this.id && window.track.visiblePage == this) {
+        this.render();
+        }
+    },
+    userUpdated: function() {
+        if (window.track.visiblePage == this) {
+            var user = User.getUser();
+            if (!user.points) user.points = 0;
+            $(".target-points-font").text(user.points);
+        }
+    },
+    save44Answer: function(e) {this.loadAnswer(e, 44);},
+    save43Answer: function(e) {this.loadAnswer(e, 43);},
+    save42Answer: function(e) {this.loadAnswer(e, 42);},
+    save41Answer: function(e) {this.loadAnswer(e, 41);},
+    save22Answer: function(e) {this.loadAnswer(e, 22);},
+    save21Answer: function(e) {this.loadAnswer(e, 21);},
+    sendMessage: function(e) {this.loadAnswer(e, 0);},
+    loadAnswer: function(e, value) {
+        var id = $(e.target).attr('data-id');
+        try {var questionItem = QuestionItem.find(id);}
+        catch(e) {return console.log(e);}
+        questionItem.done = true;
+        if (value !== 0) {
+            User.loadPoints(1);
+            QuestionItem.loadResults(questionItem.id, true, questionItem);
+            var resultItem = Result.create({questionItem: questionItem, value: value, location: window.track.location});
+            resultItem.post();
+        } else {
+            User.loadPoints(2);
+            var textAreaElements = document.getElementsByClassName('styled');
+            for (var i = 0; i < textAreaElements.length; i++) {
+                if (id == textAreaElements[i].getAttribute('data-id')) {
+                    var resultItem = Result.create({questionItem: questionItem, textComment: textAreaElements[i].value, location: window.track.location});
+                    if (questionItem.resultId) {resultItem.put();}
+                    else {resultItem.post();}
+                    questionItem.showComment = false;
+                }
+            }
+        }
+        questionItem.save();
+        this.render();
+    },
+    viewResults: function(e) {
+        var id = $(e.target).attr('data-id');
+        QuestionItem.loadResults(id, false, null);
+        Spine.Route.navigate("!/questions/" + id + "/results");
     }
-    questionItem.save();
-    this.render();
-  },
-  viewResults: function(e) {
-    var id = $(e.target).attr('data-id');
-    QuestionItem.loadResults(id, false, null);
-    Spine.Route.navigate("!/questions/" + id + "/results");
-  }
 });
 
 /* TargetCreate

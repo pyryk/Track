@@ -14,41 +14,20 @@
     var Chart;
     global.Chart = Chart = Spine.Controller.sub({
         init: function() {
-            console.log(Question.all());
-            Dashboard.Question.bind("refresh", this.proxy(this.addOne));
-
-            //if ( !this.item ) throw "question required";
-            //this.item.bind("update", this.proxy(this.render));
-            //this.item.bind("destroy", this.proxy(this.removeEl));
+            Dashboard.Question.bind("refresh", this.proxy(this.getData));
         },
-        addOne: function() {
-            console.log("Chart addOne");
-            console.log(Question.all());
+        getData: function() {
             var question = Question.all()[0];
+            for (var j in question.results.timeDistribution) {
+
+            }
+            console.log(question.results.timeDistribution.neg);
             var seriesData = [ [],[] ];
             for (var i = 0; i < question.results.timeDistribution.length; i++) {
                 seriesData[0].push({x: i, y: question.results.timeDistribution[i].pos_sum});
                 seriesData[1].push({x: i, y: question.results.timeDistribution[i].neg_sum});
             }
-
-
-            /*
-
-             seriesData[0].push({x: time, y: pos}); // pos
-             seriesData[1].push({x: time, y: neg}); // neg
-             */
-            console.log(seriesData);
-
             this.drawGraph(seriesData);
-
-        },
-        render: function(item){
-            if (item) this.item = item;
-            this.html(Chart.template(this.item));
-            return this;
-        },
-        removeEl: function() {
-            this.el.remove();
         },
         drawGraph: function(seriesData) {
             var graph;
@@ -67,7 +46,16 @@
                     }
                 ]
             } );
+            graph.renderer.unstack = true;
             graph.render();
+            this.drawAxis(graph);
+        },
+        drawAxis: function(graph) {
+            var xAxis = new Rickshaw.Graph.Axis.Time({
+                graph: graph
+            });
+
+            xAxis.render();
         }
     });
 
