@@ -210,10 +210,12 @@ var ownResult = BaseController.sub({
  *====================================================================================================================*/
 var TargetDetails = BaseController.sub({
   events: {
-    "fastclick .active.item.most.positive": "savePositiveAnswer",
-    "fastclick .active.item.middle.positive": "saveSemiPositiveAnswer",
-    "fastclick .active.item.middle.negative": "saveSemiNegativeAnswer",
-    "fastclick .active.item.most.negative": "saveNegativeAnswer",
+    "fastclick .active.item._44": "save44Answer",
+    "fastclick .active.item._43": "save43Answer",
+    "fastclick .active.item._42": "save42Answer",
+    "fastclick .active.item._41": "save41Answer",
+    "fastclick .active.item._22": "save22Answer",
+    "fastclick .active.item._21": "save21Answer",
     "fastclick .send": "sendMessage",
     "fastclick .goToResults": "viewResults"
   },
@@ -256,10 +258,12 @@ var TargetDetails = BaseController.sub({
       $(".target-points-font").text(user.points);
     }
   },
-  savePositiveAnswer: function(e) {this.loadAnswer(e, 2);},
-  saveSemiPositiveAnswer: function(e) {this.loadAnswer(e, 1);},
-  saveSemiNegativeAnswer: function(e) {this.loadAnswer(e, -1);},
-  saveNegativeAnswer: function(e) {this.loadAnswer(e, -2);},
+  save44Answer: function(e) {this.loadAnswer(e, 44);},
+  save43Answer: function(e) {this.loadAnswer(e, 43);},
+  save42Answer: function(e) {this.loadAnswer(e, 42);},
+  save41Answer: function(e) {this.loadAnswer(e, 41);},
+  save22Answer: function(e) {this.loadAnswer(e, 22);},
+  save21Answer: function(e) {this.loadAnswer(e, 21);},
   sendMessage: function(e) {this.loadAnswer(e, 0);},
   loadAnswer: function(e, value) {
     var id = $(e.target).attr('data-id');
