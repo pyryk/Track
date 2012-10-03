@@ -21,8 +21,6 @@ var BaseController = Spine.Controller.sub({
         this.titlebar.text(data.title);
       }
 
-      data.customizationClass = "tracktive";
-
       if (data.customizationClass) {
         this.header.removeClass();
         this.button_one.removeClass();
@@ -213,12 +211,10 @@ var ownResult = BaseController.sub({
  *====================================================================================================================*/
 var TargetDetails = BaseController.sub({
   events: {
-    "fastclick .active.item._44": "save44Answer",
-    "fastclick .active.item._43": "save43Answer",
-    "fastclick .active.item._42": "save42Answer",
-    "fastclick .active.item._41": "save41Answer",
-    "fastclick .active.item._22": "save22Answer",
-    "fastclick .active.item._21": "save21Answer",
+    "fastclick .active.item.most.positive": "savePositiveAnswer",
+    "fastclick .active.item.middle.positive": "saveSemiPositiveAnswer",
+    "fastclick .active.item.middle.negative": "saveSemiNegativeAnswer",
+    "fastclick .active.item.most.negative": "saveNegativeAnswer",
     "fastclick .send": "sendMessage",
     "fastclick .goToResults": "viewResults"
   },
@@ -261,12 +257,10 @@ var TargetDetails = BaseController.sub({
       $(".target-points-font").text(user.points);
     }
   },
-  save44Answer: function(e) {this.loadAnswer(e, 2);},
-  save43Answer: function(e) {this.loadAnswer(e, 1);},
-  save42Answer: function(e) {this.loadAnswer(e, -1);},
-  save41Answer: function(e) {this.loadAnswer(e, -2);},
-  save22Answer: function(e) {this.loadAnswer(e, 1);},
-  save21Answer: function(e) {this.loadAnswer(e, -1);},
+  savePositiveAnswer: function(e) {this.loadAnswer(e, 2);},
+  saveSemiPositiveAnswer: function(e) {this.loadAnswer(e, 1);},
+  saveSemiNegativeAnswer: function(e) {this.loadAnswer(e, -1);},
+  saveNegativeAnswer: function(e) {this.loadAnswer(e, -2);},
   sendMessage: function(e) {this.loadAnswer(e, 0);},
   loadAnswer: function(e, value) {
     var id = $(e.target).attr('data-id');

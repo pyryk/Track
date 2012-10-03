@@ -130,10 +130,10 @@
       <div class="questionItem">
         <p class="question">{{this.name}}</p>
         {{#unless this.done}}
-        <div class="answer-two">
-          <span data-id={{this.id}} class="active balance item most positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="55" height="55" alt=":)"/></span>
-          <span data-id={{this.id}} class="active item most negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="55" height="55" alt=":("/></span>
-        </div>
+         <div class="answer-two">
+           <span data-id={{this.id}} class="active balance item most positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="55" height="55" alt=":)"/></span>
+           <span data-id={{this.id}} class="active item most negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="55" height="55" alt=":("/></span>
+         </div>
         {{else}}
         {{#if this.showComment}}
         <textarea data-id="{{this.id}}" class="styled" placeholder="Kirjoita kommentti..."/>
@@ -157,11 +157,11 @@
       <div class="questionItem">
         <p class="question">{{this.name}}</p>
         {{#unless this.done}}
-        <div class="answer-four">
-          <span data-id={{this.id}} class="active balance item most positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="55" height="55" alt=":)"></span>
-          <span data-id={{this.id}} class="active balance middle item positive"><img data-id={{this.id}} src="img/thumbs-up-little-smiley.png" width="55" height="55" alt=":)"></span>
-          <span data-id={{this.id}} class="active item middle negative"><img data-id={{this.id}} src="img/thumbs-down-little-smiley.png" width="55" height="55" alt=":)"></span>
-          <span data-id={{this.id}} class="active item most negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="55" height="55" alt=":("></span>
+          <div class="answer-four">
+            <span data-id={{this.id}} class="active balance item most positive"><img data-id={{this.id}} src="img/smiley-thumb-up.png" width="55" height="55" alt=":)"></span>
+            <span data-id={{this.id}} class="active balance middle item positive"><img data-id={{this.id}} src="img/thumbs-up-little-smiley.png" width="55" height="55" alt=":)"></span>
+            <span data-id={{this.id}} class="active item middle negative"><img data-id={{this.id}} src="img/thumbs-down-little-smiley.png" width="55" height="55" alt=":)"></span>
+            <span data-id={{this.id}} class="active item most negative"><img data-id={{this.id}} src="img/smiley-thumb-down.png" width="55" height="55" alt=":("></span>
         </div>
         {{else}}
         {{#if this.showComment}}
