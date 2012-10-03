@@ -21,6 +21,8 @@ var BaseController = Spine.Controller.sub({
         this.titlebar.text(data.title);
       }
 
+      data.customizationClass = 'tracktive';
+
       if (data.customizationClass) {
         this.header.removeClass();
         this.button_one.removeClass();
