@@ -21,9 +21,7 @@ var BaseController = Spine.Controller.sub({
         this.titlebar.text(data.title);
       }
 
-      if (!data.customizationClass) {
-          data.customizationClass = "tracktive";
-      }
+      data.customizationClass = "tracktive";
 
       if (data.customizationClass) {
         this.header.removeClass();
