@@ -1,7 +1,7 @@
 var Mongo = require('./modules/mongo');
 
 var confs = {
-    port: 80,
+    port: 8080,
     name: "TrackAPI"
 }
 
