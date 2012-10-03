@@ -258,12 +258,12 @@ var TargetDetails = BaseController.sub({
       $(".target-points-font").text(user.points);
     }
   },
-  save44Answer: function(e) {this.loadAnswer(e, 44);},
-  save43Answer: function(e) {this.loadAnswer(e, 43);},
-  save42Answer: function(e) {this.loadAnswer(e, 42);},
-  save41Answer: function(e) {this.loadAnswer(e, 41);},
-  save22Answer: function(e) {this.loadAnswer(e, 22);},
-  save21Answer: function(e) {this.loadAnswer(e, 21);},
+  save44Answer: function(e) {this.loadAnswer(e, 2);},
+  save43Answer: function(e) {this.loadAnswer(e, 1);},
+  save42Answer: function(e) {this.loadAnswer(e, -1);},
+  save41Answer: function(e) {this.loadAnswer(e, -2);},
+  save22Answer: function(e) {this.loadAnswer(e, 1);},
+  save21Answer: function(e) {this.loadAnswer(e, -1);},
   sendMessage: function(e) {this.loadAnswer(e, 0);},
   loadAnswer: function(e, value) {
     var id = $(e.target).attr('data-id');
