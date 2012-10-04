@@ -1,31 +1,31 @@
 (function(global) {
 
-    var ip = "http://86.50.143.102/";
 
     global.Question = Question = Spine.Model.sub();
     Question.configure('Question', 'name', 'id', 'results');
     Question.extend(Spine.Model.Ajax);
     Question.extend({
-        url: ip + "questions_dashboard",
         fromJSON: function(objects) {
             // TODO
             // Change the API according to Spine.Ajax and remove this hackish method
-            var questions = (typeof objects === 'string' ? JSON.parse(objects) : objects).questions;
+            var questions = (typeof objects === 'string' ? JSON.parse(objects) : objects).question;
+            console.log("FETCH-TOIMIII!!");
             return Spine.Model.fromJSON.apply(this, [questions]);
         }
     });
 
-    global.Customer = Customer = Spine.Model.sub();
-    Customer.configure('Customer', 'name', 'id', 'targets');
-    Customer.extend(Spine.Model.Ajax);
-    Customer.extend({
-        url: ip,
+    global.Target = Target = Spine.Model.sub();
+    Target.configure('Target', 'name', 'customerId','_id', 'questionsType', 'showQuestionComment', 'customerName', 'questions');
+    Target.extend(Spine.Model.Ajax);
+    Target.extend({
+        //url: "http://192.168.1.9/targets",
         fromJSON: function(objects) {
             // TODO
             // Change the API according to Spine.Ajax and remove this hackish method
-            var customers = (typeof objects === 'string' ? JSON.parse(objects) : objects).customers;
-            return Spine.Model.fromJSON.apply(this, [customers]);
+            var targets = [];
+            var target = (typeof objects === 'string' ? JSON.parse(objects) : objects).target;
+            targets.push(target);
+            return Spine.Model.fromJSON.apply(this, [targets]);
         }
     })
-
 })(Dashboard);

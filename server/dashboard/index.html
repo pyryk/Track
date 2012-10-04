@@ -115,50 +115,30 @@
 <!-- ========================================= TEMPLATES =========================================================== -->
 <script id="sidebar-tmpl" type="text/x-handlebars-template">
     <div class="accordion" id="accordion2">
-        <div class="accordion-group">
+        <div class="accordion-group" style="margin-top: 1px; margin-bottom: 1px;">
             <div class="accordion-heading">
                 <a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseOne"><b>Kohteet</b></a>
             </div>
-            <div id="collapseOne" class="accordion-body collapse" style="height: 0px; ">
-                <div class="accordion-inner">
-                    <ul class="nav" style="margin-bottom: 0px;">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" href="#collapse1">Helsinki</a>
+
+            <div id="collapseOne" class="accordion-body collapse margins" style="height: 0px; margin-top: 0px; margin-bottom:0px; padding: 0;">
+                <div class="accordion-inner" style="margin: 0; padding: 0;">
+                    <ul class="nav" style="font-size: 90%;">
+                        <div class="accordion-heading" style="margin: 0; padding: 0;">
+                            <a class="accordion-toggle" data-toggle="collapse" style="padding-top: 3px; padding-bottom: 2px;" href=#{{this._id}}>{{this.name}}</a>
                         </div>
-                        <div id="collapse1" class="accordion-body collapse" style="height: auto; ">
-                            <div class="accordion-inner">
-                                <ul class="nav" style="margin-bottom: 0px;">
-                                    <li><label class="checkbox"><input type="checkbox" value="">{{this.name}}</label></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" href="#collapse2">Turku</a>
-                        </div>
-                        <div id="collapse2" class="accordion-body collapse" style="height: auto; ">
-                            <div class="accordion-inner">
-                                <ul class="nav" style="margin-bottom: 0px;">
-                                    <li><label class="checkbox"><input type="checkbox" value="">Miten menee?</label></li>
-                                    <li><label class="checkbox"><input type="checkbox" value="">Kuka menee?</label></li>
-                                    <li><label class="checkbox"><input type="checkbox" value="">Mihin menee?</label></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" href="#collapse3">Tampere</a>
-                        </div>
-                        <div id="collapse3" class="accordion-body collapse" style="height: auto; ">
-                            <div class="accordion-inner">
-                                <ul class="nav" style="margin-bottom: 0px;">
-                                    <li><label class="checkbox"><input type="checkbox" value="">Miten menee?</label></li>
-                                    <li><label class="checkbox"><input type="checkbox" value="">Kuka menee?</label></li>
-                                    <li><label class="checkbox"><input type="checkbox" value="">Mihin menee?</label></li>
+                        <div id={{this._id}} class="accordion-body in collapse" style="height: auto; font-size: 90%;">
+                            <div class="accordion-inner" style="margin-top: 0px; margin-bottom: 0px; padding-top:0px; border: none;">
+                                <ul class="nav test" style="margin-top: 2px; margin-bottom: 1px;">
+                                    {{#each this.questions}}
+                                    <li><label class="checkbox"><input type="checkbox" value="{{this._id}}" data-id={{this._id}}>{{this.name}}</label></li>
+                                    {{/each}}
                                 </ul>
                             </div>
                         </div>
                     </ul>
                 </div>
             </div>
+
             <div class="accordion-heading">
                 <a class="accordion-toggle collapsed" data-toggle="collapse" href="#collapseTwo"><b>Käyttäjän määrittely</b></a>
             </div>

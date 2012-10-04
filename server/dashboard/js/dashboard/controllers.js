@@ -2,17 +2,17 @@
     var App;
     global.App = App = Spine.Controller.sub({
         init: function() {
-            Spine.Model.host = "http://86.50.145.125/";
+            Spine.Model.host = "http://192.168.1.9";
             //setting templates
             Sidebar.extend({template: Handlebars.compile($("#sidebar-tmpl").html())});
             Title.extend({template: Handlebars.compile($("#title-tmpl").html())});
 
-            new SidebarCustomer({el: $('#sidebar')});
-            new SidebarQuestions({el: $('#sidebar')});
-            new Chart({el: $('#chart')});
-            new Title({el: $('#title')});
-            global.Question.fetch();
-            global.Customer.fetch();
+            new SidebarTarget({el: $('#sidebar')});
+            //new SidebarQuestions({el: $('#sidebar')});
+            //new Chart({el: $('#chart')});
+            //new Title({el: $('#title')});
+            //global.Question.fetch();
+            global.Target.fetch();
         }
     });
 
@@ -20,6 +20,8 @@
     global.Title = Title = Spine.Controller.sub({
         init: function() {
             Dashboard.Question.bind("refresh", this.proxy(this.setTitle));
+            console.log(global.url);
+
         },
         setTitle: function() {
             this.html(Title.template(Question.all()[0]));
@@ -30,8 +32,10 @@
     global.Chart = Chart = Spine.Controller.sub({
         init: function() {
             Dashboard.Question.bind("refresh", this.proxy(this.getData));
+            console.log("Chart-init");
         },
         getData: function() {
+            console.log("getData");
             var question = Question.all()[0];
             var seriesData = [ [],[] ];
             var alltimeData = [ [],[] ];
@@ -84,17 +88,35 @@
 
 
 
+
+
+
     var Sidebar;
     global.Sidebar = Sidebar = Spine.Controller.sub({
+        events:  {
+            "click .test li": "clicked"
+        },
+        clicked: function(e) {
+            var value = $(e.target).attr('value');
+            console.log(value);
+            if (value) {
+                var url = "http://192.168.1.9/questions_dashboard/"+ value;
+                console.log(url);
+                new Chart({el: $('#chart')});
+                new Title({el: $('#title')});
+                global.Question.fetch({url: url});
+                console.log("fetch done");
+            }
+        },
+
         init: function() {
-            if ( !this.item ) throw "question required";
-            console.log("Luodaan ja lisätään yksi uusi Sidebar: " + this.item.name);
+            if ( !this.item ) throw "target required";
             this.item.bind("update", this.proxy(this.render));
             this.item.bind("destroy", this.proxy(this.removeEl));
         },
         render: function(item){
             if (item) this.item = item;
-            console.log("Renderöidään SidebarQuestionItem: " + this.item.name);
+            console.log(this.item);
             this.html(Sidebar.template(this.item));
             return this;
         },
@@ -103,21 +125,39 @@
         }
     });
 
-    var SidebarCustomer;
-    global.SidebarCustomer = SidebarCustomer = Spine.Controller.sub({
+    var SidebarTarget;
+    global.SidebarTarget = SidebarTarget = Spine.Controller.sub({
         init: function(){
-           console.log("Luodaan SidebarCustomer -oliota");
-           Dashboard.Customer.bind("refresh", this.proxy(this.addAll));
-           Dashboard.Customer.bind("create",  this.proxy(this.addOne));
+           Dashboard.Target.bind("refresh", this.proxy(this.addAll));
+           Dashboard.Target.bind("create",  this.proxy(this.addOne));
         },
         addOne: function(item){
-            var customer = new Sidebar({item: item});
-            this.append(customer.render());
+            if (item) {
+                var target = new Sidebar({item: item});
+                this.append(target.render());
+            }
         },
         addAll: function(){
-            Customer.each(this.proxy(this.addOne));
+            Target.each(this.proxy(this.addOne));
         }
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     var SidebarQuestions;
     global.SidebarQuestions = SidebarQuestions = Spine.Controller.sub({
