@@ -50,7 +50,7 @@
             }
         },
         addAll: function(){
-            Customer.each(this.proxy(this.addOne));
+            Target.each(this.proxy(this.addOne));
         }
     });
 
