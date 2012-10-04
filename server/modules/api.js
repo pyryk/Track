@@ -50,6 +50,7 @@ var API = {
         this.get("/targets/:id", this.getTargetDetails, false);
         this.get("/questions/:id/results", this.getResults, false);
         this.get("/questions/:id", this.getQuestionDetails, false);
+        this.get("/questions/:id/dashboard", this.getDashboardResults, false);
         this.get("/users/:id", this.getUser, false);
 
         this.post("/targets", this.postTarget, false);
@@ -368,6 +369,13 @@ var API = {
 
                 questionDetails.results = results;
 
+                // Add time distribution if dashboard called from getDashboardResults
+                if (req.params.dashboard) {
+                    var timeDistribution = API.populateTimeSlots(data);
+                    questionDetails.results.timeDistribution = timeDistribution;
+                }
+
+
                 res.send(200, {question: questionDetails});
                 return next();
 
@@ -377,6 +385,11 @@ var API = {
             return next(error);
         });
 
+    },
+
+    getDashboardResults: function(req, res, next) {
+        req.params.dashboard = true;
+        API.getResults(req, res, next);
     },
 
     postResult: function(req, res, next) {
@@ -464,36 +477,37 @@ var API = {
             var val = result.value;
             var timestamp = result.timestamp;
 
-            // Past
-            if(timestamp > pastPeriod && timestamp < nowPeriod) {
-                if(val > 0) {
-                    pastResults.pos += val;
-                } else {
-                    pastResults.neg -= val;
+            if (val == 44 | val == 43 || val == 22) {
+                alltimeResults.pos++;
+
+                // Past
+                if (timestamp > pastPeriod && timestamp < nowPeriod) {
+                    pastResults.pos++;
+                }
+
+                // Now
+                if (timestamp > nowPeriod) {
+                    nowResults.pos++;
+                }
+            } else if (val == 42 || val == 41 | val == 21) {
+                alltimeResults.neg++;
+
+                // Past
+                if (timestamp > pastPeriod && timestamp < nowPeriod) {
+                    pastResults.neg++;
+                }
+
+                // Now
+                if (timestamp > nowPeriod) {
+                    nowResults.neg++;
                 }
             }
 
-            // Now
-            if(timestamp > nowPeriod) {
-                if(val > 0) {
-                    nowResults.pos += val;
-                } else {
-                    nowResults.neg -= val;
-                }
-            }
-
-            // Alltime. Quick hack for four smiles. This should be redesigned.
-            if(val > 0) {
-                alltimeResults.pos += val;
-            } else {
-                alltimeResults.neg -= val;
-            }
         });
 
         var pastResultsPercentage = pastResults.pos / (pastResults.pos + pastResults.neg);
         var nowResultsPercentage = nowResults.pos / (nowResults.pos + nowResults.neg);
         var change = nowResultsPercentage - pastResultsPercentage;
-
 
         var trend;
 
@@ -518,8 +532,100 @@ var API = {
 
         nowResults.trend = trend;
 
+
         return {alltime: alltimeResults, now: nowResults};
     },
+
+
+    populateTimeSlots: function(results, slotLength, firstTimestamp, lastTimestamp) {
+        if(!_.isArray(results)) {
+            return null;
+        }
+
+        if (_.isEmpty(results)) {
+            return [];
+        }
+
+        // Setting slot length a day, should be easily parameterized
+        var timeSlots = [];
+        slotLength = slotLength || 1000 * 60 * 60 * 24; // Default to day
+
+        // Time range comes from results
+        firstTimestamp = firstTimestamp || API.arrayFinder(Math.min, results, "timestamp");
+        firstTimestamp = Math.floor(firstTimestamp / slotLength) * slotLength;
+        lastTimestamp = lastTimestamp || new Date().getTime(); // Default to current date
+        lastTimestamp = Math.floor(lastTimestamp / slotLength) * slotLength;
+
+        // Initialize time slots
+        while (firstTimestamp <= lastTimestamp) {
+            var slot = {timestamp: new Date(firstTimestamp),
+                _44: 0, _43: 0, _42: 0, _41: 0, _22: 0, _21: 0,
+                pos_sum: 0, neg_sum: 0, sum: 0,
+                results: []};
+            timeSlots.push(slot);
+            firstTimestamp += slotLength;
+        }
+
+        var currentSlot = 0;
+
+        // Results have to be in ascending order by timestamp for this to work (taken care in mongo.js)
+        for (var i = 0; i < results.length; i++) {
+
+            var nextTimestamp = new Date(timeSlots[currentSlot].timestamp.getTime() + slotLength);
+
+            if (results[i].timestamp < nextTimestamp) {
+
+                // Push result record to results array to allow record level access in dashboard
+                // in addition to aggregation
+                timeSlots[currentSlot].results.push(results[i]);
+
+                if (results[i].value == 41) {
+                    timeSlots[currentSlot]._41 += 1;
+                    timeSlots[currentSlot].neg_sum += 1;
+                    timeSlots[currentSlot].sum += 1;
+                } else if (results[i].value == 42) {
+                    timeSlots[currentSlot]._42 += 1;
+                    timeSlots[currentSlot].neg_sum += 1;
+                    timeSlots[currentSlot].sum += 1;
+                } else if (results[i].value == 43) {
+                    timeSlots[currentSlot]._43 += 1;
+                    timeSlots[currentSlot].pos_sum += 1;
+                    timeSlots[currentSlot].sum += 1;
+                } else if (results[i].value == 44) {
+                    timeSlots[currentSlot]._44 += 1;
+                    timeSlots[currentSlot].pos_sum += 1;
+                    timeSlots[currentSlot].sum += 1;
+                } else if(results[i].value == 21) {
+                    timeSlots[currentSlot]._21 += 1;
+                    timeSlots[currentSlot].neg_sum += 1;
+                    timeSlots[currentSlot].sum += 1;
+                } else if (results[i].value == 22) {
+                    timeSlots[currentSlot]._22 += 1;
+                    timeSlots[currentSlot].pos_sum += 1;
+                    timeSlots[currentSlot].sum += 1;
+                }
+
+            } else {
+                // Rewind back to try if i fits the next slot
+                i--;
+
+                // Set slots forward
+                currentSlot += 1;
+            }
+        }
+
+        console.log(timeSlots);
+        return timeSlots;
+    },
+
+    arrayFinder: function(cmp, arr, attr) {
+        var val = arr[0][attr];
+        for(var i = 1; i < arr.length; i++) {
+            val = cmp(val, arr[i][attr])
+        }
+        return val;
+    },
+
 
     getLogin: function(req, res, next) {
         var body = req.authorization;
