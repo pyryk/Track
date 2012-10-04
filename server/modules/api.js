@@ -47,6 +47,7 @@ var API = {
 
         this.get("/customers", this.getCustomers, false);
         this.get("/customers/:id", this.getCustomerDetails, false);
+        this.get("/targets", this.getTargets, false);
         this.get("/targets/:id", this.getTargetDetails, false);
         this.get("/questions/:id/results", this.getResults, false);
         this.get("/questions/:id", this.getQuestionDetails, false);
@@ -166,8 +167,6 @@ var API = {
                     return API.selectFields(targets, targetFields);
                 });
 
-
-
                 // Sort
                 targets.sort(function(a, b) {
                     var aRel = a.relevance, bRel = b.relevance;
@@ -190,6 +189,11 @@ var API = {
         }, function(error) {
             return next(error);
         });
+    },
+
+    getTargets: function(req, res, next) {
+        req.params.id = "5018dd84e6ce5a6e83000636";
+        API.getTargetDetails(req, res, next);
     },
 
     postCustomer: function(req, res, next) {
