@@ -1,6 +1,5 @@
 (function(global) {
 
-
     global.Question = Question = Spine.Model.sub();
     Question.configure('Question', 'name', 'id', 'results');
     Question.extend(Spine.Model.Ajax);

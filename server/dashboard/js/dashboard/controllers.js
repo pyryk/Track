@@ -163,6 +163,7 @@
             resultSum.setDayTimeResult(seriesData);
             resultSum.setAllTimeResult(alltimeData);
             return resultSum;
+
         },
         drawGraphDaily: function(resultSum) {
             $('#chart1').html('');
@@ -195,115 +196,5 @@
             graph.render();
             return graph;
         }
-    });
-
-    var ChartQuestion;
-    global.ChartQuestion = ChartQuestion = Spine.Controller.sub({
-        init: function() {
-            Dashboard.Question.bind("refresh", this.proxy(this.addAll));
-            Dashboard.Question.bind("create", this.proxy(this.addOne));
-        },
-        addOne: function(item){
-            if (item) {
-                var question = new Chart({item: item});
-                this.append(question.render());
-            }
-        },
-        addAll: function(){
-            Question.each(this.proxy(this.addOne));
-        }
-    });
-
-
-        var Chart1;
-    global.Chart1 = Chart1 = Spine.Controller.sub({
-        init: function() {
-            Dashboard.Question.bind("refresh", this.proxy(this.getData));
-            Spine.bind("show:chart1", this.proxy(this.getData));
-        },
-        getData: function() {
-            this.removeOld();
-
-            var list = [];
-            $("input:checkbox[class=questionCheckbox]:checked").each(function(){
-                list.push($(this).val());
-            });
-            var relevantQuestions = [];
-            for (var j = 0; j < Question.all().length; j++) {
-                for (var k = 0; k < list.length; k++) {
-                    if (Question.all()[j]._id == list[k]){
-                        relevantQuestions.push(Question.all()[j]);
-                    }
-                }
-            }
-
-            var finalResuts = this.countResults(relevantQuestions);
-
-            var seriesData = [ [],[] ];
-            var alltimeData = [ [],[] ];
-            for (var l in relevantQuestions) {
-
-
-
-                var question = relevantQuestions[l].results;
-
-                for (var i = 0; i < question.timeDistribution.length; i++) {
-                    seriesData[0].push({x: (new Date(question.timeDistribution[i].timestamp)).getTime()/1000, y:question.timeDistribution[i].pos_sum});
-                    seriesData[1].push({x: (new Date(question.timeDistribution[i].timestamp)).getTime()/1000, y:question.timeDistribution[i].neg_sum});
-                }
-                alltimeData[0].push({x: 0, y: 0}, {x: 1, y: question.alltime.pos}, {x: 2, y: 0});
-                alltimeData[1].push({x: 0, y: 0}, {x: 1, y: question.alltime.neg}, {x: 2, y: 0});
-            }
-
-
-            this.drawGraph(seriesData, alltimeData);
-        },
-        countResults: function(data){
-            var questionSum = {
-                timeDistribution: [],
-                alltime: [],
-                comment: []
-            }
-            for (var i in data) {
-                data[i].results.timeDistribution;
-            }
-        },
-        drawGraph: function(seriesData, alltimeData) {
-            var graph;
-            //document.getElementById("chart1").remove();
-            graph = new Rickshaw.Graph( {
-                element: document.getElementById("chart1"),
-                width: 470,
-                height: 300,
-                renderer: 'bar',
-                series: [{color: "#30c020",data: seriesData[0]},
-                    {color: "#c05020",data: seriesData[1]}]
-            } );
-            graph.renderer.unstack = true;
-            graph.render();
-            this.drawAxis(graph);
-
-            var graph2;
-            graph2 = new Rickshaw.Graph( {
-                element: document.getElementById("chart2"),
-                width: 470,
-                height: 300,
-                renderer: 'bar',
-                series: [{color: "#30c020",data: alltimeData[0]},
-                    {color: "#c05020",data: alltimeData[1]}]
-            });
-            graph2.renderer.unstack = true;
-            graph2.render();
-            //this.drawAxis(graph2);
-        },
-        drawAxis: function(graph) {
-            var axes = new Rickshaw.Graph.Axis.Time( { graph: graph } );
-            graph.render();
-        },
-        removeOld: function() {
-            //this.el.remove();
-            //document.getElementById('chart1').parentNode.removeChild(document.getElementById('chart1'));
-        }
-
     });
 })(Dashboard);
