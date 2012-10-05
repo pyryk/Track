@@ -9,7 +9,6 @@
             // TODO
             // Change the API according to Spine.Ajax and remove this hackish method
             var questions = (typeof objects === 'string' ? JSON.parse(objects) : objects).question;
-            console.log("FETCH-TOIMIII!!");
             return Spine.Model.fromJSON.apply(this, [questions]);
         }
     });
@@ -27,5 +26,27 @@
             targets.push(target);
             return Spine.Model.fromJSON.apply(this, [targets]);
         }
-    })
+    });
+
+    global.Customer = Customer = Spine.Model.sub();
+    Customer.configure('Customer', 'name', '_id', 'targets');
+    Customer.extend(Spine.Model.Ajax);
+    Customer.extend({
+        //url: "http://192.168.1.9/targets",
+        fromJSON: function(objects) {
+            // TODO
+            // Change the API according to Spine.Ajax and remove this hackish method
+            var customers = [];
+            var customer = (typeof objects === 'string' ? JSON.parse(objects) : objects).customer;
+            customers.push(customer);
+            return Spine.Model.fromJSON.apply(this, [customers]);
+        }
+    });
+
+    global.ResultSum = ResultSum = Spine.Model.sub();
+    ResultSum.configure('ResultSum', 'name', 'dayTimeResult', 'allTimeResult');
+    ResultSum.include({
+
+    });
+
 })(Dashboard);
