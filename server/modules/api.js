@@ -51,7 +51,7 @@ var API = {
         this.get("/targets/:id", this.getTargetDetails, false);
         this.get("/questions/:id/results", this.getResults, false);
         this.get("/questions/:id", this.getQuestionDetails, false);
-        this.get("/questions/:id/dashboard", this.getDashboardResults, false);
+        this.get("/questionresults/:id", this.getDashboardResults, false);
         this.get("/users/:id", this.getUser, false);
 
         this.post("/targets", this.postTarget, false);
@@ -159,10 +159,10 @@ var API = {
             var customerFields = ['name', '_id'];
             var customerDetails = API.selectFields(data, customerFields);
 
-            Mongo.findTargets('customerId', customerId).then(function(data) {
+            Mongo.findTargetsWithQuestions('customerId', customerId).then(function(data) {
                 rel.calculate(data, fbUserId);
 
-                var targetFields = ['name', '_id', 'relevance'];
+                var targetFields = ['name', '_id', 'relevance', 'questions'];
                 var targets = data.map(function(targets) {
                     return API.selectFields(targets, targetFields);
                 });
