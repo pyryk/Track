@@ -50,7 +50,7 @@
             }
         },
         addAll: function(){
-            Target.each(this.proxy(this.addOne));
+            Question.each(this.proxy(this.addOne));
         }
     });
 
