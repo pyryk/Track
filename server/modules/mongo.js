@@ -319,6 +319,51 @@ var Mongo = {
         return promise;
     },
 
+    findTargetsWithQuestions: function(field, value) {
+        var promise = Promise();
+
+        var targetQuery = this.Target.find({});
+        var questionQuery = this.Question.find({});
+
+        if (!!field && !!value) {
+            targetQuery.where(field, value);
+        }
+
+        targetQuery.exec(function(error, data) {
+            if (!error) {
+                var targetsWithQuestions = [];
+                if (data) {
+                    var count = data.length + 1;
+                    if (--count === 0) {
+                        Mongo.resolvePromise(error, targetsWithQuestions, promise);
+                    }
+
+                    _.each(data, function(value, key) {
+
+                        var target = value;
+                        target.questions = [];
+
+                        questionQuery.where("targetId", target._id);
+
+                        questionQuery.exec(function(error, data) {
+                            _.each(data, function(data, key) {
+                                target.questions.push(data);
+                            });
+
+                            targetsWithQuestions.push(target);
+
+                            if (--count === 0) {
+                                Mongo.resolvePromise(error, targetsWithQuestions, promise);
+                            }
+                        });
+                    });
+                }
+            }
+        }.bind(this));
+
+        return promise;
+    },
+
     findTargetById: function(id) {
         var promise = Promise();
 
