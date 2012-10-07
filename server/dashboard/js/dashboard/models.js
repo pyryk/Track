@@ -44,7 +44,7 @@
     });
 
     global.ResultSum = ResultSum = Spine.Model.sub();
-    ResultSum.configure('ResultSum', 'name', 'dayTimeResult', 'allTimeResult');
+    ResultSum.configure('ResultSum', 'name', 'dayTimeResult', 'allTimeResult', 'relevantQuestions');
     ResultSum.include({
 
     });

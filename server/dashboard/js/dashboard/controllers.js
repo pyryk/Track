@@ -8,8 +8,7 @@
             Chart.extend({template: Handlebars.compile($("#chart-tmpl").html())});
             ResultSum.create({name: 'allResult'});
             new SidebarCustomer({el: $('#sidebar')});
-            new Chart({el: $('#chart')});
-            new Title({el: $('#title')});
+            new BindingQuestion();
             global.Customer.fetch({id: '500cf0a7da8f3be960000096'});
         }
     });
@@ -34,7 +33,7 @@
         },
         clicked: function(e) {
             var url = "http://82.130.38.67/questionresults/" + $(e.target).find('input:first').attr('data-id');
-            global.Question.fetch({url: url});
+            if ($(e.target).find('input:first').attr('data-id')) global.Question.fetch({url: url});
         }
     });
 
@@ -55,36 +54,13 @@
         }
     });
 
-    var Title;
-    global.Title = Title = Spine.Controller.sub({
+    var BindingQuestion;
+    global.BindingQuestion = BindingQuestion =  Spine.Controller.sub({
         init: function() {
-            Dashboard.Question.bind("refresh", this.proxy(this.setTitle));
+            Dashboard.Question.bind("refresh", this.proxy(this.setRelevantQuestions));
+            Dashboard.Question.bind("create", this.proxy(this.setRelevantQuestions));
         },
-        setTitle: function() {
-            this.html(Title.template(Question.all()[0]));
-        }
-    });
-
-    var Chart;
-    global.Chart = Chart = Spine.Controller.sub({
-        init: function() {
-            if ( !this.item ) throw "question required";
-            this.item.bind("update", this.proxy(this.render));
-            this.item.bind("destroy", this.proxy(this.removeEl));
-        },
-        render: function(item){
-            if (item) this.item = item;
-            var data = this.setSerieData(item);
-            var graph = this.makeGraph(data);
-            this.html(Chart.template(graph));
-            return this;
-        },
-        removeEl: function() {
-            var data = this.setSerieData();
-        },
-        setSerieData: function(item) {
-            var resultSum = ResultSum.findAllByAttribute("name", "allResult");
-
+        setRelevantQuestions: function(){
             var list = [];
             $("input:checkbox[class=questionCheckbox]:checked").each(function(){
                 list.push($(this).val());
@@ -98,13 +74,74 @@
                     }
                 }
             }
-            console.log(relevantQuestions);
+            var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
+            resultSum.relevantQuestions = relevantQuestions;
+            resultSum.save();
+            this.setTitle();
+            this.setChart();
+        },
+        setTitle: function() {
+            new Title({el: $('#title')});
+        },
+        setChart: function() {
+            new Chart({el: $('#chart')});
+        }
+    });
 
+    var Title;
+    global.Title = Title = Spine.Controller.sub({
+        init: function() {
+            var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
+            this.setTitle(resultSum);
+        },
+        setTitle: function(resultSum) {
+            var relevantQuestionsString;
+            for (var i in resultSum.relevantQuestions) {
+                if (i == 0) {
+                    relevantQuestionsString = resultSum.relevantQuestions[i].name;
+                } else {
+                    relevantQuestionsString += " " + resultSum.relevantQuestions[i].name;
+                }
+            }
+            this.html(Title.template(relevantQuestionsString));
+        }
+    });
+
+    var Chart;
+    global.Chart = Chart = Spine.Controller.sub({
+        init: function() {
+            this.render();
+        },
+        render: function(){
+            var data = this.setSerieData();
+            //var graph = this.makeGraph(data);
+            //this.html(Chart.template(graph));
+            //return this;
+        },
+        setSerieData: function(item) {
+            var resultSum = ResultSum.findAllByAttribute("name", "allResult");
             var seriesData = [ [],[] ];
             var alltimeData = [ [],[] ];
 
-            for (var l = 0; l < relevantQuestions.length; l++) {
-                var question = relevantQuestions[l].results;
+            for (var i in resultSum[0].relevantQuestions) {
+
+                console.log("===============");
+
+                alltimeData[0][0] = {x: 0, y: 0};
+                alltimeData[0][2] = {x: 2, y: 0};
+                alltimeData[1][0] = {x: 0, y: 0};
+                alltimeData[1][2] = {x: 2, y: 0};
+                if (i == 0) {
+                    alltimeData[0][1] = {x: 1, y: resultSum[0].relevantQuestions[i].results.alltime.pos};
+                    alltimeData[1][1] = {x: 1, y: resultSum[0].relevantQuestions[i].results.alltime.neg};
+                } else {
+                    alltimeData[0][1] = {x: 1, y: alltimeData[0][2].y + resultSum[0].relevantQuestions[i].results.alltime.pos};
+                    alltimeData[1][1] = {x: 1, y: alltimeData[1][2].y + resultSum[0].relevantQuestions[i].results.alltime.neg};
+                }
+
+                console.log(alltimeData);
+
+                var question = resultSum[0].relevantQuestions[i].results;
                 for (var i = 0; i < question.timeDistribution.length; i++) {
                     seriesData[0].push({x: (new Date(question.timeDistribution[i].timestamp)).getTime()/1000, y:question.timeDistribution[i].pos_sum});
                     seriesData[1].push({x: (new Date(question.timeDistribution[i].timestamp)).getTime()/1000, y:question.timeDistribution[i].neg_sum});
@@ -113,13 +150,7 @@
             resultSum.dayTimeResult = seriesData;
             resultSum.allTimeResult = alltimeData;
             resultSum.save();
-
-
         }
-
-
-
-
     });
 
     var ChartQuestion;
@@ -142,8 +173,8 @@
 
 
 
-        var Chart;
-    global.Chart = Chart = Spine.Controller.sub({
+        var Chart1;
+    global.Chart1 = Chart1 = Spine.Controller.sub({
         init: function() {
             Dashboard.Question.bind("refresh", this.proxy(this.getData));
             Spine.bind("show:chart1", this.proxy(this.getData));
