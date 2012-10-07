@@ -46,6 +46,19 @@
     global.ResultSum = ResultSum = Spine.Model.sub();
     ResultSum.configure('ResultSum', 'name', 'dayTimeResult', 'allTimeResult', 'relevantQuestions');
     ResultSum.include({
+        setDayTimeResult: function(data) {
+            this.dayTimeResult = data;
+            this.save();
+        },
+        setAllTimeResult: function(data) {
+            this.allTimeResult = data;
+            this.save();
+        },
+        setRelevantQuestions: function(data) {
+            this.relevantQuestions = data;
+            console.log(this);
+            this.save();
+        }
 
     });
 

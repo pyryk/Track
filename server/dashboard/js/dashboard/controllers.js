@@ -75,8 +75,7 @@
                 }
             }
             var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
-            resultSum.relevantQuestions = relevantQuestions;
-            resultSum.save();
+            resultSum.setRelevantQuestions(relevantQuestions);
             this.setTitle();
             this.setChart();
         },
@@ -110,7 +109,7 @@
     var Chart;
     global.Chart = Chart = Spine.Controller.sub({
         init: function() {
-            this.render();
+            this.setSerieData();
         },
         render: function(){
             var data = this.setSerieData();
@@ -118,12 +117,15 @@
             //this.html(Chart.template(graph));
             //return this;
         },
-        setSerieData: function(item) {
-            var resultSum = ResultSum.findAllByAttribute("name", "allResult");
+        setSerieData: function() {
+            var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
+            console.log("resultSum");
+            console.log(resultSum);
+
             var seriesData = [ [],[] ];
             var alltimeData = [ [],[] ];
 
-            for (var i in resultSum[0].relevantQuestions) {
+            for (var i in resultSum.relevantQuestions) {
 
                 console.log("===============");
 
@@ -131,25 +133,37 @@
                 alltimeData[0][2] = {x: 2, y: 0};
                 alltimeData[1][0] = {x: 0, y: 0};
                 alltimeData[1][2] = {x: 2, y: 0};
+
                 if (i == 0) {
-                    alltimeData[0][1] = {x: 1, y: resultSum[0].relevantQuestions[i].results.alltime.pos};
-                    alltimeData[1][1] = {x: 1, y: resultSum[0].relevantQuestions[i].results.alltime.neg};
-                } else {
+                    alltimeData[0][1] = {x: 1, y: resultSum.relevantQuestions[i].results.alltime.pos};
+                    alltimeData[1][1] = {x: 1, y: resultSum.relevantQuestions[i].results.alltime.neg};
+
+                    console.log(resultSum.relevantQuestions[i].results);
+                    for (var j in resultSum.relevantQuestions[i].results.timeDistribution) {
+                        seriesData[0][j] = {x: (new Date(resultSum.relevantQuestions[i].results.timeDistribution[j].timestamp)).getTime()/1000,
+                            y:resultSum.relevantQuestions[i].results.timeDistribution[j].pos_sum};
+                        seriesData[1][j] = {x: (new Date(resultSum.relevantQuestions[i].results.timeDistribution[j].timestamp)).getTime()/1000,
+                            y:resultSum.relevantQuestions[i].results.timeDistribution[j].neg_sum};
+                    }
+                }
+                else {
                     alltimeData[0][1] = {x: 1, y: alltimeData[0][2].y + resultSum[0].relevantQuestions[i].results.alltime.pos};
                     alltimeData[1][1] = {x: 1, y: alltimeData[1][2].y + resultSum[0].relevantQuestions[i].results.alltime.neg};
-                }
 
-                console.log(alltimeData);
-
-                var question = resultSum[0].relevantQuestions[i].results;
-                for (var i = 0; i < question.timeDistribution.length; i++) {
-                    seriesData[0].push({x: (new Date(question.timeDistribution[i].timestamp)).getTime()/1000, y:question.timeDistribution[i].pos_sum});
-                    seriesData[1].push({x: (new Date(question.timeDistribution[i].timestamp)).getTime()/1000, y:question.timeDistribution[i].neg_sum});
+                    for (var k in resultSum[0].relevantQuestions[i].results.timeDistribution) {
+                        seriesData[0][k] = {x: (new Date(resultSum.relevantQuestions[i].results.timeDistribution[k].timestamp)).getTime()/1000,
+                            y: seriesData[0][k].y + resultSum.relevantQuestions[i].results.timeDistribution[k].pos_sum};
+                        seriesData[1][k] = {x: (new Date(resultSum.relevantQuestions[i].results.timeDistribution[k].timestamp)).getTime()/1000,
+                            y: seriesData[1][k].y + resultSum.relevantQuestions[i].results.timeDistribution[k].neg_sum};
+                    }
                 }
             }
-            resultSum.dayTimeResult = seriesData;
-            resultSum.allTimeResult = alltimeData;
-            resultSum.save();
+            console.log(alltimeData);
+            console.log(seriesData);
+            resultSum.setDayTimeResult(seriesData);
+            resultSum.setAllTimeResult(alltimeData);
+            console.log(resultSum);
+            return resultSum;
         }
     });
 
@@ -169,8 +183,6 @@
             Question.each(this.proxy(this.addOne));
         }
     });
-
-
 
 
         var Chart1;
