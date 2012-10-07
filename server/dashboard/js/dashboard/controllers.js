@@ -109,7 +109,13 @@
     var Chart;
     global.Chart = Chart = Spine.Controller.sub({
         init: function() {
-            this.setSerieData();
+            var resultSum = this.setSerieData();
+            var graphOne = this.drawGraphDaily(resultSum);
+            var axes = new Rickshaw.Graph.Axis.Time( { graph: graphOne } );
+            graphOne.render();
+
+            var graphTwo = this.drawGraphAll(resultSum);
+            graphTwo.render();
         },
         render: function(){
             var data = this.setSerieData();
@@ -119,15 +125,11 @@
         },
         setSerieData: function() {
             var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
-            console.log("resultSum");
-            console.log(resultSum);
 
             var seriesData = [ [],[] ];
             var alltimeData = [ [],[] ];
 
             for (var i in resultSum.relevantQuestions) {
-
-                console.log("===============");
 
                 alltimeData[0][0] = {x: 0, y: 0};
                 alltimeData[0][2] = {x: 2, y: 0};
@@ -138,7 +140,6 @@
                     alltimeData[0][1] = {x: 1, y: resultSum.relevantQuestions[i].results.alltime.pos};
                     alltimeData[1][1] = {x: 1, y: resultSum.relevantQuestions[i].results.alltime.neg};
 
-                    console.log(resultSum.relevantQuestions[i].results);
                     for (var j in resultSum.relevantQuestions[i].results.timeDistribution) {
                         seriesData[0][j] = {x: (new Date(resultSum.relevantQuestions[i].results.timeDistribution[j].timestamp)).getTime()/1000,
                             y:resultSum.relevantQuestions[i].results.timeDistribution[j].pos_sum};
@@ -164,6 +165,36 @@
             resultSum.setAllTimeResult(alltimeData);
             console.log(resultSum);
             return resultSum;
+        },
+        drawGraphDaily: function(resultSum) {
+            var seriesData = resultSum.dayTimeResult;
+            var graph;
+            graph = new Rickshaw.Graph( {
+                element: document.getElementById("chart1"),
+                width: 470,
+                height: 300,
+                renderer: 'bar',
+                series: [{color: "#30c020",data: seriesData[0]},
+                    {color: "#c05020",data: seriesData[1]}]
+            } );
+            graph.renderer.unstack = true;
+            return graph;
+        },
+        drawGraphAll: function(resultSum) {
+            var alltimeData = resultSum.allTimeResult;
+
+            var graph;
+            graph = new Rickshaw.Graph( {
+                element: document.getElementById("chart2"),
+                width: 470,
+                height: 300,
+                renderer: 'bar',
+                series: [{color: "#30c020",data: alltimeData[0]},
+                    {color: "#c05020",data: alltimeData[1]}]
+            });
+            graph.renderer.unstack = true;
+            graph.render();
+            return graph;
         }
     });
 
