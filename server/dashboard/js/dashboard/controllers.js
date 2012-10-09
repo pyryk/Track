@@ -33,6 +33,7 @@
         },
         clicked: function(e) {
             var url = "http://82.130.38.67/questionresults/" + $(e.target).find('input:first').attr('data-id');
+            console.log("Haetaan Questionia ip_llä: " + url);
             if ($(e.target).find('input:first').attr('data-id')) global.Question.fetch({url: url});
         }
     });
@@ -76,6 +77,7 @@
             }
             var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
             resultSum.setRelevantQuestions(relevantQuestions);
+            console.log("Visualisoidaan data seuraavista kysymyksista: " + relevantQuestions);
             this.setTitle();
             this.setChart();
         },
@@ -160,6 +162,7 @@
 
         },
         drawGraphDaily: function(resultSum) {
+            console.log("Piirretään graafi, jonka pohjana on: " + resultSum);
             $('#chart1').html('');
             var seriesData = resultSum.dayTimeResult;
             var graph;
