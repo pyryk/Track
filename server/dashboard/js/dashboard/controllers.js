@@ -123,6 +123,7 @@
             var seriesData = [ [],[] ];
             var alltimeData = [ [],[] ];
 
+            //jea
             for (var i in resultSum.relevantQuestions) {
 
                 alltimeData[0][0] = {x: 0, y: 0};
