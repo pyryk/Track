@@ -56,7 +56,6 @@
         },
         setRelevantQuestions: function(data) {
             this.relevantQuestions = data;
-            console.log(this);
             this.save();
         }
 
