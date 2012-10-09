@@ -137,12 +137,6 @@
             var graphTwo = this.drawGraphAll(resultSum);
             graphTwo.render();
         },
-        render: function(){
-            var data = this.setSerieData();
-            //var graph = this.makeGraph(data);
-            //this.html(Chart.template(graph));
-            //return this;
-        },
         setSerieData: function() {
             var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
             console.log(resultSum);
@@ -217,4 +211,5 @@
             return graph;
         }
     });
+
 })(Dashboard);
