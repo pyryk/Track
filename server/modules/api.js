@@ -543,10 +543,12 @@ var API = {
 
     populateTimeSlots: function(results, slotLength, firstTimestamp, lastTimestamp) {
         if(!_.isArray(results)) {
+            console.log("results not array");
             return null;
         }
 
         if (_.isEmpty(results)) {
+            console.log("results empty");
             return [];
         }
 
@@ -565,7 +567,8 @@ var API = {
             var slot = {timestamp: new Date(firstTimestamp),
                 _44: 0, _43: 0, _42: 0, _41: 0, _22: 0, _21: 0,
                 pos_sum: 0, neg_sum: 0, sum: 0,
-                results: []};
+                results: []
+            };
             timeSlots.push(slot);
             firstTimestamp += slotLength;
         }
@@ -615,6 +618,91 @@ var API = {
 
                 // Set slots forward
                 currentSlot += 1;
+            }
+        }
+
+        console.log(timeSlots);
+        return timeSlots;
+    },
+
+    populateTimeSlots2: function(results, slotLength, firstTimestamp, lastTimestamp) {
+        if(!_.isArray(results)) {
+            return null;
+        }
+
+        if (_.isEmpty(results)) {
+            console.log("tyhjä");
+            return [];
+        }
+
+        // Setting slot length a day, should be easily parameterized
+        var timeSlots = [];
+        slotLength = slotLength || 1000 * 60 * 60 * 24; // Default to day
+
+        // Time range comes from results
+        firstTimestamp = firstTimestamp || API.arrayFinder(Math.min, results, "timestamp");
+        firstTimestamp = Math.floor(firstTimestamp / slotLength) * slotLength;
+        lastTimestamp = lastTimestamp || new Date().getTime(); // Default to current date
+        lastTimestamp = Math.floor(lastTimestamp / slotLength) * slotLength;
+
+        // Initialize time slots
+        while (firstTimestamp <= lastTimestamp) {
+            var slot = {timestamp: new Date(firstTimestamp),
+                _44: 0, _43: 0, _42: 0, _41: 0, _22: 0, _21: 0,
+                pos_sum: 0, neg_sum: 0, sum: 0,
+                results: []
+            };
+            timeSlots[new Date(firstTimestamp)] = slot;
+            console.log(slot);
+            firstTimestamp += slotLength;
+        }
+
+        var currentSlot = new Date(firstTimestamp);
+        var currentTimestamp = new Date(firstTimestamp);
+
+        // Results have to be in ascending order by timestamp for this to work (taken care in mongo.js)
+        for (var i = 0; i < results.length; i++) {
+
+            var nextTimestamp = new Date(currentTimestamp + slotLength);
+
+            if (results[i].timestamp < nextTimestamp) {
+
+                // Push result record to results array to allow record level access in dashboard
+                // in addition to aggregation
+                timeSlots[currentTimestamp].results.push(results[i]);
+
+                if (results[i].value == 41) {
+                    timeSlots[currentTimestamp]._41 += 1;
+                    timeSlots[currentTimestamp].neg_sum += 1;
+                    timeSlots[currentTimestamp].sum += 1;
+                } else if (results[i].value == 42) {
+                    timeSlots[currentTimestamp]._42 += 1;
+                    timeSlots[currentTimestamp].neg_sum += 1;
+                    timeSlots[currentTimestamp].sum += 1;
+                } else if (results[i].value == 43) {
+                    timeSlots[currentTimestamp]._43 += 1;
+                    timeSlots[currentTimestamp].pos_sum += 1;
+                    timeSlots[currentTimestamp].sum += 1;
+                } else if (results[i].value == 44) {
+                    timeSlots[currentTimestamp]._44 += 1;
+                    timeSlots[currentTimestamp].pos_sum += 1;
+                    timeSlots[currentTimestamp].sum += 1;
+                } else if(results[i].value == 21) {
+                    timeSlots[currentTimestamp]._21 += 1;
+                    timeSlots[currentTimestamp].neg_sum += 1;
+                    timeSlots[currentTimestamp].sum += 1;
+                } else if (results[i].value == 22) {
+                    timeSlots[currentTimestamp]._22 += 1;
+                    timeSlots[currentTimestamp].pos_sum += 1;
+                    timeSlots[currentTimestamp].sum += 1;
+                }
+
+            } else {
+                // Rewind back to try if i fits the next slot
+                i--;
+
+                // Set slots forward
+                currentTimestamp = new Date(currentTimestamp.getTime() + slotLength);
             }
         }
 
