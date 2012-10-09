@@ -6,6 +6,7 @@
             Sidebar.extend({template: Handlebars.compile($("#sidebar-tmpl").html())});
             Title.extend({template: Handlebars.compile($("#title-tmpl").html())});
             Chart.extend({template: Handlebars.compile($("#chart-tmpl").html())});
+            Charttext.extend({template: Handlebars.compile($("#charttext-tmpl").html())});
             ResultSum.create({name: 'allResult'});
             new SidebarCustomer({el: $('#sidebar')});
             new BindingQuestion();
@@ -16,7 +17,8 @@
     var Sidebar;
     global.Sidebar = Sidebar = Spine.Controller.sub({
         events:  {
-            "click .test li": "clicked"
+            //"click .test li": "clicked"
+            "click .questionCheckbox": "clicked"
         },
         init: function() {
             if ( !this.item ) throw "customer required";
@@ -32,9 +34,8 @@
             this.el.remove();
         },
         clicked: function(e) {
-            var url = "http://82.130.38.67/questionresults/" + $(e.target).find('input:first').attr('data-id');
-            console.log("Haetaan Questionia ip_llä: " + url);
-            if ($(e.target).find('input:first').attr('data-id')) global.Question.fetch({url: url});
+            var url = "http://82.130.38.67/questionresults/" + $(e.target).attr('data-id');
+            if ($(e.target).attr('data-id')) global.Question.fetch({url: url});
         }
     });
 
@@ -77,7 +78,6 @@
             }
             var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
             resultSum.setRelevantQuestions(relevantQuestions);
-            console.log("Visualisoidaan data seuraavista kysymyksista: " + relevantQuestions);
             this.setTitle();
             this.setChart();
         },
@@ -102,10 +102,18 @@
                 if (i == 0) {
                     relevantQuestionsString = resultSum.relevantQuestions[i].name;
                 } else {
-                    relevantQuestionsString += " " + resultSum.relevantQuestions[i].name;
+                    relevantQuestionsString = "Multiple questions";
                 }
             }
             this.html(Title.template(relevantQuestionsString));
+        }
+    });
+
+    var Charttext;
+    global.Charttext = Charttext = Spine.Controller.sub({
+        init: function() {
+            console.log("JEAHHH");
+            this.html(Charttext.template());
         }
     });
 
@@ -114,18 +122,25 @@
         init: function() {
             var resultSum = this.setSerieData();
             var graphOne = this.drawGraphDaily(resultSum);
-            var axes = new Rickshaw.Graph.Axis.Time( { graph: graphOne } );
-            graphOne.render();
-
+            if (graphOne === "No available data") {
+                $('#charttext').html('');
+                $('#chart1').html('No available data');
+            } else {
+                new Charttext({el: $('#charttext')});
+                graphOne.render();
+            }
             var graphTwo = this.drawGraphAll(resultSum);
-            graphTwo.render();
+            if (graphTwo === "No available data") {
+                $('#chart2').html('No available data');
+            } else {
+                graphTwo.render();
+            }
         },
         setSerieData: function() {
             var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
             var seriesData = [ [],[] ];
             var alltimeData = [ [],[] ];
 
-            //jea
             for (var i in resultSum.relevantQuestions) {
 
                 alltimeData[0][0] = {x: 0, y: 0};
@@ -162,10 +177,14 @@
 
         },
         drawGraphDaily: function(resultSum) {
-            console.log("Piirretään graafi, jonka pohjana on: " + resultSum);
             $('#chart1').html('');
             var seriesData = resultSum.dayTimeResult;
             var graph;
+            if (seriesData[0].length == 0) {
+                console.log("returning no available data");
+                graph = "No available data";
+                return graph;
+            }
             graph = new Rickshaw.Graph( {
                 element: document.getElementById("chart1"),
                 width: 470,
@@ -175,12 +194,17 @@
                     {color: "#c05020",data: seriesData[1]}]
             } );
             graph.renderer.unstack = true;
+            new Rickshaw.Graph.Axis.Time( { graph: graph } );
             return graph;
         },
         drawGraphAll: function(resultSum) {
             $('#chart2').html('');
             var alltimeData = resultSum.allTimeResult;
             var graph;
+            if (alltimeData[0].length == 0) {
+                graph = "No available data";
+                return graph;
+            }
             graph = new Rickshaw.Graph( {
                 element: document.getElementById("chart2"),
                 width: 470,
@@ -194,5 +218,7 @@
             return graph;
         }
     });
+
+
 
 })(Dashboard);

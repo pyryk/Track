@@ -98,10 +98,11 @@
     <!-- === RIGHTSIDE CONTENT === -->
     <div id="chart" class="span10">
         <div id="title"></div>
-        <div class="row">
+        <div class="row margintop30">
             <div id="chart1" class="span5"></div>
             <div id="chart2" class="span5"></div>
         </div>
+        <div id="charttext"></div>
     </div>
 </div><!--/row-->
 
@@ -287,26 +288,11 @@
 <script id="chart-tmpl" type="text/x-handlebars-template">
 </script>
 
-<script id="questionitem-tmpl" type="text/x-handlebars-template">
-
-    <div class="span10">
-        <div class="row">
-            <h1>{{name}} ja jotain</h1>
-
-        </div>
-    </div><!--/span-->
-
-</script>
-
-<script id="test-tmpl" type="text/x-handlebars-template">
-
-    <div class="span10">
-        <div class="row">
-            <h1>{{name}} ja jotain</h1>
-
-        </div>
-    </div><!--/span-->
-
+<script id="charttext-tmpl" type="text/x-handlebars-template">
+    <div class="row margintop30">
+        <div class="span5" style="text-align: center;">Daily results</div>
+        <div class="span5" style="text-align: center;">All-time results</div>
+    </div>
 </script>
 
 <!-- Le javascript

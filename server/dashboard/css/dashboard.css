@@ -29,6 +29,10 @@
   margin-top: -20px;
 }
 
+.margintop30 {
+  margin-top: 30px;
+}
+
 .grey {
   background-color: #ffffff;
   background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
