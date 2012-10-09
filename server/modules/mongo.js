@@ -339,23 +339,17 @@ var Mongo = {
                     }
 
                     _.each(data, function(value, key) {
-
                         var target = value;
-                        target.questions = [];
-
-                        questionQuery.where("targetId", target._id);
-
-                        questionQuery.exec(function(error, data) {
-                            _.each(data, function(data, key) {
-                                target.questions.push(data);
-                            });
+                        Mongo.findQuestions("targetId", target._id).then(function(data) {
+                            target.questions = data;
 
                             targetsWithQuestions.push(target);
-
                             if (--count === 0) {
                                 Mongo.resolvePromise(error, targetsWithQuestions, promise);
                             }
+
                         });
+
                     });
                 }
             }
