@@ -65,33 +65,13 @@
             $("input:checkbox[class=questionCheckbox]:checked").each(function(){
                 list.push($(this).val());
             });
-            this.render();
-        },
-        render: function(){
-            var data = this.setSerieData();
-            //var graph = this.makeGraph(data);
-            //this.html(Chart.template(graph));
-            //return this;
-        },
-        setSerieData: function(item) {
-            var resultSum = ResultSum.findAllByAttribute("name", "allResult");
-            var seriesData = [ [],[] ];
-            var alltimeData = [ [],[] ];
 
-            for (var i in resultSum[0].relevantQuestions) {
-
-                console.log("===============");
-
-                alltimeData[0][0] = {x: 0, y: 0};
-                alltimeData[0][2] = {x: 2, y: 0};
-                alltimeData[1][0] = {x: 0, y: 0};
-                alltimeData[1][2] = {x: 2, y: 0};
-                if (i == 0) {
-                    alltimeData[0][1] = {x: 1, y: resultSum[0].relevantQuestions[i].results.alltime.pos};
-                    alltimeData[1][1] = {x: 1, y: resultSum[0].relevantQuestions[i].results.alltime.neg};
-                } else {
-                    alltimeData[0][1] = {x: 1, y: alltimeData[0][2].y + resultSum[0].relevantQuestions[i].results.alltime.pos};
-                    alltimeData[1][1] = {x: 1, y: alltimeData[1][2].y + resultSum[0].relevantQuestions[i].results.alltime.neg};
+            var relevantQuestions = [];
+            for (var j = 0; j < Question.all().length; j++) {
+                for (var k = 0; k < list.length; k++) {
+                    if (Question.all()[j]._id == list[k]){
+                        relevantQuestions.push(Question.all()[j]);
+                    }
                 }
             }
             var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
@@ -104,6 +84,7 @@
         },
         setChart: function() {
             new Chart({el: $('#chart')});
+
         }
     });
 
@@ -139,8 +120,6 @@
         },
         setSerieData: function() {
             var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
-            console.log(resultSum);
-
             var seriesData = [ [],[] ];
             var alltimeData = [ [],[] ];
 
