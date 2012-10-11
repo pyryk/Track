@@ -207,7 +207,7 @@
             }
             graph = new Rickshaw.Graph( {
                 element: document.getElementById("chart2"),
-                width: 470,
+                width: 340,
                 height: 300,
                 renderer: 'bar',
                 series: [{color: "#30c020",data: alltimeData[0]},
