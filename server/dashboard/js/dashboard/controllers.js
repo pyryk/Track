@@ -138,7 +138,11 @@
             new Title({el: $('#title')});
         },
         setChart: function() {
-            new Chart({el: $('#chart')});
+            if ($('#grafic-page').attr('class') == 'active hop') {
+                new Chart({el: $('#chart')});
+            } else {
+                new Comment({el: $('#chart')});
+            }
         }
     });
 
@@ -175,8 +179,10 @@
             $('#charttext').html('');
             $('#chart1').html('');
             $('#chart2').html('');
-            if (!ResultSum.findAllByAttribute("name", "allResult")[0].relevantQuestions) return;
-            console.log(ResultSum.findAllByAttribute("name", "allResult")[0].relevantQuestions);
+            if (!ResultSum.findAllByAttribute("name", "allResult")[0].relevantQuestions) {
+                return;
+            }
+            console.log(ResultSum.findAllByAttribute("name", "allResult")[0]);
             var graphOne = this.drawGraphDaily(ResultSum.findAllByAttribute("name", "allResult")[0]);
             if (graphOne === "No available data") {
                 $('#charttext').html('');
@@ -194,11 +200,9 @@
         },
 
         drawGraphDaily: function(resultSum) {
-            $('#chart1').html('');
             var seriesData = resultSum.dayTimeResult;
             var graph;
             if (seriesData[0].length == 0) {
-                console.log("returning no available data");
                 graph = "No available data";
                 return graph;
             }
@@ -215,7 +219,6 @@
             return graph;
         },
         drawGraphAll: function(resultSum) {
-            $('#chart2').html('');
             var alltimeData = resultSum.allTimeResult;
             var graph;
             if (alltimeData[0].length == 0) {
@@ -244,6 +247,7 @@
             $('#chart1').html('');
             $('#chart2').html('');
             if (!ResultSum.findAllByAttribute("name", "allResult")[0].relevantQuestions) return;
+            console.log(ResultSum.findAllByAttribute("name", "allResult")[0]);
             var relevantQuestions = ResultSum.findAllByAttribute("name", "allResult")[0].relevantQuestions;
             var resultList = [];
             var timeList = [];
