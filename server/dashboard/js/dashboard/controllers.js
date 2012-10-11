@@ -6,11 +6,25 @@
             Sidebar.extend({template: Handlebars.compile($("#sidebar-tmpl").html())});
             Title.extend({template: Handlebars.compile($("#title-tmpl").html())});
             Chart.extend({template: Handlebars.compile($("#chart-tmpl").html())});
+            Comment.extend({template: Handlebars.compile($("#comment-tmpl").html())});
             Charttext.extend({template: Handlebars.compile($("#charttext-tmpl").html())});
             ResultSum.create({name: 'allResult'});
             new SidebarCustomer({el: $('#sidebar')});
             new BindingQuestion();
             global.Customer.fetch({id: '500cf0a7da8f3be960000096'});
+
+            $('.hop').on('click', function() {
+                $(this).parent().find('.active').removeClass('active');
+                $(this).addClass('active');
+                if ($(this).attr('id') == 'grafic-page') {
+                    console.log("grafic");
+                    new Chart({el: $('#chart')});
+                }
+                if ($(this).attr('id') == 'comment-page') {
+                    console.log("comment");
+                    new Comment({el: $('#chart')});
+                }
+            });
         }
     });
 
@@ -78,63 +92,7 @@
             }
             var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
             resultSum.setRelevantQuestions(relevantQuestions);
-            this.setTitle();
-            this.setChart();
-        },
-        setTitle: function() {
-            new Title({el: $('#title')});
-        },
-        setChart: function() {
-            new Chart({el: $('#chart')});
-
-        }
-    });
-
-    var Title;
-    global.Title = Title = Spine.Controller.sub({
-        init: function() {
-            var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
-            this.setTitle(resultSum);
-        },
-        setTitle: function(resultSum) {
-            var relevantQuestionsString;
-            for (var i in resultSum.relevantQuestions) {
-                if (i == 0) {
-                    relevantQuestionsString = resultSum.relevantQuestions[i].name;
-                } else {
-                    relevantQuestionsString = "Multiple questions";
-                }
-            }
-            this.html(Title.template(relevantQuestionsString));
-        }
-    });
-
-    var Charttext;
-    global.Charttext = Charttext = Spine.Controller.sub({
-        init: function() {
-            console.log("JEAHHH");
-            this.html(Charttext.template());
-        }
-    });
-
-    var Chart;
-    global.Chart = Chart = Spine.Controller.sub({
-        init: function() {
-            var resultSum = this.setSerieData();
-            var graphOne = this.drawGraphDaily(resultSum);
-            if (graphOne === "No available data") {
-                $('#charttext').html('');
-                $('#chart1').html('No available data');
-            } else {
-                new Charttext({el: $('#charttext')});
-                graphOne.render();
-            }
-            var graphTwo = this.drawGraphAll(resultSum);
-            if (graphTwo === "No available data") {
-                $('#chart2').html('No available data');
-            } else {
-                graphTwo.render();
-            }
+            this.setSerieData();
         },
         setSerieData: function() {
             var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
@@ -173,9 +131,68 @@
             }
             resultSum.setDayTimeResult(seriesData);
             resultSum.setAllTimeResult(alltimeData);
-            return resultSum;
-
+            this.setTitle();
+            this.setChart();
         },
+        setTitle: function() {
+            new Title({el: $('#title')});
+        },
+        setChart: function() {
+            new Chart({el: $('#chart')});
+        }
+    });
+
+    var Title;
+    global.Title = Title = Spine.Controller.sub({
+        init: function() {
+            var resultSum = ResultSum.findAllByAttribute("name", "allResult")[0];
+            this.setTitle(resultSum);
+        },
+        setTitle: function(resultSum) {
+            var relevantQuestionsString;
+            for (var i in resultSum.relevantQuestions) {
+                if (i == 0) {
+                    relevantQuestionsString = resultSum.relevantQuestions[i].name;
+                } else {
+                    relevantQuestionsString = "Multiple questions";
+                }
+            }
+            this.html(Title.template(relevantQuestionsString));
+        }
+    });
+
+    var Charttext;
+    global.Charttext = Charttext = Spine.Controller.sub({
+        init: function() {
+            this.html(Charttext.template());
+        }
+    });
+
+    var Chart;
+    global.Chart = Chart = Spine.Controller.sub({
+        init: function() {
+            if (!$('#grafic-page').attr('class') == "active hop") return;
+            $('#charttext').html('');
+            $('#chart1').html('');
+            $('#chart2').html('');
+            if (!ResultSum.findAllByAttribute("name", "allResult")[0].relevantQuestions) return;
+            console.log(ResultSum.findAllByAttribute("name", "allResult")[0].relevantQuestions);
+            var graphOne = this.drawGraphDaily(ResultSum.findAllByAttribute("name", "allResult")[0]);
+            if (graphOne === "No available data") {
+                $('#charttext').html('');
+                $('#chart1').html('No available data');
+            } else {
+                new Charttext({el: $('#charttext')});
+                graphOne.render();
+            }
+            var graphTwo = this.drawGraphAll(ResultSum.findAllByAttribute("name", "allResult")[0]);
+            if (graphTwo === "No available data") {
+                $('#chart2').html('No available data');
+            } else {
+                graphTwo.render();
+            }
+        },
+
         drawGraphDaily: function(resultSum) {
             $('#chart1').html('');
             var seriesData = resultSum.dayTimeResult;
@@ -219,6 +236,31 @@
         }
     });
 
+    var Comment;
+    global.Comment = Comment = Spine.Controller.sub({
+        init: function() {
+            if (!$('#comment-page').attr('class') == "active hop") return;
+            $('#charttext').html('');
+            $('#chart1').html('');
+            $('#chart2').html('');
+            if (!ResultSum.findAllByAttribute("name", "allResult")[0].relevantQuestions) return;
+            var relevantQuestions = ResultSum.findAllByAttribute("name", "allResult")[0].relevantQuestions;
+            var resultList = [];
+            var timeList = [];
+            for (var i in relevantQuestions) {
+                for (var j in relevantQuestions[i].results.timeDistribution) {
+                    for (var k in relevantQuestions[i].results.timeDistribution[j].results) {
+                        if (relevantQuestions[i].results.timeDistribution[j].results[k].textComment) {
+                            resultList.push(relevantQuestions[i].results.timeDistribution[j].results[k].textComment);
+                            timeList.push(new Date(relevantQuestions[i].results.timeDistribution[j].timestamp));
+                        }
+
+                    }
+                }
+            }
+            this.html(Comment.template({comment: resultList, time: timeList}));
+        }
+    });
 
 
 })(Dashboard);

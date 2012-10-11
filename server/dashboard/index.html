@@ -78,13 +78,13 @@
 <header class="margintop20">
     <div class="navbar">
         <div class="navbar-inner grey">
-            <a class="brand span3" href="#">McDonald's</a>
+            <a class="brand span3" href="#">Ravintola, Inc</a>
             <ul class="nav">
-                <li><a href="#">Grafiikka</a></li>
-                <li><a href="#">Kommentit</a></li>
-                <li><a href="#">Sijainti</a></li>
-                <li><a href="#">Arviointi</a></li>
-                <li><a href="#">Johtopäätökset</a></li>
+                <li id="grafic-page" class="active hop"><a href="#">Grafiikka</a></li>
+                <li id="comment-page" class="hop"><a href="#">Kommentit</a></li>
+                <li class="hop"><a href="#">Sijainti</a></li>
+                <li class="hop"><a href="#">Arviointi</a></li>
+                <li class="hop"><a href="#">Johtopäätökset</a></li>
             </ul>
         </div>
     </div>
@@ -96,7 +96,7 @@
     <div id="sidebar" class="span3">
     </div>
     <!-- === RIGHTSIDE CONTENT === -->
-    <div id="chart" class="span10">
+    <div id="chart" class="span9">
         <div id="title"></div>
         <div class="row margintop30">
             <div id="chart1" class="span5"></div>
@@ -296,6 +296,20 @@
 </script>
 
 <script id="comment-tmpl" type="text/x-handlebars-template">
+    <div class="row margintop30" style="text-align: center;">
+        <div class="span5">
+            {{#each this.comment}}
+            <li style="text-align: center; list-style-type: none;"> {{this}}</li>
+            {{/each}}
+        </div>
+        <div class="span4">
+            {{#each this.time}}
+            <li style="list-style-type: none;"> {{this}}</li>
+            {{/each}}
+
+        </div>
+    </div>
+
 </script>
 
 <!-- Le javascript
