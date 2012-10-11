@@ -12,17 +12,18 @@
             new SidebarCustomer({el: $('#sidebar')});
             new BindingQuestion();
             global.Customer.fetch({id: '500cf0a7da8f3be960000096'});
+            this.navigate();
 
+        },
+        navigate: function() {
             $('.hop').on('click', function() {
                 $(this).parent().find('.active').removeClass('active');
                 $(this).addClass('active');
                 if ($(this).attr('id') == 'grafic-page') {
-                    console.log("grafic");
-                    new Chart({el: $('#chart')});
+                    new Chart({el: $('#content')});
                 }
                 if ($(this).attr('id') == 'comment-page') {
-                    console.log("comment");
-                    new Comment({el: $('#chart')});
+                    new Comment({el: $('#content')});
                 }
             });
         }
@@ -31,7 +32,6 @@
     var Sidebar;
     global.Sidebar = Sidebar = Spine.Controller.sub({
         events:  {
-            //"click .test li": "clicked"
             "click .questionCheckbox": "clicked"
         },
         init: function() {
@@ -138,10 +138,10 @@
             new Title({el: $('#title')});
         },
         setChart: function() {
-            if ($('#grafic-page').attr('class') == 'active hop') {
-                new Chart({el: $('#chart')});
+            if ($('#grafic-page').attr('class') == 'active hop' || $('#grafic-page').attr('class') == 'hop active') {
+                new Chart({el: $('#content')});
             } else {
-                new Comment({el: $('#chart')});
+                new Comment({el: $('#content')});
             }
         }
     });
@@ -179,13 +179,12 @@
             $('#charttext').html('');
             $('#chart1').html('');
             $('#chart2').html('');
+            this.html(Chart.template());
             if (!ResultSum.findAllByAttribute("name", "allResult")[0].relevantQuestions) {
                 return;
             }
-            console.log(ResultSum.findAllByAttribute("name", "allResult")[0]);
             var graphOne = this.drawGraphDaily(ResultSum.findAllByAttribute("name", "allResult")[0]);
             if (graphOne === "No available data") {
-                $('#charttext').html('');
                 $('#chart1').html('No available data');
             } else {
                 new Charttext({el: $('#charttext')});
@@ -247,7 +246,6 @@
             $('#chart1').html('');
             $('#chart2').html('');
             if (!ResultSum.findAllByAttribute("name", "allResult")[0].relevantQuestions) return;
-            console.log(ResultSum.findAllByAttribute("name", "allResult")[0]);
             var relevantQuestions = ResultSum.findAllByAttribute("name", "allResult")[0].relevantQuestions;
             var resultList = [];
             var timeList = [];
