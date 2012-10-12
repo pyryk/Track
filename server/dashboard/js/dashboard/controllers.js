@@ -158,7 +158,7 @@
                 if (i == 0) {
                     relevantQuestionsString = resultSum.relevantQuestions[i].name;
                 } else {
-                    relevantQuestionsString = "Multiple questions";
+                    relevantQuestionsString = "Useampi kysymys";
                 }
             }
             this.html(Title.template(relevantQuestionsString));
@@ -215,6 +215,12 @@
             } );
             graph.renderer.unstack = true;
             new Rickshaw.Graph.Axis.Time( { graph: graph } );
+            var y_axis = new Rickshaw.Graph.Axis.Y( {
+                graph: graph,
+                orientation: 'left',
+                tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+                element: document.getElementById('y_axis1')
+            } );
             return graph;
         },
         drawGraphAll: function(resultSum) {
@@ -226,13 +232,19 @@
             }
             graph = new Rickshaw.Graph( {
                 element: document.getElementById("chart2"),
-                width: 340,
+                width: 200,
                 height: 300,
                 renderer: 'bar',
                 series: [{color: "#30c020",data: alltimeData[0]},
                     {color: "#c05020",data: alltimeData[1]}]
             });
             graph.renderer.unstack = true;
+            var y_axis = new Rickshaw.Graph.Axis.Y( {
+                graph: graph,
+                orientation: 'left',
+                tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+                element: document.getElementById('y_axis2')
+            } );
             graph.render();
             return graph;
         }
@@ -247,20 +259,27 @@
             $('#chart2').html('');
             if (!ResultSum.findAllByAttribute("name", "allResult")[0].relevantQuestions) return;
             var relevantQuestions = ResultSum.findAllByAttribute("name", "allResult")[0].relevantQuestions;
+            var list = new Array();
             var resultList = [];
             var timeList = [];
             for (var i in relevantQuestions) {
                 for (var j in relevantQuestions[i].results.timeDistribution) {
                     for (var k in relevantQuestions[i].results.timeDistribution[j].results) {
                         if (relevantQuestions[i].results.timeDistribution[j].results[k].textComment) {
+                            list.push({'comment': relevantQuestions[i].results.timeDistribution[j].results[k].textComment,
+                                'smile': relevantQuestions[i].results.timeDistribution[j].results[k].value,
+                                'time': new Date(relevantQuestions[i].results.timeDistribution[j].timestamp)});
                             resultList.push(relevantQuestions[i].results.timeDistribution[j].results[k].textComment);
                             timeList.push(new Date(relevantQuestions[i].results.timeDistribution[j].timestamp));
                         }
-
                     }
                 }
             }
-            this.html(Comment.template({comment: resultList, time: timeList}));
+            console.log(list);
+
+            this.html(Comment.template(list));
+
+//            this.html(Comment.template({comment: resultList, time: timeList}));
         }
     });
 

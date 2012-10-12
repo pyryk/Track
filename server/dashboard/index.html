@@ -78,7 +78,7 @@
 <header class="margintop20">
     <div class="navbar">
         <div class="navbar-inner grey">
-            <a class="brand span3" href="#">Ravintola, Inc</a>
+            <a class="brand span3" href="#">Ravintola Oy</a>
             <ul class="nav">
                 <li id="grafic-page" class="active hop"><a href="#">Grafiikka</a></li>
                 <li id="comment-page" class="hop"><a href="#">Kommentit</a></li>
@@ -123,7 +123,7 @@
                         <div class="accordion-heading" style="margin: 0; padding: 0;">
                             <a class="accordion-toggle" data-toggle="collapse" style="padding-top: 3px; padding-bottom: 2px;" href=#{{this._id}}>{{this.name}}</a>
                         </div>
-                        <div id={{this._id}} class="accordion-body in collapse" style="height: auto; font-size: 90%;">
+                        <div id={{this._id}} class="accordion-body collapse" style="height: 0px; font-size: 90%;">
                             <div class="accordion-inner" style="margin-top: 0px; margin-bottom: 0px; padding-top:0px; border: none;">
                                 <ul class="nav test" style="margin-top: 2px; margin-bottom: 1px;">
                                     {{#each this.questions}}
@@ -283,31 +283,47 @@
 
 <script id="chart-tmpl" type="text/x-handlebars-template">
     <div class="row margintop30">
-        <div id="chart1" class="span5"></div>
-        <div id="chart2" class="span4"></div>
+        <div id="chart_container1" class="span6">
+            <div id="y_axis1"></div>
+            <div id="chart1"></div>
+        </div>
+        <div id="chart_container2" class="span3">
+            <div id="y_axis2"></div>
+            <div id="chart2"></div>
+        </div>
     </div>
     <div id="charttext"></div>
 </script>
 
 <script id="charttext-tmpl" type="text/x-handlebars-template">
     <div class="row margintop30">
-        <div class="span5" style="text-align: center;">Daily results</div>
-        <div class="span4" style="text-align: center;">All-time results</div>
+        <div class="span6" style="text-align: center;">Daily results</div>
+        <div class="span3" style="text-align: center;">All-time results</div>
     </div>
 </script>
 
 <script id="comment-tmpl" type="text/x-handlebars-template">
     <div class="row margintop30" style="text-align: center;">
-        <div class="span5">
-            {{#each this.comment}}
-            <li style="text-align: center; list-style-type: none;"> {{this}}</li>
-            {{/each}}
-        </div>
-        <div class="span4">
-            {{#each this.time}}
-            <li style="list-style-type: none;"> {{this}}</li>
-            {{/each}}
 
+        <div class="span7">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Kommentti</th>
+                        <th>Hymiö</th>
+                        <th>Aika</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{#each this}}
+                    <tr>
+                        <td>{{this.comment}}</td>
+                        <td>{{this.smile}}</td>
+                        <td>{{this.time}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
         </div>
     </div>
 

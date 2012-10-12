@@ -29,6 +29,22 @@
   margin-top: 30px;
 }
 
+#chart_container1, #chart_container2 {
+  position: relative;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#chart1, #chart2 {
+  position: relative;
+  left: 40px;
+}
+#y_axis1, #y_axis2 {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+}
+
 .grey {
   background-color: #ffffff;
   background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
