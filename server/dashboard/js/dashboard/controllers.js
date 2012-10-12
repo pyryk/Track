@@ -2,7 +2,7 @@
     var App;
     global.App = App = Spine.Controller.sub({
         init: function() {
-            Spine.Model.host = "http://82.130.38.67";
+            Spine.Model.host = "http://86.50.140.87";
             Sidebar.extend({template: Handlebars.compile($("#sidebar-tmpl").html())});
             Title.extend({template: Handlebars.compile($("#title-tmpl").html())});
             Chart.extend({template: Handlebars.compile($("#chart-tmpl").html())});
@@ -48,7 +48,7 @@
             this.el.remove();
         },
         clicked: function(e) {
-            var url = "http://82.130.38.67/questionresults/" + $(e.target).attr('data-id');
+            var url = "http://86.50.140.87/questionresults/" + $(e.target).attr('data-id');
             if ($(e.target).attr('data-id')) global.Question.fetch({url: url});
         }
     });

@@ -135,7 +135,7 @@ var TargetsList = BaseController.sub({
     var customer, customClass, title, items;
     try {
       customer = Customer.find(this.id);
-      customClass = customer.name.toLowerCase().replace(/'/g,"");
+      customClass = customer.name.toLowerCase().replace(/'/g,"").replace(/\s/g,"-");
       title = customer.name;
       items = customer.targets;
     } catch (e) {
@@ -234,7 +234,7 @@ var TargetDetails = BaseController.sub({
       type = target.getQuestionType();
       items = target.getQuestions();
       customerName = target.getCustomerName();
-      customClass = customerName.toLowerCase().replace(/'/g,"");
+      customClass = customerName.toLowerCase().replace(/'/g,"").replace(/\s/g,"-");
       showQuestionComment = target.getShowQuestionComment();
     } catch (e) {
       Target.loadDetails(this.id);
@@ -351,7 +351,7 @@ var QuestionResults = BaseController.sub({
       questionItem = QuestionItem.find(this.id);
       data.name = questionItem.targetName;
       data.title = questionItem.customerName;
-      data.customizationClass = data.title.toLowerCase().replace(/'/g,"");
+      data.customizationClass = data.title.toLowerCase().replace(/'/g,"").replace(/\s/g,"-");
       data.question = questionItem.name;
       data.alltime = questionItem.results.alltime;
       data.now = questionItem.results.now;

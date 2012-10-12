@@ -31,6 +31,8 @@ $list_item_gradient_2: darken(#ffffff, 2%);
 
 $aalto_gradient_1: lighten(#FECB00, 20%);
 $aalto_gradient_2: lighten(#FECB00, 5%);
+$ravintola_gradient_1: lighten(#365f92, 20%);
+$ravintola_gradient_2: lighten(#365f92, 5%);
 $hesburger_gradient_1: lighten(#ec232b, 20%);
 $hesburger_gradient_2: lighten(#ec232b, 5%);
 $mtv3_gradient_1: lighten(#000000, 20%);
@@ -47,6 +49,15 @@ $mcdonalds_gradient_2: lighten(#ffe103, 5%);
   &:active, &.fake-active {
     @include background-image(linear-gradient(darken($header_gradient_2, 20%), darken($header_gradient_2, 12%)));
   }
+}
+
+.ravintola-oy {
+     @include background-image(linear-gradient($ravintola_gradient_1, $ravintola_gradient_2));
+     h1 {a:link, a:visited, a:active {color: $header_text_color;}}
+   }
+.ravintola-oy-button {
+  @include background-image(linear-gradient(darken($ravintola_gradient_1, 4%), $ravintola_gradient_2));
+  &:active, &.fake-active {@include background-image(linear-gradient(darken($ravintola_gradient_2, 20%), darken($ravintola_gradient_2, 12%)));}
 }
 
 .aalto-yliopisto {
