@@ -2,7 +2,7 @@
     var App;
     global.App = App = Spine.Controller.sub({
         init: function() {
-            Spine.Model.host = "http://86.50.140.87";
+            Spine.Model.host = "http://localhost";
             Sidebar.extend({template: Handlebars.compile($("#sidebar-tmpl").html())});
             Title.extend({template: Handlebars.compile($("#title-tmpl").html())});
             Chart.extend({template: Handlebars.compile($("#chart-tmpl").html())});
@@ -11,7 +11,7 @@
             ResultSum.create({name: 'allResult'});
             new SidebarCustomer({el: $('#sidebar')});
             new BindingQuestion();
-            global.Customer.fetch({id: '500cf0a7da8f3be960000096'});
+            global.Customer.fetch({id: '5077ba7852ec712002002a5b'});
             this.navigate();
 
         },
@@ -48,7 +48,7 @@
             this.el.remove();
         },
         clicked: function(e) {
-            var url = "http://86.50.140.87/questionresults/" + $(e.target).attr('data-id');
+            var url = "http://localhost/questionresults/" + $(e.target).attr('data-id');
             if ($(e.target).attr('data-id')) global.Question.fetch({url: url});
         }
     });

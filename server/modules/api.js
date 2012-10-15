@@ -541,7 +541,7 @@ var API = {
     },
 
 
-    populateTimeSlots: function(results, slotLength, firstTimestamp, lastTimestamp) {
+    populateTimeSlots: function(results) {
         if(!_.isArray(results)) {
             console.log("results not array");
             return null;
@@ -554,12 +554,12 @@ var API = {
 
         // Setting slot length a day, should be easily parameterized
         var timeSlots = [];
-        slotLength = slotLength || 1000 * 60 * 60 * 24; // Default to day
+        var slotLength = 1000 * 60 * 60 * 24; // Default to day
 
         // Time range comes from results
-        firstTimestamp = firstTimestamp || API.arrayFinder(Math.min, results, "timestamp");
+        var firstTimestamp = API.arrayFinder(Math.min, results, "timestamp");
         firstTimestamp = Math.floor(firstTimestamp / slotLength) * slotLength;
-        lastTimestamp = lastTimestamp || new Date().getTime(); // Default to current date
+        var lastTimestamp =  new Date().getTime(); // Default to current date
         lastTimestamp = Math.floor(lastTimestamp / slotLength) * slotLength;
 
         // Initialize time slots
